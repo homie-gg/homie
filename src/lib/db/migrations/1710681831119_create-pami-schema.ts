@@ -1,9 +1,4 @@
-import {
-  MigrationBuilder,
-  ColumnDefinitions,
-  ColumnDefinition,
-  PgLiteral,
-} from 'node-pg-migrate'
+import { MigrationBuilder, ColumnDefinitions, PgLiteral } from 'node-pg-migrate'
 
 export const shorthands: ColumnDefinitions | undefined = {
   primary_uuid: {
