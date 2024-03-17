@@ -30,9 +30,11 @@ const database = process.env.POSTGRES_DB
     dir: migrationDir,
   })
 
+  // eslint-disable-next-line no-console
   console.log('Running migrations...')
 
   await client.end()
 
+  // eslint-disable-next-line no-console
   console.log('Migrations completed')
 })()

@@ -27,6 +27,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
    * Shorthand for creating tables within the sp schema to improve readability
    * of initial migration.
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const createTableWithDefaults = (
     tableName: string,
     columns: ColumnDefinitions,
@@ -47,6 +48,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
   /**
    * Helper to automatically create a FK constraint on another table's PK
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const referencesPK = (
     tableName: string,
     colOpts?: Partial<ColumnDefinition>

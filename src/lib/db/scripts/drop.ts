@@ -13,6 +13,7 @@ const database = process.env.POSTGRES_DB
 
   await postgresClient.connect()
 
+  // eslint-disable-next-line no-console
   console.log(`Dropping database "${database}"...`)
   await postgresClient
     .query(`DROP DATABASE IF EXISTS ${database} WITH (FORCE)`)
@@ -23,6 +24,7 @@ const database = process.env.POSTGRES_DB
       throw error
     })
 
+  // eslint-disable-next-line no-console
   console.log(`Creating database "${database}"...`)
   await postgresClient.query(`CREATE DATABASE ${database};`)
   await postgresClient.end()

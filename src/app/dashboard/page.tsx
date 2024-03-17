@@ -1,4 +1,4 @@
-import { UserButton, auth, clerkClient } from '@clerk/nextjs'
+import { auth, clerkClient } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 
 export default async function Home() {
