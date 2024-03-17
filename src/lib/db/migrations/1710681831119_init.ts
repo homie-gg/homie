@@ -31,7 +31,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
   const createTableWithDefaults = (
     tableName: string,
     columns: ColumnDefinitions,
-    tableOpts: Parameters<typeof pgm.createTable>[2] = undefined
+    tableOpts: Parameters<typeof pgm.createTable>[2] = undefined,
   ) => {
     return pgm.createTable(
       { schema: 'myapp', name: tableName },
@@ -41,7 +41,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
         created_at: 'created_or_updated_at',
         updated_at: 'created_or_updated_at',
       },
-      tableOpts
+      tableOpts,
     )
   }
 
@@ -51,7 +51,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const referencesPK = (
     tableName: string,
-    colOpts?: Partial<ColumnDefinition>
+    colOpts?: Partial<ColumnDefinition>,
   ) => {
     const options = colOpts ?? { notNull: true }
 

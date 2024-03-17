@@ -20,7 +20,7 @@ const database = process.env.POSTGRES_DB
           include: '*',
           exclude: [],
         },
-      ])
+      ]),
     ),
     outDir: 'src/lib/db/schema',
   })

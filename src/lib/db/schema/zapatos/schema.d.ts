@@ -8,80 +8,76 @@ Released under the MIT licence: see LICENCE file
 */
 
 declare module 'zapatos/schema' {
-
-  import type * as db from 'zapatos/db';
+  import type * as db from 'zapatos/db'
 
   // got a type error on schemaVersionCanary below? update by running `npx zapatos`
-  export interface schemaVersionCanary extends db.SchemaVersionCanary { version: 104 }
-
+  export interface schemaVersionCanary extends db.SchemaVersionCanary {
+    version: 104
+  }
 
   /* === schema: dk === */
 
   export namespace dk {
-  
     /* --- enums --- */
     /* (none) */
-  
+
     /* --- tables --- */
     /* (none) */
-  
-    /* --- aggregate types --- */
-  
-    // `never` rather than `any` types would be more accurate in this no-tables case, but they stop `shortcuts.ts` compiling
-  
-    export type Table = never;
-    export type Selectable = never;
-    export type JSONSelectable = never;
-    export type Whereable = never;
-    export type Insertable = never;
-    export type Updatable = never;
-    export type UniqueIndex = never;
-    export type Column = never;
-  
-    export type AllBaseTables = [];
-    export type AllForeignTables = [];
-    export type AllViews = [];
-    export type AllMaterializedViews = [];
-    export type AllTablesAndViews = [];
-  }
 
+    /* --- aggregate types --- */
+
+    // `never` rather than `any` types would be more accurate in this no-tables case, but they stop `shortcuts.ts` compiling
+
+    export type Table = never
+    export type Selectable = never
+    export type JSONSelectable = never
+    export type Whereable = never
+    export type Insertable = never
+    export type Updatable = never
+    export type UniqueIndex = never
+    export type Column = never
+
+    export type AllBaseTables = []
+    export type AllForeignTables = []
+    export type AllViews = []
+    export type AllMaterializedViews = []
+    export type AllTablesAndViews = []
+  }
 
   /* === global aggregate types === */
 
-  export type Schema = 'dk';
-  export type Table = dk.Table;
-  export type Selectable = dk.Selectable;
-  export type JSONSelectable = dk.JSONSelectable;
-  export type Whereable = dk.Whereable;
-  export type Insertable = dk.Insertable;
-  export type Updatable = dk.Updatable;
-  export type UniqueIndex = dk.UniqueIndex;
-  export type Column = dk.Column;
+  export type Schema = 'dk'
+  export type Table = dk.Table
+  export type Selectable = dk.Selectable
+  export type JSONSelectable = dk.JSONSelectable
+  export type Whereable = dk.Whereable
+  export type Insertable = dk.Insertable
+  export type Updatable = dk.Updatable
+  export type UniqueIndex = dk.UniqueIndex
+  export type Column = dk.Column
 
-  export type AllSchemas = ['dk'];
-  export type AllBaseTables = [...dk.AllBaseTables];
-  export type AllForeignTables = [...dk.AllForeignTables];
-  export type AllViews = [...dk.AllViews];
-  export type AllMaterializedViews = [...dk.AllMaterializedViews];
-  export type AllTablesAndViews = [...dk.AllTablesAndViews];
-
+  export type AllSchemas = ['dk']
+  export type AllBaseTables = [...dk.AllBaseTables]
+  export type AllForeignTables = [...dk.AllForeignTables]
+  export type AllViews = [...dk.AllViews]
+  export type AllMaterializedViews = [...dk.AllMaterializedViews]
+  export type AllTablesAndViews = [...dk.AllTablesAndViews]
 
   /* === lookups === */
 
-  export type SelectableForTable<T extends Table> = any;
+  export type SelectableForTable<T extends Table> = any
 
-  export type JSONSelectableForTable<T extends Table> = any;
+  export type JSONSelectableForTable<T extends Table> = any
 
-  export type WhereableForTable<T extends Table> = any;
+  export type WhereableForTable<T extends Table> = any
 
-  export type InsertableForTable<T extends Table> = any;
+  export type InsertableForTable<T extends Table> = any
 
-  export type UpdatableForTable<T extends Table> = any;
+  export type UpdatableForTable<T extends Table> = any
 
-  export type UniqueIndexForTable<T extends Table> = any;
+  export type UniqueIndexForTable<T extends Table> = any
 
-  export type ColumnForTable<T extends Table> = any;
+  export type ColumnForTable<T extends Table> = any
 
-  export type SQLForTable<T extends Table> = any;
-
+  export type SQLForTable<T extends Table> = any
 }

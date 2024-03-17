@@ -14,7 +14,7 @@ const database = process.env.POSTGRES_DB
       fallbackDefaults: {
         database,
       },
-    })
+    }),
   )
   await client.connect()
 
