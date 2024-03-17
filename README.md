@@ -1,5 +1,3 @@
-# My Next.js boilerplate to launch apps fast
+# Pami
 
-## features
-
-- AWS native. Host on ECS + RDS database.
+AI Project manager for Github.
