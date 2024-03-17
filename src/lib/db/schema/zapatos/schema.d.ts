@@ -8,76 +8,626 @@ Released under the MIT licence: see LICENCE file
 */
 
 declare module 'zapatos/schema' {
-  import type * as db from 'zapatos/db'
+
+  import type * as db from 'zapatos/db';
 
   // got a type error on schemaVersionCanary below? update by running `npx zapatos`
-  export interface schemaVersionCanary extends db.SchemaVersionCanary {
-    version: 104
-  }
+  export interface schemaVersionCanary extends db.SchemaVersionCanary { version: 104 }
 
-  /* === schema: dk === */
 
-  export namespace dk {
+  /* === schema: pami === */
+
+  export namespace pami {
+  
     /* --- enums --- */
     /* (none) */
-
+  
     /* --- tables --- */
-    /* (none) */
-
+  
+    /**
+     * **pami.organization**
+     * - Table in database
+     */
+    export namespace organization {
+      export type Table = 'pami.organization';
+      export interface Selectable {
+        /**
+        * **pami.organization.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at: Date;
+        /**
+        * **pami.organization.ext_clerk_user_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_clerk_user_id: string;
+        /**
+        * **pami.organization.ext_gh_install_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_install_id: string;
+        /**
+        * **pami.organization.organization_id**
+        * - `uuid` in database
+        * - `NOT NULL`, default: `gen_random_uuid()`
+        */
+        organization_id: string;
+        /**
+        * **pami.organization.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at: Date;
+      }
+      export interface JSONSelectable {
+        /**
+        * **pami.organization.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at: db.TimestampTzString;
+        /**
+        * **pami.organization.ext_clerk_user_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_clerk_user_id: string;
+        /**
+        * **pami.organization.ext_gh_install_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_install_id: string;
+        /**
+        * **pami.organization.organization_id**
+        * - `uuid` in database
+        * - `NOT NULL`, default: `gen_random_uuid()`
+        */
+        organization_id: string;
+        /**
+        * **pami.organization.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at: db.TimestampTzString;
+      }
+      export interface Whereable {
+        /**
+        * **pami.organization.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **pami.organization.ext_clerk_user_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_clerk_user_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **pami.organization.ext_gh_install_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_install_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **pami.organization.organization_id**
+        * - `uuid` in database
+        * - `NOT NULL`, default: `gen_random_uuid()`
+        */
+        organization_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **pami.organization.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+      }
+      export interface Insertable {
+        /**
+        * **pami.organization.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+        /**
+        * **pami.organization.ext_clerk_user_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_clerk_user_id: string | db.Parameter<string> | db.SQLFragment;
+        /**
+        * **pami.organization.ext_gh_install_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_install_id: string | db.Parameter<string> | db.SQLFragment;
+        /**
+        * **pami.organization.organization_id**
+        * - `uuid` in database
+        * - `NOT NULL`, default: `gen_random_uuid()`
+        */
+        organization_id?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment;
+        /**
+        * **pami.organization.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+      }
+      export interface Updatable {
+        /**
+        * **pami.organization.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+        /**
+        * **pami.organization.ext_clerk_user_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_clerk_user_id?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+        /**
+        * **pami.organization.ext_gh_install_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_install_id?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+        /**
+        * **pami.organization.organization_id**
+        * - `uuid` in database
+        * - `NOT NULL`, default: `gen_random_uuid()`
+        */
+        organization_id?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.DefaultType | db.SQLFragment>;
+        /**
+        * **pami.organization.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+      }
+      export type UniqueIndex = 'organization_ext_clerk_user_id_key' | 'organization_ext_gh_install_id_key' | 'organization_pkey';
+      export type Column = keyof Selectable;
+      export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
+      export type SQLExpression = Table | db.ColumnNames<Updatable | (keyof Updatable)[]> | db.ColumnValues<Updatable> | Whereable | Column | db.ParentColumn | db.GenericSQLExpression;
+      export type SQL = SQLExpression | SQLExpression[];
+    }
+  
     /* --- aggregate types --- */
-
-    // `never` rather than `any` types would be more accurate in this no-tables case, but they stop `shortcuts.ts` compiling
-
-    export type Table = never
-    export type Selectable = never
-    export type JSONSelectable = never
-    export type Whereable = never
-    export type Insertable = never
-    export type Updatable = never
-    export type UniqueIndex = never
-    export type Column = never
-
-    export type AllBaseTables = []
-    export type AllForeignTables = []
-    export type AllViews = []
-    export type AllMaterializedViews = []
-    export type AllTablesAndViews = []
+  
+    export type Table = organization.Table;
+    export type Selectable = organization.Selectable;
+    export type JSONSelectable = organization.JSONSelectable;
+    export type Whereable = organization.Whereable;
+    export type Insertable = organization.Insertable;
+    export type Updatable = organization.Updatable;
+    export type UniqueIndex = organization.UniqueIndex;
+    export type Column = organization.Column;
+  
+    export type AllBaseTables = [organization.Table];
+    export type AllForeignTables = [];
+    export type AllViews = [];
+    export type AllMaterializedViews = [];
+    export type AllTablesAndViews = [organization.Table];
   }
+
+
+  /* === schema: github === */
+
+  export namespace github {
+  
+    /* --- enums --- */
+    /* (none) */
+  
+    /* --- tables --- */
+  
+    /**
+     * **github.pull_request**
+     * - Table in database
+     */
+    export namespace pull_request {
+      export type Table = 'github.pull_request';
+      export interface Selectable {
+        /**
+        * **github.pull_request.ext_gh_pull_request_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_pull_request_id: string;
+        /**
+        * **github.pull_request.html_url**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        html_url: string;
+        /**
+        * **github.pull_request.organization_id**
+        * - `uuid` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id: string;
+        /**
+        * **github.pull_request.pull_request_id**
+        * - `uuid` in database
+        * - `NOT NULL`, default: `gen_random_uuid()`
+        */
+        pull_request_id: string;
+        /**
+        * **github.pull_request.title**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        title: string;
+        /**
+        * **github.pull_request.user_id**
+        * - `uuid` in database
+        * - `NOT NULL`, no default
+        */
+        user_id: string;
+      }
+      export interface JSONSelectable {
+        /**
+        * **github.pull_request.ext_gh_pull_request_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_pull_request_id: string;
+        /**
+        * **github.pull_request.html_url**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        html_url: string;
+        /**
+        * **github.pull_request.organization_id**
+        * - `uuid` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id: string;
+        /**
+        * **github.pull_request.pull_request_id**
+        * - `uuid` in database
+        * - `NOT NULL`, default: `gen_random_uuid()`
+        */
+        pull_request_id: string;
+        /**
+        * **github.pull_request.title**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        title: string;
+        /**
+        * **github.pull_request.user_id**
+        * - `uuid` in database
+        * - `NOT NULL`, no default
+        */
+        user_id: string;
+      }
+      export interface Whereable {
+        /**
+        * **github.pull_request.ext_gh_pull_request_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_pull_request_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **github.pull_request.html_url**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        html_url?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **github.pull_request.organization_id**
+        * - `uuid` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **github.pull_request.pull_request_id**
+        * - `uuid` in database
+        * - `NOT NULL`, default: `gen_random_uuid()`
+        */
+        pull_request_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **github.pull_request.title**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        title?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **github.pull_request.user_id**
+        * - `uuid` in database
+        * - `NOT NULL`, no default
+        */
+        user_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+      }
+      export interface Insertable {
+        /**
+        * **github.pull_request.ext_gh_pull_request_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_pull_request_id: string | db.Parameter<string> | db.SQLFragment;
+        /**
+        * **github.pull_request.html_url**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        html_url: string | db.Parameter<string> | db.SQLFragment;
+        /**
+        * **github.pull_request.organization_id**
+        * - `uuid` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id: string | db.Parameter<string> | db.SQLFragment;
+        /**
+        * **github.pull_request.pull_request_id**
+        * - `uuid` in database
+        * - `NOT NULL`, default: `gen_random_uuid()`
+        */
+        pull_request_id?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment;
+        /**
+        * **github.pull_request.title**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        title: string | db.Parameter<string> | db.SQLFragment;
+        /**
+        * **github.pull_request.user_id**
+        * - `uuid` in database
+        * - `NOT NULL`, no default
+        */
+        user_id: string | db.Parameter<string> | db.SQLFragment;
+      }
+      export interface Updatable {
+        /**
+        * **github.pull_request.ext_gh_pull_request_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_pull_request_id?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+        /**
+        * **github.pull_request.html_url**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        html_url?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+        /**
+        * **github.pull_request.organization_id**
+        * - `uuid` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+        /**
+        * **github.pull_request.pull_request_id**
+        * - `uuid` in database
+        * - `NOT NULL`, default: `gen_random_uuid()`
+        */
+        pull_request_id?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.DefaultType | db.SQLFragment>;
+        /**
+        * **github.pull_request.title**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        title?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+        /**
+        * **github.pull_request.user_id**
+        * - `uuid` in database
+        * - `NOT NULL`, no default
+        */
+        user_id?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+      }
+      export type UniqueIndex = 'pull_request_ext_gh_pull_request_id_key' | 'pull_request_pkey';
+      export type Column = keyof Selectable;
+      export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
+      export type SQLExpression = Table | db.ColumnNames<Updatable | (keyof Updatable)[]> | db.ColumnValues<Updatable> | Whereable | Column | db.ParentColumn | db.GenericSQLExpression;
+      export type SQL = SQLExpression | SQLExpression[];
+    }
+  
+    /**
+     * **github.user**
+     * - Table in database
+     */
+    export namespace user {
+      export type Table = 'github.user';
+      export interface Selectable {
+        /**
+        * **github.user.ext_gh_user_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_user_id: string;
+        /**
+        * **github.user.organization_id**
+        * - `uuid` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id: string;
+        /**
+        * **github.user.user_id**
+        * - `uuid` in database
+        * - `NOT NULL`, default: `gen_random_uuid()`
+        */
+        user_id: string;
+      }
+      export interface JSONSelectable {
+        /**
+        * **github.user.ext_gh_user_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_user_id: string;
+        /**
+        * **github.user.organization_id**
+        * - `uuid` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id: string;
+        /**
+        * **github.user.user_id**
+        * - `uuid` in database
+        * - `NOT NULL`, default: `gen_random_uuid()`
+        */
+        user_id: string;
+      }
+      export interface Whereable {
+        /**
+        * **github.user.ext_gh_user_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_user_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **github.user.organization_id**
+        * - `uuid` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **github.user.user_id**
+        * - `uuid` in database
+        * - `NOT NULL`, default: `gen_random_uuid()`
+        */
+        user_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+      }
+      export interface Insertable {
+        /**
+        * **github.user.ext_gh_user_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_user_id: string | db.Parameter<string> | db.SQLFragment;
+        /**
+        * **github.user.organization_id**
+        * - `uuid` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id: string | db.Parameter<string> | db.SQLFragment;
+        /**
+        * **github.user.user_id**
+        * - `uuid` in database
+        * - `NOT NULL`, default: `gen_random_uuid()`
+        */
+        user_id?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment;
+      }
+      export interface Updatable {
+        /**
+        * **github.user.ext_gh_user_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_user_id?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+        /**
+        * **github.user.organization_id**
+        * - `uuid` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+        /**
+        * **github.user.user_id**
+        * - `uuid` in database
+        * - `NOT NULL`, default: `gen_random_uuid()`
+        */
+        user_id?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.DefaultType | db.SQLFragment>;
+      }
+      export type UniqueIndex = 'user_ext_gh_user_id_key' | 'user_pkey';
+      export type Column = keyof Selectable;
+      export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
+      export type SQLExpression = Table | db.ColumnNames<Updatable | (keyof Updatable)[]> | db.ColumnValues<Updatable> | Whereable | Column | db.ParentColumn | db.GenericSQLExpression;
+      export type SQL = SQLExpression | SQLExpression[];
+    }
+  
+    /* --- aggregate types --- */
+  
+    export type Table = pull_request.Table | user.Table;
+    export type Selectable = pull_request.Selectable | user.Selectable;
+    export type JSONSelectable = pull_request.JSONSelectable | user.JSONSelectable;
+    export type Whereable = pull_request.Whereable | user.Whereable;
+    export type Insertable = pull_request.Insertable | user.Insertable;
+    export type Updatable = pull_request.Updatable | user.Updatable;
+    export type UniqueIndex = pull_request.UniqueIndex | user.UniqueIndex;
+    export type Column = pull_request.Column | user.Column;
+  
+    export type AllBaseTables = [pull_request.Table, user.Table];
+    export type AllForeignTables = [];
+    export type AllViews = [];
+    export type AllMaterializedViews = [];
+    export type AllTablesAndViews = [pull_request.Table, user.Table];
+  }
+
 
   /* === global aggregate types === */
 
-  export type Schema = 'dk'
-  export type Table = dk.Table
-  export type Selectable = dk.Selectable
-  export type JSONSelectable = dk.JSONSelectable
-  export type Whereable = dk.Whereable
-  export type Insertable = dk.Insertable
-  export type Updatable = dk.Updatable
-  export type UniqueIndex = dk.UniqueIndex
-  export type Column = dk.Column
+  export type Schema = 'pami' | 'github';
+  export type Table = pami.Table | github.Table;
+  export type Selectable = pami.Selectable | github.Selectable;
+  export type JSONSelectable = pami.JSONSelectable | github.JSONSelectable;
+  export type Whereable = pami.Whereable | github.Whereable;
+  export type Insertable = pami.Insertable | github.Insertable;
+  export type Updatable = pami.Updatable | github.Updatable;
+  export type UniqueIndex = pami.UniqueIndex | github.UniqueIndex;
+  export type Column = pami.Column | github.Column;
 
-  export type AllSchemas = ['dk']
-  export type AllBaseTables = [...dk.AllBaseTables]
-  export type AllForeignTables = [...dk.AllForeignTables]
-  export type AllViews = [...dk.AllViews]
-  export type AllMaterializedViews = [...dk.AllMaterializedViews]
-  export type AllTablesAndViews = [...dk.AllTablesAndViews]
+  export type AllSchemas = ['pami', 'github'];
+  export type AllBaseTables = [...pami.AllBaseTables, ...github.AllBaseTables];
+  export type AllForeignTables = [...pami.AllForeignTables, ...github.AllForeignTables];
+  export type AllViews = [...pami.AllViews, ...github.AllViews];
+  export type AllMaterializedViews = [...pami.AllMaterializedViews, ...github.AllMaterializedViews];
+  export type AllTablesAndViews = [...pami.AllTablesAndViews, ...github.AllTablesAndViews];
+
 
   /* === lookups === */
 
-  export type SelectableForTable<T extends Table> = any
+  export type SelectableForTable<T extends Table> = {
+    "pami.organization": pami.organization.Selectable;
+    "github.pull_request": github.pull_request.Selectable;
+    "github.user": github.user.Selectable;
+  }[T];
 
-  export type JSONSelectableForTable<T extends Table> = any
+  export type JSONSelectableForTable<T extends Table> = {
+    "pami.organization": pami.organization.JSONSelectable;
+    "github.pull_request": github.pull_request.JSONSelectable;
+    "github.user": github.user.JSONSelectable;
+  }[T];
 
-  export type WhereableForTable<T extends Table> = any
+  export type WhereableForTable<T extends Table> = {
+    "pami.organization": pami.organization.Whereable;
+    "github.pull_request": github.pull_request.Whereable;
+    "github.user": github.user.Whereable;
+  }[T];
 
-  export type InsertableForTable<T extends Table> = any
+  export type InsertableForTable<T extends Table> = {
+    "pami.organization": pami.organization.Insertable;
+    "github.pull_request": github.pull_request.Insertable;
+    "github.user": github.user.Insertable;
+  }[T];
 
-  export type UpdatableForTable<T extends Table> = any
+  export type UpdatableForTable<T extends Table> = {
+    "pami.organization": pami.organization.Updatable;
+    "github.pull_request": github.pull_request.Updatable;
+    "github.user": github.user.Updatable;
+  }[T];
 
-  export type UniqueIndexForTable<T extends Table> = any
+  export type UniqueIndexForTable<T extends Table> = {
+    "pami.organization": pami.organization.UniqueIndex;
+    "github.pull_request": github.pull_request.UniqueIndex;
+    "github.user": github.user.UniqueIndex;
+  }[T];
 
-  export type ColumnForTable<T extends Table> = any
+  export type ColumnForTable<T extends Table> = {
+    "pami.organization": pami.organization.Column;
+    "github.pull_request": github.pull_request.Column;
+    "github.user": github.user.Column;
+  }[T];
 
-  export type SQLForTable<T extends Table> = any
+  export type SQLForTable<T extends Table> = {
+    "pami.organization": pami.organization.SQL;
+    "github.pull_request": github.pull_request.SQL;
+    "github.user": github.user.SQL;
+  }[T];
+
 }

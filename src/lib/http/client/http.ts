@@ -59,6 +59,10 @@ export const sendRequest = async <TData>(
 
   const response = await fetch(url, options)
 
+  if (response.status === 401) {
+    return new HttpRequestException(response.status, 'Unauthenticated')
+  }
+
   const failed = response.status > 299
   if (failed) {
     const exception = await getException(response)
@@ -81,7 +85,7 @@ export const sendRequest = async <TData>(
 
 async function getException(response: Response) {
   try {
-    const data: Record<string, any> = await response.json()
+    const data: Record<string, any> = await response.clone().json()
     const message: string = data.message ?? 'Request failed.'
     return new HttpRequestException(response.status, message, data)
   } catch {

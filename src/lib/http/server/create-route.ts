@@ -7,41 +7,34 @@ import { handleExceptions } from '@/lib/http/server/exception-handler'
 import { NextRequest, NextResponse } from 'next/server'
 import { ZodError, z } from 'zod'
 
-export function createRoute<
-  TBodyParams,
-  TQueryParams,
-  TJsonBody,
-  TExpectsFormData,
->(
+export function createRoute<TBody, TQuery, TResponse, TExpectsFormData>(
   config: {
-    bodyParams?: TBodyParams
-    bodyIsFormData?: TExpectsFormData
-    queryParams?: TQueryParams
-    jsonBody?: TJsonBody
+    body?: TBody
+    isFormData?: TExpectsFormData
+    query?: TQuery
+    response?: TResponse
   },
   handleRequest: (request: {
-    body: TBodyParams extends z.AnyZodObject
+    body: TBody extends z.AnyZodObject
       ? TExpectsFormData extends boolean
         ? FormData
-        : z.infer<TBodyParams>
+        : z.infer<TBody>
       : null
     cookies: NextRequest['cookies']
     nextUrl: NextRequest['nextUrl']
-    query: TQueryParams extends z.AnyZodObject ? z.infer<TQueryParams> : null
-  }) => TJsonBody extends z.AnyZodObject
-    ? Promise<NextResponse<z.infer<TJsonBody>>>
+    query: TQuery extends z.AnyZodObject ? z.infer<TQuery> : null
+  }) => TResponse extends z.AnyZodObject
+    ? Promise<NextResponse<z.infer<TResponse>>>
     : Promise<NextResponse<Record<PropertyKey, never>>>,
 ) {
-  return async (
-    request: NextRequest,
-    context: { params: Record<string, string> },
-  ) => {
+  return async (request: NextRequest) => {
     return handleExceptions(async () => {
-      const bodyParams = config.bodyParams as z.AnyZodObject | undefined
-      const body = (await parseBody(bodyParams, request)) as any
+      const data = config.body as z.AnyZodObject | undefined
+      const body = (await parseBody(data, request)) as any
 
-      const queryParams = config.queryParams as z.AnyZodObject | undefined
-      const query = (await parseQuery(queryParams, context.params)) as any
+      const requiredQueryParams = config.query as z.AnyZodObject | undefined
+      const queryParams = Object.fromEntries(request.nextUrl.searchParams)
+      const query = (await parseQuery(requiredQueryParams, queryParams)) as any
 
       const response = await handleRequest({
         body,
@@ -50,7 +43,7 @@ export function createRoute<
         query,
       })
 
-      const jsonBody = config.jsonBody as z.AnyZodObject | undefined
+      const jsonBody = config.response as z.AnyZodObject | undefined
       if (!jsonBody) {
         return response as unknown as Promise<
           NextResponse<Record<PropertyKey, never>>
@@ -59,7 +52,7 @@ export function createRoute<
 
       try {
         jsonBody.parse(await response.clone().json()) // Clone to avoid already read response error
-        return response as unknown as NextResponse<TJsonBody>
+        return response as unknown as NextResponse<TResponse>
       } catch (error: unknown) {
         if (error instanceof ZodError) {
           throw new InternalServerErrorException({
@@ -153,7 +146,7 @@ const createMessageFromZodIssue = (issue: z.ZodIssue) => {
 
 async function parseQuery<TQueryParmas extends z.AnyZodObject>(
   queryParmas: TQueryParmas | undefined,
-  contextParams: Record<string, string>,
+  contextParams: Record<string, string> = {},
 ) {
   if (!queryParmas) {
     return null
