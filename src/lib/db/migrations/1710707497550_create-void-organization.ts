@@ -5,12 +5,12 @@ export const shorthands: ColumnDefinitions | undefined = undefined
 
 export async function up(pgm: MigrationBuilder): Promise<void> {
   return pgm.createTable(
-    { schema: 'pami', name: 'organization' },
+    { schema: 'voidpm', name: 'organization' },
     {
-      organization_id: 'primary_uuid',
-      created_at: 'created_or_updated_at',
-      updated_at: 'created_or_updated_at',
-      ext_gh_install_id: { type: 'text', notNull: true, unique: true },
+      id: 'id',
+      created_at: 'timestamp',
+      updated_at: 'timestamp',
+      ext_gh_install_id: { type: 'integer', notNull: true, unique: true },
       ext_clerk_user_id: { type: 'text', unique: true, notNull: true },
     },
   )

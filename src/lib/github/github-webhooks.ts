@@ -35,9 +35,9 @@ app.webhooks.on('pull_request.closed', async (params) => {
   }
 
   const organization = await dbClient
-    .selectFrom('pami.organization')
-    .where('ext_gh_install_id', '=', String(installation?.id))
-    .select('organization_id')
+    .selectFrom('voidpm.organization')
+    .where('ext_gh_install_id', '=', installation?.id!)
+    .select('id')
     .executeTakeFirst()
 
   if (!organization) {
@@ -48,24 +48,29 @@ app.webhooks.on('pull_request.closed', async (params) => {
   const githubUser = await dbClient
     .insertInto('github.user')
     .values({
-      ext_gh_user_id: String(pull_request.user.id),
-      organization_id: organization.organization_id,
+      ext_gh_user_id: pull_request.user.id,
+      organization_id: organization.id,
     })
     .onConflict((oc) => oc.column('ext_gh_user_id').doNothing())
-    .returning('user_id')
+    .returning('id')
     .executeTakeFirstOrThrow()
 
   // Create Pull Request
   await dbClient
     .insertInto('github.pull_request')
     .values({
-      ext_gh_pull_request_id: String(pull_request.id),
-      organization_id: organization.organization_id,
-      user_id: githubUser.user_id,
+      ext_gh_pull_request_id: pull_request.id,
+      organization_id: organization.id,
+      user_id: githubUser.id,
       title: pull_request.title,
       html_url: pull_request.html_url,
     })
     .executeTakeFirstOrThrow()
+})
+
+app.webhooks.on('pull_request.opened', async (params) => {
+  // create PR
+  // Add timestamp for WHEN the PR was merged
 })
 
 export const githubWebhooks = app.webhooks

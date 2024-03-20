@@ -10,13 +10,16 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       name: 'user',
     },
     {
-      user_id: 'primary_uuid',
-      ext_gh_user_id: { type: 'text', unique: true, notNull: true },
+      id: 'id',
+      created_at: 'timestamp',
+      updated_at: 'timestamp',
+      ext_gh_user_id: { type: 'integer', unique: true, notNull: true },
+      username: { type: 'text', notNull: true },
       organization_id: {
-        type: 'uuid',
+        type: 'integer',
         notNull: true,
         references: {
-          schema: 'pami',
+          schema: 'voidpm',
           name: 'organization',
         },
       },

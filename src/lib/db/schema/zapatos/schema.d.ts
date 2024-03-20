@@ -15,9 +15,9 @@ declare module 'zapatos/schema' {
   export interface schemaVersionCanary extends db.SchemaVersionCanary { version: 104 }
 
 
-  /* === schema: pami === */
+  /* === schema: voidpm === */
 
-  export namespace pami {
+  export namespace voidpm {
   
     /* --- enums --- */
     /* (none) */
@@ -25,38 +25,38 @@ declare module 'zapatos/schema' {
     /* --- tables --- */
   
     /**
-     * **pami.organization**
+     * **voidpm.organization**
      * - Table in database
      */
     export namespace organization {
-      export type Table = 'pami.organization';
+      export type Table = 'voidpm.organization';
       export interface Selectable {
         /**
-        * **pami.organization.created_at**
+        * **voidpm.organization.created_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
         */
         created_at: Date;
         /**
-        * **pami.organization.ext_clerk_user_id**
+        * **voidpm.organization.ext_clerk_user_id**
         * - `text` in database
         * - `NOT NULL`, no default
         */
         ext_clerk_user_id: string;
         /**
-        * **pami.organization.ext_gh_install_id**
-        * - `text` in database
+        * **voidpm.organization.ext_gh_install_id**
+        * - `int4` in database
         * - `NOT NULL`, no default
         */
-        ext_gh_install_id: string;
+        ext_gh_install_id: number;
         /**
-        * **pami.organization.organization_id**
-        * - `uuid` in database
-        * - `NOT NULL`, default: `gen_random_uuid()`
+        * **voidpm.organization.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('voidpm.organization_id_seq'::regclass)`
         */
-        organization_id: string;
+        id: number;
         /**
-        * **pami.organization.updated_at**
+        * **voidpm.organization.updated_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
         */
@@ -64,31 +64,31 @@ declare module 'zapatos/schema' {
       }
       export interface JSONSelectable {
         /**
-        * **pami.organization.created_at**
+        * **voidpm.organization.created_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
         */
         created_at: db.TimestampTzString;
         /**
-        * **pami.organization.ext_clerk_user_id**
+        * **voidpm.organization.ext_clerk_user_id**
         * - `text` in database
         * - `NOT NULL`, no default
         */
         ext_clerk_user_id: string;
         /**
-        * **pami.organization.ext_gh_install_id**
-        * - `text` in database
+        * **voidpm.organization.ext_gh_install_id**
+        * - `int4` in database
         * - `NOT NULL`, no default
         */
-        ext_gh_install_id: string;
+        ext_gh_install_id: number;
         /**
-        * **pami.organization.organization_id**
-        * - `uuid` in database
-        * - `NOT NULL`, default: `gen_random_uuid()`
+        * **voidpm.organization.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('voidpm.organization_id_seq'::regclass)`
         */
-        organization_id: string;
+        id: number;
         /**
-        * **pami.organization.updated_at**
+        * **voidpm.organization.updated_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
         */
@@ -96,31 +96,31 @@ declare module 'zapatos/schema' {
       }
       export interface Whereable {
         /**
-        * **pami.organization.created_at**
+        * **voidpm.organization.created_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
         */
         created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
         /**
-        * **pami.organization.ext_clerk_user_id**
+        * **voidpm.organization.ext_clerk_user_id**
         * - `text` in database
         * - `NOT NULL`, no default
         */
         ext_clerk_user_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
         /**
-        * **pami.organization.ext_gh_install_id**
-        * - `text` in database
+        * **voidpm.organization.ext_gh_install_id**
+        * - `int4` in database
         * - `NOT NULL`, no default
         */
-        ext_gh_install_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        ext_gh_install_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
         /**
-        * **pami.organization.organization_id**
-        * - `uuid` in database
-        * - `NOT NULL`, default: `gen_random_uuid()`
+        * **voidpm.organization.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('voidpm.organization_id_seq'::regclass)`
         */
-        organization_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
         /**
-        * **pami.organization.updated_at**
+        * **voidpm.organization.updated_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
         */
@@ -128,31 +128,31 @@ declare module 'zapatos/schema' {
       }
       export interface Insertable {
         /**
-        * **pami.organization.created_at**
+        * **voidpm.organization.created_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
         */
         created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
         /**
-        * **pami.organization.ext_clerk_user_id**
+        * **voidpm.organization.ext_clerk_user_id**
         * - `text` in database
         * - `NOT NULL`, no default
         */
         ext_clerk_user_id: string | db.Parameter<string> | db.SQLFragment;
         /**
-        * **pami.organization.ext_gh_install_id**
-        * - `text` in database
+        * **voidpm.organization.ext_gh_install_id**
+        * - `int4` in database
         * - `NOT NULL`, no default
         */
-        ext_gh_install_id: string | db.Parameter<string> | db.SQLFragment;
+        ext_gh_install_id: number | db.Parameter<number> | db.SQLFragment;
         /**
-        * **pami.organization.organization_id**
-        * - `uuid` in database
-        * - `NOT NULL`, default: `gen_random_uuid()`
+        * **voidpm.organization.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('voidpm.organization_id_seq'::regclass)`
         */
-        organization_id?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment;
+        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
         /**
-        * **pami.organization.updated_at**
+        * **voidpm.organization.updated_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
         */
@@ -160,31 +160,31 @@ declare module 'zapatos/schema' {
       }
       export interface Updatable {
         /**
-        * **pami.organization.created_at**
+        * **voidpm.organization.created_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
         */
         created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
         /**
-        * **pami.organization.ext_clerk_user_id**
+        * **voidpm.organization.ext_clerk_user_id**
         * - `text` in database
         * - `NOT NULL`, no default
         */
         ext_clerk_user_id?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
         /**
-        * **pami.organization.ext_gh_install_id**
-        * - `text` in database
+        * **voidpm.organization.ext_gh_install_id**
+        * - `int4` in database
         * - `NOT NULL`, no default
         */
-        ext_gh_install_id?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+        ext_gh_install_id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
         /**
-        * **pami.organization.organization_id**
-        * - `uuid` in database
-        * - `NOT NULL`, default: `gen_random_uuid()`
+        * **voidpm.organization.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('voidpm.organization_id_seq'::regclass)`
         */
-        organization_id?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.DefaultType | db.SQLFragment>;
+        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
         /**
-        * **pami.organization.updated_at**
+        * **voidpm.organization.updated_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
         */
@@ -233,11 +233,23 @@ declare module 'zapatos/schema' {
       export type Table = 'github.pull_request';
       export interface Selectable {
         /**
+        * **github.pull_request.closed_at**
+        * - `timestamptz` in database
+        * - Nullable, no default
+        */
+        closed_at: Date | null;
+        /**
+        * **github.pull_request.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at: Date;
+        /**
         * **github.pull_request.ext_gh_pull_request_id**
-        * - `text` in database
+        * - `int4` in database
         * - `NOT NULL`, no default
         */
-        ext_gh_pull_request_id: string;
+        ext_gh_pull_request_id: number;
         /**
         * **github.pull_request.html_url**
         * - `text` in database
@@ -245,17 +257,23 @@ declare module 'zapatos/schema' {
         */
         html_url: string;
         /**
+        * **github.pull_request.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('github.pull_request_id_seq'::regclass)`
+        */
+        id: number;
+        /**
+        * **github.pull_request.merged_at**
+        * - `timestamptz` in database
+        * - Nullable, no default
+        */
+        merged_at: Date | null;
+        /**
         * **github.pull_request.organization_id**
-        * - `uuid` in database
+        * - `int4` in database
         * - `NOT NULL`, no default
         */
-        organization_id: string;
-        /**
-        * **github.pull_request.pull_request_id**
-        * - `uuid` in database
-        * - `NOT NULL`, default: `gen_random_uuid()`
-        */
-        pull_request_id: string;
+        organization_id: number;
         /**
         * **github.pull_request.title**
         * - `text` in database
@@ -263,19 +281,37 @@ declare module 'zapatos/schema' {
         */
         title: string;
         /**
+        * **github.pull_request.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at: Date;
+        /**
         * **github.pull_request.user_id**
-        * - `uuid` in database
+        * - `int4` in database
         * - `NOT NULL`, no default
         */
-        user_id: string;
+        user_id: number;
       }
       export interface JSONSelectable {
         /**
+        * **github.pull_request.closed_at**
+        * - `timestamptz` in database
+        * - Nullable, no default
+        */
+        closed_at: db.TimestampTzString | null;
+        /**
+        * **github.pull_request.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at: db.TimestampTzString;
+        /**
         * **github.pull_request.ext_gh_pull_request_id**
-        * - `text` in database
+        * - `int4` in database
         * - `NOT NULL`, no default
         */
-        ext_gh_pull_request_id: string;
+        ext_gh_pull_request_id: number;
         /**
         * **github.pull_request.html_url**
         * - `text` in database
@@ -283,17 +319,23 @@ declare module 'zapatos/schema' {
         */
         html_url: string;
         /**
+        * **github.pull_request.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('github.pull_request_id_seq'::regclass)`
+        */
+        id: number;
+        /**
+        * **github.pull_request.merged_at**
+        * - `timestamptz` in database
+        * - Nullable, no default
+        */
+        merged_at: db.TimestampTzString | null;
+        /**
         * **github.pull_request.organization_id**
-        * - `uuid` in database
+        * - `int4` in database
         * - `NOT NULL`, no default
         */
-        organization_id: string;
-        /**
-        * **github.pull_request.pull_request_id**
-        * - `uuid` in database
-        * - `NOT NULL`, default: `gen_random_uuid()`
-        */
-        pull_request_id: string;
+        organization_id: number;
         /**
         * **github.pull_request.title**
         * - `text` in database
@@ -301,19 +343,37 @@ declare module 'zapatos/schema' {
         */
         title: string;
         /**
+        * **github.pull_request.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at: db.TimestampTzString;
+        /**
         * **github.pull_request.user_id**
-        * - `uuid` in database
+        * - `int4` in database
         * - `NOT NULL`, no default
         */
-        user_id: string;
+        user_id: number;
       }
       export interface Whereable {
         /**
+        * **github.pull_request.closed_at**
+        * - `timestamptz` in database
+        * - Nullable, no default
+        */
+        closed_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **github.pull_request.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+        /**
         * **github.pull_request.ext_gh_pull_request_id**
-        * - `text` in database
+        * - `int4` in database
         * - `NOT NULL`, no default
         */
-        ext_gh_pull_request_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        ext_gh_pull_request_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
         /**
         * **github.pull_request.html_url**
         * - `text` in database
@@ -321,17 +381,23 @@ declare module 'zapatos/schema' {
         */
         html_url?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
         /**
+        * **github.pull_request.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('github.pull_request_id_seq'::regclass)`
+        */
+        id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **github.pull_request.merged_at**
+        * - `timestamptz` in database
+        * - Nullable, no default
+        */
+        merged_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+        /**
         * **github.pull_request.organization_id**
-        * - `uuid` in database
+        * - `int4` in database
         * - `NOT NULL`, no default
         */
-        organization_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
-        /**
-        * **github.pull_request.pull_request_id**
-        * - `uuid` in database
-        * - `NOT NULL`, default: `gen_random_uuid()`
-        */
-        pull_request_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        organization_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
         /**
         * **github.pull_request.title**
         * - `text` in database
@@ -339,19 +405,37 @@ declare module 'zapatos/schema' {
         */
         title?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
         /**
+        * **github.pull_request.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+        /**
         * **github.pull_request.user_id**
-        * - `uuid` in database
+        * - `int4` in database
         * - `NOT NULL`, no default
         */
-        user_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        user_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
       }
       export interface Insertable {
         /**
+        * **github.pull_request.closed_at**
+        * - `timestamptz` in database
+        * - Nullable, no default
+        */
+        closed_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | null | db.DefaultType | db.SQLFragment;
+        /**
+        * **github.pull_request.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+        /**
         * **github.pull_request.ext_gh_pull_request_id**
-        * - `text` in database
+        * - `int4` in database
         * - `NOT NULL`, no default
         */
-        ext_gh_pull_request_id: string | db.Parameter<string> | db.SQLFragment;
+        ext_gh_pull_request_id: number | db.Parameter<number> | db.SQLFragment;
         /**
         * **github.pull_request.html_url**
         * - `text` in database
@@ -359,17 +443,23 @@ declare module 'zapatos/schema' {
         */
         html_url: string | db.Parameter<string> | db.SQLFragment;
         /**
+        * **github.pull_request.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('github.pull_request_id_seq'::regclass)`
+        */
+        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+        /**
+        * **github.pull_request.merged_at**
+        * - `timestamptz` in database
+        * - Nullable, no default
+        */
+        merged_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | null | db.DefaultType | db.SQLFragment;
+        /**
         * **github.pull_request.organization_id**
-        * - `uuid` in database
+        * - `int4` in database
         * - `NOT NULL`, no default
         */
-        organization_id: string | db.Parameter<string> | db.SQLFragment;
-        /**
-        * **github.pull_request.pull_request_id**
-        * - `uuid` in database
-        * - `NOT NULL`, default: `gen_random_uuid()`
-        */
-        pull_request_id?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment;
+        organization_id: number | db.Parameter<number> | db.SQLFragment;
         /**
         * **github.pull_request.title**
         * - `text` in database
@@ -377,19 +467,37 @@ declare module 'zapatos/schema' {
         */
         title: string | db.Parameter<string> | db.SQLFragment;
         /**
+        * **github.pull_request.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+        /**
         * **github.pull_request.user_id**
-        * - `uuid` in database
+        * - `int4` in database
         * - `NOT NULL`, no default
         */
-        user_id: string | db.Parameter<string> | db.SQLFragment;
+        user_id: number | db.Parameter<number> | db.SQLFragment;
       }
       export interface Updatable {
         /**
+        * **github.pull_request.closed_at**
+        * - `timestamptz` in database
+        * - Nullable, no default
+        */
+        closed_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | null | db.DefaultType | db.SQLFragment>;
+        /**
+        * **github.pull_request.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+        /**
         * **github.pull_request.ext_gh_pull_request_id**
-        * - `text` in database
+        * - `int4` in database
         * - `NOT NULL`, no default
         */
-        ext_gh_pull_request_id?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+        ext_gh_pull_request_id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
         /**
         * **github.pull_request.html_url**
         * - `text` in database
@@ -397,17 +505,23 @@ declare module 'zapatos/schema' {
         */
         html_url?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
         /**
+        * **github.pull_request.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('github.pull_request_id_seq'::regclass)`
+        */
+        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+        /**
+        * **github.pull_request.merged_at**
+        * - `timestamptz` in database
+        * - Nullable, no default
+        */
+        merged_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | null | db.DefaultType | db.SQLFragment>;
+        /**
         * **github.pull_request.organization_id**
-        * - `uuid` in database
+        * - `int4` in database
         * - `NOT NULL`, no default
         */
-        organization_id?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
-        /**
-        * **github.pull_request.pull_request_id**
-        * - `uuid` in database
-        * - `NOT NULL`, default: `gen_random_uuid()`
-        */
-        pull_request_id?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.DefaultType | db.SQLFragment>;
+        organization_id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
         /**
         * **github.pull_request.title**
         * - `text` in database
@@ -415,11 +529,17 @@ declare module 'zapatos/schema' {
         */
         title?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
         /**
+        * **github.pull_request.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+        /**
         * **github.pull_request.user_id**
-        * - `uuid` in database
+        * - `int4` in database
         * - `NOT NULL`, no default
         */
-        user_id?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+        user_id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
       }
       export type UniqueIndex = 'pull_request_ext_gh_pull_request_id_key' | 'pull_request_pkey';
       export type Column = keyof Selectable;
@@ -436,103 +556,193 @@ declare module 'zapatos/schema' {
       export type Table = 'github.user';
       export interface Selectable {
         /**
+        * **github.user.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at: Date;
+        /**
         * **github.user.ext_gh_user_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_user_id: number;
+        /**
+        * **github.user.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('github.user_id_seq'::regclass)`
+        */
+        id: number;
+        /**
+        * **github.user.organization_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id: number;
+        /**
+        * **github.user.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at: Date;
+        /**
+        * **github.user.username**
         * - `text` in database
         * - `NOT NULL`, no default
         */
-        ext_gh_user_id: string;
-        /**
-        * **github.user.organization_id**
-        * - `uuid` in database
-        * - `NOT NULL`, no default
-        */
-        organization_id: string;
-        /**
-        * **github.user.user_id**
-        * - `uuid` in database
-        * - `NOT NULL`, default: `gen_random_uuid()`
-        */
-        user_id: string;
+        username: string;
       }
       export interface JSONSelectable {
         /**
+        * **github.user.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at: db.TimestampTzString;
+        /**
         * **github.user.ext_gh_user_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_user_id: number;
+        /**
+        * **github.user.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('github.user_id_seq'::regclass)`
+        */
+        id: number;
+        /**
+        * **github.user.organization_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id: number;
+        /**
+        * **github.user.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at: db.TimestampTzString;
+        /**
+        * **github.user.username**
         * - `text` in database
         * - `NOT NULL`, no default
         */
-        ext_gh_user_id: string;
-        /**
-        * **github.user.organization_id**
-        * - `uuid` in database
-        * - `NOT NULL`, no default
-        */
-        organization_id: string;
-        /**
-        * **github.user.user_id**
-        * - `uuid` in database
-        * - `NOT NULL`, default: `gen_random_uuid()`
-        */
-        user_id: string;
+        username: string;
       }
       export interface Whereable {
         /**
+        * **github.user.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+        /**
         * **github.user.ext_gh_user_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_user_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **github.user.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('github.user_id_seq'::regclass)`
+        */
+        id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **github.user.organization_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **github.user.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **github.user.username**
         * - `text` in database
         * - `NOT NULL`, no default
         */
-        ext_gh_user_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
-        /**
-        * **github.user.organization_id**
-        * - `uuid` in database
-        * - `NOT NULL`, no default
-        */
-        organization_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
-        /**
-        * **github.user.user_id**
-        * - `uuid` in database
-        * - `NOT NULL`, default: `gen_random_uuid()`
-        */
-        user_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        username?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
       }
       export interface Insertable {
         /**
+        * **github.user.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+        /**
         * **github.user.ext_gh_user_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_user_id: number | db.Parameter<number> | db.SQLFragment;
+        /**
+        * **github.user.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('github.user_id_seq'::regclass)`
+        */
+        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+        /**
+        * **github.user.organization_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id: number | db.Parameter<number> | db.SQLFragment;
+        /**
+        * **github.user.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+        /**
+        * **github.user.username**
         * - `text` in database
         * - `NOT NULL`, no default
         */
-        ext_gh_user_id: string | db.Parameter<string> | db.SQLFragment;
-        /**
-        * **github.user.organization_id**
-        * - `uuid` in database
-        * - `NOT NULL`, no default
-        */
-        organization_id: string | db.Parameter<string> | db.SQLFragment;
-        /**
-        * **github.user.user_id**
-        * - `uuid` in database
-        * - `NOT NULL`, default: `gen_random_uuid()`
-        */
-        user_id?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment;
+        username: string | db.Parameter<string> | db.SQLFragment;
       }
       export interface Updatable {
         /**
+        * **github.user.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+        /**
         * **github.user.ext_gh_user_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_user_id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+        /**
+        * **github.user.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('github.user_id_seq'::regclass)`
+        */
+        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+        /**
+        * **github.user.organization_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+        /**
+        * **github.user.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+        /**
+        * **github.user.username**
         * - `text` in database
         * - `NOT NULL`, no default
         */
-        ext_gh_user_id?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
-        /**
-        * **github.user.organization_id**
-        * - `uuid` in database
-        * - `NOT NULL`, no default
-        */
-        organization_id?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
-        /**
-        * **github.user.user_id**
-        * - `uuid` in database
-        * - `NOT NULL`, default: `gen_random_uuid()`
-        */
-        user_id?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.DefaultType | db.SQLFragment>;
+        username?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
       }
       export type UniqueIndex = 'user_ext_gh_user_id_key' | 'user_pkey';
       export type Column = keyof Selectable;
@@ -562,70 +772,70 @@ declare module 'zapatos/schema' {
 
   /* === global aggregate types === */
 
-  export type Schema = 'pami' | 'github';
-  export type Table = pami.Table | github.Table;
-  export type Selectable = pami.Selectable | github.Selectable;
-  export type JSONSelectable = pami.JSONSelectable | github.JSONSelectable;
-  export type Whereable = pami.Whereable | github.Whereable;
-  export type Insertable = pami.Insertable | github.Insertable;
-  export type Updatable = pami.Updatable | github.Updatable;
-  export type UniqueIndex = pami.UniqueIndex | github.UniqueIndex;
-  export type Column = pami.Column | github.Column;
+  export type Schema = 'voidpm' | 'github';
+  export type Table = voidpm.Table | github.Table;
+  export type Selectable = voidpm.Selectable | github.Selectable;
+  export type JSONSelectable = voidpm.JSONSelectable | github.JSONSelectable;
+  export type Whereable = voidpm.Whereable | github.Whereable;
+  export type Insertable = voidpm.Insertable | github.Insertable;
+  export type Updatable = voidpm.Updatable | github.Updatable;
+  export type UniqueIndex = voidpm.UniqueIndex | github.UniqueIndex;
+  export type Column = voidpm.Column | github.Column;
 
-  export type AllSchemas = ['pami', 'github'];
-  export type AllBaseTables = [...pami.AllBaseTables, ...github.AllBaseTables];
-  export type AllForeignTables = [...pami.AllForeignTables, ...github.AllForeignTables];
-  export type AllViews = [...pami.AllViews, ...github.AllViews];
-  export type AllMaterializedViews = [...pami.AllMaterializedViews, ...github.AllMaterializedViews];
-  export type AllTablesAndViews = [...pami.AllTablesAndViews, ...github.AllTablesAndViews];
+  export type AllSchemas = ['voidpm', 'github'];
+  export type AllBaseTables = [...voidpm.AllBaseTables, ...github.AllBaseTables];
+  export type AllForeignTables = [...voidpm.AllForeignTables, ...github.AllForeignTables];
+  export type AllViews = [...voidpm.AllViews, ...github.AllViews];
+  export type AllMaterializedViews = [...voidpm.AllMaterializedViews, ...github.AllMaterializedViews];
+  export type AllTablesAndViews = [...voidpm.AllTablesAndViews, ...github.AllTablesAndViews];
 
 
   /* === lookups === */
 
   export type SelectableForTable<T extends Table> = {
-    "pami.organization": pami.organization.Selectable;
+    "voidpm.organization": voidpm.organization.Selectable;
     "github.pull_request": github.pull_request.Selectable;
     "github.user": github.user.Selectable;
   }[T];
 
   export type JSONSelectableForTable<T extends Table> = {
-    "pami.organization": pami.organization.JSONSelectable;
+    "voidpm.organization": voidpm.organization.JSONSelectable;
     "github.pull_request": github.pull_request.JSONSelectable;
     "github.user": github.user.JSONSelectable;
   }[T];
 
   export type WhereableForTable<T extends Table> = {
-    "pami.organization": pami.organization.Whereable;
+    "voidpm.organization": voidpm.organization.Whereable;
     "github.pull_request": github.pull_request.Whereable;
     "github.user": github.user.Whereable;
   }[T];
 
   export type InsertableForTable<T extends Table> = {
-    "pami.organization": pami.organization.Insertable;
+    "voidpm.organization": voidpm.organization.Insertable;
     "github.pull_request": github.pull_request.Insertable;
     "github.user": github.user.Insertable;
   }[T];
 
   export type UpdatableForTable<T extends Table> = {
-    "pami.organization": pami.organization.Updatable;
+    "voidpm.organization": voidpm.organization.Updatable;
     "github.pull_request": github.pull_request.Updatable;
     "github.user": github.user.Updatable;
   }[T];
 
   export type UniqueIndexForTable<T extends Table> = {
-    "pami.organization": pami.organization.UniqueIndex;
+    "voidpm.organization": voidpm.organization.UniqueIndex;
     "github.pull_request": github.pull_request.UniqueIndex;
     "github.user": github.user.UniqueIndex;
   }[T];
 
   export type ColumnForTable<T extends Table> = {
-    "pami.organization": pami.organization.Column;
+    "voidpm.organization": voidpm.organization.Column;
     "github.pull_request": github.pull_request.Column;
     "github.user": github.user.Column;
   }[T];
 
   export type SQLForTable<T extends Table> = {
-    "pami.organization": pami.organization.SQL;
+    "voidpm.organization": voidpm.organization.SQL;
     "github.pull_request": github.pull_request.SQL;
     "github.user": github.user.SQL;
   }[T];

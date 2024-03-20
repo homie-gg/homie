@@ -14,7 +14,7 @@ const database = process.env.POSTGRES_DB
       }),
     },
     schemas: Object.fromEntries(
-      ['pami', 'github'].map((s) => [
+      ['voidpm', 'github'].map((s) => [
         s,
         {
           include: '*',

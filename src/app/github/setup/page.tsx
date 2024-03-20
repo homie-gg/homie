@@ -12,9 +12,7 @@ export default async function GithubSetup(
     }
   >,
 ) {
-  const {
-    searchParams: { installation_id },
-  } = props
+  const { searchParams } = props
 
   const { userId } = auth()
 
@@ -22,18 +20,20 @@ export default async function GithubSetup(
     redirect('/')
   }
 
+  const installId = parseInt(searchParams.installation_id)
+
   dbClient
-    .insertInto('pami.organization')
+    .insertInto('voidpm.organization')
     .values({
-      ext_gh_install_id: installation_id,
+      ext_gh_install_id: installId,
       ext_clerk_user_id: userId,
     })
     .onConflict((oc) =>
       oc.column('ext_clerk_user_id').doUpdateSet({
-        ext_gh_install_id: installation_id,
+        ext_gh_install_id: installId,
       }),
     )
     .executeTakeFirstOrThrow()
 
-  return redirect('/dashboard')
+  return redirect('/review')
 }

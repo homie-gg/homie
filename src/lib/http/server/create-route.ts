@@ -7,12 +7,19 @@ import { handleExceptions } from '@/lib/http/server/exception-handler'
 import { NextRequest, NextResponse } from 'next/server'
 import { ZodError, z } from 'zod'
 
-export function createRoute<TBody, TQuery, TResponse, TExpectsFormData>(
+export function createRoute<
+  TBody,
+  TQuery,
+  TResponse,
+  TExpectsFormData,
+  TRouteParams,
+>(
   config: {
     body?: TBody
     isFormData?: TExpectsFormData
     query?: TQuery
     response?: TResponse
+    routeParams?: TRouteParams
   },
   handleRequest: (request: {
     body: TBody extends z.AnyZodObject
@@ -23,12 +30,20 @@ export function createRoute<TBody, TQuery, TResponse, TExpectsFormData>(
     cookies: NextRequest['cookies']
     nextUrl: NextRequest['nextUrl']
     query: TQuery extends z.AnyZodObject ? z.infer<TQuery> : null
+    routeParams: TRouteParams extends z.AnyZodObject
+      ? z.infer<TRouteParams>
+      : null
   }) => TResponse extends z.AnyZodObject
     ? Promise<NextResponse<z.infer<TResponse>>>
     : Promise<NextResponse<Record<PropertyKey, never>>>,
 ) {
-  return async (request: NextRequest) => {
+  return async (
+    request: NextRequest,
+    options: { params?: Record<string, string> } = {},
+  ) => {
     return handleExceptions(async () => {
+      const { params = {} } = options
+
       const data = config.body as z.AnyZodObject | undefined
       const body = (await parseBody(data, request)) as any
 
@@ -36,11 +51,20 @@ export function createRoute<TBody, TQuery, TResponse, TExpectsFormData>(
       const queryParams = Object.fromEntries(request.nextUrl.searchParams)
       const query = (await parseQuery(requiredQueryParams, queryParams)) as any
 
+      const requiredRouteParams = config.routeParams as
+        | z.AnyZodObject
+        | undefined
+      const routeParams = (await parseRouteParams(
+        requiredRouteParams,
+        params,
+      )) as any
+
       const response = await handleRequest({
         body,
         cookies: request.cookies,
         nextUrl: request.nextUrl,
         query,
+        routeParams,
       })
 
       const jsonBody = config.response as z.AnyZodObject | undefined
@@ -144,8 +168,8 @@ const createMessageFromZodIssue = (issue: z.ZodIssue) => {
   return `${issue.message} for "${issue.path.join('.')}"`
 }
 
-async function parseQuery<TQueryParmas extends z.AnyZodObject>(
-  queryParmas: TQueryParmas | undefined,
+async function parseQuery<TQueryParams extends z.AnyZodObject>(
+  queryParmas: TQueryParams | undefined,
   contextParams: Record<string, string> = {},
 ) {
   if (!queryParmas) {
@@ -158,6 +182,29 @@ async function parseQuery<TQueryParmas extends z.AnyZodObject>(
     if (error instanceof ZodError) {
       throw new NotFoundException({
         type: 'missing_query_param',
+        message: createZodErrorMessage(error),
+        errors: error.format(),
+      })
+    }
+
+    throw error
+  }
+}
+
+async function parseRouteParams<TRouteParams extends z.AnyZodObject>(
+  routeParams: TRouteParams | undefined,
+  contextParams: Record<string, string> = {},
+) {
+  if (!routeParams) {
+    return null
+  }
+
+  try {
+    return routeParams.parse(contextParams)
+  } catch (error: unknown) {
+    if (error instanceof ZodError) {
+      throw new NotFoundException({
+        type: 'missing_route_param',
         message: createZodErrorMessage(error),
         errors: error.format(),
       })

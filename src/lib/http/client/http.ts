@@ -60,7 +60,7 @@ export const sendRequest = async <TData>(
   const response = await fetch(url, options)
 
   if (response.status === 401) {
-    return new HttpRequestException(response.status, 'Unauthenticated')
+    throw new HttpRequestException(response.status, 'Unauthenticated')
   }
 
   const failed = response.status > 299

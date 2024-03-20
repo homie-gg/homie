@@ -10,18 +10,20 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       name: 'pull_request',
     },
     {
-      pull_request_id: 'primary_uuid',
-      ext_gh_pull_request_id: { type: 'text', unique: true, notNull: true },
+      id: 'id',
+      created_at: 'timestamp',
+      updated_at: 'timestamp',
+      ext_gh_pull_request_id: { type: 'integer', unique: true, notNull: true },
       organization_id: {
-        type: 'uuid',
+        type: 'integer',
         notNull: true,
         references: {
-          schema: 'pami',
+          schema: 'voidpm',
           name: 'organization',
         },
       },
       user_id: {
-        type: 'uuid',
+        type: 'integer',
         notNull: true,
         references: {
           schema: 'github',
@@ -30,6 +32,12 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       },
       title: { type: 'text', notNull: true },
       html_url: { type: 'text', notNull: true },
+      merged_at: {
+        type: 'timestamptz',
+      },
+      closed_at: {
+        type: 'timestamptz',
+      },
     },
   )
 }
