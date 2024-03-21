@@ -1,25 +1,16 @@
-import { GithubUser } from '@/app/api/github/users/[id]/route'
-import { api } from '@/lib/http/client/api'
-import { http } from '@/lib/http/client/http'
-import { useEffect, useState } from 'react'
+import { useGithubUser } from '@/lib/api/github/use-github-user'
+import { Skeleton } from '@/lib/ui/Skeleton'
 
 interface GithubUserNameProps {
-  userId: string
+  userId: number
 }
 
 export default function GithubUsername(props: GithubUserNameProps) {
   const { userId } = props
-  const [name, setName] = useState<string | null>(null)
-
-  useEffect(() => {
-    http
-      .get<{
-        user: GithubUser
-      }>(api(`/github/users/${userId}`))
-      .then((data) => {
-        setName(data.user.username)
-      })
-  }, [userId])
-
-  return name
+  const user = useGithubUser({ userId })
+  return (
+    user.value?.username ?? (
+      <Skeleton className="w-[100px] h-[16px] rounded-full" />
+    )
+  )
 }

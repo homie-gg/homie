@@ -25,13 +25,13 @@ async function seedGithubUsers(
   organization: Organization,
 ): Promise<GithubUser[]> {
   return await Promise.all(
-    [800, 801, 802, 803, 804, 805, 806].map(
-      async (ghUserId) =>
+    Array.from({ length: 20 }).map(
+      async (_, index) =>
         await dbClient
           .insertInto('github.user')
           .values({
             organization_id: organization.id,
-            ext_gh_user_id: ghUserId,
+            ext_gh_user_id: index + 800,
             username: faker.internet.userName(),
           })
           .returningAll()
@@ -44,8 +44,8 @@ async function seedPullRequests(user: GithubUser) {
   const numPullRequests = generateRandomNumber(1, 10)
 
   return Promise.all(
-    Array.from({ length: numPullRequests }).map(async () => {
-      const ghPullRequestId = generateRandomNumber(100, 10000)
+    Array.from({ length: numPullRequests }).map(async (_, index) => {
+      const ghPullRequestId = user.id * 100 + index
 
       const createdDaysAgo = generateRandomNumber(1, 14)
 

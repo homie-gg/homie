@@ -77,7 +77,7 @@ export function useContributors() {
 
   const [contributors, setContributors] = useState<
     {
-      userId: string
+      userId: number
       prCount: number
     }[]
   >([])
@@ -92,7 +92,7 @@ export function useContributors() {
 
     const sorted = Object.entries(updated)
       .map(([id, prCount]) => ({
-        userId: id,
+        userId: parseInt(id),
         prCount,
       }))
       .sort((a, b) => b.prCount - a.prCount) // ascending
