@@ -9,6 +9,10 @@ export default function PercentTopContribution() {
   const { pullRequests } = usePullRequests()
   const { topContributors } = useContributors()
 
+  if (pullRequests.length === 0) {
+    return 100
+  }
+
   const numTopPullRequests = pullRequests.filter((pr) =>
     topContributors.some((c) => c.userId === String(pr.user_id)),
   ).length

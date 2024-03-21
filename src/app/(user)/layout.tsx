@@ -1,5 +1,8 @@
+import AppBar from '@/app/(user)/AppBar'
+import Content from '@/app/(user)/Content'
+import InstallPage from '@/app/(user)/_components/InstallPage'
 import { MainNav } from '@/app/(user)/_components/MainNav'
-import { UserNav } from '@/app/(user)/_components/UserNav'
+import { dbClient } from '@/lib/db/client'
 import { auth, clerkClient } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 
@@ -17,23 +20,28 @@ export default async function UserLayout(props: UserLayoutProps) {
 
   const user = await clerkClient.users.getUser(userId)
 
-  return (
-    <>
+  const organization = await dbClient
+    .selectFrom('voidpm.organization')
+    .where('ext_clerk_user_id', '=', userId)
+    .executeTakeFirst()
+
+  if (!organization) {
+    return (
       <div className="flex flex-col">
-        <div className="border-b">
-          <div className="flex h-16 items-center px-4">
-            <MainNav className="mx-6" />
-            <div className="ml-auto flex items-center space-x-4">
-              <UserNav
-                firstName={user.firstName}
-                lastName={user.lastName}
-                email={user.emailAddresses[0].emailAddress}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="flex-1 space-y-4 p-8 pt-6">{children}</div>
+        <AppBar user={user} />
+        <Content>
+          <InstallPage />
+        </Content>
       </div>
-    </>
+    )
+  }
+
+  return (
+    <div className="flex flex-col">
+      <AppBar user={user}>
+        <MainNav className="mx-6" />
+      </AppBar>
+      <Content>{children}</Content>
+    </div>
   )
 }
