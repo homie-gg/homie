@@ -21,7 +21,7 @@ export default function ContributorsTab(props: ContributorsTabProps) {
 
   return (
     <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
+      <TableCaption>A list of everybody who has opened a PR.</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead className="w-100">Github Username</TableHead>
