@@ -1,3 +1,4 @@
+import ContributorsTable from '@/app/(user)/review/_components/ContributorsTable'
 import ContributorsTableRows from '@/app/(user)/review/_components/ContributorsTableRows'
 import {
   Table,
@@ -10,23 +11,8 @@ import {
 
 interface ContributorsTabProps {}
 
-export default function ContributorsTab(props: ContributorsTabProps) {
+export default async function ContributorsTab(props: ContributorsTabProps) {
   const {} = props
 
-  return (
-    <Table>
-      <TableCaption>
-        A list of Github contributors who have opened a PR.
-      </TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Github Username</TableHead>
-          <TableHead className="text-right w-[200px]">PR Count</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <ContributorsTableRows />
-      </TableBody>
-    </Table>
-  )
+  return <ContributorsTable />
 }
