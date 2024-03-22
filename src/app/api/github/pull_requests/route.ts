@@ -1,5 +1,8 @@
+import { getUserOrganization } from '@/lib/auth/get-user-organization'
 import { dbClient } from '@/lib/db/client'
 import { createRoute } from '@/lib/http/server/create-route'
+import { NotFoundException } from '@/lib/http/server/exceptions'
+import { auth } from '@clerk/nextjs'
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 
@@ -24,11 +27,22 @@ export const GET = createRoute(
     }),
   },
   async (request) => {
+    const organization = await getUserOrganization()
+
+    if (!organization) {
+      throw new NotFoundException({
+        type: 'missing_organization',
+        message:
+          'Organization not found; did the Github app install successfully?',
+      })
+    }
+
     const { query } = request
     const pullRequests = await dbClient
       .selectFrom('github.pull_request')
       .where('created_at', '>=', new Date(query.from))
       .where('created_at', '<=', new Date(query.to))
+      .where('github.pull_request.organization_id', '=', organization.id)
       .selectAll()
       .execute()
 

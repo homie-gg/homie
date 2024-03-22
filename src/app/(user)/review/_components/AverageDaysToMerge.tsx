@@ -28,5 +28,11 @@ export default function AverageDaysToMerge() {
     return '-'
   }
 
-  return Math.round(totalDaysToMerge / numMergedPRs)
+  const days = Math.round(totalDaysToMerge / numMergedPRs)
+
+  if (days === 0 || days > 1) {
+    return `${days} days`
+  }
+
+  return '1 day'
 }

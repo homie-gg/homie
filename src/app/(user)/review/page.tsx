@@ -1,26 +1,26 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/lib/ui/Tabs'
 import { CalendarDateRangePicker } from '@/lib/ui/DateRangePicker'
-import {
-  addDays,
-  endOfDay,
-  endOfWeek,
-  startOfDay,
-  startOfWeek,
-  subDays,
-} from 'date-fns'
+import { endOfWeek, startOfWeek } from 'date-fns'
 import PullRequestsProvider from '@/app/(user)/review/_components/PullRequestsProvider'
 import { dbClient } from '@/lib/db/client'
 import OverviewsTab from '@/app/(user)/review/_components/OverviewsTab'
 import ContributorsTab from '@/app/(user)/review/_components/ContributorsTab'
-
+import { auth } from '@clerk/nextjs'
+import { getUserOrganization } from '@/lib/auth/get-user-organization'
 export default async function ReviewPage() {
   const startDate = startOfWeek(new Date(), { weekStartsOn: 1 }) // Mon start
   const endDate = endOfWeek(startDate, { weekStartsOn: 1 })
+
+  const organization = await getUserOrganization()
+  if (!organization) {
+    return
+  }
 
   const pullRequests = await dbClient
     .selectFrom('github.pull_request')
     .where('created_at', '>=', startDate)
     .where('created_at', '<=', endDate)
+    .where('github.pull_request.organization_id', '=', organization?.id)
     .selectAll()
     .execute()
 
