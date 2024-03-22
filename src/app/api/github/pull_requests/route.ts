@@ -2,7 +2,6 @@ import { getUserOrganization } from '@/lib/auth/get-user-organization'
 import { dbClient } from '@/lib/db/client'
 import { createRoute } from '@/lib/http/server/create-route'
 import { NotFoundException } from '@/lib/http/server/exceptions'
-import { auth } from '@clerk/nextjs'
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 

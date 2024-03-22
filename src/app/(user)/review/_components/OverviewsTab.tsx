@@ -6,7 +6,6 @@ import { getNumMergedPRs } from '@/app/(user)/review/_utils/get-num-merged-prs'
 import { getNumPendingPRs } from '@/app/(user)/review/_utils/get-num-pending-prs'
 import { getPercentTopContributors } from '@/app/(user)/review/_utils/get-percent-top-contributors'
 import { PullRequest } from '@/app/(user)/review/_utils/get-pull-requests'
-import { numTopContributors } from '@/app/(user)/review/_utils/get-top-contributors'
 import {
   Card,
   CardContent,
