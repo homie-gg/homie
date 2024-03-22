@@ -8,37 +8,39 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/lib/ui/Button'
 import { Calendar } from '@/lib/ui/Calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/lib/ui/Popover'
-import { usePullRequests } from '@/app/(user)/review/_components/PullRequestsProvider'
+import { DateRange } from 'react-day-picker'
 
-interface CalendarDateRangePickerProps {
+interface DateRangePickerProps {
   className?: string
+  value: DateRange
+  onChange: (date: DateRange | undefined) => void
+  onOpenChange?: (open: boolean) => void
 }
 
-export function CalendarDateRangePicker(props: CalendarDateRangePickerProps) {
-  const { date: date, setDate } = usePullRequests()
-  const { className } = props
+export function DateRangePicker(props: DateRangePickerProps) {
+  const { className, value, onChange, onOpenChange } = props
 
   return (
     <div className={cn('grid gap-2', className)}>
-      <Popover>
+      <Popover onOpenChange={onOpenChange}>
         <PopoverTrigger asChild>
           <Button
             id="date"
             variant={'outline'}
             className={cn(
               'w-[260px] justify-start text-left font-normal',
-              !date && 'text-muted-foreground',
+              !value && 'text-muted-foreground',
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {date?.from ? (
-              date.to ? (
+            {value?.from ? (
+              value.to ? (
                 <>
-                  {format(date.from, 'LLL dd, y')} -{' '}
-                  {format(date.to, 'LLL dd, y')}
+                  {format(value.from, 'LLL dd, y')} -{' '}
+                  {format(value.to, 'LLL dd, y')}
                 </>
               ) : (
-                format(date.from, 'LLL dd, y')
+                format(value.from, 'LLL dd, y')
               )
             ) : (
               <span>Pick a date</span>
@@ -49,9 +51,9 @@ export function CalendarDateRangePicker(props: CalendarDateRangePickerProps) {
           <Calendar
             initialFocus
             mode="range"
-            defaultMonth={date?.from}
-            selected={date}
-            onSelect={setDate}
+            defaultMonth={value?.from}
+            selected={value}
+            onSelect={onChange}
             numberOfMonths={2}
           />
         </PopoverContent>
