@@ -1,14 +1,21 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/lib/ui/Tabs'
 import { CalendarDateRangePicker } from '@/lib/ui/DateRangePicker'
-import { endOfDay, startOfDay, subDays } from 'date-fns'
+import {
+  addDays,
+  endOfDay,
+  endOfWeek,
+  startOfDay,
+  startOfWeek,
+  subDays,
+} from 'date-fns'
 import PullRequestsProvider from '@/app/(user)/review/_components/PullRequestsProvider'
 import { dbClient } from '@/lib/db/client'
 import OverviewsTab from '@/app/(user)/review/_components/OverviewsTab'
 import ContributorsTab from '@/app/(user)/review/_components/ContributorsTab'
 
 export default async function ReviewPage() {
-  const startDate = startOfDay(subDays(new Date(), 7)) // one week ago
-  const endDate = endOfDay(new Date()) // today
+  const startDate = startOfWeek(new Date(), { weekStartsOn: 1 }) // Mon start
+  const endDate = endOfWeek(startDate, { weekStartsOn: 1 })
 
   const pullRequests = await dbClient
     .selectFrom('github.pull_request')

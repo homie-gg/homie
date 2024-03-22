@@ -3,7 +3,7 @@
 import { GithubPullRequest } from '@/app/api/github/pull_requests/route'
 import { api } from '@/lib/http/client/api'
 import { http } from '@/lib/http/client/http'
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { PropsWithChildren, useState } from 'react'
 import { DateRange } from 'react-day-picker'
 
@@ -15,7 +15,7 @@ interface PullRequestsProviderProps extends PropsWithChildren {
 
 interface PullRequestsContextProps {
   date: DateRange
-  setDate: (date: DateRange) => void
+  setDate: (date: DateRange | undefined) => void
   pullRequests: GithubPullRequest[]
 }
 
@@ -35,6 +35,15 @@ export default function PullRequestsProvider(props: PullRequestsProviderProps) {
     to,
   })
 
+  const setNonNullableDate = useCallback((date: DateRange | undefined) => {
+    // Ignore null values
+    if (!date) {
+      return
+    }
+
+    setDate(date)
+  }, [])
+
   useEffect(() => {
     if (!date?.from || !date?.to) {
       return
@@ -53,7 +62,9 @@ export default function PullRequestsProvider(props: PullRequestsProviderProps) {
   }, [date])
 
   return (
-    <PullRequestsContext.Provider value={{ date, setDate, pullRequests }}>
+    <PullRequestsContext.Provider
+      value={{ date, setDate: setNonNullableDate, pullRequests }}
+    >
       {children}
     </PullRequestsContext.Provider>
   )

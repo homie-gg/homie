@@ -11,13 +11,23 @@ export default function ContributorsTableRow(props: ContributorsPRsTableProps) {
   const { userId, prCount } = props
 
   const user = useGithubUser({ userId })
+
+  if (!user.value) {
+    return (
+      <TableRow className="w-100">
+        <TableCell className="font-medium w-100">
+          <Skeleton className="w-48 h-[16px] rounded" />
+        </TableCell>
+        <TableCell className="text-right w-0">
+          <Skeleton className="w-16 h-[16px] rounded" />
+        </TableCell>
+      </TableRow>
+    )
+  }
+
   return (
     <TableRow>
-      <TableCell className="font-medium">
-        {user.value?.username ?? (
-          <Skeleton className="w-[100px] h-[16px] rounded-full" />
-        )}
-      </TableCell>
+      <TableCell className="font-medium w-100">{user.value.username}</TableCell>
       <TableCell className="text-right">{prCount}</TableCell>
     </TableRow>
   )
