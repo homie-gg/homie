@@ -12,7 +12,7 @@ const app = new App({
 
 app.webhooks.on('pull_request.closed', async (params) => {
   const {
-    payload: { pull_request, installation },
+    payload: { pull_request, installation, repository },
   } = params
 
   /**
@@ -56,6 +56,20 @@ app.webhooks.on('pull_request.closed', async (params) => {
     .returning('id')
     .executeTakeFirstOrThrow()
 
+  // Create repo
+
+  const repo = await dbClient
+    .insertInto('github.repo')
+    .values({
+      organization_id: organization.id,
+      name: repository.name,
+      html_url: repository.html_url,
+      ext_gh_repo_id: repository.id,
+    })
+    .onConflict((oc) => oc.column('ext_gh_repo_id').doNothing())
+    .returning('id')
+    .executeTakeFirstOrThrow()
+
   // Create Pull Request
   await dbClient
     .insertInto('github.pull_request')
@@ -65,6 +79,7 @@ app.webhooks.on('pull_request.closed', async (params) => {
       user_id: githubUser.id,
       title: pull_request.title,
       html_url: pull_request.html_url,
+      repo_id: repo.id,
     })
     .executeTakeFirstOrThrow()
 })

@@ -12,7 +12,7 @@ export function getContributors(pullRequests: PullRequest[]): Contributor[] {
   for (const pullRequest of pullRequests) {
     const current = contributors[pullRequest.user_id] ?? {
       id: pullRequest.user_id,
-      username: pullRequest.username,
+      username: pullRequest.user_username,
       prCount: 0,
     }
     contributors[pullRequest.user_id] = {

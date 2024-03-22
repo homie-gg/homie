@@ -275,6 +275,12 @@ declare module 'zapatos/schema' {
         */
         organization_id: number;
         /**
+        * **github.pull_request.repo_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        repo_id: number;
+        /**
         * **github.pull_request.title**
         * - `text` in database
         * - `NOT NULL`, no default
@@ -336,6 +342,12 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, no default
         */
         organization_id: number;
+        /**
+        * **github.pull_request.repo_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        repo_id: number;
         /**
         * **github.pull_request.title**
         * - `text` in database
@@ -399,6 +411,12 @@ declare module 'zapatos/schema' {
         */
         organization_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
         /**
+        * **github.pull_request.repo_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        repo_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+        /**
         * **github.pull_request.title**
         * - `text` in database
         * - `NOT NULL`, no default
@@ -460,6 +478,12 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, no default
         */
         organization_id: number | db.Parameter<number> | db.SQLFragment;
+        /**
+        * **github.pull_request.repo_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        repo_id: number | db.Parameter<number> | db.SQLFragment;
         /**
         * **github.pull_request.title**
         * - `text` in database
@@ -523,6 +547,12 @@ declare module 'zapatos/schema' {
         */
         organization_id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
         /**
+        * **github.pull_request.repo_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        repo_id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+        /**
         * **github.pull_request.title**
         * - `text` in database
         * - `NOT NULL`, no default
@@ -542,6 +572,239 @@ declare module 'zapatos/schema' {
         user_id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
       }
       export type UniqueIndex = 'pull_request_ext_gh_pull_request_id_key' | 'pull_request_pkey';
+      export type Column = keyof Selectable;
+      export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
+      export type SQLExpression = Table | db.ColumnNames<Updatable | (keyof Updatable)[]> | db.ColumnValues<Updatable> | Whereable | Column | db.ParentColumn | db.GenericSQLExpression;
+      export type SQL = SQLExpression | SQLExpression[];
+    }
+  
+    /**
+     * **github.repo**
+     * - Table in database
+     */
+    export namespace repo {
+      export type Table = 'github.repo';
+      export interface Selectable {
+        /**
+        * **github.repo.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at: Date;
+        /**
+        * **github.repo.ext_gh_repo_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_repo_id: number;
+        /**
+        * **github.repo.html_url**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        html_url: string;
+        /**
+        * **github.repo.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('github.repo_id_seq'::regclass)`
+        */
+        id: number;
+        /**
+        * **github.repo.name**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        name: string;
+        /**
+        * **github.repo.organization_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id: number;
+        /**
+        * **github.repo.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at: Date;
+      }
+      export interface JSONSelectable {
+        /**
+        * **github.repo.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at: db.TimestampTzString;
+        /**
+        * **github.repo.ext_gh_repo_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_repo_id: number;
+        /**
+        * **github.repo.html_url**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        html_url: string;
+        /**
+        * **github.repo.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('github.repo_id_seq'::regclass)`
+        */
+        id: number;
+        /**
+        * **github.repo.name**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        name: string;
+        /**
+        * **github.repo.organization_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id: number;
+        /**
+        * **github.repo.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at: db.TimestampTzString;
+      }
+      export interface Whereable {
+        /**
+        * **github.repo.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **github.repo.ext_gh_repo_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_repo_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **github.repo.html_url**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        html_url?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **github.repo.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('github.repo_id_seq'::regclass)`
+        */
+        id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **github.repo.name**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        name?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **github.repo.organization_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **github.repo.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+      }
+      export interface Insertable {
+        /**
+        * **github.repo.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+        /**
+        * **github.repo.ext_gh_repo_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_repo_id: number | db.Parameter<number> | db.SQLFragment;
+        /**
+        * **github.repo.html_url**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        html_url: string | db.Parameter<string> | db.SQLFragment;
+        /**
+        * **github.repo.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('github.repo_id_seq'::regclass)`
+        */
+        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+        /**
+        * **github.repo.name**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        name: string | db.Parameter<string> | db.SQLFragment;
+        /**
+        * **github.repo.organization_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id: number | db.Parameter<number> | db.SQLFragment;
+        /**
+        * **github.repo.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+      }
+      export interface Updatable {
+        /**
+        * **github.repo.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+        /**
+        * **github.repo.ext_gh_repo_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        ext_gh_repo_id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+        /**
+        * **github.repo.html_url**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        html_url?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+        /**
+        * **github.repo.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('github.repo_id_seq'::regclass)`
+        */
+        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+        /**
+        * **github.repo.name**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        name?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+        /**
+        * **github.repo.organization_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+        /**
+        * **github.repo.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+      }
+      export type UniqueIndex = 'repo_ext_gh_repo_id_key' | 'repo_pkey';
       export type Column = keyof Selectable;
       export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
       export type SQLExpression = Table | db.ColumnNames<Updatable | (keyof Updatable)[]> | db.ColumnValues<Updatable> | Whereable | Column | db.ParentColumn | db.GenericSQLExpression;
@@ -753,20 +1016,20 @@ declare module 'zapatos/schema' {
   
     /* --- aggregate types --- */
   
-    export type Table = pull_request.Table | user.Table;
-    export type Selectable = pull_request.Selectable | user.Selectable;
-    export type JSONSelectable = pull_request.JSONSelectable | user.JSONSelectable;
-    export type Whereable = pull_request.Whereable | user.Whereable;
-    export type Insertable = pull_request.Insertable | user.Insertable;
-    export type Updatable = pull_request.Updatable | user.Updatable;
-    export type UniqueIndex = pull_request.UniqueIndex | user.UniqueIndex;
-    export type Column = pull_request.Column | user.Column;
+    export type Table = pull_request.Table | repo.Table | user.Table;
+    export type Selectable = pull_request.Selectable | repo.Selectable | user.Selectable;
+    export type JSONSelectable = pull_request.JSONSelectable | repo.JSONSelectable | user.JSONSelectable;
+    export type Whereable = pull_request.Whereable | repo.Whereable | user.Whereable;
+    export type Insertable = pull_request.Insertable | repo.Insertable | user.Insertable;
+    export type Updatable = pull_request.Updatable | repo.Updatable | user.Updatable;
+    export type UniqueIndex = pull_request.UniqueIndex | repo.UniqueIndex | user.UniqueIndex;
+    export type Column = pull_request.Column | repo.Column | user.Column;
   
-    export type AllBaseTables = [pull_request.Table, user.Table];
+    export type AllBaseTables = [pull_request.Table, repo.Table, user.Table];
     export type AllForeignTables = [];
     export type AllViews = [];
     export type AllMaterializedViews = [];
-    export type AllTablesAndViews = [pull_request.Table, user.Table];
+    export type AllTablesAndViews = [pull_request.Table, repo.Table, user.Table];
   }
 
 
@@ -795,48 +1058,56 @@ declare module 'zapatos/schema' {
   export type SelectableForTable<T extends Table> = {
     "voidpm.organization": voidpm.organization.Selectable;
     "github.pull_request": github.pull_request.Selectable;
+    "github.repo": github.repo.Selectable;
     "github.user": github.user.Selectable;
   }[T];
 
   export type JSONSelectableForTable<T extends Table> = {
     "voidpm.organization": voidpm.organization.JSONSelectable;
     "github.pull_request": github.pull_request.JSONSelectable;
+    "github.repo": github.repo.JSONSelectable;
     "github.user": github.user.JSONSelectable;
   }[T];
 
   export type WhereableForTable<T extends Table> = {
     "voidpm.organization": voidpm.organization.Whereable;
     "github.pull_request": github.pull_request.Whereable;
+    "github.repo": github.repo.Whereable;
     "github.user": github.user.Whereable;
   }[T];
 
   export type InsertableForTable<T extends Table> = {
     "voidpm.organization": voidpm.organization.Insertable;
     "github.pull_request": github.pull_request.Insertable;
+    "github.repo": github.repo.Insertable;
     "github.user": github.user.Insertable;
   }[T];
 
   export type UpdatableForTable<T extends Table> = {
     "voidpm.organization": voidpm.organization.Updatable;
     "github.pull_request": github.pull_request.Updatable;
+    "github.repo": github.repo.Updatable;
     "github.user": github.user.Updatable;
   }[T];
 
   export type UniqueIndexForTable<T extends Table> = {
     "voidpm.organization": voidpm.organization.UniqueIndex;
     "github.pull_request": github.pull_request.UniqueIndex;
+    "github.repo": github.repo.UniqueIndex;
     "github.user": github.user.UniqueIndex;
   }[T];
 
   export type ColumnForTable<T extends Table> = {
     "voidpm.organization": voidpm.organization.Column;
     "github.pull_request": github.pull_request.Column;
+    "github.repo": github.repo.Column;
     "github.user": github.user.Column;
   }[T];
 
   export type SQLForTable<T extends Table> = {
     "voidpm.organization": voidpm.organization.SQL;
     "github.pull_request": github.pull_request.SQL;
+    "github.repo": github.repo.SQL;
     "github.user": github.user.SQL;
   }[T];
 

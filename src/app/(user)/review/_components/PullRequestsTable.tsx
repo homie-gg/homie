@@ -8,22 +8,32 @@ import { PullRequest } from '@/app/(user)/review/_utils/get-pull-requests'
 
 export const columns: ColumnDef<PullRequest>[] = [
   {
-    accessorKey: 'username',
+    accessorKey: 'user_username',
     header: ({ column }: { column: Column<PullRequest> }) => {
       return (
-        <Button
-          variant="ghost"
+        <span
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="px-0 text-muted-foreground cursor-pointer flex items-center"
         >
           Contributor
           <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        </span>
       )
     },
   },
   {
-    accessorKey: 'repo',
-    header: 'Repo',
+    accessorKey: 'repo_name',
+    header: ({ column }: { column: Column<PullRequest> }) => {
+      return (
+        <span
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="px-0 text-muted-foreground cursor-pointer flex items-center"
+        >
+          Repo
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </span>
+      )
+    },
   },
   {
     accessorKey: 'title',
