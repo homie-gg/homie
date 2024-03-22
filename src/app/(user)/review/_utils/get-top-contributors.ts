@@ -1,10 +1,13 @@
-import { getContributors } from '@/app/(user)/review/_utils/get-contributors'
-import { GithubPullRequest } from '@/lib/db/types'
+import {
+  Contributor,
+  getContributors,
+} from '@/app/(user)/review/_utils/get-contributors'
+import { PullRequest } from '@/app/(user)/review/_utils/get-pull-requests'
 
-const numTopContributors = 5
+export const numTopContributors = 5
 
-export async function getTopContributors(pullRequests: GithubPullRequest[]) {
-  const contributors = await getContributors(pullRequests)
+export function getTopContributors(pullRequests: PullRequest[]): Contributor[] {
+  const contributors = getContributors(pullRequests)
 
   return contributors.filter((_c, index) => index < numTopContributors)
 }

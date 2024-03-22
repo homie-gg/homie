@@ -1,10 +1,8 @@
+import { PullRequest } from '@/app/(user)/review/_utils/get-pull-requests'
 import { getTopContributors } from '@/app/(user)/review/_utils/get-top-contributors'
-import { GithubPullRequest } from '@/lib/db/types'
 
-export async function getPercentTopContributors(
-  pullRequests: GithubPullRequest[],
-) {
-  const topContributors = await getTopContributors(pullRequests)
+export function getPercentTopContributors(pullRequests: PullRequest[]) {
+  const topContributors = getTopContributors(pullRequests)
 
   if (pullRequests.length === 0) {
     return 100

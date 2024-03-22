@@ -2,6 +2,7 @@ import {
   Contributor,
   getContributors,
 } from '@/app/(user)/review/_utils/get-contributors'
+import { PullRequest } from '@/app/(user)/review/_utils/get-pull-requests'
 import { GithubPullRequest } from '@/lib/db/types'
 import DataTable from '@/lib/ui/DataTable'
 
@@ -19,13 +20,13 @@ export const columns: ColumnDef<Contributor>[] = [
 ]
 
 interface ContributorsTableProps {
-  pullRequests: GithubPullRequest[]
+  pullRequests: PullRequest[]
 }
 
 export default async function ContributorsTable(props: ContributorsTableProps) {
   const { pullRequests } = props
 
-  const contributors = await getContributors(pullRequests)
+  const contributors = getContributors(pullRequests)
 
   return <DataTable columns={columns} data={contributors} />
 }

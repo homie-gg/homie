@@ -1,38 +1,27 @@
-import { dbClient } from '@/lib/db/client'
-import { GithubPullRequest, GithubUser } from '@/lib/db/types'
+import { PullRequest } from '@/app/(user)/review/_utils/get-pull-requests'
 
-export type Contributor = GithubUser & {
+export type Contributor = {
+  id: number
+  username: string
   prCount: number
 }
 
-export async function getContributors(
-  pullRequests: GithubPullRequest[],
-): Promise<Contributor[]> {
-  const contributors: Record<string, number> = {}
+export function getContributors(pullRequests: PullRequest[]): Contributor[] {
+  const contributors: Record<string, Contributor> = {}
 
   for (const pullRequest of pullRequests) {
-    const currentCount = contributors[pullRequest.user_id] ?? 0
-    contributors[pullRequest.user_id] = currentCount + 1
+    const current = contributors[pullRequest.user_id] ?? {
+      id: pullRequest.user_id,
+      username: pullRequest.username,
+      prCount: 0,
+    }
+    contributors[pullRequest.user_id] = {
+      ...current,
+      prCount: current.prCount + 1,
+    }
   }
 
-  const sorted = Object.entries(contributors)
-    .map(([id, prCount]) => ({
-      userId: parseInt(id),
-      prCount,
-    }))
-    .sort((a, b) => b.prCount - a.prCount) // ascending
-
-  return Promise.all(
-    sorted.map(async ({ userId, prCount }) => {
-      const user = await dbClient
-        .selectFrom('github.user')
-        .where('id', '=', userId)
-        .selectAll()
-        .executeTakeFirstOrThrow()
-      return {
-        ...user,
-        prCount,
-      }
-    }),
+  return Object.values(contributors).sort(
+    ({ prCount: aCount }, { prCount: bCount }) => bCount - aCount, // descendign
   )
 }

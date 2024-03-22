@@ -3,10 +3,11 @@ import { endOfWeek, parse, startOfWeek } from 'date-fns'
 import { dbClient } from '@/lib/db/client'
 import OverviewsTab from '@/app/(user)/review/_components/OverviewsTab'
 import { getUserOrganization } from '@/lib/auth/get-user-organization'
-import PullRequestsTab from '@/app/(user)/review/_components/PullRequestsTab'
 import DatePicker from '@/app/(user)/review/_components/DatePicker'
 import ContributorsTable from '@/app/(user)/review/_components/ContributorsTable'
 import ReviewTabs from '@/app/(user)/review/_components/ReviewTabs'
+import PullRequestsTable from '@/app/(user)/review/_components/PullRequestsTable'
+import { getPullRequests } from '@/app/(user)/review/_utils/get-pull-requests'
 
 interface ReviewPageProps {
   searchParams: { from?: string; to?: string; tab?: string }
@@ -28,13 +29,11 @@ export default async function ReviewPage(props: ReviewPageProps) {
     return
   }
 
-  const pullRequests = await dbClient
-    .selectFrom('github.pull_request')
-    .where('created_at', '>=', startDate)
-    .where('created_at', '<=', endDate)
-    .where('github.pull_request.organization_id', '=', organization?.id)
-    .selectAll()
-    .execute()
+  const pullRequests = await getPullRequests({
+    startDate,
+    endDate,
+    organization,
+  })
 
   const tab = searchParams.tab ?? 'overview'
 
@@ -68,7 +67,7 @@ export default async function ReviewPage(props: ReviewPageProps) {
           <ContributorsTable pullRequests={pullRequests} />
         </TabsContent>
         <TabsContent value="pull_requests" className="space-y-4">
-          <PullRequestsTab />
+          <PullRequestsTable pullRequests={pullRequests} />
         </TabsContent>
       </ReviewTabs>
     </>

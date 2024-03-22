@@ -1,13 +1,13 @@
+import { PullRequest } from '@/app/(user)/review/_utils/get-pull-requests'
 import { getTopContributors } from '@/app/(user)/review/_utils/get-top-contributors'
-import { GithubPullRequest } from '@/lib/db/types'
 
 interface TopContributorsListProps {
-  pullRequests: GithubPullRequest[]
+  pullRequests: PullRequest[]
 }
 
 export async function TopContributorsList(props: TopContributorsListProps) {
   const { pullRequests } = props
-  const topContributors = await getTopContributors(pullRequests)
+  const topContributors = getTopContributors(pullRequests)
 
   return (
     <div className="space-y-4">

@@ -10,6 +10,7 @@ import {
 } from '@/lib/ui/Table'
 import {
   ColumnDef,
+  TableOptions,
   flexRender,
   getCoreRowModel,
   useReactTable,
@@ -18,16 +19,18 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  options?: Partial<TableOptions<TData>>
 }
 
-export default function DataTable<TData, TValue>({
-  columns,
-  data,
-}: DataTableProps<TData, TValue>) {
+export default function DataTable<TData, TValue>(
+  props: DataTableProps<TData, TValue>,
+) {
+  const { data, columns, options = {} } = props
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    ...options,
   })
 
   return (

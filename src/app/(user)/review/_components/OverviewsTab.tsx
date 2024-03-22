@@ -5,7 +5,8 @@ import { getNumContributors } from '@/app/(user)/review/_utils/get-num-contribut
 import { getNumMergedPRs } from '@/app/(user)/review/_utils/get-num-merged-prs'
 import { getNumPendingPRs } from '@/app/(user)/review/_utils/get-num-pending-prs'
 import { getPercentTopContributors } from '@/app/(user)/review/_utils/get-percent-top-contributors'
-import { GithubPullRequest } from '@/lib/db/types'
+import { PullRequest } from '@/app/(user)/review/_utils/get-pull-requests'
+import { numTopContributors } from '@/app/(user)/review/_utils/get-top-contributors'
 import {
   Card,
   CardContent,
@@ -16,13 +17,14 @@ import {
 import TooltipQuestion from '@/lib/ui/TooltipQuestion'
 
 interface OverviewsTabProps {
-  pullRequests: GithubPullRequest[]
+  pullRequests: PullRequest[]
   startDate: Date
   endDate: Date
 }
 
 export default async function OverviewsTab(props: OverviewsTabProps) {
   const { pullRequests, startDate, endDate } = props
+
   return (
     <>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -126,7 +128,7 @@ export default async function OverviewsTab(props: OverviewsTabProps) {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {await getNumContributors(pullRequests)}
+              {getNumContributors(pullRequests)}
             </div>
           </CardContent>
         </Card>
@@ -148,7 +150,7 @@ export default async function OverviewsTab(props: OverviewsTabProps) {
           <CardHeader>
             <CardTitle>Top Contributors</CardTitle>
             <CardDescription>
-              Closed {await getPercentTopContributors(pullRequests)}% of all PRs
+              Closed {getPercentTopContributors(pullRequests)}% of all PRs
             </CardDescription>
           </CardHeader>
           <CardContent>

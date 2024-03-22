@@ -1,6 +1,6 @@
 'use client'
 
-import { GithubPullRequest } from '@/lib/db/types'
+import { PullRequest } from '@/app/(user)/review/_utils/get-pull-requests'
 import { addDays, differenceInDays, format, isSameDay } from 'date-fns'
 import { useEffect, useState } from 'react'
 import {
@@ -15,7 +15,7 @@ import {
 type Entry = { date: string; count: number }
 
 interface OpenedPRsChartProps {
-  pullRequests: GithubPullRequest[]
+  pullRequests: PullRequest[]
   startDate: Date
   endDate: Date
 }
