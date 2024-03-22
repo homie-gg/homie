@@ -1,20 +1,23 @@
-'use client'
+import { getTopContributors } from '@/app/(user)/review/_utils/get-top-contributors'
+import { GithubPullRequest } from '@/lib/db/types'
 
-import GithubUsername from '@/app/(user)/review/_components/GithubUserName'
-import { useContributors } from '@/app/(user)/review/_components/PullRequestsProvider'
+interface TopContributorsListProps {
+  pullRequests: GithubPullRequest[]
+}
 
-export function TopContributorsList() {
-  const { topContributors } = useContributors()
+export async function TopContributorsList(props: TopContributorsListProps) {
+  const { pullRequests } = props
+  const topContributors = await getTopContributors(pullRequests)
 
   return (
     <div className="space-y-4">
       {topContributors.map((contributor) => (
         <div
           className="flex items-center justify-between"
-          key={contributor.userId}
+          key={contributor.username}
         >
           <p className="text-sm font-medium leading-none">
-            <GithubUsername userId={contributor.userId} />
+            {contributor.username}
           </p>
           <p className="text-sm text-muted-foreground">{contributor.prCount}</p>
         </div>

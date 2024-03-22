@@ -1,5 +1,3 @@
-import ContributorsTableSingleRow from '@/app/(user)/review/_components/ContributorsTableSingleRow'
-import PullRequestRows from '@/app/(user)/review/_components/PullRequestsTableRows'
 import {
   Table,
   TableBody,
@@ -24,9 +22,7 @@ export default function PullRequestsTab(props: PullRequestsTabProps) {
           <TableHead className="w-8/12">PR Title</TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody>
-        <PullRequestRows />
-      </TableBody>
+      <TableBody></TableBody>
     </Table>
   )
 }

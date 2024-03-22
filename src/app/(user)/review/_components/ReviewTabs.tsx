@@ -2,7 +2,6 @@
 
 import { setReviewUrl } from '@/app/(user)/review/_utils/set-review-url'
 import { TabsProps, Root } from '@radix-ui/react-tabs'
-import { useEffect, useState } from 'react'
 
 type ReviewTabsProps = TabsProps & {
   startDate: Date

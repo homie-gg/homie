@@ -1,6 +1,6 @@
 'use client'
 
-import { usePullRequests } from '@/app/(user)/review/_components/PullRequestsProvider'
+import { GithubPullRequest } from '@/lib/db/types'
 import { addDays, differenceInDays, format, isSameDay } from 'date-fns'
 import { useEffect, useState } from 'react'
 import {
@@ -14,13 +14,19 @@ import {
 
 type Entry = { date: string; count: number }
 
-export function OpenedPRsChart() {
-  const { date, pullRequests } = usePullRequests()
+interface OpenedPRsChartProps {
+  pullRequests: GithubPullRequest[]
+  startDate: Date
+  endDate: Date
+}
+
+export function OpenedPRsChart(props: OpenedPRsChartProps) {
+  const { pullRequests } = props
 
   const [data, setData] = useState<Entry[]>([])
 
-  const startDate = date?.from?.toISOString()
-  const endDate = date?.to?.toISOString()
+  const startDate = props.startDate.toISOString()
+  const endDate = props.endDate.toISOString()
 
   useEffect(() => {
     if (!startDate || !endDate) {

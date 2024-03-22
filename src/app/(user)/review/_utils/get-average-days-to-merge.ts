@@ -1,11 +1,7 @@
-'use client'
-
-import { usePullRequests } from '@/app/(user)/review/_components/PullRequestsProvider'
+import { GithubPullRequest } from '@/lib/db/types'
 import { differenceInDays } from 'date-fns'
 
-export default function AverageDaysToMerge() {
-  const { pullRequests } = usePullRequests()
-
+export function getAverageDaysToMerge(pullRequests: GithubPullRequest[]) {
   let totalDaysToMerge = 0
   let numMergedPRs = 0
 

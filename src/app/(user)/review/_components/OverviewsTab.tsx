@@ -1,11 +1,11 @@
-import AverageDaysToMerge from '@/app/(user)/review/_components/AverageDaysToMerge'
-import NumActivePRs from '@/app/(user)/review/_components/NumActivePRs'
-import NumContributors from '@/app/(user)/review/_components/NumContributors'
-import NumMergedPRs from '@/app/(user)/review/_components/NumMergedPRs'
-import NumOpenedPRs from '@/app/(user)/review/_components/NumOpenedPRs'
 import { OpenedPRsChart } from '@/app/(user)/review/_components/OpenedPRsChart'
-import PercentTopContribution from '@/app/(user)/review/_components/PercentTopContribution'
 import { TopContributorsList } from '@/app/(user)/review/_components/TopContributorsList'
+import { getAverageDaysToMerge } from '@/app/(user)/review/_utils/get-average-days-to-merge'
+import { getNumContributors } from '@/app/(user)/review/_utils/get-num-contributors'
+import { getNumMergedPRs } from '@/app/(user)/review/_utils/get-num-merged-prs'
+import { getNumPendingPRs } from '@/app/(user)/review/_utils/get-num-pending-prs'
+import { getPercentTopContributors } from '@/app/(user)/review/_utils/get-percent-top-contributors'
+import { GithubPullRequest } from '@/lib/db/types'
 import {
   Card,
   CardContent,
@@ -15,10 +15,14 @@ import {
 } from '@/lib/ui/Card'
 import TooltipQuestion from '@/lib/ui/TooltipQuestion'
 
-interface OverviewsTabProps {}
+interface OverviewsTabProps {
+  pullRequests: GithubPullRequest[]
+  startDate: Date
+  endDate: Date
+}
 
-export default function OverviewsTab(props: OverviewsTabProps) {
-  const {} = props
+export default async function OverviewsTab(props: OverviewsTabProps) {
+  const { pullRequests, startDate, endDate } = props
   return (
     <>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -35,15 +39,13 @@ export default function OverviewsTab(props: OverviewsTabProps) {
               <path
                 d="M8.69667 0.0403541C8.90859 0.131038 9.03106 0.354857 8.99316 0.582235L8.0902 6.00001H12.5C12.6893 6.00001 12.8625 6.10701 12.9472 6.27641C13.0319 6.4458 13.0136 6.6485 12.8999 6.80001L6.89997 14.8C6.76167 14.9844 6.51521 15.0503 6.30328 14.9597C6.09135 14.869 5.96888 14.6452 6.00678 14.4178L6.90974 9H2.49999C2.31061 9 2.13748 8.893 2.05278 8.72361C1.96809 8.55422 1.98636 8.35151 2.09999 8.2L8.09997 0.200038C8.23828 0.0156255 8.48474 -0.0503301 8.69667 0.0403541ZM3.49999 8.00001H7.49997C7.64695 8.00001 7.78648 8.06467 7.88148 8.17682C7.97648 8.28896 8.01733 8.43723 7.99317 8.5822L7.33027 12.5596L11.5 7.00001H7.49997C7.353 7.00001 7.21347 6.93534 7.11846 6.8232C7.02346 6.71105 6.98261 6.56279 7.00678 6.41781L7.66968 2.44042L3.49999 8.00001Z"
                 fill="currentColor"
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+                fillRule="evenodd"
+                clipRule="evenodd"
               ></path>
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              <NumOpenedPRs />
-            </div>
+            <div className="text-2xl font-bold">{pullRequests.length}</div>
           </CardContent>
         </Card>
 
@@ -52,7 +54,7 @@ export default function OverviewsTab(props: OverviewsTabProps) {
             <CardTitle className="text-sm font-medium">
               Merged PRs{' '}
               <TooltipQuestion>
-                On average merged after <AverageDaysToMerge />
+                On average merged after {getAverageDaysToMerge(pullRequests)}
               </TooltipQuestion>
             </CardTitle>
             <svg
@@ -73,7 +75,7 @@ export default function OverviewsTab(props: OverviewsTabProps) {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              <NumMergedPRs />
+              {getNumMergedPRs(pullRequests)}
             </div>
           </CardContent>
         </Card>
@@ -100,7 +102,7 @@ export default function OverviewsTab(props: OverviewsTabProps) {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              <NumActivePRs />
+              {getNumPendingPRs(pullRequests)}
             </div>
           </CardContent>
         </Card>
@@ -124,7 +126,7 @@ export default function OverviewsTab(props: OverviewsTabProps) {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              <NumContributors />
+              {getNumContributors(pullRequests)}
             </div>
           </CardContent>
         </Card>
@@ -135,18 +137,22 @@ export default function OverviewsTab(props: OverviewsTabProps) {
             <CardTitle>Pull Requests</CardTitle>
           </CardHeader>
           <CardContent className="pl-2">
-            <OpenedPRsChart />
+            <OpenedPRsChart
+              pullRequests={pullRequests}
+              startDate={startDate}
+              endDate={endDate}
+            />
           </CardContent>
         </Card>
         <Card className="col-span-3">
           <CardHeader>
             <CardTitle>Top Contributors</CardTitle>
             <CardDescription>
-              Closed <PercentTopContribution />% of all PRs
+              Closed {await getPercentTopContributors(pullRequests)}% of all PRs
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <TopContributorsList />
+            <TopContributorsList pullRequests={pullRequests} />
           </CardContent>
         </Card>
       </div>

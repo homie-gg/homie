@@ -50,6 +50,7 @@ app.webhooks.on('pull_request.closed', async (params) => {
     .values({
       ext_gh_user_id: pull_request.user.id,
       organization_id: organization.id,
+      username: pull_request.user.name ?? '',
     })
     .onConflict((oc) => oc.column('ext_gh_user_id').doNothing())
     .returning('id')
