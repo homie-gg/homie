@@ -1,7 +1,8 @@
 'use client'
 
-import { setReviewUrl } from '@/app/(user)/review/_utils/set-review-url'
+import { getReviewUrl } from '@/app/(user)/review/_utils/set-review-url'
 import { DateRangePicker } from '@/lib/ui/DateRangePicker'
+import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
 import { DateRange } from 'react-day-picker'
 
@@ -13,6 +14,8 @@ interface DatePickerProps {
 
 export default function DatePicker(props: DatePickerProps) {
   const { from, to, tab } = props
+
+  const router = useRouter()
 
   const [date, setDate] = useState<DateRange>({
     from,
@@ -37,11 +40,13 @@ export default function DatePicker(props: DatePickerProps) {
       return
     }
 
-    setReviewUrl({
-      startDate: date.from,
-      endDate: date.to,
-      tab,
-    })
+    router.push(
+      getReviewUrl({
+        startDate: date.from,
+        endDate: date.to,
+        tab,
+      }),
+    )
   }
 
   return (

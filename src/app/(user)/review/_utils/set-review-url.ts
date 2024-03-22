@@ -1,16 +1,16 @@
 import { format } from 'date-fns'
 
-interface SetReviewUrlParams {
+interface GetReviewUrlParams {
   startDate: Date
   endDate: Date
   tab: string
 }
 
-export function setReviewUrl(params: SetReviewUrlParams) {
+export function getReviewUrl(params: GetReviewUrlParams) {
   const { startDate, endDate, tab } = params
 
   const formattedFrom = format(startDate, 'yyyy-MM-dd')
   const formattedTo = format(endDate, 'yyyy-MM-dd')
 
-  window.location.href = `/review?tab=${tab}&from=${formattedFrom}&to=${formattedTo}`
+  return `/review?tab=${tab}&from=${formattedFrom}&to=${formattedTo}`
 }
