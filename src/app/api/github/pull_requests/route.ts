@@ -11,6 +11,7 @@ const pullRequest = z.object({
   created_at: z.string(),
   merged_at: z.string().nullable(),
   closed_at: z.string().nullable(),
+  title: z.string(),
   user_id: z.number(),
 })
 

@@ -1,7 +1,4 @@
-'use client'
-
-import ContributorsTableRow from '@/app/(user)/review/_components/ContributorPRsTable'
-import { useContributors } from '@/app/(user)/review/_components/PullRequestsProvider'
+import ContributorsTableRows from '@/app/(user)/review/_components/ContributorsTableRows'
 import {
   Table,
   TableBody,
@@ -15,27 +12,20 @@ interface ContributorsTabProps {}
 
 export default function ContributorsTab(props: ContributorsTabProps) {
   const {} = props
-  const { contributors } = useContributors()
-
-  const sorted = contributors.sort((a, b) => b.prCount - a.prCount) // Descending
 
   return (
     <Table>
-      <TableCaption>A list of everybody who has opened a PR.</TableCaption>
+      <TableCaption>
+        A list of Github contributors who have opened a PR.
+      </TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-100">Github Username</TableHead>
-          <TableHead className="text-right">PR Count</TableHead>
+          <TableHead>Github Username</TableHead>
+          <TableHead className="text-right w-[200px]">PR Count</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {sorted.map((contributor) => (
-          <ContributorsTableRow
-            key={contributor.userId}
-            userId={contributor.userId}
-            prCount={contributor.prCount}
-          />
-        ))}
+        <ContributorsTableRows />
       </TableBody>
     </Table>
   )

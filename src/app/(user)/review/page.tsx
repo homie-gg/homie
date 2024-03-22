@@ -7,6 +7,7 @@ import OverviewsTab from '@/app/(user)/review/_components/OverviewsTab'
 import ContributorsTab from '@/app/(user)/review/_components/ContributorsTab'
 import { auth } from '@clerk/nextjs'
 import { getUserOrganization } from '@/lib/auth/get-user-organization'
+import PullRequestsTab from '@/app/(user)/review/_components/PullRequestsTab'
 export default async function ReviewPage() {
   const startDate = startOfWeek(new Date(), { weekStartsOn: 1 }) // Mon start
   const endDate = endOfWeek(startDate, { weekStartsOn: 1 })
@@ -52,6 +53,9 @@ export default async function ReviewPage() {
         </TabsContent>
         <TabsContent value="contributors" className="space-y-4">
           <ContributorsTab />
+        </TabsContent>
+        <TabsContent value="pull_requests" className="space-y-4">
+          <PullRequestsTab />
         </TabsContent>
       </Tabs>
     </PullRequestsProvider>
