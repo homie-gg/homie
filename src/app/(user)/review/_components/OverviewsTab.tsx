@@ -126,7 +126,7 @@ export default async function OverviewsTab(props: OverviewsTabProps) {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {getNumContributors(pullRequests)}
+              {await getNumContributors(pullRequests)}
             </div>
           </CardContent>
         </Card>
