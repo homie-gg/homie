@@ -14,7 +14,7 @@ export default function PercentTopContribution() {
   }
 
   const numTopPullRequests = pullRequests.filter((pr) =>
-    topContributors.some((c) => c.userId === String(pr.user_id)),
+    topContributors.some((c) => c.userId === pr.user_id),
   ).length
 
   const percentContribution = Math.round(

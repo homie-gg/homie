@@ -141,7 +141,7 @@ export default function OverviewsTab(props: OverviewsTabProps) {
           <CardHeader>
             <CardTitle>Top Contributors</CardTitle>
             <CardDescription>
-              Closed <PercentTopContribution />% of all PRs.
+              Closed <PercentTopContribution />% of all PRs
             </CardDescription>
           </CardHeader>
           <CardContent>
