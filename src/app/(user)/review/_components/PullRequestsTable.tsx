@@ -103,7 +103,7 @@ export default function PullRequestsTable(props: ContributorsTableProps) {
         initialState: {
           sorting: [
             {
-              id: 'username',
+              id: 'user_username',
               desc: false,
             },
           ],
