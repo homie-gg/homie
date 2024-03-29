@@ -5,16 +5,28 @@ export const shorthands: ColumnDefinitions | undefined = undefined
 
 export async function up(pgm: MigrationBuilder): Promise<void> {
   return pgm.createTable(
-    { schema: 'voidpm', name: 'organization' },
+    {
+      schema: 'github',
+      name: 'organization',
+    },
     {
       id: 'id',
       created_at: 'timestamp',
       updated_at: 'timestamp',
-      ext_clerk_user_id: { type: 'text', unique: true, notNull: true },
+      ext_gh_install_id: { type: 'integer', notNull: true, unique: true },
+      organization_id: {
+        type: 'integer',
+        notNull: true,
+        unique: true,
+        references: {
+          schema: 'voidpm',
+          name: 'organization',
+        },
+      },
     },
   )
 }
 
 export async function down(pgm: MigrationBuilder): Promise<void> {
-  pgm.dropTable('organization')
+  pgm.dropTable('github.organization')
 }

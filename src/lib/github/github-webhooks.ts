@@ -36,8 +36,13 @@ app.webhooks.on('pull_request.closed', async (params) => {
 
   const organization = await dbClient
     .selectFrom('voidpm.organization')
+    .innerJoin(
+      'github.organization',
+      'github.organization.organization_id',
+      'voidpm.organization.id',
+    )
     .where('ext_gh_install_id', '=', installation?.id!)
-    .select('id')
+    .select('voidpm.organization.id')
     .executeTakeFirst()
 
   if (!organization) {

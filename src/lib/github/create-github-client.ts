@@ -3,7 +3,7 @@ import { Octokit } from 'octokit'
 import { createAppAuth } from '@octokit/auth-app'
 
 interface CreateGithubClientParams {
-  installationId: string
+  installationId: number
 }
 
 export const privateKey = crypto

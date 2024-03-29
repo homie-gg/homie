@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { ClerkProvider } from '@clerk/nextjs'
+import { ClerkProvider, RedirectToSignIn, SignedOut } from '@clerk/nextjs'
 import './globals.css'
 import { cn } from '@/lib/utils'
 import { TooltipProvider } from '@/lib/ui/Tooltip'

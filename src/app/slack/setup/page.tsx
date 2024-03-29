@@ -1,21 +1,21 @@
 import { dbClient } from '@/lib/db/client'
 import { PageProps } from '@/lib/next-js/page-props'
+import { GetAccessToken } from '@/lib/slack/get-access-token'
 import { auth } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 
-export default async function GithubSetup(
+export default async function SlackSetup(
   props: PageProps<
     {},
     {
-      installation_id: string
-      setup_action: 'install'
+      code: string
       state: string
     }
   >,
 ) {
-  const {
-    searchParams: { installation_id, state: organization_id },
-  } = props
+  const { searchParams } = props
+
+  const { code, state: organization_id } = searchParams
 
   const { userId } = auth()
 
@@ -23,7 +23,7 @@ export default async function GithubSetup(
     redirect('/')
   }
 
-  const installId = parseInt(installation_id)
+  const data = await GetAccessToken({ code })
 
   const organization = await dbClient
     .selectFrom('voidpm.organization')
@@ -37,14 +37,20 @@ export default async function GithubSetup(
   }
 
   dbClient
-    .insertInto('github.organization')
+    .insertInto('slack.workspace')
     .values({
-      ext_gh_install_id: installId,
+      ext_slack_webhook_channel_id: data.incoming_webhook.channel_id,
+      ext_slack_team_id: data.team.id,
+      webhook_url: data.incoming_webhook.url,
       organization_id: organization.id,
+      slack_access_token: data.access_token,
     })
     .onConflict((oc) =>
       oc.column('organization_id').doUpdateSet({
-        ext_gh_install_id: installId,
+        ext_slack_webhook_channel_id: data.incoming_webhook.channel_id,
+        ext_slack_team_id: data.team.id,
+        webhook_url: data.incoming_webhook.url,
+        slack_access_token: data.access_token,
       }),
     )
     .executeTakeFirstOrThrow()
