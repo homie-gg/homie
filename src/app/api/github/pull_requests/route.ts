@@ -11,7 +11,7 @@ const pullRequest = z.object({
   merged_at: z.string().nullable(),
   closed_at: z.string().nullable(),
   title: z.string(),
-  user_id: z.number(),
+  contributor_id: z.number(),
 })
 
 export type GithubPullRequest = z.infer<typeof pullRequest>

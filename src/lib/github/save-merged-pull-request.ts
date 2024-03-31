@@ -58,8 +58,8 @@ export async function saveMergedPullRequest(
   }
 
   // Create Github User if doesn't exits
-  const githubUser = await dbClient
-    .insertInto('github.user')
+  const contributor = await dbClient
+    .insertInto('voidpm.contributor')
     .values({
       ext_gh_user_id: pullRequest.user.id,
       organization_id: organization.id,
@@ -125,7 +125,7 @@ export async function saveMergedPullRequest(
       summary,
       ext_gh_pull_request_id: pullRequest.id,
       organization_id: organization.id,
-      user_id: githubUser.id,
+      contributor_id: contributor.id,
       repo_id: repo.id,
     },
     issue: issue?.body ?? null,
@@ -137,7 +137,7 @@ export async function saveMergedPullRequest(
       created_at: parseISO(pullRequest.created_at),
       ext_gh_pull_request_id: pullRequest.id,
       organization_id: organization.id,
-      user_id: githubUser.id,
+      contributor_id: contributor.id,
       title: pullRequest.title,
       html_url: pullRequest.html_url,
       repo_id: repo.id,
@@ -151,7 +151,7 @@ export async function saveMergedPullRequest(
       oc.column('ext_gh_pull_request_id').doUpdateSet({
         created_at: parseISO(pullRequest.created_at),
         organization_id: organization.id,
-        user_id: githubUser.id,
+        contributor_id: contributor.id,
         title: pullRequest.title,
         html_url: pullRequest.html_url,
         repo_id: repo.id,

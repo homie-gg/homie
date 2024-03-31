@@ -21,8 +21,8 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
   }
 
   // Create Github User if doesn't exits
-  const githubUser = await dbClient
-    .insertInto('github.user')
+  const contributor = await dbClient
+    .insertInto('voidpm.contributor')
     .values({
       ext_gh_user_id: pull_request.user.id,
       organization_id: organization.id,
@@ -61,7 +61,7 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
       created_at: parseISO(pull_request.created_at),
       ext_gh_pull_request_id: pull_request.id,
       organization_id: organization.id,
-      user_id: githubUser.id,
+      contributor_id: contributor.id,
       title: pull_request.title,
       html_url: pull_request.html_url,
       repo_id: repo.id,

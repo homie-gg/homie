@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 
 import ms from 'ms'
 import { dbClient } from '@/lib/db/client'
-import { GithubRepo, GithubUser, Organization } from '@/lib/db/types'
+import { Contributor, GithubRepo, Organization } from '@/lib/db/types'
 ;(async () => {
   const organization = await dbClient
     .selectFrom('voidpm.organization')
@@ -24,12 +24,12 @@ import { GithubRepo, GithubUser, Organization } from '@/lib/db/types'
 
 async function seedGithubUsers(
   organization: Organization,
-): Promise<GithubUser[]> {
+): Promise<Contributor[]> {
   return await Promise.all(
     Array.from({ length: 20 }).map(
       async (_, index) =>
         await dbClient
-          .insertInto('github.user')
+          .insertInto('voidpm.contributor')
           .values({
             organization_id: organization.id,
             ext_gh_user_id: index + 800,
@@ -61,13 +61,13 @@ async function seedGithubRepos(
   )
 }
 
-async function seedPullRequests(repos: GithubRepo[], user: GithubUser) {
+async function seedPullRequests(repos: GithubRepo[], contributor: Contributor) {
   const numPullRequests = generateRandomNumber(1, 10)
 
   return Promise.all(
     Array.from({ length: numPullRequests }).map(async (_, index) => {
       const repo = repos[generateRandomNumber(1, repos.length) - 1]
-      const ghPullRequestId = user.id * 100 + index
+      const ghPullRequestId = contributor.id * 100 + index
 
       const createdDaysAgo = generateRandomNumber(1, 14)
 
@@ -79,13 +79,14 @@ async function seedPullRequests(repos: GithubRepo[], user: GithubUser) {
       return dbClient
         .insertInto('github.pull_request')
         .values({
+          number: index + 1,
           created_at: new Date(Date.now() - ms(`${createdDaysAgo} days`)),
           ext_gh_pull_request_id: ghPullRequestId,
           html_url: `https://github.com/void-pm/void/pull/${ghPullRequestId}`,
           title: `Fake PR: ${ghPullRequestId}`,
           repo_id: repo.id,
-          user_id: user.id,
-          organization_id: user.organization_id,
+          contributor_id: contributor.id,
+          organization_id: contributor.organization_id,
           closed_at: wasClosed
             ? new Date(Date.now() - ms(`${closedDaysAgo} days`))
             : undefined,

@@ -10,12 +10,12 @@ export function getContributors(pullRequests: PullRequest[]): Contributor[] {
   const contributors: Record<string, Contributor> = {}
 
   for (const pullRequest of pullRequests) {
-    const current = contributors[pullRequest.user_id] ?? {
-      id: pullRequest.user_id,
+    const current = contributors[pullRequest.contributor_id] ?? {
+      id: pullRequest.contributor_id,
       username: pullRequest.user_username,
       prCount: 0,
     }
-    contributors[pullRequest.user_id] = {
+    contributors[pullRequest.contributor_id] = {
       ...current,
       prCount: current.prCount + 1,
     }

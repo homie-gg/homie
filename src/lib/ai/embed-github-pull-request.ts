@@ -1,6 +1,4 @@
-import { metadata } from './../../app/layout'
 import { PineconeRecord } from '@pinecone-database/pinecone'
-import { GithubPullRequest } from '@/lib/db/types'
 import { OpenAIEmbeddings } from '@langchain/openai'
 import { pineconeClient } from '@/lib/pinecone/create-pinecone-client'
 import { v4 as uuid } from 'uuid'
@@ -10,7 +8,7 @@ interface EmbedGithubPullRequestParams {
     summary: string
     ext_gh_pull_request_id: number
     organization_id: number
-    user_id: number
+    contributor_id: number
     repo_id: number
   }
   issue: string | null
@@ -23,7 +21,7 @@ export async function embedGithubPullRequest(
     pullRequest: {
       summary,
       ext_gh_pull_request_id,
-      user_id,
+      contributor_id,
       repo_id,
       organization_id,
     },
@@ -42,7 +40,7 @@ export async function embedGithubPullRequest(
       text: summary,
       ext_gh_pull_request_id,
       organization_id,
-      user_id,
+      contributor_id,
       repo_id,
     },
   }

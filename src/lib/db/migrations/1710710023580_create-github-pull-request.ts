@@ -22,12 +22,12 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
           name: 'organization',
         },
       },
-      user_id: {
+      contributor_id: {
         type: 'integer',
         notNull: true,
         references: {
-          schema: 'github',
-          name: 'user',
+          schema: 'voidpm',
+          name: 'contributor',
         },
       },
       repo_id: {
