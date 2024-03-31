@@ -147,6 +147,21 @@ export async function saveMergedPullRequest(
       summary,
       summary_metadata: metadata,
     })
+    .onConflict((oc) =>
+      oc.column('ext_gh_pull_request_id').doUpdateSet({
+        created_at: parseISO(pullRequest.created_at),
+        organization_id: organization.id,
+        user_id: githubUser.id,
+        title: pullRequest.title,
+        html_url: pullRequest.html_url,
+        repo_id: repo.id,
+        body: pullRequest.body ?? '',
+        merged_at: parseISO(pullRequest.merged_at!),
+        number: pullRequest.number,
+        summary,
+        summary_metadata: metadata,
+      }),
+    )
     .returningAll()
     .executeTakeFirstOrThrow()
 }
