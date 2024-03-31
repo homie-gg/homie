@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { app } from '@/lib/github/app'
 import '@/app/api/github/webhook/handlers/pull-request-opened'
 import '@/app/api/github/webhook/handlers/pull-request-closed'
+import '@/app/api/github/webhook/handlers/pull-request-edited'
 
 export const POST = async (request: NextRequest) => {
   app.webhooks.verifyAndReceive({

@@ -57,7 +57,9 @@ export async function handleGenerateOpenPullRequestSummary(
     issue: issue?.body ?? null,
   })
 
-  const bodyWithSummary = pull_request.body?.replace(summaryKey, summary)
+  const bodyWithSummary = pull_request.body
+    ?.replace(summaryKey, summary)
+    .replace(summaryKey, 'summary key') // avoid infinite loop of summaries by replacing the key if it exists
 
   await github.rest.pulls.update({
     owner,

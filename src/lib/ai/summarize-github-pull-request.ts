@@ -138,6 +138,7 @@ const prompts = {
   - Do not infer any initiatives, or features other than what has already been mentioned in the CHANGES, or ISSUE.
   - Use bullet points to present the summary.
   - Each point should be 1 to 2 sentences long.
+  - The summary should be a single list with no headings, or sub-lists.
   - Do not include a conclusion.
   
   TITLE: 
@@ -155,6 +156,7 @@ const prompts = {
   - Do not infer any initiatives, or features other than what has already been mentioned in the ISSUE.
   - Use bullet points to present the summary.
   - Each point should be 1 to 2 sentences long.
+  - The summary should be a single list with no headings, or sub-lists.
   - Do not include a conclusion.
 
   TITLE: 
@@ -171,6 +173,7 @@ const prompts = {
   - Do not infer any initiatives, or features other than what has already been mentioned in the ISSUE, or BODY.
   - Use bullet points to present the summary.
   - Each point should be 1 to 2 sentences long.
+  - The summary should be a single list with no headings, or sub-lists.
   - Do not include a conclusion.
 
   TITLE: 
@@ -188,6 +191,7 @@ const prompts = {
   - The summary should only be based on the BODY only. Do not generate the summary without a clear reference to the BODY.
   - Do not infer any initiatives, or features other than what has already been mentioned in the ISSUE, or BODY.
   - Use bullet points to present the summary.
+  - The summary should be a single list with no headings, or sub-lists.
   - Each point should be 1 to 2 sentences long.
   - Do not include a conclusion.
 
@@ -205,6 +209,8 @@ const prompts = {
   - The summary should only be based on the CHANGES, ISSUE, and BODY. Do not generate the summary without a clear reference to the CHANGES, ISSUE, OR BODY.
   - Do not infer any initiatives, or features other than what has already been mentioned in the CHANGES, ISSUE, or BODY.
   - Use bullet points to present the summary.
+  - The summary should be a single list with no headings, or sub-lists.
+  - The summary should be less than 5 points.
   - Each point should be 1 to 2 sentences long.
   - Do not include a conclusion.
 
