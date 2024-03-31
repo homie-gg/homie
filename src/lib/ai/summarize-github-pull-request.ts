@@ -5,6 +5,7 @@ import { OpenAI } from '@langchain/openai'
 
 interface SummarizeGithubPullRequestParams {
   pullRequest: {
+    title: string
     body: string | null
     repo_id: number
     pull_number: number
@@ -40,6 +41,7 @@ export async function summarizeGithubPullRequest(
   }
 
   const input = await getInput({
+    title: pullRequest.title,
     diffSummary,
     issue,
     body: pullRequest.body,
@@ -53,6 +55,7 @@ export async function summarizeGithubPullRequest(
 }
 
 interface GetInputParams {
+  title: string
   diffSummary: string | null
   issue: string | null
   body: string | null
@@ -62,15 +65,16 @@ interface GetInputParams {
  * Get the appropriate prompt input based on the available data.
  */
 function getInput(params: GetInputParams) {
-  const { diffSummary, issue, body } = params
+  const { title, diffSummary, issue, body } = params
 
   if (diffSummary && issue && !body) {
     const promptTemplate = new PromptTemplate({
       template: prompts.diffAndIssue,
-      inputVariables: ['diff', 'issue'],
+      inputVariables: ['title', 'diff', 'issue'],
     })
 
     return promptTemplate.format({
+      title,
       diff: diffSummary,
       issue,
     })
@@ -79,10 +83,11 @@ function getInput(params: GetInputParams) {
   if (!diffSummary && issue && !body) {
     const promptTemplate = new PromptTemplate({
       template: prompts.issueOnly,
-      inputVariables: ['issue'],
+      inputVariables: ['title', 'issue'],
     })
 
     return promptTemplate.format({
+      title,
       issue,
     })
   }
@@ -90,10 +95,11 @@ function getInput(params: GetInputParams) {
   if (!diffSummary && issue && body) {
     const promptTemplate = new PromptTemplate({
       template: prompts.issueAndBody,
-      inputVariables: ['issue', 'body'],
+      inputVariables: ['title', 'issue', 'body'],
     })
 
     return promptTemplate.format({
+      title,
       issue,
       body,
     })
@@ -102,20 +108,22 @@ function getInput(params: GetInputParams) {
   if (!diffSummary && !issue && body) {
     const promptTemplate = new PromptTemplate({
       template: prompts.bodyOnly,
-      inputVariables: ['body'],
+      inputVariables: ['title', 'body'],
     })
 
     return promptTemplate.format({
+      title,
       body,
     })
   }
 
   const promptTemplate = new PromptTemplate({
     template: prompts.complete,
-    inputVariables: ['diff', 'issue', 'body'],
+    inputVariables: ['title', 'diff', 'issue', 'body'],
   })
 
   return promptTemplate.format({
+    title,
     diff: diffSummary,
     issue,
     body,
@@ -123,7 +131,8 @@ function getInput(params: GetInputParams) {
 }
 
 const prompts = {
-  diffAndIssue: `Create a Pull Request. You MUST follow the following rules when generating the summary:
+  diffAndIssue: `Write a Pull Request summary. You MUST follow the following rules when generating the summary:
+  - The TITLE is the pull request title.
   - The CHANGES will be a summary of all the changes.
   - The ISSUE will contain the description of the issue that this pull request aims to solve.
   - The summary should only be based on the CHANGES, and ISSUE. Do not generate the summary without a clear reference to CHANGES, or ISSUE.
@@ -131,26 +140,32 @@ const prompts = {
   - Use bullet points to present the summary.
   - Each point should be 1 to 2 sentences long.
   - Do not include a conclusion.
-  - 
   
+  TITLE: 
+  {title}
+
   CHANGES:
   {diff}
   
   ISSUE:
   {issue}`,
   issueOnly: `Create a Pull Request summary from the information below. You MUST follow the following rules when generating the summary:
+  - The TITLE is the pull request title.
   - The ISSUE will contain the description of an issue that this pull request aims to solve.
   - The summary should only be based on the ISSUE only. Do not generate the summary without a clear reference to the ISSUE.
   - Do not infer any initiatives, or features other than what has already been mentioned in the ISSUE.
   - Use bullet points to present the summary.
   - Each point should be 1 to 2 sentences long.
   - Do not include a conclusion.
-  - 
+
+  TITLE: 
+  {title}
 
   ISSUE: 
   {issue}
   `,
   issueAndBody: `Create a Pull Request summary from the information below. You MUST follow the following rules when generating the summary:
+  - The TITLE is the pull request title.
   - The ISSUE will contain the description of a issue that this pull request aims to solve.
   - The BODY will contain a description of what this pull request attempts to achieve.
   - The summary should only be based on the ISSUE, and BODY. Do not generate the summary without a clear reference to the ISSUE, OR BODY.
@@ -158,7 +173,9 @@ const prompts = {
   - Use bullet points to present the summary.
   - Each point should be 1 to 2 sentences long.
   - Do not include a conclusion.
-  - 
+
+  TITLE: 
+  {title}
   
   ISSUE:
   {issue}
@@ -167,6 +184,7 @@ const prompts = {
   {body}
   `,
   bodyOnly: `Create a Pull Request summary from the information below. You MUST follow the following rules when generating the summary:
+  - The TITLE is the pull request title.
   - The BODY will contain a description of what this pull request attempts to achieve.
   - The summary should only be based on the BODY only. Do not generate the summary without a clear reference to the BODY.
   - Do not infer any initiatives, or features other than what has already been mentioned in the ISSUE, or BODY.
@@ -174,10 +192,14 @@ const prompts = {
   - Each point should be 1 to 2 sentences long.
   - Do not include a conclusion.
 
+  TITLE: 
+  {title}
+
   BODY: 
   {body}
   `,
   complete: `Create a Pull Request summary from the information below. You MUST follow the following rules when generating the summary:
+  - The TITLE is the pull request title.
   - The CHANGES will be a summary of all the changes.
   - The ISSUE will contain the description of a issue that this pull request aims to solve.
   - The BODY will contain a description of what this pull request attempts to achieve.
@@ -186,6 +208,9 @@ const prompts = {
   - Use bullet points to present the summary.
   - Each point should be 1 to 2 sentences long.
   - Do not include a conclusion.
+
+  TITLE: 
+  {title}
   
   CHANGES:
   {diff}
