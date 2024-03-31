@@ -1,7 +1,13 @@
 'use client'
 
 import { PullRequest } from '@/app/(user)/review/_utils/get-pull-requests'
-import { addDays, differenceInDays, format, isSameDay } from 'date-fns'
+import {
+  addDays,
+  differenceInDays,
+  endOfDay,
+  format,
+  isSameDay,
+} from 'date-fns'
 import { useEffect, useState } from 'react'
 import {
   Line,
@@ -26,7 +32,7 @@ export function OpenedPRsChart(props: OpenedPRsChartProps) {
   const [data, setData] = useState<Entry[]>([])
 
   const startDate = props.startDate.toISOString()
-  const endDate = props.endDate.toISOString()
+  const endDate = addDays(props.endDate, 1).toISOString()
 
   useEffect(() => {
     if (!startDate || !endDate) {
