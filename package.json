@@ -15,9 +15,13 @@
     "db:seed-dev": "dotenv -e .env.local tsx src/lib/db/seeders/seed-dev.ts",
     "worker:default": "dotenv -e .env.local tsx -- --watch src/queue/default-worker.ts",
     "format": "next lint --fix && prettier --write --ignore-path .gitignore .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "queue:dashboard": "dotenv -e .env.local tsx queue-dashboard.ts"
   },
   "dependencies": {
+    "@bull-board/api": "^5.15.3",
+    "@bull-board/express": "^5.15.3",
+    "@bull-board/ui": "^5.15.3",
     "@clerk/nextjs": "^4.29.9",
     "@langchain/core": "^0.1.51",
     "@langchain/openai": "^0.0.23",
