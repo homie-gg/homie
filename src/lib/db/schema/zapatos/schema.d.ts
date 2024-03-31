@@ -442,6 +442,12 @@ declare module 'zapatos/schema' {
         */
         summary: string;
         /**
+        * **github.pull_request.summary_metadata**
+        * - `json` in database
+        * - Nullable, no default
+        */
+        summary_metadata: db.JSONValue | null;
+        /**
         * **github.pull_request.title**
         * - `text` in database
         * - `NOT NULL`, no default
@@ -527,6 +533,12 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, no default
         */
         summary: string;
+        /**
+        * **github.pull_request.summary_metadata**
+        * - `json` in database
+        * - Nullable, no default
+        */
+        summary_metadata: db.JSONValue | null;
         /**
         * **github.pull_request.title**
         * - `text` in database
@@ -614,6 +626,12 @@ declare module 'zapatos/schema' {
         */
         summary?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
         /**
+        * **github.pull_request.summary_metadata**
+        * - `json` in database
+        * - Nullable, no default
+        */
+        summary_metadata?: db.JSONValue | db.Parameter<db.JSONValue> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, db.JSONValue | db.Parameter<db.JSONValue> | db.SQLFragment | db.ParentColumn>;
+        /**
         * **github.pull_request.title**
         * - `text` in database
         * - `NOT NULL`, no default
@@ -700,6 +718,12 @@ declare module 'zapatos/schema' {
         */
         summary: string | db.Parameter<string> | db.SQLFragment;
         /**
+        * **github.pull_request.summary_metadata**
+        * - `json` in database
+        * - Nullable, no default
+        */
+        summary_metadata?: db.JSONValue | db.Parameter<db.JSONValue> | null | db.DefaultType | db.SQLFragment;
+        /**
         * **github.pull_request.title**
         * - `text` in database
         * - `NOT NULL`, no default
@@ -785,6 +809,12 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, no default
         */
         summary?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+        /**
+        * **github.pull_request.summary_metadata**
+        * - `json` in database
+        * - Nullable, no default
+        */
+        summary_metadata?: db.JSONValue | db.Parameter<db.JSONValue> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, db.JSONValue | db.Parameter<db.JSONValue> | null | db.DefaultType | db.SQLFragment>;
         /**
         * **github.pull_request.title**
         * - `text` in database

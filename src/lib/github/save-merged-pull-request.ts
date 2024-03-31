@@ -120,7 +120,18 @@ export async function saveMergedPullRequest(
     user_id: githubUser.id,
   })
 
-  const pullRequestRecord = await dbClient
+  const { metadata } = await embedGithubPullRequest({
+    pullRequest: {
+      summary,
+      ext_gh_pull_request_id: pullRequest.id,
+      organization_id: organization.id,
+      user_id: githubUser.id,
+      repo_id: repo.id,
+    },
+    issue: issue?.body ?? null,
+  })
+
+  await dbClient
     .insertInto('github.pull_request')
     .values({
       created_at: parseISO(pullRequest.created_at),
@@ -132,11 +143,10 @@ export async function saveMergedPullRequest(
       repo_id: repo.id,
       body: pullRequest.body ?? '',
       merged_at: parseISO(pullRequest.merged_at),
-      summary,
       number: pullRequest.number,
+      summary,
+      summary_metadata: metadata,
     })
     .returningAll()
     .executeTakeFirstOrThrow()
-
-  await embedGithubPullRequest({ pullRequest: pullRequestRecord })
 }

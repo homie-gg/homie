@@ -36,14 +36,7 @@ export async function summarizeGithubPullRequest(
   const diffSummary = diff ? await summarizeDiff({ diff }) : null
 
   if (diffSummary && !issue && !pullRequest.body) {
-    return `
-      Title:
-      Merged Pull Request
-      User:
-      user_${user_id}
-      Summary:
-      ${diffSummary}
-      `
+    return diffSummary
   }
 
   const input = await getInput({
@@ -56,16 +49,7 @@ export async function summarizeGithubPullRequest(
 
   const summary = await model.invoke(input)
 
-  return `
-  Title:
-  Merged Pull Request
-  User:
-  user_${user_id}
-  Summary:
-  ${summary}
-  Issue:
-  ${issue}
-  `
+  return summary
 }
 
 interface GetInputParams {
