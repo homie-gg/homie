@@ -1,6 +1,5 @@
 import { TabsContent, TabsList, TabsTrigger } from '@/lib/ui/Tabs'
 import { endOfWeek, parse, startOfWeek } from 'date-fns'
-import { dbClient } from '@/lib/db/client'
 import OverviewsTab from '@/app/(user)/review/_components/OverviewsTab'
 import { getUserOrganization } from '@/lib/auth/get-user-organization'
 import DatePicker from '@/app/(user)/review/_components/DatePicker'

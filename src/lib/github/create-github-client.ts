@@ -1,5 +1,5 @@
 import crypto from 'node:crypto'
-import { Octokit } from 'octokit'
+import { App } from 'octokit'
 import { createAppAuth } from '@octokit/auth-app'
 
 interface CreateGithubClientParams {
@@ -13,15 +13,15 @@ export const privateKey = crypto
     format: 'pem',
   })
 
-export function createGithubClient(params: CreateGithubClientParams) {
+export type GithubClient = Awaited<ReturnType<typeof createGithubClient>>
+
+export async function createGithubClient(params: CreateGithubClientParams) {
   const { installationId } = params
 
-  return new Octokit({
-    authStrategy: createAppAuth,
-    auth: {
-      installationId,
-      appId: process.env.GITHUB_APP_ID!,
-      privateKey: privateKey,
-    },
+  const app = new App({
+    appId: process.env.GITHUB_APP_ID!,
+    privateKey: privateKey.toString('utf-8'),
   })
+
+  return app.getInstallationOctokit(installationId)
 }

@@ -1,3 +1,4 @@
+import { GithubOrganization } from '@/lib/db/types'
 import { Job as BullMQJob } from 'bullmq'
 
 export type AskSlackSelectGithubRepoForIssue = BullMQJob<
@@ -24,4 +25,15 @@ export type CreateGithubIssueFromSlack = BullMQJob<
   'create_github_issue_from_slack'
 >
 
-export type Job = CreateGithubIssueFromSlack | AskSlackSelectGithubRepoForIssue
+export type ImportPullRequests = BullMQJob<
+  {
+    github_organization: GithubOrganization
+  },
+  void, // return type
+  'import_pull_requests'
+>
+
+export type Job =
+  | CreateGithubIssueFromSlack
+  | AskSlackSelectGithubRepoForIssue
+  | ImportPullRequests

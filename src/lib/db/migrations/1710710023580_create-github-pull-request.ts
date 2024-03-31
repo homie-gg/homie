@@ -46,6 +46,18 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       closed_at: {
         type: 'timestamptz',
       },
+      body: {
+        type: 'text',
+        notNull: true,
+      },
+      summary: {
+        type: 'text',
+        notNull: true,
+      },
+      number: {
+        type: 'integer',
+        notNull: true,
+      },
     },
   )
 }

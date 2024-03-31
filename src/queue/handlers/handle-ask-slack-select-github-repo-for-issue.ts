@@ -27,7 +27,7 @@ export async function handleAskSlackSelectGithubRepoForIssue(
     return
   }
 
-  const github = createGithubClient({
+  const github = await createGithubClient({
     installationId: organization.ext_gh_install_id,
   })
 

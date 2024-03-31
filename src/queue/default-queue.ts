@@ -1,5 +1,5 @@
 import { Job } from '@/queue/jobs'
-import { Worker, Queue } from 'bullmq'
+import {  Queue } from 'bullmq'
 import Redis from 'ioredis'
 
 const connection = new Redis(process.env.REDIS_URL!, {

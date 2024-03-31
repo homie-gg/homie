@@ -4,7 +4,7 @@ import { Conversation, TextMessageEvent } from '@/lib/slack/types'
 import { CreateGithubIssueFromSlack } from '@/queue/jobs'
 import { getMessageLink } from '@/lib/slack/get-message-link'
 import { GetAllTextMessages } from '@/lib/slack/get-all-text-messages'
-import { summarizeGithubIssue } from '@/lib/ai/summarize-github-issue'
+import { summarizeTask } from '@/lib/ai/summarize-task'
 import { http } from '@/lib/http/client/http'
 import { findOrgWithSlackTeamId } from '@/lib/organization/get-org-with-slack-team-id'
 
@@ -73,7 +73,7 @@ export async function handleCreateGithubIssueFromSlack(
     slackClient,
   })
 
-  const data = await summarizeGithubIssue({ messages })
+  const data = await summarizeTask({ messages })
   if (!data) {
     await http.post(response_url, {
       text: `Error creating issue for: ${initialMessage}`,
@@ -81,9 +81,9 @@ export async function handleCreateGithubIssueFromSlack(
     return
   }
 
-  const { issue, description } = data
+  const { task: issue, description } = data
 
-  const github = createGithubClient({
+  const github = await createGithubClient({
     installationId: organization.ext_gh_install_id,
   })
 

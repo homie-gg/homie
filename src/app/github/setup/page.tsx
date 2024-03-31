@@ -1,5 +1,6 @@
 import { dbClient } from '@/lib/db/client'
 import { PageProps } from '@/lib/next-js/page-props'
+import { defaultQueue } from '@/queue/default-queue'
 import { auth } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 
@@ -36,7 +37,7 @@ export default async function GithubSetup(
     return redirect('/')
   }
 
-  dbClient
+  const githubOrganization = await dbClient
     .insertInto('github.organization')
     .values({
       ext_gh_install_id: installId,
@@ -47,7 +48,12 @@ export default async function GithubSetup(
         ext_gh_install_id: installId,
       }),
     )
+    .returningAll()
     .executeTakeFirstOrThrow()
+
+  await defaultQueue.add('import_pull_requests', {
+    github_organization: githubOrganization,
+  })
 
   return redirect('/review')
 }

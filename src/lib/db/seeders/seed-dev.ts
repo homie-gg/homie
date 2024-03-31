@@ -92,6 +92,7 @@ async function seedPullRequests(repos: GithubRepo[], user: GithubUser) {
           merged_at: wasMerged
             ? new Date(Date.now() - ms(`${closedDaysAgo} days`))
             : undefined,
+          body: 'This is a test pr',
         })
         .returningAll()
         .executeTakeFirstOrThrow()

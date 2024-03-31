@@ -1,14 +1,9 @@
+import { app } from '@/lib/github/app'
 import { dbClient } from '@/lib/db/client'
-import { privateKey } from '@/lib/github/create-github-client'
-import { App } from 'octokit'
-
-const app = new App({
-  appId: process.env.GITHUB_APP_ID!,
-  privateKey: privateKey.toString('utf-8'),
-  webhooks: {
-    secret: process.env.GITHUB_WEBHOOK_SECRET!,
-  },
-})
+import { embedGithubPullRequest } from '@/lib/ai/embed-github-pull-request'
+import { summarizeGithubPullRequest } from '@/lib/ai/summarize-github-pull-request'
+import { createGithubClient } from '@/lib/github/create-github-client'
+import { findLinkedIssue } from '@/lib/github/find-linked-issue'
 
 app.webhooks.on('pull_request.closed', async (params) => {
   const {
@@ -42,7 +37,7 @@ app.webhooks.on('pull_request.closed', async (params) => {
       'voidpm.organization.id',
     )
     .where('ext_gh_install_id', '=', installation?.id!)
-    .select('voidpm.organization.id')
+    .select(['voidpm.organization.id', 'github.organization.ext_gh_install_id'])
     .executeTakeFirst()
 
   if (!organization) {
@@ -62,7 +57,6 @@ app.webhooks.on('pull_request.closed', async (params) => {
     .executeTakeFirstOrThrow()
 
   // Create repo
-
   const repo = await dbClient
     .insertInto('github.repo')
     .values({
@@ -75,8 +69,38 @@ app.webhooks.on('pull_request.closed', async (params) => {
     .returning('id')
     .executeTakeFirstOrThrow()
 
+  // Embed pr
+
+  const github = await createGithubClient({
+    installationId: organization.ext_gh_install_id,
+  })
+
+  const owner = pull_request.base.repo.full_name.split('/')[0]
+
+  const issue = await findLinkedIssue({
+    pullRequest: {
+      body: pull_request.body,
+    },
+    repo: pull_request.base.repo.name,
+    owner,
+    github,
+  })
+
+  const summary = await summarizeGithubPullRequest({
+    pullRequest: {
+      body: pull_request.body,
+      repo_id: pull_request.base.repo.id,
+      pull_number: pull_request.number,
+    },
+    repo: pull_request.base.repo.name,
+    owner,
+    github,
+    issue: issue?.body ?? null,
+    user_id: githubUser.id,
+  })
+
   // Create Pull Request
-  await dbClient
+  const pullRequest = await dbClient
     .insertInto('github.pull_request')
     .values({
       ext_gh_pull_request_id: pull_request.id,
@@ -85,13 +109,13 @@ app.webhooks.on('pull_request.closed', async (params) => {
       title: pull_request.title,
       html_url: pull_request.html_url,
       repo_id: repo.id,
+      body: pull_request.body ?? '',
+      summary,
     })
+    .returningAll()
     .executeTakeFirstOrThrow()
-})
 
-app.webhooks.on('pull_request.opened', async (params) => {
-  // create PR
-  // Add timestamp for WHEN the PR was merged
+  await embedGithubPullRequest({ pullRequest })
 })
 
 export const githubWebhooks = app.webhooks

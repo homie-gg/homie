@@ -376,6 +376,12 @@ declare module 'zapatos/schema' {
       export type Table = 'github.pull_request';
       export interface Selectable {
         /**
+        * **github.pull_request.body**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        body: string;
+        /**
         * **github.pull_request.closed_at**
         * - `timestamptz` in database
         * - Nullable, no default
@@ -412,6 +418,12 @@ declare module 'zapatos/schema' {
         */
         merged_at: Date | null;
         /**
+        * **github.pull_request.number**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        number: number;
+        /**
         * **github.pull_request.organization_id**
         * - `int4` in database
         * - `NOT NULL`, no default
@@ -423,6 +435,12 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, no default
         */
         repo_id: number;
+        /**
+        * **github.pull_request.summary**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        summary: string;
         /**
         * **github.pull_request.title**
         * - `text` in database
@@ -443,6 +461,12 @@ declare module 'zapatos/schema' {
         user_id: number;
       }
       export interface JSONSelectable {
+        /**
+        * **github.pull_request.body**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        body: string;
         /**
         * **github.pull_request.closed_at**
         * - `timestamptz` in database
@@ -480,6 +504,12 @@ declare module 'zapatos/schema' {
         */
         merged_at: db.TimestampTzString | null;
         /**
+        * **github.pull_request.number**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        number: number;
+        /**
         * **github.pull_request.organization_id**
         * - `int4` in database
         * - `NOT NULL`, no default
@@ -491,6 +521,12 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, no default
         */
         repo_id: number;
+        /**
+        * **github.pull_request.summary**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        summary: string;
         /**
         * **github.pull_request.title**
         * - `text` in database
@@ -511,6 +547,12 @@ declare module 'zapatos/schema' {
         user_id: number;
       }
       export interface Whereable {
+        /**
+        * **github.pull_request.body**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        body?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
         /**
         * **github.pull_request.closed_at**
         * - `timestamptz` in database
@@ -548,6 +590,12 @@ declare module 'zapatos/schema' {
         */
         merged_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
         /**
+        * **github.pull_request.number**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        number?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+        /**
         * **github.pull_request.organization_id**
         * - `int4` in database
         * - `NOT NULL`, no default
@@ -559,6 +607,12 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, no default
         */
         repo_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **github.pull_request.summary**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        summary?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
         /**
         * **github.pull_request.title**
         * - `text` in database
@@ -579,6 +633,12 @@ declare module 'zapatos/schema' {
         user_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
       }
       export interface Insertable {
+        /**
+        * **github.pull_request.body**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        body: string | db.Parameter<string> | db.SQLFragment;
         /**
         * **github.pull_request.closed_at**
         * - `timestamptz` in database
@@ -616,6 +676,12 @@ declare module 'zapatos/schema' {
         */
         merged_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | null | db.DefaultType | db.SQLFragment;
         /**
+        * **github.pull_request.number**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        number: number | db.Parameter<number> | db.SQLFragment;
+        /**
         * **github.pull_request.organization_id**
         * - `int4` in database
         * - `NOT NULL`, no default
@@ -627,6 +693,12 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, no default
         */
         repo_id: number | db.Parameter<number> | db.SQLFragment;
+        /**
+        * **github.pull_request.summary**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        summary: string | db.Parameter<string> | db.SQLFragment;
         /**
         * **github.pull_request.title**
         * - `text` in database
@@ -647,6 +719,12 @@ declare module 'zapatos/schema' {
         user_id: number | db.Parameter<number> | db.SQLFragment;
       }
       export interface Updatable {
+        /**
+        * **github.pull_request.body**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        body?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
         /**
         * **github.pull_request.closed_at**
         * - `timestamptz` in database
@@ -684,6 +762,12 @@ declare module 'zapatos/schema' {
         */
         merged_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | null | db.DefaultType | db.SQLFragment>;
         /**
+        * **github.pull_request.number**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        number?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+        /**
         * **github.pull_request.organization_id**
         * - `int4` in database
         * - `NOT NULL`, no default
@@ -695,6 +779,12 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, no default
         */
         repo_id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+        /**
+        * **github.pull_request.summary**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        summary?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
         /**
         * **github.pull_request.title**
         * - `text` in database

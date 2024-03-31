@@ -1,11 +1,11 @@
 import { PromptTemplate } from '@langchain/core/prompts'
 import { OpenAI } from '@langchain/openai'
 
-interface SummarizeGithubIssueParams {
+interface SummarizeTaskParams {
   messages: Array<{ text: string }>
 }
 
-export async function summarizeGithubIssue(params: SummarizeGithubIssueParams) {
+export async function summarizeTask(params: SummarizeTaskParams) {
   const { messages } = params
   const promptTemplate = new PromptTemplate({
     template: prompt,
@@ -29,11 +29,11 @@ export async function summarizeGithubIssue(params: SummarizeGithubIssueParams) {
     return null
   }
 
-  const issue = matches[1].replace('- ', '')
+  const task = matches[1].replace('- ', '')
   const description = matches[2]
 
   return {
-    issue,
+    task,
     description,
   }
 }
