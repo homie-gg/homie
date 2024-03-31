@@ -1,5 +1,6 @@
 import { GithubOrganization } from '@/lib/db/types'
 import { Job as BullMQJob } from 'bullmq'
+import { PullRequest, InstallationLite } from '@octokit/webhooks-types'
 
 export type AskSlackSelectGithubRepoForIssue = BullMQJob<
   {
@@ -33,7 +34,17 @@ export type ImportPullRequests = BullMQJob<
   'import_pull_requests'
 >
 
+export type SaveMergedPullRequest = BullMQJob<
+  {
+    pull_request: PullRequest
+    installation: InstallationLite | undefined
+  },
+  void, // return type
+  'save_merged_pull_request'
+>
+
 export type Job =
   | CreateGithubIssueFromSlack
   | AskSlackSelectGithubRepoForIssue
   | ImportPullRequests
+  | SaveMergedPullRequest
