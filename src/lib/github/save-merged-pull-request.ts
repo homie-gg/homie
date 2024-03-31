@@ -112,12 +112,12 @@ export async function saveMergedPullRequest(
       body: pullRequest.body,
       repo_id: pullRequest.base.repo.id,
       pull_number: pullRequest.number,
+      title: pullRequest.title,
     },
     repo: pullRequest.base.repo.name,
     owner,
     github,
     issue: issue?.body ?? null,
-    user_id: githubUser.id,
   })
 
   const { metadata } = await embedGithubPullRequest({

@@ -34,6 +34,15 @@ export type ImportPullRequests = BullMQJob<
   'import_pull_requests'
 >
 
+export type SaveOpenedPullRequest = BullMQJob<
+  {
+    pull_request: PullRequest
+    installation: InstallationLite | undefined
+  },
+  void, // return type
+  'save_opened_pull_request'
+>
+
 export type SaveMergedPullRequest = BullMQJob<
   {
     pull_request: PullRequest
@@ -43,8 +52,19 @@ export type SaveMergedPullRequest = BullMQJob<
   'save_merged_pull_request'
 >
 
+export type GenerateOpenPullRequestSummary = BullMQJob<
+  {
+    pull_request: PullRequest
+    installation: InstallationLite | undefined
+  },
+  void, // return type
+  'generate_open_pull_request_summary'
+>
+
 export type Job =
   | CreateGithubIssueFromSlack
   | AskSlackSelectGithubRepoForIssue
   | ImportPullRequests
+  | SaveOpenedPullRequest
   | SaveMergedPullRequest
+  | GenerateOpenPullRequestSummary

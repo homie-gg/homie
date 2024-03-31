@@ -1,8 +1,10 @@
 import { defaultQueueName } from '@/queue/default-queue'
 import { handleAskSlackSelectGithubRepoForIssue } from '@/queue/handlers/handle-ask-slack-select-github-repo-for-issue'
 import { handleCreateGithubIssueFromSlack } from '@/queue/handlers/handle-create-github-issue-from-slack'
+import { handleGenerateOpenPullRequestSummary } from '@/queue/handlers/handle-generate-open-pull-request-summary'
 import { handleImportPullRequests } from '@/queue/handlers/handle-import-pull-requests'
-import { handleSaveMergedPullRequest } from '@/queue/handlers/save-merged-pull-request'
+import { handleSaveMergedPullRequest } from '@/queue/handlers/handle-save-merged-pull-request'
+import { handleSaveOpenedPullRequest } from '@/queue/handlers/handle-save-opened-pull-request'
 import { Job } from '@/queue/jobs'
 import { Worker } from 'bullmq'
 import Redis from 'ioredis'
@@ -16,7 +18,9 @@ const handlers: Handlers = {
   ask_slack_select_github_repo_for_issue:
     handleAskSlackSelectGithubRepoForIssue,
   import_pull_requests: handleImportPullRequests,
+  save_opened_pull_request: handleSaveOpenedPullRequest,
   save_merged_pull_request: handleSaveMergedPullRequest,
+  generate_open_pull_request_summary: handleGenerateOpenPullRequestSummary,
 }
 
 const worker = new Worker(

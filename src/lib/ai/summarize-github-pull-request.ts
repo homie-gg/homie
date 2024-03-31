@@ -14,13 +14,12 @@ interface SummarizeGithubPullRequestParams {
   owner: string
   github: GithubClient
   issue: string | null
-  user_id: number
 }
 
 export async function summarizeGithubPullRequest(
   params: SummarizeGithubPullRequestParams,
 ) {
-  const { pullRequest, github, repo, owner, issue, user_id } = params
+  const { pullRequest, github, repo, owner, issue } = params
 
   const diff = await github.rest.pulls
     .get({
