@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifySlackRequest } from '@/lib/api/slack/verify-slack-request'
+import { defaultQueue } from '@/queue/default-queue'
 import { SlackEvent } from '@slack/bolt'
 
 export const POST = async (request: NextRequest) => {
@@ -26,14 +27,26 @@ export const POST = async (request: NextRequest) => {
     }
   }
 
-  await handleEvent(payload.event)
+  await handleEvent({ event: payload.event, team_id: payload.team_id })
 
   return NextResponse.json({})
 }
 
-async function handleEvent(event: SlackEvent) {
+interface HandleEventParams {
+  event: SlackEvent
+  team_id: string
+}
+
+async function handleEvent(params: HandleEventParams) {
+  const { event, team_id } = params
   switch (event.type) {
     case 'app_mention':
+      await defaultQueue.add('answer_slack_question', {
+        team_id,
+        channel_id: event.channel,
+        target_message_ts: event.ts,
+        text: event.text,
+      })
     default:
       return
   }

@@ -13,6 +13,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       ext_slack_team_id: { type: 'text', notNull: true, unique: true },
       webhook_url: { type: 'text', notNull: true },
       ext_slack_webhook_channel_id: { type: 'text', notNull: true },
+      ext_slack_bot_user_id: { type: 'text', notNull: true },
       slack_access_token: { type: 'text', notNull: true },
       organization_id: {
         type: 'integer',

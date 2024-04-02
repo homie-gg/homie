@@ -39,17 +39,18 @@ export default async function SlackSetup(
   dbClient
     .insertInto('slack.workspace')
     .values({
-      ext_slack_webhook_channel_id: data.incoming_webhook.channel_id,
-      ext_slack_team_id: data.team.id,
-      webhook_url: data.incoming_webhook.url,
+      ext_slack_webhook_channel_id: data.incoming_webhook?.channel_id!,
+      ext_slack_team_id: data.team?.id!,
+      ext_slack_bot_user_id: data.bot_user_id!,
+      webhook_url: data.incoming_webhook?.url!,
       organization_id: organization.id,
-      slack_access_token: data.access_token,
+      slack_access_token: data.access_token!,
     })
     .onConflict((oc) =>
       oc.column('organization_id').doUpdateSet({
-        ext_slack_webhook_channel_id: data.incoming_webhook.channel_id,
-        ext_slack_team_id: data.team.id,
-        webhook_url: data.incoming_webhook.url,
+        ext_slack_webhook_channel_id: data.incoming_webhook?.channel_id!,
+        ext_slack_team_id: data.team?.id!,
+        webhook_url: data.incoming_webhook?.url!,
         slack_access_token: data.access_token,
       }),
     )

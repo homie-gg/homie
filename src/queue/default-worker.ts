@@ -1,4 +1,5 @@
 import { defaultQueueName } from '@/queue/default-queue'
+import { handleAnswerSlackQuestion } from '@/queue/handlers/handle-answer-slack-question'
 import { handleAskSlackSelectGithubRepoForIssue } from '@/queue/handlers/handle-ask-slack-select-github-repo-for-issue'
 import { handleCreateGithubIssueFromSlack } from '@/queue/handlers/handle-create-github-issue-from-slack'
 import { handleGenerateOpenPullRequestSummary } from '@/queue/handlers/handle-generate-open-pull-request-summary'
@@ -21,6 +22,7 @@ const handlers: Handlers = {
   save_opened_pull_request: handleSaveOpenedPullRequest,
   save_merged_pull_request: handleSaveMergedPullRequest,
   generate_open_pull_request_summary: handleGenerateOpenPullRequestSummary,
+  answer_slack_question: handleAnswerSlackQuestion
 }
 
 const worker = new Worker(

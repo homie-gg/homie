@@ -107,31 +107,36 @@ export async function saveMergedPullRequest(
     github,
   })
 
-  const summary = await summarizeGithubPullRequest({
+  const { summary, diff } = await summarizeGithubPullRequest({
     pullRequest: {
       body: pullRequest.body,
       repo_id: pullRequest.base.repo.id,
       pull_number: pullRequest.number,
       title: pullRequest.title,
+      merged_at: pullRequest.merged_at,
+      base: pullRequest.base,
+      html_url: pullRequest.html_url,
     },
     repo: pullRequest.base.repo.name,
     owner,
     github,
     issue: issue?.body ?? null,
+    length: 'long',
+    contributor_id: contributor.id,
   })
 
-  const { metadata } = await embedGithubPullRequest({
-    pullRequest: {
-      summary,
-      ext_gh_pull_request_id: pullRequest.id,
-      organization_id: organization.id,
-      contributor_id: contributor.id,
-      repo_id: repo.id,
-    },
-    issue: issue?.body ?? null,
-  })
+  const embed_metadata = {
+    title: pullRequest.title,
+    url: pullRequest.html_url,
+    text: summary,
+    ext_gh_pull_request_id: pullRequest.id,
+    organization_id: organization.id,
+    contributor_id: contributor.id,
+    repo_id: repo.id,
+    merged_at: pullRequest.merged_at,
+  }
 
-  await dbClient
+  const pullRequestRecord = await dbClient
     .insertInto('github.pull_request')
     .values({
       created_at: parseISO(pullRequest.created_at),
@@ -144,8 +149,9 @@ export async function saveMergedPullRequest(
       body: pullRequest.body ?? '',
       merged_at: parseISO(pullRequest.merged_at),
       number: pullRequest.number,
-      summary,
-      summary_metadata: metadata,
+      embed_value: summary,
+      embed_metadata,
+      diff,
     })
     .onConflict((oc) =>
       oc.column('ext_gh_pull_request_id').doUpdateSet({
@@ -158,10 +164,16 @@ export async function saveMergedPullRequest(
         body: pullRequest.body ?? '',
         merged_at: parseISO(pullRequest.merged_at!),
         number: pullRequest.number,
-        summary,
-        summary_metadata: metadata,
+        embed_value: summary,
+        embed_metadata,
       }),
     )
     .returningAll()
     .executeTakeFirstOrThrow()
+
+  await embedGithubPullRequest({
+    pull_request_id: pullRequestRecord.id,
+    summary,
+    metadata: embed_metadata,
+  })
 }

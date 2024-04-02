@@ -603,6 +603,24 @@ declare module 'zapatos/schema' {
         */
         created_at: Date;
         /**
+        * **github.pull_request.diff**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        diff: string | null;
+        /**
+        * **github.pull_request.embed_metadata**
+        * - `json` in database
+        * - Nullable, no default
+        */
+        embed_metadata: db.JSONValue | null;
+        /**
+        * **github.pull_request.embed_value**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        embed_value: string | null;
+        /**
         * **github.pull_request.ext_gh_pull_request_id**
         * - `int4` in database
         * - `NOT NULL`, no default
@@ -645,18 +663,6 @@ declare module 'zapatos/schema' {
         */
         repo_id: number;
         /**
-        * **github.pull_request.summary**
-        * - `text` in database
-        * - Nullable, no default
-        */
-        summary: string | null;
-        /**
-        * **github.pull_request.summary_metadata**
-        * - `json` in database
-        * - Nullable, no default
-        */
-        summary_metadata: db.JSONValue | null;
-        /**
         * **github.pull_request.title**
         * - `text` in database
         * - `NOT NULL`, no default
@@ -694,6 +700,24 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
         */
         created_at: db.TimestampTzString;
+        /**
+        * **github.pull_request.diff**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        diff: string | null;
+        /**
+        * **github.pull_request.embed_metadata**
+        * - `json` in database
+        * - Nullable, no default
+        */
+        embed_metadata: db.JSONValue | null;
+        /**
+        * **github.pull_request.embed_value**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        embed_value: string | null;
         /**
         * **github.pull_request.ext_gh_pull_request_id**
         * - `int4` in database
@@ -737,18 +761,6 @@ declare module 'zapatos/schema' {
         */
         repo_id: number;
         /**
-        * **github.pull_request.summary**
-        * - `text` in database
-        * - Nullable, no default
-        */
-        summary: string | null;
-        /**
-        * **github.pull_request.summary_metadata**
-        * - `json` in database
-        * - Nullable, no default
-        */
-        summary_metadata: db.JSONValue | null;
-        /**
         * **github.pull_request.title**
         * - `text` in database
         * - `NOT NULL`, no default
@@ -786,6 +798,24 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
         */
         created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **github.pull_request.diff**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        diff?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **github.pull_request.embed_metadata**
+        * - `json` in database
+        * - Nullable, no default
+        */
+        embed_metadata?: db.JSONValue | db.Parameter<db.JSONValue> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, db.JSONValue | db.Parameter<db.JSONValue> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **github.pull_request.embed_value**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        embed_value?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
         /**
         * **github.pull_request.ext_gh_pull_request_id**
         * - `int4` in database
@@ -829,18 +859,6 @@ declare module 'zapatos/schema' {
         */
         repo_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
         /**
-        * **github.pull_request.summary**
-        * - `text` in database
-        * - Nullable, no default
-        */
-        summary?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
-        /**
-        * **github.pull_request.summary_metadata**
-        * - `json` in database
-        * - Nullable, no default
-        */
-        summary_metadata?: db.JSONValue | db.Parameter<db.JSONValue> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, db.JSONValue | db.Parameter<db.JSONValue> | db.SQLFragment | db.ParentColumn>;
-        /**
         * **github.pull_request.title**
         * - `text` in database
         * - `NOT NULL`, no default
@@ -878,6 +896,24 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
         */
         created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+        /**
+        * **github.pull_request.diff**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        diff?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
+        /**
+        * **github.pull_request.embed_metadata**
+        * - `json` in database
+        * - Nullable, no default
+        */
+        embed_metadata?: db.JSONValue | db.Parameter<db.JSONValue> | null | db.DefaultType | db.SQLFragment;
+        /**
+        * **github.pull_request.embed_value**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        embed_value?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
         /**
         * **github.pull_request.ext_gh_pull_request_id**
         * - `int4` in database
@@ -921,18 +957,6 @@ declare module 'zapatos/schema' {
         */
         repo_id: number | db.Parameter<number> | db.SQLFragment;
         /**
-        * **github.pull_request.summary**
-        * - `text` in database
-        * - Nullable, no default
-        */
-        summary?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
-        /**
-        * **github.pull_request.summary_metadata**
-        * - `json` in database
-        * - Nullable, no default
-        */
-        summary_metadata?: db.JSONValue | db.Parameter<db.JSONValue> | null | db.DefaultType | db.SQLFragment;
-        /**
         * **github.pull_request.title**
         * - `text` in database
         * - `NOT NULL`, no default
@@ -970,6 +994,24 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
         */
         created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+        /**
+        * **github.pull_request.diff**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        diff?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
+        /**
+        * **github.pull_request.embed_metadata**
+        * - `json` in database
+        * - Nullable, no default
+        */
+        embed_metadata?: db.JSONValue | db.Parameter<db.JSONValue> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, db.JSONValue | db.Parameter<db.JSONValue> | null | db.DefaultType | db.SQLFragment>;
+        /**
+        * **github.pull_request.embed_value**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        embed_value?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
         /**
         * **github.pull_request.ext_gh_pull_request_id**
         * - `int4` in database
@@ -1012,18 +1054,6 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, no default
         */
         repo_id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
-        /**
-        * **github.pull_request.summary**
-        * - `text` in database
-        * - Nullable, no default
-        */
-        summary?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
-        /**
-        * **github.pull_request.summary_metadata**
-        * - `json` in database
-        * - Nullable, no default
-        */
-        summary_metadata?: db.JSONValue | db.Parameter<db.JSONValue> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, db.JSONValue | db.Parameter<db.JSONValue> | null | db.DefaultType | db.SQLFragment>;
         /**
         * **github.pull_request.title**
         * - `text` in database
@@ -1319,6 +1349,12 @@ declare module 'zapatos/schema' {
         */
         created_at: Date;
         /**
+        * **slack.workspace.ext_slack_bot_user_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_slack_bot_user_id: string;
+        /**
         * **slack.workspace.ext_slack_team_id**
         * - `text` in database
         * - `NOT NULL`, no default
@@ -1368,6 +1404,12 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
         */
         created_at: db.TimestampTzString;
+        /**
+        * **slack.workspace.ext_slack_bot_user_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_slack_bot_user_id: string;
         /**
         * **slack.workspace.ext_slack_team_id**
         * - `text` in database
@@ -1419,6 +1461,12 @@ declare module 'zapatos/schema' {
         */
         created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
         /**
+        * **slack.workspace.ext_slack_bot_user_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_slack_bot_user_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        /**
         * **slack.workspace.ext_slack_team_id**
         * - `text` in database
         * - `NOT NULL`, no default
@@ -1469,6 +1517,12 @@ declare module 'zapatos/schema' {
         */
         created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
         /**
+        * **slack.workspace.ext_slack_bot_user_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_slack_bot_user_id: string | db.Parameter<string> | db.SQLFragment;
+        /**
         * **slack.workspace.ext_slack_team_id**
         * - `text` in database
         * - `NOT NULL`, no default
@@ -1518,6 +1572,12 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
         */
         created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+        /**
+        * **slack.workspace.ext_slack_bot_user_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_slack_bot_user_id?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
         /**
         * **slack.workspace.ext_slack_team_id**
         * - `text` in database

@@ -44,17 +44,39 @@ export async function handleGenerateOpenPullRequestSummary(
     github,
   })
 
-  const summary = await summarizeGithubPullRequest({
+  // Create Github User if doesn't exits
+  const contributor = await dbClient
+    .insertInto('voidpm.contributor')
+    .values({
+      ext_gh_user_id: pull_request.user.id,
+      organization_id: organization.id,
+      username: pull_request.user.login ?? '',
+    })
+    .onConflict((oc) =>
+      oc.column('ext_gh_user_id').doUpdateSet({
+        organization_id: organization.id,
+        username: pull_request.user?.login ?? '',
+      }),
+    )
+    .returning('id')
+    .executeTakeFirstOrThrow()
+
+  const { summary } = await summarizeGithubPullRequest({
     pullRequest: {
       body: pull_request.body,
       repo_id: pull_request.base.repo.id,
       pull_number: pull_request.number,
       title: pull_request.title,
+      merged_at: pull_request.merged_at!,
+      base: pull_request.base,
+      html_url: pull_request.html_url,
     },
     repo: pull_request.base.repo.name,
     owner,
     github,
     issue: issue?.body ?? null,
+    length: 'short',
+    contributor_id: contributor.id,
   })
 
   const bodyWithSummary = pull_request.body

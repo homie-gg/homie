@@ -20,29 +20,9 @@ export async function summarizeDiff(
 ): Promise<string> {
   const { diff } = params
 
-  const documents = diff
-    // split by file
-    .split(/(?=diff --git)/)
-    // remove lock files
-    .filter(
-      (file) => !commonLockFiles.some((lockFile) => file.includes(lockFile)),
-    )
-    // Shorten each file to max limit
-    .map((file) => file.substring(0, chatGPTCharLimit))
-    // Combine files as long as they are below limit to reduce
-    // the amount of api calls
-    .reduce((acc, file) => {
-      const lastIndex = acc.length - 1
-      const lastItem = acc[lastIndex] ?? ''
-
-      const appended = lastItem + '\n' + file
-      if (appended.length > 4000) {
-        return [...acc, file]
-      }
-
-      return [...acc.slice(0, lastIndex), appended]
-    }, [] as string[])
-    .map((file) => new Document({ pageContent: file }))
+  const documents = chunkDiff(diff).map(
+    (file) => new Document({ pageContent: file }),
+  )
 
   const model = new OpenAI({
     temperature: 0,
@@ -61,6 +41,36 @@ export async function summarizeDiff(
   })
 
   return result.text
+}
+
+export function chunkDiff(
+  diff: string,
+  chunkSize = chatGPTCharLimit,
+): string[] {
+  return (
+    diff
+      // split by file
+      .split(/(?=diff --git)/)
+      // remove lock files
+      .filter(
+        (file) => !commonLockFiles.some((lockFile) => file.includes(lockFile)),
+      )
+      // Shorten each file to max limit
+      .map((file) => file.substring(0, chunkSize))
+      // Combine files as long as they are below limit to reduce
+      // the amount of api calls
+      .reduce((acc, file) => {
+        const lastIndex = acc.length - 1
+        const lastItem = acc[lastIndex] ?? ''
+
+        const appended = lastItem + '\n' + file
+        if (appended.length > chunkSize) {
+          return [...acc, file]
+        }
+
+        return [...acc.slice(0, lastIndex), appended]
+      }, [] as string[])
+  )
 }
 
 const mapPrompt = `

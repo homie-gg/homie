@@ -61,6 +61,17 @@ export type GenerateOpenPullRequestSummary = BullMQJob<
   'generate_open_pull_request_summary'
 >
 
+export type AnswerSlackQuestion = BullMQJob<
+  {
+    team_id: string
+    channel_id: string
+    target_message_ts: string
+    text: string
+  },
+  void, // return type
+  'answer_slack_question'
+>
+
 export type Job =
   | CreateGithubIssueFromSlack
   | AskSlackSelectGithubRepoForIssue
@@ -68,3 +79,4 @@ export type Job =
   | SaveOpenedPullRequest
   | SaveMergedPullRequest
   | GenerateOpenPullRequestSummary
+  | AnswerSlackQuestion

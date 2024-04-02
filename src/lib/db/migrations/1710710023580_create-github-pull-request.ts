@@ -54,12 +54,16 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
         type: 'integer',
         notNull: true,
       },
-      summary: {
+      embed_value: {
         type: 'text',
         notNull: false,
       },
-      summary_metadata: {
+      embed_metadata: {
         type: 'json', // use json (not jsonb) as we won't be querying / updating this
+        notNull: false,
+      },
+      diff: {
+        type: 'text',
         notNull: false,
       },
     },

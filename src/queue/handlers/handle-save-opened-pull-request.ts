@@ -67,7 +67,6 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
       repo_id: repo.id,
       body: pull_request.body ?? '',
       number: pull_request.number,
-      summary: '',
     })
     .returningAll()
     .executeTakeFirstOrThrow()

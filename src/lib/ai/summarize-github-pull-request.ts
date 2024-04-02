@@ -9,17 +9,24 @@ interface SummarizeGithubPullRequestParams {
     body: string | null
     repo_id: number
     pull_number: number
+    merged_at: string
+    html_url: string
+    base: {
+      ref: string
+    }
   }
   repo: string
   owner: string
   github: GithubClient
   issue: string | null
+  contributor_id: number
+  length: 'short' | 'long'
 }
 
 export async function summarizeGithubPullRequest(
   params: SummarizeGithubPullRequestParams,
 ) {
-  const { pullRequest, github, repo, owner, issue } = params
+  const { pullRequest, github, repo, owner, issue, length: type } = params
 
   const diff = await github.rest.pulls
     .get({
@@ -33,24 +40,44 @@ export async function summarizeGithubPullRequest(
     .then((res) => res.data as unknown as string) // diff is a string
     .catch(() => null) // ignore fails. eg. too many files
 
-  const diffSummary = diff ? await summarizeDiff({ diff }) : null
+  const summary = await getSummary({
+    title: pullRequest.title,
+    diff,
+    issue,
+    body: pullRequest.body,
+    type,
+  })
 
-  if (diffSummary && !issue && !pullRequest.body) {
+  return { summary, diff }
+}
+
+interface GetSummaryParams {
+  title: string
+  diff: string | null
+  issue: string | null
+  body: string | null
+  type: 'short' | 'long'
+}
+
+async function getSummary(params: GetSummaryParams) {
+  const { body, issue, diff, title, type } = params
+
+  const diffSummary = diff ? await summarizeDiff({ diff }) : null
+  if (diffSummary && !issue && !body) {
     return diffSummary
   }
 
   const input = await getInput({
-    title: pullRequest.title,
+    title,
     diffSummary,
     issue,
-    body: pullRequest.body,
+    body,
+    type,
   })
 
   const model = new OpenAI({ temperature: 0, modelName: 'gpt-4' })
 
-  const summary = await model.invoke(input)
-
-  return summary
+  return await model.invoke(input)
 }
 
 interface GetInputParams {
@@ -58,6 +85,7 @@ interface GetInputParams {
   diffSummary: string | null
   issue: string | null
   body: string | null
+  type: 'short' | 'long'
 }
 
 /**
@@ -66,59 +94,13 @@ interface GetInputParams {
 function getInput(params: GetInputParams) {
   const { title, diffSummary, issue, body } = params
 
-  if (diffSummary && issue && !body) {
-    const promptTemplate = new PromptTemplate({
-      template: prompts.diffAndIssue,
-      inputVariables: ['title', 'diff', 'issue'],
-    })
+  const template = getTemplate(params)
 
-    return promptTemplate.format({
-      title,
-      diff: diffSummary,
-      issue,
-    })
-  }
-
-  if (!diffSummary && issue && !body) {
-    const promptTemplate = new PromptTemplate({
-      template: prompts.issueOnly,
-      inputVariables: ['title', 'issue'],
-    })
-
-    return promptTemplate.format({
-      title,
-      issue,
-    })
-  }
-
-  if (!diffSummary && issue && body) {
-    const promptTemplate = new PromptTemplate({
-      template: prompts.issueAndBody,
-      inputVariables: ['title', 'issue', 'body'],
-    })
-
-    return promptTemplate.format({
-      title,
-      issue,
-      body,
-    })
-  }
-
-  if (!diffSummary && !issue && body) {
-    const promptTemplate = new PromptTemplate({
-      template: prompts.bodyOnly,
-      inputVariables: ['title', 'body'],
-    })
-
-    return promptTemplate.format({
-      title,
-      body,
-    })
-  }
+  const rules = getRules(params)
 
   const promptTemplate = new PromptTemplate({
-    template: prompts.complete,
-    inputVariables: ['title', 'diff', 'issue', 'body'],
+    template,
+    inputVariables: ['title', 'diff', 'issue', 'body', 'rules'],
   })
 
   return promptTemplate.format({
@@ -126,104 +108,153 @@ function getInput(params: GetInputParams) {
     diff: diffSummary,
     issue,
     body,
+    rules,
   })
+}
+
+function getTemplate(params: GetInputParams) {
+  const { diffSummary, issue, body } = params
+  if (diffSummary && issue && !body) {
+    return prompts.diffAndIssue
+  }
+
+  if (!diffSummary && issue && !body) {
+    return prompts.issueOnly
+  }
+
+  if (!diffSummary && issue && body) {
+    return prompts.issueAndBody
+  }
+
+  if (!diffSummary && !issue && body) {
+    return prompts.bodyOnly
+  }
+
+  return prompts.allVariables
+}
+
+/**
+ * Additional rules to append to the prompt
+ */
+const rules = {
+  shortSummary: [
+    '- The summary should be less than 5 points',
+    '- Each point should be 1 to 2 sentences long.',
+  ],
+  longSummary: [
+    '- Include references to code, and code snippets.',
+    '- Explain the changes in files, and how they affect the application.',
+    '- Include the file names, when describing changes.',
+    '- Include the function names when describing changes.',
+  ],
+}
+
+function getRules(params: GetInputParams): string {
+  const { type } = params
+  if (type === 'long') {
+    return rules.longSummary.join('\n')
+  }
+
+  if (type === 'short') {
+    return rules.shortSummary.join('\n')
+  }
+
+  return ''
 }
 
 const prompts = {
   diffAndIssue: `Write a Pull Request summary. You MUST follow the following rules when generating the summary:
-  - The TITLE is the pull request title.
-  - The CHANGES will be a summary of all the changes.
-  - The ISSUE will contain the description of the issue that this pull request aims to solve.
-  - The summary should only be based on the CHANGES, and ISSUE. Do not generate the summary without a clear reference to CHANGES, or ISSUE.
-  - Do not infer any initiatives, or features other than what has already been mentioned in the CHANGES, or ISSUE.
-  - Use bullet points to present the summary.
-  - Each point should be 1 to 2 sentences long.
-  - The summary should be a single list with no headings, or sub-lists.
-  - Do not include a conclusion.
+- The TITLE is the pull request title.
+- The CHANGES will be a summary of all the changes.
+- The ISSUE will contain the description of the issue that this pull request aims to solve.
+- The summary should only be based on the CHANGES, and ISSUE. Do not generate the summary without a clear reference to CHANGES, or ISSUE.
+- Do not infer any initiatives, or features other than what has already been mentioned in the CHANGES, or ISSUE.
+- Do not include a conclusion.
+- Use bullet points to present the summary
+- The summary should be a single list with no headings, or sub-lists
+{rules}
   
-  TITLE: 
-  {title}
+TITLE: 
+{title}
 
-  CHANGES:
-  {diff}
+CHANGES:
+{diff}
   
-  ISSUE:
-  {issue}`,
+ISSUE:
+{issue}`,
   issueOnly: `Create a Pull Request summary from the information below. You MUST follow the following rules when generating the summary:
-  - The TITLE is the pull request title.
-  - The ISSUE will contain the description of an issue that this pull request aims to solve.
-  - The summary should only be based on the ISSUE only. Do not generate the summary without a clear reference to the ISSUE.
-  - Do not infer any initiatives, or features other than what has already been mentioned in the ISSUE.
-  - Use bullet points to present the summary.
-  - Each point should be 1 to 2 sentences long.
-  - The summary should be a single list with no headings, or sub-lists.
-  - Do not include a conclusion.
+- The TITLE is the pull request title.
+- The ISSUE will contain the description of an issue that this pull request aims to solve.
+- The summary should only be based on the ISSUE only. Do not generate the summary without a clear reference to the ISSUE.
+- Do not infer any initiatives, or features other than what has already been mentioned in the ISSUE.
+- Do not include a conclusion.
+- Use bullet points to present the summary
+- The summary should be a single list with no headings, or sub-lists
+{rules}
 
-  TITLE: 
-  {title}
+TITLE: 
+{title}
 
-  ISSUE: 
-  {issue}
+ISSUE: 
+{issue}
   `,
   issueAndBody: `Create a Pull Request summary from the information below. You MUST follow the following rules when generating the summary:
-  - The TITLE is the pull request title.
-  - The ISSUE will contain the description of a issue that this pull request aims to solve.
-  - The BODY will contain a description of what this pull request attempts to achieve.
-  - The summary should only be based on the ISSUE, and BODY. Do not generate the summary without a clear reference to the ISSUE, OR BODY.
-  - Do not infer any initiatives, or features other than what has already been mentioned in the ISSUE, or BODY.
-  - Use bullet points to present the summary.
-  - Each point should be 1 to 2 sentences long.
-  - The summary should be a single list with no headings, or sub-lists.
-  - Do not include a conclusion.
+- The TITLE is the pull request title.
+- The ISSUE will contain the description of a issue that this pull request aims to solve.
+- The BODY will contain a description of what this pull request attempts to achieve.
+- The summary should only be based on the ISSUE, and BODY. Do not generate the summary without a clear reference to the ISSUE, OR BODY.
+- Do not infer any initiatives, or features other than what has already been mentioned in the ISSUE, or BODY.
+- Do not include a conclusion.
+- Use bullet points to present the summary
+- The summary should be a single list with no headings, or sub-lists
+{rules}
 
-  TITLE: 
-  {title}
+TITLE: 
+{title}
   
-  ISSUE:
-  {issue}
+ISSUE:
+{issue}
   
-  BODY:
-  {body}
-  `,
+BODY:
+{body}
+`,
   bodyOnly: `Create a Pull Request summary from the information below. You MUST follow the following rules when generating the summary:
-  - The TITLE is the pull request title.
-  - The BODY will contain a description of what this pull request attempts to achieve.
-  - The summary should only be based on the BODY only. Do not generate the summary without a clear reference to the BODY.
-  - Do not infer any initiatives, or features other than what has already been mentioned in the ISSUE, or BODY.
-  - Use bullet points to present the summary.
-  - The summary should be a single list with no headings, or sub-lists.
-  - Each point should be 1 to 2 sentences long.
-  - Do not include a conclusion.
+- The TITLE is the pull request title.
+- The BODY will contain a description of what this pull request attempts to achieve.
+- The summary should only be based on the BODY only. Do not generate the summary without a clear reference to the BODY.
+- Do not infer any initiatives, or features other than what has already been mentioned in the ISSUE, or BODY.
+- Do not include a conclusion.
+- Use bullet points to present the summary
+- The summary should be a single list with no headings, or sub-lists
+{rules}
 
-  TITLE: 
-  {title}
+TITLE: 
+{title}
 
-  BODY: 
-  {body}
-  `,
-  complete: `Create a Pull Request summary from the information below. You MUST follow the following rules when generating the summary:
-  - The TITLE is the pull request title.
-  - The CHANGES will be a summary of all the changes.
-  - The ISSUE will contain the description of a issue that this pull request aims to solve.
-  - The BODY will contain a description of what this pull request attempts to achieve.
-  - The summary should only be based on the CHANGES, ISSUE, and BODY. Do not generate the summary without a clear reference to the CHANGES, ISSUE, OR BODY.
-  - Do not infer any initiatives, or features other than what has already been mentioned in the CHANGES, ISSUE, or BODY.
-  - Use bullet points to present the summary.
-  - The summary should be a single list with no headings, or sub-lists.
-  - The summary should be less than 5 points.
-  - Each point should be 1 to 2 sentences long.
-  - Do not include a conclusion.
+BODY: 
+{body}
+`,
+  allVariables: `Create a Pull Request summary from the information below. You MUST follow the following rules when generating the summary:
+- The TITLE is the pull request title.
+- The CHANGES will be a summary of all the changes.
+- The ISSUE will contain the description of a issue that this pull request aims to solve.
+- The BODY will contain a description of what this pull request attempts to achieve.
+- The summary should only be based on the CHANGES, ISSUE, and BODY. Do not generate the summary without a clear reference to the CHANGES, ISSUE, OR BODY.
+- Do not infer any initiatives, or features other than what has already been mentioned in the CHANGES, ISSUE, or BODY.
+- Use bullet points to present the summary
+- The summary should be a single list with no headings, or sub-lists
+{rules}
 
-  TITLE: 
-  {title}
+TITLE: 
+{title}
   
-  CHANGES:
-  {diff}
+CHANGES:
+{diff}
   
-  ISSUE:
-  {issue}
+ISSUE:
+{issue}
   
-  BODY:
-  {body}
-  `,
+BODY:
+{body}
+`,
 }
