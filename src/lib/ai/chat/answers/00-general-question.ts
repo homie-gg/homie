@@ -1,16 +1,12 @@
 import { getEmbeddingMatches } from '@/lib/ai/get-embedding-matches'
-import { chunkDiff } from '@/lib/ai/summarize-diff'
 import {
   chatGPTCharLimit,
   shortenQuestionContext,
 } from '@/lib/ai/shorten-question-context'
-import { dbClient } from '@/lib/db/client'
-import { PromptTemplate } from '@langchain/core/prompts'
+import { CohereClient } from 'cohere-ai'
 import { OpenAI, OpenAIEmbeddings } from '@langchain/openai'
-import {
-  RecordMetadata,
-  ScoredPineconeRecord,
-} from '@pinecone-database/pinecone'
+
+import { PromptTemplate } from '@langchain/core/prompts'
 
 export async function answerGeneralQuestion(question: string): Promise<string> {
   const embedder = new OpenAIEmbeddings({
@@ -25,13 +21,30 @@ export async function answerGeneralQuestion(question: string): Promise<string> {
 
   const { matches } = await getEmbeddingMatches({
     embeddings,
-    numTopResults: 1,
+    numTopResults: 30, // fetch lots of results, but we'll re-rank and take top x
   })
 
-  const match = matches[0]!
+  // 3. re-rank to find relevant results
 
-  const context = await getContext(question, match)
+  const cohere = new CohereClient({
+    token: process.env.COHERE_API_KEY,
+  })
 
+  const reranked = await cohere.rerank({
+    query: question,
+    documents: matches.map((match) => (match.metadata?.text ?? '') as string),
+  })
+
+  const rankedDocuments = reranked.results
+    .map((result) => matches[result.index].metadata?.text as string)
+    .filter((text) => !!text) // remove empty text
+    .slice(0, 3) // only use top docs for relevancy
+
+  // 4. summarize context to fit length
+
+  const context = await getContext(question, rankedDocuments)
+
+  // 5. Get answer
 
   const model = new OpenAI({ temperature: 0, modelName: 'gpt-4' })
 
@@ -48,57 +61,19 @@ export async function answerGeneralQuestion(question: string): Promise<string> {
   return model.invoke(input)
 }
 
-async function getContext(
-  question: string,
-  match: ScoredPineconeRecord<RecordMetadata>,
-) {
-  // Turn metadata from a JSON object to a text with headings
-  let metadata = ''
-  for (const [key, value] of Object.entries(match.metadata ?? {})) {
-    metadata += `${key}:\n${value}\n`
-  }
+async function getContext(question: string, documents: string[]) {
+  const context = documents.join('\n')
 
-  const context = await shortenQuestionContext({
-    question,
-    context: metadata,
-    promptLength: prompt.length,
-  })
-
-  // Append a diff (if one exists) for more context
-
-  /**
-   * How many chars left for diff
-   */
-  const diffLimit =
-    chatGPTCharLimit - (question.length + context.length + prompt.length)
-  const matchDiff = await getDiff(match)
-  const diff = matchDiff ? chunkDiff(matchDiff, diffLimit)[0] : null
-
-  if (!diff) {
+  // If we're under the limit, no need to shorten
+  if (question.length + context.length + prompt.length < chatGPTCharLimit) {
     return context
   }
 
-  return metadata + `\ndiff:\n${diff}`
-}
-
-async function getDiff(
-  match: ScoredPineconeRecord<RecordMetadata>,
-): Promise<string | null> {
-  const githubId = match.metadata?.ext_gh_pull_request_id as number | undefined
-  if (!githubId) {
-    return null
-  }
-
-  const pullRequest = await dbClient
-    .selectFrom('github.pull_request')
-    .where('github.pull_request.ext_gh_pull_request_id', '=', githubId)
-    .select('diff')
-    .executeTakeFirst()
-  if (!pullRequest) {
-    return null
-  }
-
-  return pullRequest.diff
+  return shortenQuestionContext({
+    question,
+    context,
+    promptLength: prompt.length,
+  })
 }
 
 const prompt = `Answer the question based on the context below. You should follow ALL the following rules when generating and answer:

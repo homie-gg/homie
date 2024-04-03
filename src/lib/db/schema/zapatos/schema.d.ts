@@ -603,12 +603,6 @@ declare module 'zapatos/schema' {
         */
         created_at: Date;
         /**
-        * **github.pull_request.diff**
-        * - `text` in database
-        * - Nullable, no default
-        */
-        diff: string | null;
-        /**
         * **github.pull_request.embed_metadata**
         * - `json` in database
         * - Nullable, no default
@@ -700,12 +694,6 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
         */
         created_at: db.TimestampTzString;
-        /**
-        * **github.pull_request.diff**
-        * - `text` in database
-        * - Nullable, no default
-        */
-        diff: string | null;
         /**
         * **github.pull_request.embed_metadata**
         * - `json` in database
@@ -799,12 +787,6 @@ declare module 'zapatos/schema' {
         */
         created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
         /**
-        * **github.pull_request.diff**
-        * - `text` in database
-        * - Nullable, no default
-        */
-        diff?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
-        /**
         * **github.pull_request.embed_metadata**
         * - `json` in database
         * - Nullable, no default
@@ -897,12 +879,6 @@ declare module 'zapatos/schema' {
         */
         created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
         /**
-        * **github.pull_request.diff**
-        * - `text` in database
-        * - Nullable, no default
-        */
-        diff?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
-        /**
         * **github.pull_request.embed_metadata**
         * - `json` in database
         * - Nullable, no default
@@ -994,12 +970,6 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
         */
         created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
-        /**
-        * **github.pull_request.diff**
-        * - `text` in database
-        * - Nullable, no default
-        */
-        diff?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
         /**
         * **github.pull_request.embed_metadata**
         * - `json` in database

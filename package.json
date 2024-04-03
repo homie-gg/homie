@@ -41,6 +41,7 @@
     "bullmq": "^5.4.6",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "cohere-ai": "^7.9.0",
     "date-fns": "^3.6.0",
     "install": "^0.13.0",
     "ioredis": "^5.3.2",

@@ -43,6 +43,14 @@ export async function summarizeDiff(
   return result.text
 }
 
+/**
+ * Create chunks of diff by files, so that each chunk
+ * is less than the given chunk size. e.g. GPT char
+ * limit.
+ *
+ * @param diff
+ * @param chunkSize
+ */
 export function chunkDiff(
   diff: string,
   chunkSize = chatGPTCharLimit,

@@ -1,3 +1,4 @@
+import { embedDiff } from '@/lib/ai/embed-diff'
 import { embedGithubPullRequest } from '@/lib/ai/embed-github-pull-request'
 import { summarizeGithubPullRequest } from '@/lib/ai/summarize-github-pull-request'
 import { dbClient } from '@/lib/db/client'
@@ -151,7 +152,6 @@ export async function saveMergedPullRequest(
       number: pullRequest.number,
       embed_value: summary,
       embed_metadata,
-      diff,
     })
     .onConflict((oc) =>
       oc.column('ext_gh_pull_request_id').doUpdateSet({
@@ -172,8 +172,17 @@ export async function saveMergedPullRequest(
     .executeTakeFirstOrThrow()
 
   await embedGithubPullRequest({
-    pull_request_id: pullRequestRecord.id,
     summary,
     metadata: embed_metadata,
+    pullRequest: pullRequestRecord,
   })
+
+  if (diff) {
+    await embedDiff({
+      pullRequest: pullRequestRecord,
+      diff,
+      summary,
+      organization_id: organization.id,
+    })
+  }
 }

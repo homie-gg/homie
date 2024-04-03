@@ -62,10 +62,6 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
         type: 'json', // use json (not jsonb) as we won't be querying / updating this
         notNull: false,
       },
-      diff: {
-        type: 'text',
-        notNull: false,
-      },
     },
   )
 }

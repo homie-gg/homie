@@ -1,31 +1,42 @@
 import { PineconeRecord } from '@pinecone-database/pinecone'
 import { OpenAIEmbeddings } from '@langchain/openai'
 import { pineconeClient } from '@/lib/pinecone/create-pinecone-client'
+import { v4 as uuid } from 'uuid'
 
 interface EmbedGithubPullRequestParams {
   summary: string
-  pull_request_id: number
   metadata: Record<string, any>
+  pullRequest: {
+    title: string
+    html_url: string
+  }
 }
 
 export async function embedGithubPullRequest(
   params: EmbedGithubPullRequestParams,
 ) {
-  const { pull_request_id, summary, metadata } = params
+  const { pullRequest, summary, metadata } = params
 
-  const embedder = new OpenAIEmbeddings({
-    modelName: 'text-embedding-3-large',
-  })
+  const points = summary.split(/^-/gm)
 
-  const embedding = await embedder.embedQuery(summary)
+  // Embed each PR point separately
+  for (const point of points) {
+    const text = `Pull Request ${pullRequest.title}. URL: ${pullRequest.html_url}. Changed: ${point}`
 
-  const record: PineconeRecord = {
-    id: `pull_request_${pull_request_id}`,
-    values: embedding,
-    metadata,
+    const embedder = new OpenAIEmbeddings({
+      modelName: 'text-embedding-3-large',
+    })
+
+    const embedding = await embedder.embedQuery(text)
+
+    const record: PineconeRecord = {
+      id: uuid(),
+      values: embedding,
+      metadata,
+    }
+
+    const index = pineconeClient.Index(process.env.PINECONE_INDEX_MAIN!)
+
+    await index.upsert([record])
   }
-
-  const index = pineconeClient.Index(process.env.PINECONE_INDEX_MAIN!)
-
-  await index.upsert([record])
 }
