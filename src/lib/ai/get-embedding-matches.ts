@@ -3,10 +3,11 @@ import { pineconeClient } from '@/lib/pinecone/create-pinecone-client'
 interface GetEmbeddingMatchesParams {
   embeddings: number[]
   numTopResults: number
+  organizationId: number
 }
 
 export async function getEmbeddingMatches(params: GetEmbeddingMatchesParams) {
-  const { embeddings, numTopResults } = params
+  const { embeddings, numTopResults, organizationId } = params
 
   const index = pineconeClient.Index(process.env.PINECONE_INDEX_MAIN!)
 
@@ -15,6 +16,11 @@ export async function getEmbeddingMatches(params: GetEmbeddingMatchesParams) {
       vector: embeddings,
       topK: numTopResults,
       includeMetadata: true,
+      filter: {
+        organization_id: {
+          $eq: organizationId,
+        },
+      },
     })
 
     return result

@@ -18,7 +18,10 @@ export async function handleAnswerSlackQuestion(job: AnswerSlackQuestion) {
 
   const slackClient = createSlackClient(organization.slack_access_token)
 
-  const answer = await answerQuestion(input)
+  const answer = await answerQuestion({
+    question: input,
+    organizationId: organization.id,
+  })
 
   // Reply
   await slackClient.post('chat.postMessage', {

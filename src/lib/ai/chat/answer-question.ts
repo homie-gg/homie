@@ -2,15 +2,21 @@ import { getQuestionParams } from '@/lib/ai/chat/get-question-params'
 import { questions } from '@/lib/ai/chat/questions'
 import { answerGeneralQuestion } from '@/lib/ai/chat/answers/00-general-question'
 
-export async function answerQuestion(question: string) {
-  const params = await tryGetQuestionParams(question)
+interface AnswerQuestionParams {
+  organizationId: number
+  question: string
+}
+
+export async function answerQuestion(params: AnswerQuestionParams) {
+  const { organizationId, question } = params
+  const questionParams = await tryGetQuestionParams(question)
 
   const handler = questions[params.question]
   if (!handler) {
-    return answerGeneralQuestion(question)
+    return answerGeneralQuestion({ question, organizationId })
   }
 
-  return JSON.stringify(params)
+  return JSON.stringify(questionParams)
 }
 
 async function tryGetQuestionParams(question: string) {

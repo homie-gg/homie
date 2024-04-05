@@ -1,5 +1,4 @@
 import { About } from '@/app/_components/About'
-import { Features } from '@/app/_components/Features'
 import { Hero } from '@/app/_components/Hero'
 import { HowItWorks } from '@/app/_components/HowItWorks'
 import { Navbar } from '@/app/_components/Navbar'
@@ -42,9 +41,8 @@ export default async function Home() {
                   height="4631"
                   decoding="async"
                   data-nimg="1"
-                  class="bottom-0 object-contain object-center px-4 pt-8"
+                  className="bottom-0 object-contain object-center px-4 pt-8"
                   style={{ color: 'transparent' }}
-                  srcset="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F1.3ee50ff9.png&amp;w=3840&amp;q=75 1x"
                   src="https://www.chatbase.co/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F1.3ee50ff9.png&w=3840&q=75"
                 />
               </div>
@@ -68,9 +66,8 @@ export default async function Home() {
                   height="4631"
                   decoding="async"
                   data-nimg="1"
-                  class="bottom-0 object-contain object-center px-4 pt-8"
+                  className="bottom-0 object-contain object-center px-4 pt-8"
                   style={{ color: 'transparent' }}
-                  srcset="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F1.3ee50ff9.png&amp;w=3840&amp;q=75 1x"
                   src="https://www.chatbase.co/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F1.3ee50ff9.png&w=3840&q=75"
                 />
               </div>
@@ -94,9 +91,8 @@ export default async function Home() {
                   height="4631"
                   decoding="async"
                   data-nimg="1"
-                  class="bottom-0 object-contain object-center px-4 pt-8"
+                  className="bottom-0 object-contain object-center px-4 pt-8"
                   style={{ color: 'transparent' }}
-                  srcset="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F1.3ee50ff9.png&amp;w=3840&amp;q=75 1x"
                   src="https://www.chatbase.co/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F1.3ee50ff9.png&w=3840&q=75"
                 />
               </div>
@@ -126,7 +122,6 @@ export default async function Home() {
       </div>
 
       <HowItWorks />
-      <Features />
     </>
   )
 }

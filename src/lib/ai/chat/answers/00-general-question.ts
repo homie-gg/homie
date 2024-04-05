@@ -8,7 +8,16 @@ import { OpenAI, OpenAIEmbeddings } from '@langchain/openai'
 
 import { PromptTemplate } from '@langchain/core/prompts'
 
-export async function answerGeneralQuestion(question: string): Promise<string> {
+interface AnswerGeneralQuestionParams {
+  question: string
+  organizationId: number
+}
+
+export async function answerGeneralQuestion(
+  params: AnswerGeneralQuestionParams,
+): Promise<string> {
+  const { question, organizationId } = params
+
   const embedder = new OpenAIEmbeddings({
     modelName: 'text-embedding-3-large',
   })
@@ -22,6 +31,7 @@ export async function answerGeneralQuestion(question: string): Promise<string> {
   const { matches } = await getEmbeddingMatches({
     embeddings,
     numTopResults: 30, // fetch lots of results, but we'll re-rank and take top x
+    organizationId,
   })
 
   // 3. re-rank to find relevant results

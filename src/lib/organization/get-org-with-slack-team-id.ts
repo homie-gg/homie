@@ -14,6 +14,7 @@ export const findOrgWithSlackTeamId = async (teamId: string) => {
       'voidpm.organization.id',
     )
     .select([
+      'voidpm.organization.id',
       'ext_gh_install_id',
       'slack_access_token',
       'ext_slack_bot_user_id',

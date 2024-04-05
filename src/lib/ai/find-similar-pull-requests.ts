@@ -3,12 +3,13 @@ import { OpenAIEmbeddings } from '@langchain/openai'
 
 interface FindSimilarPullRequestsParams {
   diffSummary: string
+  organizationId: number
 }
 
 export async function findSimilarPullRequests(
   params: FindSimilarPullRequestsParams,
 ) {
-  const { diffSummary } = params
+  const { diffSummary, organizationId } = params
 
   const embedder = new OpenAIEmbeddings({
     modelName: 'text-embedding-3-large',
@@ -21,6 +22,7 @@ export async function findSimilarPullRequests(
   const { matches } = await getEmbeddingMatches({
     embeddings,
     numTopResults: 10,
+    organizationId,
   })
 
   return matches
