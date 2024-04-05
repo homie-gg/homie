@@ -1,62 +1,52 @@
-import { Badge } from "./ui/badge";
+// import { Badge } from './ui/badge'
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import image from "../assets/growth.png";
-import image3 from "../assets/reflecting.png";
-import image4 from "../assets/looking-ahead.png";
+} from '@/lib/ui/Card'
 
 interface FeatureProps {
-  title: string;
-  description: string;
-  image: string;
+  title: string
+  description: string
 }
 
 const features: FeatureProps[] = [
   {
-    title: "Responsive Design",
+    title: 'Responsive Design',
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi nesciunt est nostrum omnis ab sapiente.",
-    image: image4,
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi nesciunt est nostrum omnis ab sapiente.',
   },
   {
-    title: "Intuitive user interface",
+    title: 'Intuitive user interface',
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi nesciunt est nostrum omnis ab sapiente.",
-    image: image3,
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi nesciunt est nostrum omnis ab sapiente.',
   },
   {
-    title: "AI-Powered insights",
+    title: 'AI-Powered insights',
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi nesciunt est nostrum omnis ab sapiente.",
-    image: image,
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi nesciunt est nostrum omnis ab sapiente.',
   },
-];
+]
 
 const featureList: string[] = [
-  "Dark/Light theme",
-  "Reviews",
-  "Features",
-  "Pricing",
-  "Contact form",
-  "Our team",
-  "Responsive design",
-  "Newsletter",
-  "Minimalist",
-];
+  'Dark/Light theme',
+  'Reviews',
+  'Features',
+  'Pricing',
+  'Contact form',
+  'Our team',
+  'Responsive design',
+  'Newsletter',
+  'Minimalist',
+]
 
 export const Features = () => {
   return (
-    <section
-      id="features"
-      className="container py-24 sm:py-32 space-y-8"
-    >
+    <section id="features" className="container py-24 sm:py-32 space-y-8">
       <h2 className="text-3xl lg:text-4xl font-bold md:text-center">
-        Many{" "}
+        Many{' '}
         <span className="bg-gradient-to-b from-primary/60 to-primary text-transparent bg-clip-text">
           Great Features
         </span>
@@ -64,14 +54,7 @@ export const Features = () => {
 
       <div className="flex flex-wrap md:justify-center gap-4">
         {featureList.map((feature: string) => (
-          <div key={feature}>
-            <Badge
-              variant="secondary"
-              className="text-sm"
-            >
-              {feature}
-            </Badge>
-          </div>
+          <div key={feature}>{feature}</div>
         ))}
       </div>
 
@@ -95,5 +78,5 @@ export const Features = () => {
         ))}
       </div>
     </section>
-  );
-};
+  )
+}
