@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifySlackRequest } from '@/lib/api/slack/verify-slack-request'
 import { SlackShortcut, ViewSubmitAction } from '@slack/bolt'
-import { defaultQueue } from '@/queue/default-queue'
+import { getDefaultQueue } from '@/queue/default-queue'
 import { CreateGithubIssueSelectedRepoMetadata } from '@/queue/handlers/handle-ask-slack-select-github-repo-for-issue'
 
 export const POST = async (request: NextRequest) => {
@@ -39,7 +39,7 @@ export const POST = async (request: NextRequest) => {
       shortcut.view.state.values['select_repo_block']['github_repo']
         .selected_option?.value ?? null
 
-    await defaultQueue.add('create_github_issue_from_slack', {
+    await getDefaultQueue().add('create_github_issue_from_slack', {
       team_id: data.team_id,
       target_message_ts: data.target_message_ts,
       channel_id: data.channel_id,
@@ -52,7 +52,7 @@ export const POST = async (request: NextRequest) => {
     shortcut.type === 'message_action' &&
     shortcut.callback_id === 'gh_issue_create:start'
   ) {
-    await defaultQueue.add('ask_slack_select_github_repo_for_issue', {
+    await getDefaultQueue().add('ask_slack_select_github_repo_for_issue', {
       team_id: shortcut.team.id,
       trigger_id: shortcut.trigger_id,
       channel_id: shortcut.channel.id,

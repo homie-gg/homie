@@ -1,4 +1,3 @@
-import { howLongOnTask } from '@/lib/ai/chat/answers/02-how-long-on-task'
 import { QuestionParams, questionParams } from '@/lib/ai/chat/types'
 import { StructuredOutputParser } from 'langchain/output_parsers'
 import { PromptTemplate } from '@langchain/core/prompts'

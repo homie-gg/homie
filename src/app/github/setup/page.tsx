@@ -1,6 +1,6 @@
 import { dbClient } from '@/lib/db/client'
 import { PageProps } from '@/lib/next-js/page-props'
-import { defaultQueue } from '@/queue/default-queue'
+import { getDefaultQueue } from '@/queue/default-queue'
 import { auth } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 
@@ -51,7 +51,7 @@ export default async function GithubSetup(
     .returningAll()
     .executeTakeFirstOrThrow()
 
-  await defaultQueue.add('import_pull_requests', {
+  await getDefaultQueue().add('import_pull_requests', {
     github_organization: githubOrganization,
   })
 

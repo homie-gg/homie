@@ -1,5 +1,4 @@
 import { Statistics } from './Statistics'
-import pilot from '../assets/pilot.png'
 import Image from 'next/image'
 
 export const About = () => {

@@ -3,7 +3,6 @@ import {
   getContributors,
 } from '@/app/(user)/review/_utils/get-contributors'
 import { PullRequest } from '@/app/(user)/review/_utils/get-pull-requests'
-import { GithubPullRequest } from '@/lib/db/types'
 import DataTable from '@/lib/ui/DataTable'
 
 import { ColumnDef } from '@tanstack/react-table'

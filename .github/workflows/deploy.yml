@@ -1,0 +1,145 @@
+name: 🚀 Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: us-east-1
+
+jobs:
+  get_ecr_pw:
+    name: Get ECR PW
+    uses: ./.github/workflows/get_ecr_pw.yml
+    with:
+      region: us-east-1
+    secrets: inherit
+
+  deploy_app:
+    name: Deploy App
+    needs: get_ecr_pw
+    runs-on: ubuntu-latest
+    container: docker:19.03.11
+    services:
+      docker:
+        image: docker:19.03.11-dind
+    env:
+      CONTAINER: prod-app-webserver
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Login to ECR
+        run: |
+          echo "${{ needs.get_ecr_pw.outputs.password}}" | docker login --username AWS --password-stdin 435193955274.dkr.ecr.$AWS_REGION.amazonaws.com
+      - name: Build & Push
+        # Update service to use new task (image)
+        # Reference: https://github.com/aws/aws-cli/issues/3064#issuecomment-701513960
+        run: |
+          IMAGE=435193955274.dkr.ecr.$AWS_REGION.amazonaws.com/$CONTAINER:latest
+          docker build --compress -f app.Dockerfile -t $IMAGE .
+          docker push $IMAGE
+
+  update_app:
+    name: Update App ECS Service
+    needs: deploy_app
+    runs-on: ubuntu-latest
+    container: alpine:3.18
+    env:
+      CLUSTER: prod-app-web-server
+      SERVICE: web-server
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    steps:
+      - name: Install AWS CLI
+        run: |
+          apk add python3 py3-pip
+          pip3 install awscli==1.18.8
+      - name: Update Service
+        run: |
+          aws ecs update-service --cluster "$CLUSTER" --service "$SERVICE" --region $AWS_REGION --force-new-deployment
+          aws ecs wait services-stable --cluster "$CLUSTER" --services "$SERVICE" --region $AWS_REGION
+
+  deploy_worker:
+    name: Deploy Worker
+    needs: get_ecr_pw
+    runs-on: ubuntu-latest
+    container: docker:19.03.11
+    services:
+      docker:
+        image: docker:19.03.11-dind
+    env:
+      CONTAINER: prod-app-worker
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Login to ECR
+        run: |
+          echo "${{ needs.get_ecr_pw.outputs.password}}" | docker login --username AWS --password-stdin 435193955274.dkr.ecr.$AWS_REGION.amazonaws.com
+      - name: Build & Push
+        # Update service to use new task (image)
+        # Reference: https://github.com/aws/aws-cli/issues/3064#issuecomment-701513960
+        run: |
+          IMAGE=435193955274.dkr.ecr.$AWS_REGION.amazonaws.com/$CONTAINER:latest
+          docker build --compress -f worker.Dockerfile -t $IMAGE .
+          docker push $IMAGE
+
+  update_worker:
+    name: Update Worker ECS Service
+    needs: deploy_worker
+    runs-on: ubuntu-latest
+    container: alpine:3.18
+    env:
+      CLUSTER: prod-app-workers
+      SERVICE: workers
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    steps:
+      - name: Install AWS CLI
+        run: |
+          apk add python3 py3-pip
+          pip3 install awscli==1.18.8
+      - name: Update Service
+        run: |
+          aws ecs update-service --cluster "$CLUSTER" --service "$SERVICE" --region $AWS_REGION --force-new-deployment
+          aws ecs wait services-stable --cluster "$CLUSTER" --services "$SERVICE" --region $AWS_REGION
+
+  deploy_instances:
+    name: Deploy Instances
+    runs-on: ubuntu-latest
+    container: alpine:3.18
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      CD_BUCKET: prod-app-deploy-voidpm
+      CD_FILE: app.tar
+      CD_APP: prod-app-server
+      CD_GROUP: prod
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Deploy System Dependencies
+        run: |
+          apk add python3 py3-pip nodejs npm jq
+          pip3 install awscli==1.18.8
+      - name: Install Dependencies
+        run: npm install
+      - name: tar & upload to s3
+        run: |
+          tar cf "$CD_FILE" *
+          aws s3 cp "$CD_FILE" "s3://$CD_BUCKET/"
+      - name: Run Deploy
+        run: |
+          deploymentId=$(aws deploy create-deployment --application-name "$CD_APP" --deployment-group "$CD_GROUP" --region $AWS_REGION --s3-location bucket="$CD_BUCKET",bundleType=Tar,key="$CD_FILE" | jq -r .'deploymentId')
+          failed=1
+          for i in $(seq 1 20)
+            do
+              status=$(aws deploy get-deployment --region $AWS_REGION --deployment-id "$deploymentId" | jq -r .'deploymentInfo.status')
+              echo "Deploy: $status"
+              if [ "$status" == 'Succeeded' ]
+              then
+                failed=0
+                break
+              fi
+              sleep 5
+            done
+          exit $failed

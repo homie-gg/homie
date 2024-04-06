@@ -1,0 +1,46 @@
+name: ✔️ ECR Password
+
+on:
+  workflow_call:
+    inputs:
+      region:
+        required: true
+        type: string
+
+    # Specify which secrets we need, these are usually passed in via
+    # 'secrets: inherit' by the parent workflow.
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+
+    # To make this workflow's output available we have to actually define it twice:
+    # 1. On the job level via steps.{step}.outputs.{output}
+    # 2. Here, in workflow_call.
+    outputs:
+      password:
+        description: 'ECR login password'
+        value: ${{ jobs.fetch.outputs.password }}
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: ${{ inputs.region }}
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    container: alpine:3.18
+    steps:
+      - name: Install AWS CLI
+        run: |
+          apk add python3 py3-pip
+          pip3 install awscli==1.18.8
+      - name: Get Password
+        id: get_password
+        run: |
+          ECR_LOGIN=$(aws ecr get-login-password --region $AWS_REGION)
+          echo "password=$ECR_LOGIN" >> $GITHUB_OUTPUT
+    outputs:
+      password: ${{ steps.get_password.outputs.password }}

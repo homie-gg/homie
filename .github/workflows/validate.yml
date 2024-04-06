@@ -1,0 +1,47 @@
+name: 💯 Validate
+on:
+  push:
+    branches:
+      - '**' # all branches
+      - '!main'
+
+jobs:
+  typecheck:
+    name: 🎯 Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm i
+      - run: npm run typecheck
+
+  format:
+    name: 🔨 Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - run: npm i
+      - run: npm run format
+
+      - name: Commit and Push
+        uses: stefanzweifel/git-auto-commit-action@v4.2.0
+        id: auto_commit_action
+        with:
+          commit_user_name: dk_bot
+          commit_user_email: bot@daikokuya78.com
+          commit_author: dk bot <bot@daikokuya78.com>
+          commit_message: Bot - Fix Formatting
+
+      - name: Success
+        if: steps.auto_commit_action.outputs.changes_detected == 'false'
+        run: echo "Format check... PASS!"
+
+      - name: Fail
+        if: steps.auto_commit_action.outputs.changes_detected == 'true'
+        run: echo "Fixed formatting, and pushed changes" && exit 1

@@ -10,9 +10,7 @@ import { Job } from '@/queue/jobs'
 import { Worker } from 'bullmq'
 import Redis from 'ioredis'
 
-const connection = new Redis(process.env.REDIS_URL!, {
-  maxRetriesPerRequest: null,
-})
+let defaultWorker: Worker | null = null
 
 const handlers: Handlers = {
   create_github_issue_from_slack: handleCreateGithubIssueFromSlack,
@@ -22,26 +20,38 @@ const handlers: Handlers = {
   save_opened_pull_request: handleSaveOpenedPullRequest,
   save_merged_pull_request: handleSaveMergedPullRequest,
   generate_open_pull_request_summary: handleGenerateOpenPullRequestSummary,
-  answer_slack_question: handleAnswerSlackQuestion
+  answer_slack_question: handleAnswerSlackQuestion,
 }
 
-const worker = new Worker(
-  defaultQueueName,
-  async (job: Job) => {
-    const handle = handlers[job.name]
-    if (!handle) {
-      return
-    }
+export const getDefaultWorker = () => {
+  if (defaultWorker) {
+    return defaultWorker
+  }
 
-    return handle(job as any) // Ignore TS, as already type-safe when accessing hadnle
-  },
-  {
-    connection,
-    concurrency: 5,
-    removeOnComplete: { count: 1000 },
-    removeOnFail: { count: 5000 },
-  },
-)
+  const connection = new Redis(process.env.REDIS_HOST!, {
+    maxRetriesPerRequest: null,
+  })
+
+  defaultWorker = new Worker(
+    defaultQueueName,
+    async (job: Job) => {
+      const handle = handlers[job.name]
+      if (!handle) {
+        return
+      }
+
+      return handle(job as any) // Ignore TS, as already type-safe when accessing hadnle
+    },
+    {
+      connection,
+      concurrency: 5,
+      removeOnComplete: { count: 1000 },
+      removeOnFail: { count: 5000 },
+    },
+  ) as any
+
+  return defaultWorker
+}
 
 type HandlerFunc<TJob extends Job> = (job: TJob) => void | Promise<void>
 
@@ -49,4 +59,4 @@ type Handlers = {
   [J in Job as J['name']]: HandlerFunc<J>
 }
 
-export default worker
+export default defaultWorker
