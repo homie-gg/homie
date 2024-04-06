@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20
       - run: npm i
       - run: npm run typecheck
 
@@ -22,9 +22,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.BOT_GH_TOKEN }}
+          ref: ${{ github.head_ref }}
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20
 
       - run: npm i
       - run: npm run format
@@ -33,9 +36,9 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4.2.0
         id: auto_commit_action
         with:
-          commit_user_name: dk_bot
-          commit_user_email: bot@daikokuya78.com
-          commit_author: dk bot <bot@daikokuya78.com>
+          commit_user_name: void_bot
+          commit_user_email: bot.voidpm.io
+          commit_author: void bot <bot@voidpm.io>
           commit_message: Bot - Fix Formatting
 
       - name: Success

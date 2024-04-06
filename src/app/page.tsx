@@ -51,8 +51,8 @@ export default async function Home() {
                   Trustworthy, Accurate Answers
                 </h5>
                 <p className="text-md font-normal text-zinc-700 ">
-                  With features like Revise answers and Confidence score you
-                  can be sure your chatbot is giving the right answers.
+                  With features like Revise answers and Confidence score you can
+                  be sure your chatbot is giving the right answers.
                 </p>
               </div>
             </div>
@@ -64,8 +64,8 @@ export default async function Home() {
                   Trustworthy, Accurate Answers
                 </h5>
                 <p className="text-md font-normal text-zinc-700 ">
-                  With features like Revise answers and Confidence score you
-                  can be sure your chatbot is giving the right answers.
+                  With features like Revise answers and Confidence score you can
+                  be sure your chatbot is giving the right answers.
                 </p>
               </div>
             </div>
