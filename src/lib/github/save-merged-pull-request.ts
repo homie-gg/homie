@@ -4,6 +4,7 @@ import { summarizeGithubPullRequest } from '@/lib/ai/summarize-github-pull-reque
 import { dbClient } from '@/lib/db/client'
 import { createGithubClient } from '@/lib/github/create-github-client'
 import { findLinkedIssue } from '@/lib/github/find-linked-issue'
+import { logger } from '@/lib/logger'
 import { parseISO } from 'date-fns'
 
 interface SaveMergedPullRequestParams {
@@ -41,10 +42,25 @@ export async function saveMergedPullRequest(
 ) {
   const { pullRequest, organization } = params
 
+  logger.debug('Start Save pull request', {
+    event: 'save_pull_request.start',
+    data: {
+      organization,
+      pull_request: pullRequest,
+    },
+  })
+
   /**
    * Whether PR was successfully merged (not closed).
    */
   if (!pullRequest.merged_at) {
+    logger.debug('Missing merged_at - abort', {
+      event: 'save_pull_request.missing_merged_at',
+      data: {
+        organization,
+        pull_request: pullRequest,
+      },
+    })
     return
   }
 
@@ -55,6 +71,13 @@ export async function saveMergedPullRequest(
     pullRequest.base.ref === pullRequest.base.repo.default_branch
 
   if (!isDefaultBranchPR) {
+    logger.debug('Was not merge to default branch - abort', {
+      event: 'save_pull_request.not_merged_to_default',
+      data: {
+        organization,
+        pull_request: pullRequest,
+      },
+    })
     return
   }
 

@@ -20,8 +20,6 @@ nvm use v20.9.0
 
 cd /app
 
-npm install
-
 npm run queue:dashboard > /dev/null 2> /dev/null < /dev/null &
 
 exit 0

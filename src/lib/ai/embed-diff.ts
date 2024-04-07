@@ -57,6 +57,4 @@ export async function embedDiff(params: EmbedDiffParams) {
       await index.upsert([record])
     }
   }
-
-  return null
 }

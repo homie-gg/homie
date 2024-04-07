@@ -2,9 +2,15 @@ import { NextRequest, NextResponse } from 'next/server'
 import { verifySlackRequest } from '@/lib/api/slack/verify-slack-request'
 import { getDefaultQueue } from '@/queue/default-queue'
 import { SlackEvent } from '@slack/bolt'
+import { logger } from '@/lib/logger'
 
 export const POST = async (request: NextRequest) => {
   const payload = await request.clone().json()
+
+  logger.debug('Received Slack webhook', {
+    event: 'slack.webhook.received',
+    data: payload,
+  })
 
   // Handle Slack ownership verification
   // Reference: https://api.slack.com/apis/connections/events-api#handshake

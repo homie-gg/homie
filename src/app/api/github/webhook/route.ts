@@ -3,8 +3,14 @@ import { App } from 'octokit'
 import { getPrivateKey } from '@/lib/github/create-github-client'
 import { getDefaultQueue } from '@/queue/default-queue'
 import { summaryKey } from '@/queue/handlers/handle-generate-open-pull-request-summary'
+import { logger } from '@/lib/logger'
 
 export const POST = async (request: NextRequest) => {
+  logger.debug('Received Github webhook', {
+    event: 'github.webhook.received',
+    data: await request.clone().json(),
+  })
+
   const app = new App({
     appId: process.env.GITHUB_APP_ID!,
     privateKey: getPrivateKey().toString('utf-8'),
