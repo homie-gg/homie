@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { verifySlackRequest } from '@/lib/api/slack/verify-slack-request'
 import { getDefaultQueue } from '@/queue/default-queue'
 import { SlackEvent } from '@slack/bolt'
-import { logger } from '@/lib/logger'
+import { logger } from '@/lib/log/logger'
 
 export const POST = async (request: NextRequest) => {
   const payload = await request.clone().json()

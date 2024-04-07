@@ -3,7 +3,7 @@ import { App } from 'octokit'
 import { getPrivateKey } from '@/lib/github/create-github-client'
 import { getDefaultQueue } from '@/queue/default-queue'
 import { summaryKey } from '@/queue/handlers/handle-generate-open-pull-request-summary'
-import { logger } from '@/lib/logger'
+import { logger } from '@/lib/log/logger'
 
 export const POST = async (request: NextRequest) => {
   logger.debug('Received Github webhook', {
