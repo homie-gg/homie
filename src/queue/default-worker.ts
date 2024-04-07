@@ -59,4 +59,4 @@ type Handlers = {
   [J in Job as J['name']]: HandlerFunc<J>
 }
 
-export default defaultWorker
+export default getDefaultWorker()
