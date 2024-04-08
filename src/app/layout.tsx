@@ -28,14 +28,14 @@ export default function RootLayout({
             <head>
               <script
                 async
-                src={`https://www.googletagmanager.com/gtag/js?id="${googleAnalayticsMeasurementId}"`}
+                src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalayticsMeasurementId}`}
               />
               <Script id="google-analytics">
                 {`
                   window.dataLayer = window.dataLayer || [];
                   function gtag(){dataLayer.push(arguments);}
                   gtag('js', new Date());
-                  gtag('config', ${googleAnalayticsMeasurementId});
+                  gtag('config', "${googleAnalayticsMeasurementId}");
                 `}
               </Script>
             </head>
