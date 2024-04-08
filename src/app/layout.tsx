@@ -24,7 +24,7 @@ export default function RootLayout({
       <TooltipProvider>
         <html lang="en">
           {googleAnalayticsMeasurementId && (
-            <>
+            <head>
               <script
                 async
                 src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalayticsMeasurementId}`}
@@ -37,7 +37,7 @@ export default function RootLayout({
                   gtag('config', googleAnalayticsMeasurementId);
                 `}
               </script>
-            </>
+            </head>
           )}
           <body
             className={cn(
