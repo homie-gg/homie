@@ -18,17 +18,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const googleAnalayticsMeasurementId =
-    process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
   return (
     <ClerkProvider>
       <TooltipProvider>
         <html lang="en">
-          {googleAnalayticsMeasurementId && (
+          {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
             <head>
               <Script
                 async
-                src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalayticsMeasurementId}`}
+                src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
               />
               <Script id="google-analytics">
                 {`
