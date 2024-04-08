@@ -131,7 +131,7 @@ jobs:
         run: |
           deploymentId=$(aws deploy create-deployment --application-name "$CD_APP" --deployment-group "$CD_GROUP" --region $AWS_REGION --s3-location bucket="$CD_BUCKET",bundleType=Tar,key="$CD_FILE" | jq -r .'deploymentId')
           failed=1
-          for i in $(seq 1 20)
+          for i in $(seq 1 40)
             do
               status=$(aws deploy get-deployment --region $AWS_REGION --deployment-id "$deploymentId" | jq -r .'deploymentInfo.status')
               echo "Deploy: $status"
