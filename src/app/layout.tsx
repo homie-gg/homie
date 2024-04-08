@@ -26,7 +26,7 @@ export default function RootLayout({
         <html lang="en">
           {googleAnalayticsMeasurementId && (
             <head>
-              <script
+              <Script
                 async
                 src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalayticsMeasurementId}`}
               />
