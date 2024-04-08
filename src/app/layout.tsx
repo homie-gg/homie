@@ -8,8 +8,6 @@ import Script from 'next/script'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
-const googleAnalayticsMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
-
 export const metadata: Metadata = {
   title: 'Void',
   description: 'AI Project Manager',
@@ -20,6 +18,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const googleAnalayticsMeasurementId =
+    process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
   return (
     <ClerkProvider>
       <TooltipProvider>
