@@ -7,6 +7,8 @@ import { TooltipProvider } from '@/lib/ui/Tooltip'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
+const googleAnalayticsMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
+
 export const metadata: Metadata = {
   title: 'Void',
   description: 'AI Project Manager',
@@ -21,6 +23,22 @@ export default function RootLayout({
     <ClerkProvider>
       <TooltipProvider>
         <html lang="en">
+          {googleAnalayticsMeasurementId && (
+            <>
+              <script
+                async
+                src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalayticsMeasurementId}`}
+              />
+              <script>
+                {`
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', googleAnalayticsMeasurementId);
+                `}
+              </script>
+            </>
+          )}
           <body
             className={cn(
               'min-h-screen bg-background font-sans antialiased',
