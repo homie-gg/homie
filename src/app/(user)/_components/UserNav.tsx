@@ -53,11 +53,8 @@ export function UserNav(params: UserNavParams) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <Link href="/settings">
-            <DropdownMenuItem>
-              Settings
-              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-            </DropdownMenuItem>
+          <Link href="https://voidpm.nolt.io/roadmap">
+            <DropdownMenuItem>Request Feature</DropdownMenuItem>
           </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
@@ -67,7 +64,6 @@ export function UserNav(params: UserNavParams) {
           }}
         >
           Log out
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
