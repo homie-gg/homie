@@ -75,7 +75,7 @@ async function getSummary(params: GetSummaryParams) {
     type,
   })
 
-  const model = new OpenAI({ temperature: 0, modelName: 'gpt-4' })
+  const model = new OpenAI({ temperature: 0, modelName: 'gpt-3.5-turbo' })
 
   return await model.invoke(input)
 }
