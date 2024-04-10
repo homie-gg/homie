@@ -44,7 +44,10 @@ export async function embedGithubPullRequest(
     const record: PineconeRecord = {
       id: uuid(),
       values: embedding,
-      metadata,
+      metadata: {
+        ...metadata,
+        text,
+      },
     }
 
     const index = pineconeClient.Index(process.env.PINECONE_INDEX_MAIN!)
