@@ -7,6 +7,7 @@ import { CohereClient } from 'cohere-ai'
 import { OpenAI, OpenAIEmbeddings } from '@langchain/openai'
 
 import { PromptTemplate } from '@langchain/core/prompts'
+import { logger } from '@/lib/log/logger'
 
 interface AnswerGeneralQuestionParams {
   question: string
@@ -68,7 +69,21 @@ export async function answerGeneralQuestion(
     context,
   })
 
-  return model.invoke(input)
+  const answer = await model.invoke(input)
+
+  logger.debug('Answered general question', {
+    event: 'answer_general_question',
+    question,
+    matches,
+    reranked: rankedDocuments,
+    context,
+    answer,
+    organization: {
+      id: organizationId,
+    },
+  })
+
+  return answer
 }
 
 async function getContext(question: string, documents: string[]) {
