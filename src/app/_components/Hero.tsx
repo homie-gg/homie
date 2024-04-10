@@ -11,7 +11,7 @@ export const Hero = () => {
             </span>{' '}
           </h1>
           <h2 className="inline">
-            <span className="inline bg-gradient-to-r from-[#61DAFB]  to-[#D247BF] text-transparent bg-clip-text">
+            <span className="inline bg-gradient-to-r from-[#7C3AED]  to-[#F80282] text-transparent bg-clip-text">
               {' '}
               ship fast.
             </span>{' '}

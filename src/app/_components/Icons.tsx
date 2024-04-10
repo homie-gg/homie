@@ -1,3 +1,5 @@
+import { cn } from '@/lib/utils'
+
 export const LogoIcon = () => {
   return (
     <svg
@@ -17,12 +19,12 @@ export const LogoIcon = () => {
   )
 }
 
-export const MedalIcon = () => {
+export const MedalIcon = (props: { className?: string }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 128 128"
-      className="w-14 fill-primary"
+      className={cn('w-14 fill-primary', props.className)}
     >
       <title>Free Icons</title>
       <g id="Layer_8" data-name="Layer 8">
@@ -95,12 +97,12 @@ export const MedalIcon = () => {
   )
 }
 
-export const MapIcon = () => {
+export const MapIcon = (props: { className?: string }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 128 128"
-      className="w-14 fill-primary"
+      className={cn('w-14 fill-primary', props.className)}
     >
       <title>Free Icons</title>
       <g id="Layer_45" data-name="Layer 45">
@@ -169,12 +171,12 @@ export const MapIcon = () => {
   )
 }
 
-export const PlaneIcon = () => {
+export const PlaneIcon = (props: { className?: string }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 128 128"
-      className="w-14 fill-primary"
+      className={cn('w-14 fill-primary', props.className)}
     >
       <title>Free Icons</title>
       <g id="Layer_4" data-name="Layer 4">
@@ -227,12 +229,12 @@ export const PlaneIcon = () => {
   )
 }
 
-export const GiftIcon = () => {
+export const GiftIcon = (props: { className?: string }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 128 128"
-      className="w-14 fill-primary"
+      className={cn('w-14 fill-primary', props.className)}
     >
       <title>Free Icons</title>
       <g id="Layer_14" data-name="Layer 14">
@@ -325,12 +327,12 @@ export const GiftIcon = () => {
   )
 }
 
-export const LightBulbIcon = () => {
+export const LightBulbIcon = (props: { className?: string }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 128 128"
-      className="w-12 fill-primary"
+      className={cn('w-12 fill-primary', props.className)}
     >
       <title>Free Icons</title>
       <g id="Layer_49" data-name="Layer 49">
@@ -399,12 +401,12 @@ export const LightBulbIcon = () => {
   )
 }
 
-export const WalletIcon = () => {
+export const WalletIcon = (props: { className?: string }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 128 128"
-      className="w-12 fill-primary"
+      className={cn('w-12 fill-primary', props.className)}
     >
       <title>Free Icons</title>
       <g id="Layer_21" data-name="Layer 21">
@@ -489,12 +491,12 @@ export const WalletIcon = () => {
   )
 }
 
-export const ChartIcon = () => {
+export const ChartIcon = (props: { className?: string }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 128 128"
-      className="w-12 fill-primary"
+      className={cn('w-12 fill-primary', props.className)}
     >
       <title>Free Icons</title>
       <g id="Layer_10" data-name="Layer 10">
@@ -559,12 +561,12 @@ export const ChartIcon = () => {
   )
 }
 
-export const MagnifierIcon = () => {
+export const MagnifierIcon = (props: { className?: string }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 128 128"
-      className="w-12 fill-primary"
+      className={cn('w-12 fill-primary', props.className)}
     >
       <title>Free Icons</title>
       <g id="Layer_46" data-name="Layer 46">

@@ -1,37 +1,15 @@
 'use client'
+import Image from 'next/image'
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
 } from '@/lib/ui/NavigationMenu'
+import logo from '@/assets/logo.svg'
 
-import { LogoIcon } from './Icons'
 import { buttonVariants } from '@/lib/ui/Button'
 import { MobileMenu } from '@/app/_components/MobileMenu'
-
-interface RouteProps {
-  href: string
-  label: string
-}
-
-const routeList: RouteProps[] = [
-  {
-    href: '#features',
-    label: 'Features',
-  },
-  {
-    href: '#testimonials',
-    label: 'Testimonials',
-  },
-  {
-    href: '#pricing',
-    label: 'Pricing',
-  },
-  {
-    href: '#faq',
-    label: 'FAQ',
-  },
-]
+import Link from 'next/link'
 
 export const Navbar = () => {
   return (
@@ -40,8 +18,7 @@ export const Navbar = () => {
         <NavigationMenuList className="container h-14 px-4 w-screen flex justify-between ">
           <NavigationMenuItem className="font-bold flex">
             <a href="/" className="ml-2 font-bold text-xl flex">
-              <LogoIcon />
-              Void
+              <Image src={logo.src} alt="void" width={100} height={29} />
             </a>
           </NavigationMenuItem>
 
@@ -52,17 +29,22 @@ export const Navbar = () => {
 
           {/* desktop */}
           <nav className="hidden md:flex gap-2">
-            {routeList.map((route: RouteProps, i) => (
-              <a
-                href={route.href}
-                key={i}
-                className={`text-[17px] ${buttonVariants({
-                  variant: 'ghost',
-                })}`}
-              >
-                {route.label}
-              </a>
-            ))}
+            <Link
+              href="/login"
+              className={`text-[0.875rem] ${buttonVariants({
+                variant: 'ghost',
+              })}`}
+            >
+              Login
+            </Link>
+            <Link
+              href="/sign_up"
+              className={`text-[0.875rem] ${buttonVariants({
+                variant: 'default',
+              })}`}
+            >
+              Try for free
+            </Link>
           </nav>
         </NavigationMenuList>
       </NavigationMenu>
