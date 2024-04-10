@@ -35,6 +35,10 @@ export async function answerGeneralQuestion(
     organizationId,
   })
 
+  if (matches.length === 0) {
+    return "We don't have an answer for that yet."
+  }
+
   // 3. re-rank to find relevant results
 
   const cohere = new CohereClient({
