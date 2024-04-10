@@ -152,6 +152,7 @@ export async function saveMergedPullRequest(
   })
 
   const embed_metadata = {
+    type: 'pr_summary',
     title: pullRequest.title,
     url: pullRequest.html_url,
     ext_gh_pull_request_id: pullRequest.id,

@@ -52,6 +52,7 @@ export async function embedDiff(params: EmbedDiffParams) {
       const embedding = await embedder.embedQuery(text)
 
       const metadata = {
+        type: 'pr_diff',
         text,
         organization_id,
         pull_request_id: pullRequest.id,
