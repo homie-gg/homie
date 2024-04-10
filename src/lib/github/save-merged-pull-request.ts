@@ -200,6 +200,7 @@ export async function saveMergedPullRequest(
     summary,
     metadata: embed_metadata,
     pullRequest: pullRequestRecord,
+    contributor: pullRequest.user.login,
   })
 
   if (diff) {
