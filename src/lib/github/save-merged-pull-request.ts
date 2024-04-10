@@ -208,6 +208,7 @@ export async function saveMergedPullRequest(
       pullRequest: pullRequestRecord,
       diff,
       summary,
+      contributor: pullRequest.user.login,
       organization_id: organization.id,
     })
   }

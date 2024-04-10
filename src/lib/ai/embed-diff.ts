@@ -15,12 +15,14 @@ interface EmbedDiffParams {
     ext_gh_pull_request_id: number
     repo_id: number
     contributor_id: number
+    merged_at: Date | null
   }
+  contributor: string
   organization_id: number
 }
 
 export async function embedDiff(params: EmbedDiffParams) {
-  const { diff, summary, pullRequest, organization_id } = params
+  const { diff, summary, pullRequest, organization_id, contributor } = params
 
   const chunks = chunkDiff(diff, 4000 - prompt.length)
 
@@ -35,7 +37,18 @@ export async function embedDiff(params: EmbedDiffParams) {
     })
 
     for (const snippet of snippets) {
-      const text = `Pull Request ${pullRequest.title}. URL: ${pullRequest.html_url}. Changed: ${snippet}`
+      const attributes = [
+        `Pull Request ${pullRequest.title}`,
+        `URL: ${pullRequest.html_url}`,
+        `Contributed by ${contributor}`,
+        `Changed: ${snippet}`,
+      ]
+
+      if (pullRequest.merged_at) {
+        attributes.push(`Merged at ${pullRequest.merged_at.toISOString()}.`)
+      }
+
+      const text = attributes.join('. ')
       const embedding = await embedder.embedQuery(text)
 
       const metadata = {
