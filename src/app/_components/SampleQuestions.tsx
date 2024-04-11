@@ -138,7 +138,7 @@ await defaultQueue.add('answer_slack_question', {
               saveMergedPullRequest function and added to the metadata object in
               the embedGithubPullRequest function. This change was made as part
               of the Pull Request titled &quot;fix(PR): embedding missing
-              text&quot (URL: https://github.com/void-pm/void/pull/104),
+              text&quot; (URL: https://github.com/void-pm/void/pull/104),
               contributed by mikewuu.
             </div>
           </AccordionContent>
