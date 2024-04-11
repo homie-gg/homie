@@ -133,7 +133,7 @@ await defaultQueue.add('answer_slack_question', {
           <AccordionContent>
             <div>
               The embedded metadata was changed to fix an issue with embedding
-              missing text. Specifically, the &apos;text&apos property was
+              missing text. Specifically, the &apos;text&apos; property was
               removed from the embed_metadata object in the
               saveMergedPullRequest function and added to the metadata object in
               the embedGithubPullRequest function. This change was made as part
