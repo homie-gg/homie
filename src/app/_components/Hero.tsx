@@ -19,8 +19,8 @@ export const Hero = () => {
         </main>
 
         <p className="text-xl text-muted-foreground md:w-10/12 mx-auto lg:mx-0">
-          Void is an AI powered integration that comes with dashboard, chatbot,
-          notifications, reminders, and reports for your team.
+          Void is an AI powered integration that comes with a dashboard,
+          chatbot, reminders, and reports for your team.
           <br />
           <br />
           Built for async global teams that need to start shipping code faster
