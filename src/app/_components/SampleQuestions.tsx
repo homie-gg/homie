@@ -124,6 +124,25 @@ await defaultQueue.add('answer_slack_question', {
             </div>
           </AccordionContent>
         </AccordionItem>
+        <AccordionItem value="question_6">
+          <AccordionTrigger className="text-left">
+            <div>
+              <strong>Why</strong> did we change the embedded metadata?
+            </div>
+          </AccordionTrigger>
+          <AccordionContent>
+            <div>
+              The embedded metadata was changed to fix an issue with embedding
+              missing text. Specifically, the &apos;text&apos property was
+              removed from the embed_metadata object in the
+              saveMergedPullRequest function and added to the metadata object in
+              the embedGithubPullRequest function. This change was made as part
+              of the Pull Request titled &quot;fix(PR): embedding missing
+              text&quot (URL: https://github.com/void-pm/void/pull/104),
+              contributed by mikewuu.
+            </div>
+          </AccordionContent>
+        </AccordionItem>
       </Accordion>
     </section>
   )
