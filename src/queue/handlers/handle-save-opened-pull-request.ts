@@ -13,10 +13,19 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
       'voidpm.organization.id',
     )
     .where('ext_gh_install_id', '=', installation?.id!)
-    .select(['voidpm.organization.id', 'github.organization.ext_gh_install_id'])
+    .select([
+      'voidpm.organization.id',
+      'github.organization.ext_gh_install_id',
+      'is_over_plan_pr_limit',
+      'has_unlimited_usage',
+    ])
     .executeTakeFirst()
 
   if (!organization) {
+    return
+  }
+
+  if (organization.is_over_plan_pr_limit && !organization.has_unlimited_usage) {
     return
   }
 

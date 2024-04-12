@@ -83,7 +83,8 @@ export default async function UserLayout(props: UserLayoutProps) {
       </AppBar>
 
       <Content>
-        {organization.is_over_plan_pr_limit && <OverPlanLimitAlert />}
+        {organization.is_over_plan_pr_limit &&
+          !organization.has_unlimited_usage && <OverPlanLimitAlert />}
         {children}
       </Content>
     </div>

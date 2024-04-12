@@ -27,6 +27,7 @@ export async function handleGenerateOpenPullRequestSummary(
       'voidpm.organization.id',
       'github.organization.ext_gh_install_id',
       'is_over_plan_pr_limit',
+      'has_unlimited_usage',
     ])
     .executeTakeFirst()
 
@@ -40,7 +41,7 @@ export async function handleGenerateOpenPullRequestSummary(
 
   const owner = pull_request.base.repo.full_name.split('/')[0]
 
-  if (organization.is_over_plan_pr_limit) {
+  if (organization.is_over_plan_pr_limit && !organization.has_unlimited_usage) {
     const bodyWithSummary = pull_request.body?.replace(
       summaryKey,
       getOverPRLimitMessage(),

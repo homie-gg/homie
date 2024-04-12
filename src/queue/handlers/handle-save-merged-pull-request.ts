@@ -25,6 +25,7 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
       'github.organization.ext_gh_install_id',
       'is_over_plan_pr_limit',
       'pr_limit_per_month',
+      'has_unlimited_usage',
     ])
     .executeTakeFirst()
 
@@ -32,7 +33,7 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
     return
   }
 
-  if (organization.is_over_plan_pr_limit) {
+  if (organization.is_over_plan_pr_limit && !organization.has_unlimited_usage) {
     return
   }
 

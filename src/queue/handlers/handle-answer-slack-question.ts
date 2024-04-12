@@ -14,7 +14,7 @@ export async function handleAnswerSlackQuestion(job: AnswerSlackQuestion) {
 
   const slackClient = createSlackClient(organization.slack_access_token)
 
-  if (organization.is_over_plan_pr_limit) {
+  if (organization.is_over_plan_pr_limit && !organization.has_unlimited_usage) {
     await slackClient.post('chat.postMessage', {
       channel: channel_id,
       thread_ts: target_message_ts,

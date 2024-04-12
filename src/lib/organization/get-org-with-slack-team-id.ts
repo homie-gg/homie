@@ -19,6 +19,7 @@ export const findOrgWithSlackTeamId = async (teamId: string) => {
       'slack_access_token',
       'ext_slack_bot_user_id',
       'is_over_plan_pr_limit',
+      'has_unlimited_usage',
     ])
     .where('ext_slack_team_id', '=', teamId)
     .executeTakeFirst()
