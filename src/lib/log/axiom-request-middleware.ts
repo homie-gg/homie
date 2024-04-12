@@ -13,7 +13,17 @@ export default function axiomRequestMiddleware(
   return async (request, event) => {
     const id = uuid()
 
-    const reqBody = await getRequestBody(request)
+    let reqBody = null
+
+    try {
+      reqBody = await request.clone().json()
+    } catch {
+      try {
+        reqBody = await request.clone().text()
+      } catch {
+        // back request
+      }
+    }
 
     axiom.ingest(process.env.NEXT_PUBLIC_AXIOM_DATASET!, [
       {
@@ -21,13 +31,13 @@ export default function axiomRequestMiddleware(
         id,
         data: {
           event: 'req.init',
-          method: request.method,
-          referrer: request.referrer,
-          ip: request.ip,
           url: request.url,
           pathname: request.nextUrl.pathname,
           search: request.nextUrl.search,
-          req_body: reqBody,
+          method: request.method,
+          referrer: request.referrer,
+          ip: request.ip,
+          data: await getRequestBody(request),
         },
       },
     ])
@@ -49,7 +59,6 @@ export default function axiomRequestMiddleware(
           url: request.url,
           pathname: request.nextUrl.pathname,
           search: request.nextUrl.search,
-          req_body: reqBody,
         },
       },
     ])

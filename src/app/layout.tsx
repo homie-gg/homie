@@ -5,6 +5,7 @@ import './globals.css'
 import { cn } from '@/lib/utils'
 import { TooltipProvider } from '@/lib/ui/Tooltip'
 import Script from 'next/script'
+import { AxiomWebVitals } from 'next-axiom'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
@@ -20,8 +21,10 @@ export default function RootLayout({
 }>) {
   const googleAnalayticsMeasurementId =
     process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
+
   return (
     <ClerkProvider>
+      <AxiomWebVitals />
       <TooltipProvider>
         <html lang="en">
           {googleAnalayticsMeasurementId && (
