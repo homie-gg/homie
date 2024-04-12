@@ -8,7 +8,7 @@ import {
 import logo from '@/assets/logo.svg'
 
 import { buttonVariants } from '@/lib/ui/Button'
-import { MobileMenu } from '@/app/_components/MobileMenu'
+// import { MobileMenu } from '@/app/_components/MobileMenu'
 import Link from 'next/link'
 
 export const Navbar = () => {
