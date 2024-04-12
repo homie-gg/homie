@@ -19,14 +19,16 @@ export default function axiomRequestMiddleware(
       {
         message: 'REQ',
         event: 'req.init',
-        id,
-        method: request.method,
-        url: request.url,
-        pathname: request.nextUrl.pathname,
-        search: request.nextUrl.search,
-        req_body: reqBody,
-        referrer: request.referrer,
-        ip: request.ip,
+        data: {
+          id,
+          method: request.method,
+          url: request.url,
+          pathname: request.nextUrl.pathname,
+          search: request.nextUrl.search,
+          req_body: reqBody,
+          referrer: request.referrer,
+          ip: request.ip,
+        },
       },
     ])
 
