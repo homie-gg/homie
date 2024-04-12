@@ -52,7 +52,7 @@ export const plans: Plan[] = [
       'Trello, and Asana integration*',
       'Learn from Notion',
     ],
-    afterSignUpUrl: '/subscribe?plan=basic',
+    afterSignUpUrl: '/billing?plan=basic',
   },
   {
     title: 'Team',
@@ -69,7 +69,7 @@ export const plans: Plan[] = [
       'Custom reminders*',
       'Slack message reports*',
     ],
-    afterSignUpUrl: '/subscribe?plan=team',
+    afterSignUpUrl: '/billing?plan=team',
   },
   {
     title: 'Agency',
@@ -86,7 +86,7 @@ export const plans: Plan[] = [
       'Generate report PDFs*',
       'API Access*',
     ],
-    afterSignUpUrl: '/subscribe?plan=agency',
+    afterSignUpUrl: '/billing?plan=agency',
   },
 ]
 
