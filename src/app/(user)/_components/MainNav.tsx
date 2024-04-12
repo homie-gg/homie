@@ -26,18 +26,6 @@ export function MainNav({
       >
         Review
       </Link>
-
-      <Link
-        href="/settings"
-        className={cn(
-          'text-sm font-medium transition-colors hover:text-primary',
-          {
-            'text-muted-foreground': pathname !== '/settings',
-          },
-        )}
-      >
-        Settings
-      </Link>
     </nav>
   )
 }
