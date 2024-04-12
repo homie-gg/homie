@@ -20,6 +20,10 @@ nvm use v20.9.0
 
 cd /app
 
+# Run db migrations
+npm run db:migrate
+
+# Start queue dashbboard
 npm run queue:dashboard > /dev/null 2> /dev/null < /dev/null &
 
 exit 0

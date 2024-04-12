@@ -368,6 +368,12 @@ declare module 'zapatos/schema' {
          */
         ext_stripe_customer_id: string | null
         /**
+         * **voidpm.organization.has_unlimited_usage**
+         * - `bool` in database
+         * - Nullable, default: `false`
+         */
+        has_unlimited_usage: boolean | null
+        /**
          * **voidpm.organization.id**
          * - `int4` in database
          * - `NOT NULL`, default: `nextval('voidpm.organization_id_seq'::regclass)`
@@ -405,6 +411,12 @@ declare module 'zapatos/schema' {
          * - Nullable, no default
          */
         ext_stripe_customer_id: string | null
+        /**
+         * **voidpm.organization.has_unlimited_usage**
+         * - `bool` in database
+         * - Nullable, default: `false`
+         */
+        has_unlimited_usage: boolean | null
         /**
          * **voidpm.organization.id**
          * - `int4` in database
@@ -469,6 +481,20 @@ declare module 'zapatos/schema' {
           | db.SQLFragment<
               any,
               string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.organization.has_unlimited_usage**
+         * - `bool` in database
+         * - Nullable, default: `false`
+         */
+        has_unlimited_usage?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn
             >
         /**
          * **voidpm.organization.id**
@@ -545,6 +571,17 @@ declare module 'zapatos/schema' {
           | db.DefaultType
           | db.SQLFragment
         /**
+         * **voidpm.organization.has_unlimited_usage**
+         * - `bool` in database
+         * - Nullable, default: `false`
+         */
+        has_unlimited_usage?:
+          | boolean
+          | db.Parameter<boolean>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
          * **voidpm.organization.id**
          * - `int4` in database
          * - `NOT NULL`, default: `nextval('voidpm.organization_id_seq'::regclass)`
@@ -615,6 +652,25 @@ declare module 'zapatos/schema' {
               any,
               | string
               | db.Parameter<string>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **voidpm.organization.has_unlimited_usage**
+         * - `bool` in database
+         * - Nullable, default: `false`
+         */
+        has_unlimited_usage?:
+          | boolean
+          | db.Parameter<boolean>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | boolean
+              | db.Parameter<boolean>
               | null
               | db.DefaultType
               | db.SQLFragment
