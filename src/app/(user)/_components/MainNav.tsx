@@ -10,6 +10,9 @@ export function MainNav({
 }: React.HTMLAttributes<HTMLElement>) {
   const pathname = usePathname()
 
+  console.log('env vars: ')
+  console.log(process.env)
+
   return (
     <nav
       className={cn('flex items-center space-x-4 lg:space-x-6', className)}
