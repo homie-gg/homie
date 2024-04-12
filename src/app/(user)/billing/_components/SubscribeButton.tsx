@@ -5,7 +5,6 @@ import { getStripeUserClient } from '@/lib/billing/get-stripe-user-client'
 import { Plan } from '@/lib/db/types'
 import { http } from '@/lib/http/client/http'
 import { Button, ButtonProps } from '@/lib/ui/Button'
-import { cn } from '@/lib/utils'
 import { useState } from 'react'
 
 interface SubscribeButtonProps extends ButtonProps {
@@ -32,8 +31,6 @@ export default function SubscribeButton(props: SubscribeButtonProps) {
           success_url: window.location.href,
           cancel_url: window.location.href,
         })
-
-      console.log('KEY: ', process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 
       const stripe = await getStripeUserClient()
 
