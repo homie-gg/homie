@@ -17,6 +17,11 @@ RUN npm install
 
 # Copying source files
 COPY . .
+
+# Replace .env.local with PROD public variables, so that 
+# they'll be included in the client-side build.
+COPY ./.env.local.prod /app/.env.local
+
 # Building app
 RUN npm run build
 
