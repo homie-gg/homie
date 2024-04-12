@@ -7,6 +7,7 @@ import { GetAllTextMessages } from '@/lib/slack/get-all-text-messages'
 import { summarizeTask } from '@/lib/ai/summarize-task'
 import { http } from '@/lib/http/client/http'
 import { findOrgWithSlackTeamId } from '@/lib/organization/get-org-with-slack-team-id'
+import { getOverPRLimitMessage } from '@/lib/billing/get-over-pr-limit-message'
 
 export async function handleCreateGithubIssueFromSlack(
   job: CreateGithubIssueFromSlack,
@@ -38,6 +39,16 @@ export async function handleCreateGithubIssueFromSlack(
   }
 
   const slackClient = createSlackClient(organization.slack_access_token)
+
+  if (organization.is_over_plan_pr_limit) {
+    await slackClient.post('chat.postMessage', {
+      channel: channel_id,
+      thread_ts: target_message_ts,
+      text: getOverPRLimitMessage(),
+    })
+
+    return
+  }
 
   const history = await slackClient.post<Conversation>(
     'conversations.history',

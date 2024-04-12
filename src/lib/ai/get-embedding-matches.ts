@@ -1,4 +1,4 @@
-import { pineconeClient } from '@/lib/pinecone/create-pinecone-client'
+import { pineconeClient } from '@/lib/pinecone/pinecone-client'
 
 interface GetEmbeddingMatchesParams {
   embeddings: number[]

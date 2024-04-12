@@ -1,6 +1,6 @@
 import { PineconeRecord } from '@pinecone-database/pinecone'
 import { OpenAIEmbeddings } from '@langchain/openai'
-import { pineconeClient } from '@/lib/pinecone/create-pinecone-client'
+import { pineconeClient } from '@/lib/pinecone/pinecone-client'
 import { v4 as uuid } from 'uuid'
 
 interface EmbedGithubPullRequestParams {

@@ -8,11 +8,12 @@ const middleware = authMiddleware({
     '/api/github/webhook',
     '/api/slack/event',
     '/api/slack/interaction',
-    '/slack/install',
+    '/slack/setup',
+    '/api/stripe/webhook',
   ],
   // Routes that can always be accessed, and have
   // no authentication information
-  ignoredRoutes: ['/privacy', '/terms'],
+  ignoredRoutes: ['/privacy', '/terms', '/_axiom/web-vitals'],
 })
 
 const withLogging =

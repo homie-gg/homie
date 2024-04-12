@@ -21,7 +21,7 @@ interface Plan {
   afterSignUpUrl: string
 }
 
-const plans: Plan[] = [
+export const plans: Plan[] = [
   {
     title: 'Free',
     isPopular: false,

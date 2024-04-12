@@ -1,7 +1,8 @@
 'use client'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/lib/ui/Avatar'
+import { Avatar } from '@/lib/ui/Avatar'
 import { Button } from '@/lib/ui/Button'
+import { PersonIcon } from '@radix-ui/react-icons'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,15 +28,12 @@ export function UserNav(params: UserNavParams) {
 
   const router = useRouter()
 
-  const initials = `${firstName?.[0]}${lastName?.[0]}`
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-          <Avatar className="h-8 w-8">
-            <AvatarImage src="/avatars/01.png" alt="@shadcn" />
-            <AvatarFallback>{initials}</AvatarFallback>
+          <Avatar className="h-8 w-8 flex items-center justify-center">
+            <PersonIcon />
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -52,6 +50,9 @@ export function UserNav(params: UserNavParams) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
+          <Link href="/billing">
+            <DropdownMenuItem>Billing</DropdownMenuItem>
+          </Link>
           <Link href="https://voidpm.nolt.io/roadmap">
             <DropdownMenuItem>Request Feature</DropdownMenuItem>
           </Link>

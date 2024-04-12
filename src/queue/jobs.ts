@@ -72,6 +72,12 @@ export type AnswerSlackQuestion = BullMQJob<
   'answer_slack_question'
 >
 
+export type ResetOrganizationsOverPRLimit = BullMQJob<
+  null,
+  void, // return type
+  'reset_organizations_over_pr_limit'
+>
+
 export type Job =
   | CreateGithubIssueFromSlack
   | AskSlackSelectGithubRepoForIssue
@@ -80,3 +86,4 @@ export type Job =
   | SaveMergedPullRequest
   | GenerateOpenPullRequestSummary
   | AnswerSlackQuestion
+  | ResetOrganizationsOverPRLimit

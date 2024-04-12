@@ -362,11 +362,23 @@ declare module 'zapatos/schema' {
          */
         ext_clerk_user_id: string
         /**
+         * **voidpm.organization.ext_stripe_customer_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_stripe_customer_id: string | null
+        /**
          * **voidpm.organization.id**
          * - `int4` in database
          * - `NOT NULL`, default: `nextval('voidpm.organization_id_seq'::regclass)`
          */
         id: number
+        /**
+         * **voidpm.organization.is_over_plan_pr_limit**
+         * - `bool` in database
+         * - Nullable, default: `false`
+         */
+        is_over_plan_pr_limit: boolean | null
         /**
          * **voidpm.organization.updated_at**
          * - `timestamptz` in database
@@ -388,11 +400,23 @@ declare module 'zapatos/schema' {
          */
         ext_clerk_user_id: string
         /**
+         * **voidpm.organization.ext_stripe_customer_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_stripe_customer_id: string | null
+        /**
          * **voidpm.organization.id**
          * - `int4` in database
          * - `NOT NULL`, default: `nextval('voidpm.organization_id_seq'::regclass)`
          */
         id: number
+        /**
+         * **voidpm.organization.is_over_plan_pr_limit**
+         * - `bool` in database
+         * - Nullable, default: `false`
+         */
+        is_over_plan_pr_limit: boolean | null
         /**
          * **voidpm.organization.updated_at**
          * - `timestamptz` in database
@@ -433,6 +457,20 @@ declare module 'zapatos/schema' {
               string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
             >
         /**
+         * **voidpm.organization.ext_stripe_customer_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_stripe_customer_id?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
          * **voidpm.organization.id**
          * - `int4` in database
          * - `NOT NULL`, default: `nextval('voidpm.organization_id_seq'::regclass)`
@@ -445,6 +483,20 @@ declare module 'zapatos/schema' {
           | db.SQLFragment<
               any,
               number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.organization.is_over_plan_pr_limit**
+         * - `bool` in database
+         * - Nullable, default: `false`
+         */
+        is_over_plan_pr_limit?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn
             >
         /**
          * **voidpm.organization.updated_at**
@@ -482,11 +534,33 @@ declare module 'zapatos/schema' {
          */
         ext_clerk_user_id: string | db.Parameter<string> | db.SQLFragment
         /**
+         * **voidpm.organization.ext_stripe_customer_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_stripe_customer_id?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
          * **voidpm.organization.id**
          * - `int4` in database
          * - `NOT NULL`, default: `nextval('voidpm.organization_id_seq'::regclass)`
          */
         id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+        /**
+         * **voidpm.organization.is_over_plan_pr_limit**
+         * - `bool` in database
+         * - Nullable, default: `false`
+         */
+        is_over_plan_pr_limit?:
+          | boolean
+          | db.Parameter<boolean>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
         /**
          * **voidpm.organization.updated_at**
          * - `timestamptz` in database
@@ -527,6 +601,25 @@ declare module 'zapatos/schema' {
           | db.SQLFragment
           | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
         /**
+         * **voidpm.organization.ext_stripe_customer_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_stripe_customer_id?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | string
+              | db.Parameter<string>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
          * **voidpm.organization.id**
          * - `int4` in database
          * - `NOT NULL`, default: `nextval('voidpm.organization_id_seq'::regclass)`
@@ -539,6 +632,25 @@ declare module 'zapatos/schema' {
           | db.SQLFragment<
               any,
               number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **voidpm.organization.is_over_plan_pr_limit**
+         * - `bool` in database
+         * - Nullable, default: `false`
+         */
+        is_over_plan_pr_limit?:
+          | boolean
+          | db.Parameter<boolean>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | boolean
+              | db.Parameter<boolean>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
             >
         /**
          * **voidpm.organization.updated_at**
@@ -560,7 +672,905 @@ declare module 'zapatos/schema' {
       }
       export type UniqueIndex =
         | 'organization_ext_clerk_user_id_key'
+        | 'organization_ext_stripe_customer_id_key'
         | 'organization_pkey'
+      export type Column = keyof Selectable
+      export type OnlyCols<T extends readonly Column[]> = Pick<
+        Selectable,
+        T[number]
+      >
+      export type SQLExpression =
+        | Table
+        | db.ColumnNames<Updatable | (keyof Updatable)[]>
+        | db.ColumnValues<Updatable>
+        | Whereable
+        | Column
+        | db.ParentColumn
+        | db.GenericSQLExpression
+      export type SQL = SQLExpression | SQLExpression[]
+    }
+
+    /**
+     * **voidpm.plan**
+     * - Table in database
+     */
+    export namespace plan {
+      export type Table = 'voidpm.plan'
+      export interface Selectable {
+        /**
+         * **voidpm.plan.billing_interval**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        billing_interval: string
+        /**
+         * **voidpm.plan.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at: Date
+        /**
+         * **voidpm.plan.ext_stripe_price_id**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        ext_stripe_price_id: string
+        /**
+         * **voidpm.plan.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('voidpm.plan_id_seq'::regclass)`
+         */
+        id: number
+        /**
+         * **voidpm.plan.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name: string
+        /**
+         * **voidpm.plan.pr_limit_per_month**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        pr_limit_per_month: number | null
+        /**
+         * **voidpm.plan.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at: Date
+      }
+      export interface JSONSelectable {
+        /**
+         * **voidpm.plan.billing_interval**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        billing_interval: string
+        /**
+         * **voidpm.plan.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at: db.TimestampTzString
+        /**
+         * **voidpm.plan.ext_stripe_price_id**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        ext_stripe_price_id: string
+        /**
+         * **voidpm.plan.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('voidpm.plan_id_seq'::regclass)`
+         */
+        id: number
+        /**
+         * **voidpm.plan.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name: string
+        /**
+         * **voidpm.plan.pr_limit_per_month**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        pr_limit_per_month: number | null
+        /**
+         * **voidpm.plan.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at: db.TimestampTzString
+      }
+      export interface Whereable {
+        /**
+         * **voidpm.plan.billing_interval**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        billing_interval?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.plan.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+        /**
+         * **voidpm.plan.ext_stripe_price_id**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        ext_stripe_price_id?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.plan.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('voidpm.plan_id_seq'::regclass)`
+         */
+        id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.plan.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.plan.pr_limit_per_month**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        pr_limit_per_month?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.plan.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+      }
+      export interface Insertable {
+        /**
+         * **voidpm.plan.billing_interval**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        billing_interval: string | db.Parameter<string> | db.SQLFragment
+        /**
+         * **voidpm.plan.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **voidpm.plan.ext_stripe_price_id**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        ext_stripe_price_id: string | db.Parameter<string> | db.SQLFragment
+        /**
+         * **voidpm.plan.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('voidpm.plan_id_seq'::regclass)`
+         */
+        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+        /**
+         * **voidpm.plan.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name: string | db.Parameter<string> | db.SQLFragment
+        /**
+         * **voidpm.plan.pr_limit_per_month**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        pr_limit_per_month?:
+          | number
+          | db.Parameter<number>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **voidpm.plan.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+      }
+      export interface Updatable {
+        /**
+         * **voidpm.plan.billing_interval**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        billing_interval?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
+        /**
+         * **voidpm.plan.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **voidpm.plan.ext_stripe_price_id**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        ext_stripe_price_id?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
+        /**
+         * **voidpm.plan.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('voidpm.plan_id_seq'::regclass)`
+         */
+        id?:
+          | number
+          | db.Parameter<number>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **voidpm.plan.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
+        /**
+         * **voidpm.plan.pr_limit_per_month**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        pr_limit_per_month?:
+          | number
+          | db.Parameter<number>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | number
+              | db.Parameter<number>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **voidpm.plan.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.DefaultType
+              | db.SQLFragment
+            >
+      }
+      export type UniqueIndex = 'plan_pkey'
+      export type Column = keyof Selectable
+      export type OnlyCols<T extends readonly Column[]> = Pick<
+        Selectable,
+        T[number]
+      >
+      export type SQLExpression =
+        | Table
+        | db.ColumnNames<Updatable | (keyof Updatable)[]>
+        | db.ColumnValues<Updatable>
+        | Whereable
+        | Column
+        | db.ParentColumn
+        | db.GenericSQLExpression
+      export type SQL = SQLExpression | SQLExpression[]
+    }
+
+    /**
+     * **voidpm.subscription**
+     * - Table in database
+     */
+    export namespace subscription {
+      export type Table = 'voidpm.subscription'
+      export interface Selectable {
+        /**
+         * **voidpm.subscription.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at: Date
+        /**
+         * **voidpm.subscription.ends_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        ends_at: Date | null
+        /**
+         * **voidpm.subscription.ext_stripe_subscription_id**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        ext_stripe_subscription_id: string
+        /**
+         * **voidpm.subscription.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('voidpm.subscription_id_seq'::regclass)`
+         */
+        id: number
+        /**
+         * **voidpm.subscription.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name: string
+        /**
+         * **voidpm.subscription.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id: number
+        /**
+         * **voidpm.subscription.plan_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        plan_id: number
+        /**
+         * **voidpm.subscription.stripe_status**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        stripe_status: string
+        /**
+         * **voidpm.subscription.trial_ends_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        trial_ends_at: Date | null
+        /**
+         * **voidpm.subscription.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at: Date
+      }
+      export interface JSONSelectable {
+        /**
+         * **voidpm.subscription.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at: db.TimestampTzString
+        /**
+         * **voidpm.subscription.ends_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        ends_at: db.TimestampTzString | null
+        /**
+         * **voidpm.subscription.ext_stripe_subscription_id**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        ext_stripe_subscription_id: string
+        /**
+         * **voidpm.subscription.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('voidpm.subscription_id_seq'::regclass)`
+         */
+        id: number
+        /**
+         * **voidpm.subscription.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name: string
+        /**
+         * **voidpm.subscription.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id: number
+        /**
+         * **voidpm.subscription.plan_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        plan_id: number
+        /**
+         * **voidpm.subscription.stripe_status**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        stripe_status: string
+        /**
+         * **voidpm.subscription.trial_ends_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        trial_ends_at: db.TimestampTzString | null
+        /**
+         * **voidpm.subscription.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at: db.TimestampTzString
+      }
+      export interface Whereable {
+        /**
+         * **voidpm.subscription.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+        /**
+         * **voidpm.subscription.ends_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        ends_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+        /**
+         * **voidpm.subscription.ext_stripe_subscription_id**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        ext_stripe_subscription_id?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.subscription.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('voidpm.subscription_id_seq'::regclass)`
+         */
+        id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.subscription.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.subscription.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.subscription.plan_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        plan_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.subscription.stripe_status**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        stripe_status?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.subscription.trial_ends_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        trial_ends_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+        /**
+         * **voidpm.subscription.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+      }
+      export interface Insertable {
+        /**
+         * **voidpm.subscription.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **voidpm.subscription.ends_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        ends_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **voidpm.subscription.ext_stripe_subscription_id**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        ext_stripe_subscription_id:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+        /**
+         * **voidpm.subscription.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('voidpm.subscription_id_seq'::regclass)`
+         */
+        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+        /**
+         * **voidpm.subscription.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name: string | db.Parameter<string> | db.SQLFragment
+        /**
+         * **voidpm.subscription.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id: number | db.Parameter<number> | db.SQLFragment
+        /**
+         * **voidpm.subscription.plan_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        plan_id: number | db.Parameter<number> | db.SQLFragment
+        /**
+         * **voidpm.subscription.stripe_status**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        stripe_status: string | db.Parameter<string> | db.SQLFragment
+        /**
+         * **voidpm.subscription.trial_ends_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        trial_ends_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **voidpm.subscription.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+      }
+      export interface Updatable {
+        /**
+         * **voidpm.subscription.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **voidpm.subscription.ends_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        ends_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **voidpm.subscription.ext_stripe_subscription_id**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        ext_stripe_subscription_id?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
+        /**
+         * **voidpm.subscription.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('voidpm.subscription_id_seq'::regclass)`
+         */
+        id?:
+          | number
+          | db.Parameter<number>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **voidpm.subscription.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
+        /**
+         * **voidpm.subscription.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
+        /**
+         * **voidpm.subscription.plan_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        plan_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
+        /**
+         * **voidpm.subscription.stripe_status**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        stripe_status?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
+        /**
+         * **voidpm.subscription.trial_ends_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        trial_ends_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **voidpm.subscription.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.DefaultType
+              | db.SQLFragment
+            >
+      }
+      export type UniqueIndex =
+        | 'subscription_organization_id_key'
+        | 'subscription_pkey'
       export type Column = keyof Selectable
       export type OnlyCols<T extends readonly Column[]> = Pick<
         Selectable,
@@ -579,22 +1589,62 @@ declare module 'zapatos/schema' {
 
     /* --- aggregate types --- */
 
-    export type Table = contributor.Table | organization.Table
-    export type Selectable = contributor.Selectable | organization.Selectable
+    export type Table =
+      | contributor.Table
+      | organization.Table
+      | plan.Table
+      | subscription.Table
+    export type Selectable =
+      | contributor.Selectable
+      | organization.Selectable
+      | plan.Selectable
+      | subscription.Selectable
     export type JSONSelectable =
       | contributor.JSONSelectable
       | organization.JSONSelectable
-    export type Whereable = contributor.Whereable | organization.Whereable
-    export type Insertable = contributor.Insertable | organization.Insertable
-    export type Updatable = contributor.Updatable | organization.Updatable
-    export type UniqueIndex = contributor.UniqueIndex | organization.UniqueIndex
-    export type Column = contributor.Column | organization.Column
+      | plan.JSONSelectable
+      | subscription.JSONSelectable
+    export type Whereable =
+      | contributor.Whereable
+      | organization.Whereable
+      | plan.Whereable
+      | subscription.Whereable
+    export type Insertable =
+      | contributor.Insertable
+      | organization.Insertable
+      | plan.Insertable
+      | subscription.Insertable
+    export type Updatable =
+      | contributor.Updatable
+      | organization.Updatable
+      | plan.Updatable
+      | subscription.Updatable
+    export type UniqueIndex =
+      | contributor.UniqueIndex
+      | organization.UniqueIndex
+      | plan.UniqueIndex
+      | subscription.UniqueIndex
+    export type Column =
+      | contributor.Column
+      | organization.Column
+      | plan.Column
+      | subscription.Column
 
-    export type AllBaseTables = [contributor.Table, organization.Table]
+    export type AllBaseTables = [
+      contributor.Table,
+      organization.Table,
+      plan.Table,
+      subscription.Table,
+    ]
     export type AllForeignTables = []
     export type AllViews = []
     export type AllMaterializedViews = []
-    export type AllTablesAndViews = [contributor.Table, organization.Table]
+    export type AllTablesAndViews = [
+      contributor.Table,
+      organization.Table,
+      plan.Table,
+      subscription.Table,
+    ]
   }
 
   /* === schema: github === */
@@ -2579,6 +3629,8 @@ declare module 'zapatos/schema' {
   export type SelectableForTable<T extends Table> = {
     'voidpm.contributor': voidpm.contributor.Selectable
     'voidpm.organization': voidpm.organization.Selectable
+    'voidpm.plan': voidpm.plan.Selectable
+    'voidpm.subscription': voidpm.subscription.Selectable
     'github.organization': github.organization.Selectable
     'github.pull_request': github.pull_request.Selectable
     'github.repo': github.repo.Selectable
@@ -2588,6 +3640,8 @@ declare module 'zapatos/schema' {
   export type JSONSelectableForTable<T extends Table> = {
     'voidpm.contributor': voidpm.contributor.JSONSelectable
     'voidpm.organization': voidpm.organization.JSONSelectable
+    'voidpm.plan': voidpm.plan.JSONSelectable
+    'voidpm.subscription': voidpm.subscription.JSONSelectable
     'github.organization': github.organization.JSONSelectable
     'github.pull_request': github.pull_request.JSONSelectable
     'github.repo': github.repo.JSONSelectable
@@ -2597,6 +3651,8 @@ declare module 'zapatos/schema' {
   export type WhereableForTable<T extends Table> = {
     'voidpm.contributor': voidpm.contributor.Whereable
     'voidpm.organization': voidpm.organization.Whereable
+    'voidpm.plan': voidpm.plan.Whereable
+    'voidpm.subscription': voidpm.subscription.Whereable
     'github.organization': github.organization.Whereable
     'github.pull_request': github.pull_request.Whereable
     'github.repo': github.repo.Whereable
@@ -2606,6 +3662,8 @@ declare module 'zapatos/schema' {
   export type InsertableForTable<T extends Table> = {
     'voidpm.contributor': voidpm.contributor.Insertable
     'voidpm.organization': voidpm.organization.Insertable
+    'voidpm.plan': voidpm.plan.Insertable
+    'voidpm.subscription': voidpm.subscription.Insertable
     'github.organization': github.organization.Insertable
     'github.pull_request': github.pull_request.Insertable
     'github.repo': github.repo.Insertable
@@ -2615,6 +3673,8 @@ declare module 'zapatos/schema' {
   export type UpdatableForTable<T extends Table> = {
     'voidpm.contributor': voidpm.contributor.Updatable
     'voidpm.organization': voidpm.organization.Updatable
+    'voidpm.plan': voidpm.plan.Updatable
+    'voidpm.subscription': voidpm.subscription.Updatable
     'github.organization': github.organization.Updatable
     'github.pull_request': github.pull_request.Updatable
     'github.repo': github.repo.Updatable
@@ -2624,6 +3684,8 @@ declare module 'zapatos/schema' {
   export type UniqueIndexForTable<T extends Table> = {
     'voidpm.contributor': voidpm.contributor.UniqueIndex
     'voidpm.organization': voidpm.organization.UniqueIndex
+    'voidpm.plan': voidpm.plan.UniqueIndex
+    'voidpm.subscription': voidpm.subscription.UniqueIndex
     'github.organization': github.organization.UniqueIndex
     'github.pull_request': github.pull_request.UniqueIndex
     'github.repo': github.repo.UniqueIndex
@@ -2633,6 +3695,8 @@ declare module 'zapatos/schema' {
   export type ColumnForTable<T extends Table> = {
     'voidpm.contributor': voidpm.contributor.Column
     'voidpm.organization': voidpm.organization.Column
+    'voidpm.plan': voidpm.plan.Column
+    'voidpm.subscription': voidpm.subscription.Column
     'github.organization': github.organization.Column
     'github.pull_request': github.pull_request.Column
     'github.repo': github.repo.Column
@@ -2642,6 +3706,8 @@ declare module 'zapatos/schema' {
   export type SQLForTable<T extends Table> = {
     'voidpm.contributor': voidpm.contributor.SQL
     'voidpm.organization': voidpm.organization.SQL
+    'voidpm.plan': voidpm.plan.SQL
+    'voidpm.subscription': voidpm.subscription.SQL
     'github.organization': github.organization.SQL
     'github.pull_request': github.pull_request.SQL
     'github.repo': github.repo.SQL

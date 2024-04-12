@@ -1,3 +1,4 @@
+import PlanBadge from '@/app/(user)/_components/PlanBadge'
 import { UserNav } from '@/app/(user)/_components/UserNav'
 import { User } from '@clerk/nextjs/server'
 
@@ -14,6 +15,7 @@ export default async function AppBar(props: AppBarProps) {
       <div className="flex h-16 items-center px-4">
         {children}
         <div className="ml-auto flex items-center space-x-4">
+          <PlanBadge />
           <UserNav
             firstName={user.firstName}
             lastName={user.lastName}

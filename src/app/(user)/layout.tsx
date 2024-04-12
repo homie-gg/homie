@@ -5,6 +5,7 @@ import { MainNav } from '@/app/(user)/_components/MainNav'
 import { dbClient } from '@/lib/db/client'
 import { auth, clerkClient } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
+import OverPlanLimitAlert from '@/app/(user)/billing/_components/OverPlanLimitAlert'
 
 interface UserLayoutProps {
   children: React.ReactNode
@@ -36,7 +37,9 @@ export default async function UserLayout(props: UserLayoutProps) {
     .select([
       'github.organization.ext_gh_install_id',
       'slack.workspace.ext_slack_team_id',
+      'is_over_plan_pr_limit',
     ])
+    .where('ext_clerk_user_id', '=', userId)
     .executeTakeFirst()
 
   if (!organization) {
@@ -78,7 +81,11 @@ export default async function UserLayout(props: UserLayoutProps) {
       <AppBar user={user}>
         <MainNav className="mx-6" />
       </AppBar>
-      <Content>{children}</Content>
+
+      <Content>
+        {organization.is_over_plan_pr_limit && <OverPlanLimitAlert />}
+        {children}
+      </Content>
     </div>
   )
 }

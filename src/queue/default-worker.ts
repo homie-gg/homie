@@ -6,6 +6,7 @@ import { handleGenerateOpenPullRequestSummary } from '@/queue/handlers/handle-ge
 import { handleImportPullRequests } from '@/queue/handlers/handle-import-pull-requests'
 import { handleSaveMergedPullRequest } from '@/queue/handlers/handle-save-merged-pull-request'
 import { handleSaveOpenedPullRequest } from '@/queue/handlers/handle-save-opened-pull-request'
+import { handleResetOrganizationsOverPRLimit } from '@/queue/handlers/handleResetOrganizationsOverPRLimit'
 import { Job } from '@/queue/jobs'
 import { Worker } from 'bullmq'
 import Redis from 'ioredis'
@@ -21,6 +22,7 @@ const handlers: Handlers = {
   save_merged_pull_request: handleSaveMergedPullRequest,
   generate_open_pull_request_summary: handleGenerateOpenPullRequestSummary,
   answer_slack_question: handleAnswerSlackQuestion,
+  reset_organizations_over_pr_limit: handleResetOrganizationsOverPRLimit,
 }
 
 export const getDefaultWorker = () => {

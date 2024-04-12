@@ -2,7 +2,8 @@ import { Job } from '@/queue/jobs'
 import { Queue } from 'bullmq'
 import Redis from 'ioredis'
 
-let defaultQueue: Queue | null = null
+let defaultQueue: Queue<Job['data'], Job['returnvalue'], Job['name']> | null =
+  null
 
 export const defaultQueueName = 'default'
 
@@ -15,19 +16,16 @@ export const getDefaultQueue = () => {
     maxRetriesPerRequest: null,
   })
 
-  defaultQueue = new Queue<Job['data'], Job['returnvalue'], Job['name']>(
-    defaultQueueName,
-    {
-      connection,
-      defaultJobOptions: {
-        attempts: 3,
-        backoff: {
-          type: 'exponential',
-          delay: 5000,
-        },
+  defaultQueue = new Queue(defaultQueueName, {
+    connection,
+    defaultJobOptions: {
+      attempts: 3,
+      backoff: {
+        type: 'exponential',
+        delay: 5000,
       },
     },
-  )
+  })
 
   return defaultQueue
 }

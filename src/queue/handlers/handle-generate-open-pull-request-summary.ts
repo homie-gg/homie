@@ -1,4 +1,5 @@
 import { summarizeGithubPullRequest } from '@/lib/ai/summarize-github-pull-request'
+import { getOverPRLimitMessage } from '@/lib/billing/get-over-pr-limit-message'
 import { dbClient } from '@/lib/db/client'
 import { createGithubClient } from '@/lib/github/create-github-client'
 import { findLinkedIssue } from '@/lib/github/find-linked-issue'
@@ -22,7 +23,11 @@ export async function handleGenerateOpenPullRequestSummary(
       'voidpm.organization.id',
     )
     .where('ext_gh_install_id', '=', installation?.id!)
-    .select(['voidpm.organization.id', 'github.organization.ext_gh_install_id'])
+    .select([
+      'voidpm.organization.id',
+      'github.organization.ext_gh_install_id',
+      'is_over_plan_pr_limit',
+    ])
     .executeTakeFirst()
 
   if (!organization) {
@@ -34,6 +39,21 @@ export async function handleGenerateOpenPullRequestSummary(
   })
 
   const owner = pull_request.base.repo.full_name.split('/')[0]
+
+  if (organization.is_over_plan_pr_limit) {
+    const bodyWithSummary = pull_request.body?.replace(
+      summaryKey,
+      getOverPRLimitMessage(),
+    ) // avoid infinite loop of summaries by replacing the key if it exists
+
+    await github.rest.pulls.update({
+      owner,
+      repo: pull_request.base.repo.name,
+      pull_number: pull_request.number,
+      body: bodyWithSummary,
+    })
+    return
+  }
 
   const issue = await findLinkedIssue({
     pullRequest: {
