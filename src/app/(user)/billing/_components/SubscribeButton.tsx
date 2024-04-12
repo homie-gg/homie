@@ -5,6 +5,7 @@ import { getStripeUserClient } from '@/lib/billing/get-stripe-user-client'
 import { Plan } from '@/lib/db/types'
 import { http } from '@/lib/http/client/http'
 import { Button, ButtonProps } from '@/lib/ui/Button'
+import { captureException } from '@sentry/nextjs'
 import { useState } from 'react'
 
 interface SubscribeButtonProps extends ButtonProps {
@@ -39,11 +40,8 @@ export default function SubscribeButton(props: SubscribeButtonProps) {
       }
 
       stripe.redirectToCheckout({ sessionId: ext_stripe_session_id })
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error(e)
-      // Show user generic error alert
-      // log error to Sentry
+    } catch (error) {
+      captureException(error)
     }
 
     setProcessing(false)

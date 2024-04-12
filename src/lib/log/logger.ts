@@ -16,6 +16,4 @@ export const logger = winston.createLogger({
   level: process.env.NEXT_PUBLIC_APP_LOG_LEVEL || 'info',
   format: format.combine(format.errors({ stack: true }), format.json()),
   transports: transports,
-  exceptionHandlers: transports,
-  rejectionHandlers: transports,
 })
