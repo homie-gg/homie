@@ -7,6 +7,9 @@ export const getStripeUserClient = async () => {
     return stripeUserClient
   }
 
+  console.log('INIt stripe...')
+  console.log('server key: ', process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+
   stripeUserClient = await loadStripe(
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
   )
