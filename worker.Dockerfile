@@ -14,5 +14,8 @@ RUN npm run build
 
 EXPOSE 3000
 
-# Running the app
-CMD ["npm run queue:schedule-jobs && npm run worker:default"]
+COPY ./worker-entrypoint.sh /usr/local/bin/docker-init.sh
+RUN chmod +x /usr/local/bin/docker-init.sh
+
+ENTRYPOINT [ "docker-init.sh" ]
+CMD ["/bin/bash"]
