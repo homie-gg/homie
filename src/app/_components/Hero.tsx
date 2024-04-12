@@ -1,4 +1,5 @@
 import { Button } from '@/lib/ui/Button'
+import Link from 'next/link'
 
 export const Hero = () => {
   return (
@@ -28,7 +29,9 @@ export const Hero = () => {
         </p>
 
         <div className="space-y-4 md:space-y-0 md:space-x-4 flex flex-col">
-          <Button className="w-full md:w-1/3 mb-1">Try for free</Button>
+          <Link href="/sign_up">
+            <Button className="w-full md:w-1/3 mb-1">Try for free</Button>
+          </Link>
           <span className="h-0 text-sm text-zinc-500">
             No credit card required
           </span>
