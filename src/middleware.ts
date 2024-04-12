@@ -1,6 +1,7 @@
+import loggingMiddleware from '@/lib/log/axiom-request-middleware'
 import { authMiddleware } from '@clerk/nextjs'
 
-export default authMiddleware({
+const middleware = authMiddleware({
   // Routes that can be accessed while signed out
   publicRoutes: [
     '/',
@@ -13,6 +14,13 @@ export default authMiddleware({
   // no authentication information
   ignoredRoutes: ['/privacy', '/terms'],
 })
+
+const withLogging =
+  process.env.NODE_ENV === 'production'
+    ? loggingMiddleware(middleware)
+    : middleware
+
+export default withLogging
 
 export const config = {
   matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
