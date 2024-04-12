@@ -8,7 +8,7 @@ import { logger } from '@/lib/log/logger'
 export const POST = async (request: NextRequest) => {
   logger.debug('Received Github webhook', {
     event: 'github.webhook.received',
-    data: await request.clone().json(),
+    data: JSON.stringify(await request.clone().json()),
   })
 
   const app = new App({

@@ -19,7 +19,7 @@ export const POST = async (request: NextRequest) => {
 
   logger.debug('Received webhook', {
     event: 'stripe_webhook.received',
-    data: jsonData,
+    data: JSON.stringify(jsonData),
     signature,
   })
 
@@ -35,7 +35,7 @@ export const POST = async (request: NextRequest) => {
   if (!events.has(event.type)) {
     logger.error(`Unsupported event type: '${event.type}'`, {
       event: 'stripe_webhook.unknown_event',
-      data: jsonData,
+      data: JSON.stringify(jsonData),
     })
     return new NextResponse('Unsupported event', { status: 400 })
   }
@@ -62,7 +62,7 @@ export const POST = async (request: NextRequest) => {
     default:
       logger.error(`Unhandled event: ${event.type}`, {
         event: 'stripe_webhook.unhandled_event',
-        data: jsonData,
+        data: JSON.stringify(jsonData),
       })
 
       return new NextResponse('Unhandled event', { status: 400 })

@@ -9,7 +9,7 @@ export const POST = async (request: NextRequest) => {
 
   logger.debug('Received Slack webhook', {
     event: 'slack.webhook.received',
-    data: payload,
+    data: JSON.stringify(payload),
   })
 
   // Handle Slack ownership verification

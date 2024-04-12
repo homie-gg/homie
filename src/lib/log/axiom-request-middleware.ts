@@ -63,7 +63,11 @@ export default function axiomRequestMiddleware(
 
 async function getBody(request: Request | Response) {
   try {
-    return await request.clone().json()
+    const json = await request.clone().json()
+    // Stringify to avoid hitting fields limit
+    return {
+      content: JSON.stringify(json),
+    }
   } catch {
     try {
       return {

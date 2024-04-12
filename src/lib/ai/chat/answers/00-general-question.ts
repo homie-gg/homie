@@ -78,7 +78,7 @@ export async function answerGeneralQuestion(
   logger.debug('Answered general question', {
     event: 'answer_general_question',
     question,
-    matches,
+    matches: matches.map((match) => match.metadata?.text),
     reranked: rankedDocuments,
     context,
     answer,
