@@ -5,8 +5,8 @@ const transports =
   process.env.NODE_ENV === 'production'
     ? [
         new AxiomTransport({
-          dataset: process.env.AXIOM_DATASET!,
-          token: process.env.AXIOM_TOKEN!,
+          dataset: process.env.NEXT_PUBLIC_AXIOM_DATASET!,
+          token: process.env.NEXT_PUBLIC_AXIOM_TOKEN!,
           orgId: process.env.AXIOM_ORG_ID!,
         }),
       ]
