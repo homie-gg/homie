@@ -11,7 +11,8 @@ export function MainNav({
   const pathname = usePathname()
 
   console.log('env vars: ')
-  console.log(process.env)
+  console.log('google: ', process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID)
+  console.log('app_url: ', process.env.NEXT_PUBLIC_APP_URL)
 
   return (
     <nav
