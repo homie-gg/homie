@@ -1,4 +1,4 @@
-import { NextMiddleware, NextRequest } from 'next/server'
+import { NextMiddleware, NextRequest, NextResponse } from 'next/server'
 import { Axiom } from '@axiomhq/js'
 import { v4 as uuid } from 'uuid'
 
@@ -13,17 +13,7 @@ export default function axiomRequestMiddleware(
   return async (request, event) => {
     const id = uuid()
 
-    let reqBody = null
-
-    try {
-      reqBody = await request.clone().json()
-    } catch {
-      try {
-        reqBody = await request.clone().text()
-      } catch {
-        // back request
-      }
-    }
+    const reqBody = await getBody(request)
 
     axiom.ingest(process.env.NEXT_PUBLIC_AXIOM_DATASET!, [
       {
@@ -31,13 +21,13 @@ export default function axiomRequestMiddleware(
         id,
         data: {
           event: 'req.init',
+          method: request.method,
           url: request.url,
           pathname: request.nextUrl.pathname,
           search: request.nextUrl.search,
-          method: request.method,
+          req_body: reqBody,
           referrer: request.referrer,
           ip: request.ip,
-          data: await getRequestBody(request),
         },
       },
     ])
@@ -52,13 +42,15 @@ export default function axiomRequestMiddleware(
         message: 'RES',
         data: {
           event: 'req.done',
-          body: response?.body ?? null,
-          status: response?.status,
-          redirected: response?.redirected,
-          statusText: response?.statusText,
+          method: request.method,
           url: request.url,
           pathname: request.nextUrl.pathname,
           search: request.nextUrl.search,
+          req_body: reqBody,
+          res_body: response ? getBody(response) : null,
+          status: response?.status,
+          redirected: response?.redirected,
+          statusText: response?.statusText,
         },
       },
     ])
@@ -69,12 +61,14 @@ export default function axiomRequestMiddleware(
   }
 }
 
-async function getRequestBody(request: NextRequest) {
+async function getBody(request: Request | Response) {
   try {
     return await request.clone().json()
   } catch {
     try {
-      return await request.clone().text()
+      return {
+        content: request.clone().text(),
+      }
     } catch {
       return null
     }
