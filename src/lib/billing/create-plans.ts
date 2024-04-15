@@ -18,7 +18,8 @@ import { dbClient } from '@/lib/db/client'
   for (const plan of plans) {
     const existingPlan = await dbClient
       .selectFrom('voidpm.plan')
-      .where('ext_stripe_price_id', '=', plan.ext_stripe_price_id)
+      .where('name', '=', plan.name)
+      .where('billing_interval', '=', plan.billing_interval)
       .select('id')
       .executeTakeFirst()
 
