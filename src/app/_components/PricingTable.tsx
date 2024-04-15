@@ -34,7 +34,7 @@ export const plans: Plan[] = [
       'Quickly create tasks',
       'Auto-generate PR summaries',
       'PR & Contributor statistics',
-      'Up to 5 PRs / month',
+      'Up to 30 PRs / month',
     ],
     afterSignUpUrl: '/review',
   },
@@ -47,7 +47,7 @@ export const plans: Plan[] = [
     buttonText: 'Subscribe',
     benefitList: [
       'Everything in Free',
-      'Up to 20 PRs / month',
+      'Up to 50 PRs / month',
       'Learn Slack messages*',
       'Trello, and Asana integration*',
       'Learn from Notion',
@@ -64,7 +64,7 @@ export const plans: Plan[] = [
     buttonText: 'Subscribe',
     benefitList: [
       'Everything in Basic',
-      'Up to 100 PRs / month',
+      'Up to 200 PRs / month',
       'Milestone Analysis*',
       'Custom reminders*',
       'Slack message reports*',
