@@ -16,6 +16,27 @@ import { dbClient } from '@/lib/db/client'
   ]
 
   for (const plan of plans) {
+    const existingPlan = await dbClient
+      .selectFrom('voidpm.plan')
+      .where('ext_stripe_price_id', '=', plan.ext_stripe_price_id)
+      .select('id')
+      .executeTakeFirst()
+
+    if (existingPlan) {
+      await dbClient
+        .updateTable('voidpm.plan')
+        .set({
+          name: plan.name,
+          billing_interval: plan.billing_interval,
+          ext_stripe_price_id: plan.ext_stripe_price_id,
+          pr_limit_per_month: plan.pr_limit_per_month,
+        })
+        .where('voidpm.plan.id', '=', existingPlan.id)
+        .executeTakeFirstOrThrow()
+
+      continue
+    }
+
     await dbClient
       .insertInto('voidpm.plan')
       .values({
@@ -24,13 +45,6 @@ import { dbClient } from '@/lib/db/client'
         ext_stripe_price_id: plan.ext_stripe_price_id,
         pr_limit_per_month: plan.pr_limit_per_month,
       })
-      .onConflict((oc) =>
-        oc.column('name').doUpdateSet({
-          billing_interval: plan.billing_interval,
-          ext_stripe_price_id: plan.ext_stripe_price_id,
-          pr_limit_per_month: plan.pr_limit_per_month,
-        }),
-      )
       .executeTakeFirstOrThrow()
   }
 
