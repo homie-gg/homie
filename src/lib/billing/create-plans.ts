@@ -5,13 +5,13 @@ import { dbClient } from '@/lib/db/client'
       name: 'basic',
       billing_interval: 'monthly',
       ext_stripe_price_id: process.env.STRIPE_PRICE_ID_VOID_BASIC_MONTHLY!,
-      pr_limit_per_month: 20,
+      pr_limit_per_month: 50,
     },
     {
       name: 'team',
       billing_interval: 'monthly',
       ext_stripe_price_id: process.env.STRIPE_PRICE_ID_VOID_TEAM_MONTHLY!,
-      pr_limit_per_month: 100,
+      pr_limit_per_month: 200,
     },
   ]
 
@@ -22,7 +22,15 @@ import { dbClient } from '@/lib/db/client'
         name: plan.name,
         billing_interval: plan.billing_interval,
         ext_stripe_price_id: plan.ext_stripe_price_id,
+        pr_limit_per_month: plan.pr_limit_per_month,
       })
+      .onConflict((oc) =>
+        oc.column('name').doUpdateSet({
+          billing_interval: plan.billing_interval,
+          ext_stripe_price_id: plan.ext_stripe_price_id,
+          pr_limit_per_month: plan.pr_limit_per_month,
+        }),
+      )
       .executeTakeFirstOrThrow()
   }
 

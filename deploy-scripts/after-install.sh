@@ -23,6 +23,9 @@ cd /app
 # Run db migrations
 npm run db:migrate
 
+# Set billing plans
+npm run billing:create-plans
+
 # Start queue dashbboard
 npm run queue:dashboard > /dev/null 2> /dev/null < /dev/null &
 

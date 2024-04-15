@@ -9,7 +9,7 @@ interface GetIsOverPlanPRLimitParams {
   pr_limit_per_month: number | null
 }
 
-const freePlanPRLimitPerMonth = 5
+const freePlanPRLimitPerMonth = 30
 
 export async function getIsOverPlanPRLimit(
   params: GetIsOverPlanPRLimitParams,
