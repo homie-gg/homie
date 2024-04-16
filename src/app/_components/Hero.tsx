@@ -1,5 +1,7 @@
 import { Button } from '@/lib/ui/Button'
 import Link from 'next/link'
+import MuxPlayer from '@mux/mux-player-react/lazy'
+import MuxPlayerClient from '@/lib/ui/MuxPlayerClient'
 
 export const Hero = () => {
   return (
@@ -37,7 +39,15 @@ export const Hero = () => {
       </div>
 
       {/* Hero cards sections */}
-      <div className="z-10">{/* <HeroCards /> */}</div>
+      <div className="z-10 w-full h-full pt-8 lg:pt-20">
+        <MuxPlayerClient
+          streamType="on-demand"
+          playbackId="MJ9SXa005c9NpG4K8tg3g6x5nw1qrsGV01G02bk1SjvDPg"
+          metadataVideoTitle="Void in 20secs"
+          primaryColor="#FFFFFF"
+          secondaryColor="#000000"
+        />
+      </div>
     </section>
   )
 }
