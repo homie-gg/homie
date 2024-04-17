@@ -43,6 +43,12 @@ declare module 'zapatos/schema' {
          */
         ext_gh_user_id: number
         /**
+         * **voidpm.contributor.ext_slack_member_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_slack_member_id: string | null
+        /**
          * **voidpm.contributor.id**
          * - `int4` in database
          * - `NOT NULL`, default: `nextval('voidpm.contributor_id_seq'::regclass)`
@@ -80,6 +86,12 @@ declare module 'zapatos/schema' {
          * - `NOT NULL`, no default
          */
         ext_gh_user_id: number
+        /**
+         * **voidpm.contributor.ext_slack_member_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_slack_member_id: string | null
         /**
          * **voidpm.contributor.id**
          * - `int4` in database
@@ -136,6 +148,20 @@ declare module 'zapatos/schema' {
           | db.SQLFragment<
               any,
               number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.contributor.ext_slack_member_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_slack_member_id?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
             >
         /**
          * **voidpm.contributor.id**
@@ -215,6 +241,17 @@ declare module 'zapatos/schema' {
          */
         ext_gh_user_id: number | db.Parameter<number> | db.SQLFragment
         /**
+         * **voidpm.contributor.ext_slack_member_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_slack_member_id?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
          * **voidpm.contributor.id**
          * - `int4` in database
          * - `NOT NULL`, default: `nextval('voidpm.contributor_id_seq'::regclass)`
@@ -271,6 +308,25 @@ declare module 'zapatos/schema' {
           | db.Parameter<number>
           | db.SQLFragment
           | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
+        /**
+         * **voidpm.contributor.ext_slack_member_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_slack_member_id?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | string
+              | db.Parameter<string>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
         /**
          * **voidpm.contributor.id**
          * - `int4` in database

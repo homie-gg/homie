@@ -26,6 +26,17 @@ export function MainNav({
       >
         Review
       </Link>
+      <Link
+        href="/settings/contributors"
+        className={cn(
+          'text-sm font-medium transition-colors hover:text-primary',
+          {
+            'text-muted-foreground': !pathname.includes('settings'),
+          },
+        )}
+      >
+        Settings
+      </Link>
     </nav>
   )
 }

@@ -1,6 +1,5 @@
 import { Button } from '@/lib/ui/Button'
 import Link from 'next/link'
-import MuxPlayer from '@mux/mux-player-react/lazy'
 import MuxPlayerClient from '@/lib/ui/MuxPlayerClient'
 
 export const Hero = () => {
