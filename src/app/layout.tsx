@@ -47,7 +47,7 @@ export default function RootLayout({
               inter.variable,
             )}
           >
-            <main>{children}</main>
+            <main className="h-screen">{children}</main>
           </body>
         </html>
       </TooltipProvider>
