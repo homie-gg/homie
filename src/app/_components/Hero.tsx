@@ -8,7 +8,7 @@ export const Hero = () => {
       <div className="text-center lg:text-start space-y-6">
         <main className="text-5xl md:text-7xl font-bold">
           <h1 className="inline">
-            <span className="">Project tools to fix slow dev and </span>{' '}
+            <span className="">AI project management to fix slow dev and </span>{' '}
           </h1>
           <h2 className="inline">
             <span className="inline bg-gradient-to-r from-[#7C3AED]  to-[#F80282] text-transparent bg-clip-text">
