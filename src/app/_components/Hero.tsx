@@ -8,19 +8,19 @@ export const Hero = () => {
       <div className="text-center lg:text-start space-y-6">
         <main className="text-5xl md:text-7xl font-bold">
           <h1 className="inline">
-            <span className="">AI project management to fix slow dev and </span>{' '}
+            <span className="">AI project management to </span>{' '}
           </h1>
           <h2 className="inline">
             <span className="inline bg-gradient-to-r from-[#7C3AED]  to-[#F80282] text-transparent bg-clip-text">
               {' '}
-              ship fast.
+              ship quicker.
             </span>{' '}
           </h2>
         </main>
 
         <p className="text-xl text-muted-foreground md:w-10/12 mx-auto lg:mx-0">
-          Void is an AI powered collection of project management tools that
-          includes a dashboard, chatbot, reminders, and reports for your team.
+          2 min setup to get automated dashboard, chatbot, reminders, and
+          reports out the box.
           <br />
           <br />
           Built for async global teams that need to start shipping code faster
