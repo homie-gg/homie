@@ -442,6 +442,30 @@ declare module 'zapatos/schema' {
          */
         is_over_plan_pr_limit: boolean | null
         /**
+         * **voidpm.organization.send_pull_request_summaries_day**
+         * - `text` in database
+         * - `NOT NULL`, default: `'7'::text`
+         */
+        send_pull_request_summaries_day: string
+        /**
+         * **voidpm.organization.send_pull_request_summaries_enabled**
+         * - `bool` in database
+         * - `NOT NULL`, default: `true`
+         */
+        send_pull_request_summaries_enabled: boolean
+        /**
+         * **voidpm.organization.send_pull_request_summaries_interval**
+         * - `text` in database
+         * - `NOT NULL`, default: `'weekly'::text`
+         */
+        send_pull_request_summaries_interval: string
+        /**
+         * **voidpm.organization.send_pull_request_summaries_time**
+         * - `text` in database
+         * - `NOT NULL`, default: `'22:00'::text`
+         */
+        send_pull_request_summaries_time: string
+        /**
          * **voidpm.organization.updated_at**
          * - `timestamptz` in database
          * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -485,6 +509,30 @@ declare module 'zapatos/schema' {
          * - Nullable, default: `false`
          */
         is_over_plan_pr_limit: boolean | null
+        /**
+         * **voidpm.organization.send_pull_request_summaries_day**
+         * - `text` in database
+         * - `NOT NULL`, default: `'7'::text`
+         */
+        send_pull_request_summaries_day: string
+        /**
+         * **voidpm.organization.send_pull_request_summaries_enabled**
+         * - `bool` in database
+         * - `NOT NULL`, default: `true`
+         */
+        send_pull_request_summaries_enabled: boolean
+        /**
+         * **voidpm.organization.send_pull_request_summaries_interval**
+         * - `text` in database
+         * - `NOT NULL`, default: `'weekly'::text`
+         */
+        send_pull_request_summaries_interval: string
+        /**
+         * **voidpm.organization.send_pull_request_summaries_time**
+         * - `text` in database
+         * - `NOT NULL`, default: `'22:00'::text`
+         */
+        send_pull_request_summaries_time: string
         /**
          * **voidpm.organization.updated_at**
          * - `timestamptz` in database
@@ -581,6 +629,62 @@ declare module 'zapatos/schema' {
               boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn
             >
         /**
+         * **voidpm.organization.send_pull_request_summaries_day**
+         * - `text` in database
+         * - `NOT NULL`, default: `'7'::text`
+         */
+        send_pull_request_summaries_day?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.organization.send_pull_request_summaries_enabled**
+         * - `bool` in database
+         * - `NOT NULL`, default: `true`
+         */
+        send_pull_request_summaries_enabled?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.organization.send_pull_request_summaries_interval**
+         * - `text` in database
+         * - `NOT NULL`, default: `'weekly'::text`
+         */
+        send_pull_request_summaries_interval?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.organization.send_pull_request_summaries_time**
+         * - `text` in database
+         * - `NOT NULL`, default: `'22:00'::text`
+         */
+        send_pull_request_summaries_time?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
          * **voidpm.organization.updated_at**
          * - `timestamptz` in database
          * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -652,6 +756,46 @@ declare module 'zapatos/schema' {
           | boolean
           | db.Parameter<boolean>
           | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **voidpm.organization.send_pull_request_summaries_day**
+         * - `text` in database
+         * - `NOT NULL`, default: `'7'::text`
+         */
+        send_pull_request_summaries_day?:
+          | string
+          | db.Parameter<string>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **voidpm.organization.send_pull_request_summaries_enabled**
+         * - `bool` in database
+         * - `NOT NULL`, default: `true`
+         */
+        send_pull_request_summaries_enabled?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **voidpm.organization.send_pull_request_summaries_interval**
+         * - `text` in database
+         * - `NOT NULL`, default: `'weekly'::text`
+         */
+        send_pull_request_summaries_interval?:
+          | string
+          | db.Parameter<string>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **voidpm.organization.send_pull_request_summaries_time**
+         * - `text` in database
+         * - `NOT NULL`, default: `'22:00'::text`
+         */
+        send_pull_request_summaries_time?:
+          | string
+          | db.Parameter<string>
           | db.DefaultType
           | db.SQLFragment
         /**
@@ -763,6 +907,62 @@ declare module 'zapatos/schema' {
               | null
               | db.DefaultType
               | db.SQLFragment
+            >
+        /**
+         * **voidpm.organization.send_pull_request_summaries_day**
+         * - `text` in database
+         * - `NOT NULL`, default: `'7'::text`
+         */
+        send_pull_request_summaries_day?:
+          | string
+          | db.Parameter<string>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **voidpm.organization.send_pull_request_summaries_enabled**
+         * - `bool` in database
+         * - `NOT NULL`, default: `true`
+         */
+        send_pull_request_summaries_enabled?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **voidpm.organization.send_pull_request_summaries_interval**
+         * - `text` in database
+         * - `NOT NULL`, default: `'weekly'::text`
+         */
+        send_pull_request_summaries_interval?:
+          | string
+          | db.Parameter<string>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **voidpm.organization.send_pull_request_summaries_time**
+         * - `text` in database
+         * - `NOT NULL`, default: `'22:00'::text`
+         */
+        send_pull_request_summaries_time?:
+          | string
+          | db.Parameter<string>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.DefaultType | db.SQLFragment
             >
         /**
          * **voidpm.organization.updated_at**

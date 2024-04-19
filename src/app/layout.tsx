@@ -5,6 +5,7 @@ import './globals.css'
 import { cn } from '@/lib/utils'
 import { TooltipProvider } from '@/lib/ui/Tooltip'
 import Script from 'next/script'
+import { Toaster } from '@/lib/ui/Toast/Toaster'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
@@ -48,6 +49,7 @@ export default function RootLayout({
             )}
           >
             <main className="h-screen">{children}</main>
+            <Toaster />
           </body>
         </html>
       </TooltipProvider>

@@ -13,6 +13,12 @@ import { getDefaultQueue } from '@/queue/default-queue'
     },
   })
 
+  await queue.add('send_pull_request_summaries', null, {
+    repeat: {
+      pattern: '* * * * *', // send every minute
+    },
+  })
+
   // eslint-disable-next-line no-console
   console.log('Scheduled jobs added.')
   process.exit()

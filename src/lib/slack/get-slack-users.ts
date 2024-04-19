@@ -1,4 +1,4 @@
-import { SlackClient } from '@/lib/api/slack/client'
+import { SlackClient } from '@/lib/api/slack/create-slack-client'
 import {
   type UsersListResponse,
   type Member,

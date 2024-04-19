@@ -1,4 +1,4 @@
-import { createSlackClient } from '@/lib/api/slack/client'
+import { createSlackClient } from '@/lib/api/slack/create-slack-client'
 import { AnswerSlackQuestion } from '@/queue/jobs'
 import { findOrgWithSlackTeamId } from '@/lib/organization/get-org-with-slack-team-id'
 import { answerQuestion } from '@/lib/ai/chat/answer-question'

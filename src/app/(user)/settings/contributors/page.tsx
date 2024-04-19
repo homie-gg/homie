@@ -1,6 +1,6 @@
 import ContributorRow from '@/app/(user)/settings/contributors/_components/ContributorRow'
 import FetchUsersFailedAlert from '@/app/(user)/settings/contributors/_components/FetchUsersFailedAlert'
-import { createSlackClient } from '@/lib/api/slack/client'
+import { createSlackClient } from '@/lib/api/slack/create-slack-client'
 import { dbClient } from '@/lib/db/client'
 import { getSlackUsers } from '@/lib/slack/get-slack-users'
 import { Separator } from '@/lib/ui/Separator'

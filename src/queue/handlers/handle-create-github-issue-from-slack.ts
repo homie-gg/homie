@@ -1,4 +1,4 @@
-import { createSlackClient } from '@/lib/api/slack/client'
+import { createSlackClient } from '@/lib/api/slack/create-slack-client'
 import { createGithubClient } from '@/lib/github/create-github-client'
 import { Conversation, TextMessageEvent } from '@/lib/slack/types'
 import { CreateGithubIssueFromSlack } from '@/queue/jobs'
