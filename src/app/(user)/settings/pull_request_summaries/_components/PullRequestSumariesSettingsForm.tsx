@@ -197,7 +197,7 @@ export default function PullRequestSumariesSettingsForm(
                               <SelectItem value="4">Thursday</SelectItem>
                               <SelectItem value="5">Friday</SelectItem>
                               <SelectItem value="6">Saturday</SelectItem>
-                              <SelectItem value="7">Sunday</SelectItem>
+                              <SelectItem value="0">Sunday</SelectItem>
                             </SelectContent>
                           </Select>
                         </FormControl>
