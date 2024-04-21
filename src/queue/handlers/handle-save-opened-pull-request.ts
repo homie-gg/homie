@@ -3,6 +3,7 @@ import { SaveOpenedPullRequest } from '@/queue/jobs'
 import { parseISO } from 'date-fns'
 
 export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
+  
   const { pull_request, installation } = job.data
 
   const organization = await dbClient

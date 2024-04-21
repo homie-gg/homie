@@ -1,10 +1,20 @@
 import { getIsOverPlanPRLimit } from '@/lib/billing/get-is-over-plan-pr-limit'
 import { dbClient } from '@/lib/db/client'
 import { saveMergedPullRequest } from '@/lib/github/save-merged-pull-request'
+import { getOrganizationLogData } from '@/lib/log/get-organization-log-data'
+import { getPullRequestLogData } from '@/lib/log/get-pull-request-log-data'
+import { logger } from '@/lib/log/logger'
 import { SaveMergedPullRequest } from '@/queue/jobs'
 
 export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
   const { pull_request, installation } = job.data
+
+  logger.debug('Start save merged PR', {
+    event: 'save_merged_pr.start',
+    data: {
+      pull_request: getPullRequestLogData(pull_request),
+    },
+  })
 
   const organization = await dbClient
     .selectFrom('voidpm.organization')
@@ -30,10 +40,23 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
     .executeTakeFirst()
 
   if (!organization) {
+    logger.debug('Missing organization', {
+      event: 'save_merged_pr.missing_organization',
+      data: {
+        pull_request: getPullRequestLogData(pull_request),
+      },
+    })
     return
   }
 
   if (organization.is_over_plan_pr_limit && !organization.has_unlimited_usage) {
+    logger.debug('org over plan limit', {
+      event: 'save_merged_pr.org_over_plan_limit',
+      data: {
+        pull_request: getPullRequestLogData(pull_request),
+        organization: getOrganizationLogData(organization),
+      },
+    })
     return
   }
 
