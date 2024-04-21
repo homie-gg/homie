@@ -12,6 +12,7 @@ import { Worker } from 'bullmq'
 import Redis from 'ioredis'
 import { handleSendPullRequestSummaries } from '@/queue/handlers/handle-send-pull-request-summaries'
 import { handleSendPullRequestSummariesToOrganization } from '@/queue/handlers/handle-send-pull-request-summaries-to-organization'
+import { logger } from '@/lib/log/logger'
 
 let defaultWorker: Worker | null = null
 
@@ -42,12 +43,27 @@ export const getDefaultWorker = () => {
   defaultWorker = new Worker(
     defaultQueueName,
     async (job: Job) => {
+      logger.debug(`got job: ${job.name}`, {
+        event: 'job.start',
+        data: job.data,
+      })
       const handle = handlers[job.name]
       if (!handle) {
+        logger.debug(`Missing job handler" ${job.name}`, {
+          event: 'job.missing_handler',
+          data: job.data,
+        })
         return
       }
 
-      return handle(job as any) // Ignore TS, as already type-safe when accessing hadnle
+      const result = handle(job as any) // Ignore TS, as already type-safe when accessing hadnle
+
+      logger.debug(`Completed job: ${job.name}`, {
+        event: 'job.complete',
+        data: job.data,
+        result,
+      })
+      return result
     },
     {
       connection,
