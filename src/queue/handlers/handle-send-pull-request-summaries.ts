@@ -1,9 +1,10 @@
 import { dbClient } from '@/lib/db/client'
 import { getDefaultQueue } from '@/queue/default-queue'
-import { format } from 'date-fns'
 
 export async function handleSendPullRequestSummaries() {
-  const now = new Date()
+  const isoTime = new Date().toISOString().split('T')[1].split(':')
+  const hours = isoTime[0]
+  const minutes = isoTime[1]
   const defaultQueue = getDefaultQueue()
 
   const organizations = await dbClient
@@ -14,7 +15,7 @@ export async function handleSendPullRequestSummaries() {
       'voidpm.organization.id',
     )
     .where('send_pull_request_summaries_enabled', '=', true)
-    .where('send_pull_request_summaries_time', '=', format(now, 'kk:mm'))
+    .where('send_pull_request_summaries_time', '=', `${hours}:${minutes}`)
     .select([
       'voidpm.organization.id',
       'send_pull_request_summaries_time',
