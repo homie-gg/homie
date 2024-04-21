@@ -1,4 +1,5 @@
-import { setDay, setHours, setMinutes, subMinutes } from 'date-fns'
+import { getDate } from '@/lib/date/get-date'
+import { subMinutes } from 'date-fns'
 
 interface GetLocalDateParams {
   day: number
@@ -9,7 +10,11 @@ interface GetLocalDateParams {
 export function getLocalDate(params: GetLocalDateParams) {
   const { day, hours, minutes } = params
 
-  const utc = setMinutes(setHours(setDay(new Date(), day), hours), minutes)
+  const utc = getDate({
+    day,
+    hours,
+    minutes,
+  })
 
   const offset = utc.getTimezoneOffset()
   return subMinutes(utc, offset)

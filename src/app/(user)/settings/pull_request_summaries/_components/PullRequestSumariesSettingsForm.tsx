@@ -32,7 +32,8 @@ import {
 import { useToast } from '@/lib/ui/Toast/use-toast'
 import { format } from 'date-fns'
 import { getLocalDate } from '@/lib/date/get-local-date'
-import { getUTCDate } from '@/lib/date/get-utc-date'
+import { getDate as getDate } from '@/lib/date/get-date'
+import { formatInTimeZone } from 'date-fns-tz'
 
 interface EnablePullRequestSummariesSwitchProps {
   organization: Organization
@@ -59,7 +60,7 @@ export default function PullRequestSumariesSettingsForm(
 
     setProcessing(true)
 
-    const utcDate = getUTCDate({
+    const localDate = getDate({
       day: parseInt(data.send_pull_request_summaries_day ?? ''),
       hours: parseInt(
         (data.send_pull_request_summaries_time ?? '').split(':')[0],
@@ -69,19 +70,16 @@ export default function PullRequestSumariesSettingsForm(
       ),
     })
 
-    // const utc = addMinutes(m, new Date().getTimezoneOffset())
-
-    const hours = format(utcDate, 'kk')
-    const localizedHours = hours === '24' ? '00' : hours
-    const minutes = format(utcDate, 'mm')
+    const day = formatInTimeZone(localDate, 'UTC', 'i')
+    const time = formatInTimeZone(localDate, 'UTC', 'kk:mm')
 
     http
       .patch<{ organization: OrganizationResponse }>(
         `/api/organizations/${organization.id}`,
         {
           ...data,
-          send_pull_request_summaries_day: utcDate.getDay().toString(),
-          send_pull_request_summaries_time: `${localizedHours}:${minutes}`,
+          send_pull_request_summaries_day: day,
+          send_pull_request_summaries_time: time,
         },
       )
       .then(() => {
@@ -105,7 +103,7 @@ export default function PullRequestSumariesSettingsForm(
       })
   }
 
-  const dateTime = getLocalDate({
+  const localDate = getLocalDate({
     day: parseInt(organization.send_pull_request_summaries_day),
     hours: parseInt(
       organization.send_pull_request_summaries_time.split(':')[0],
@@ -120,8 +118,9 @@ export default function PullRequestSumariesSettingsForm(
     defaultValues: {
       send_pull_request_summaries_interval:
         organization.send_pull_request_summaries_interval as any,
-      send_pull_request_summaries_day: dateTime.getDay().toString() as any,
-      send_pull_request_summaries_time: format(dateTime, 'kk:mm'),
+      send_pull_request_summaries_day:
+        localDate.getDay() === 0 ? '7' : (localDate.getDay().toString() as any), // js sunday starts at 0
+      send_pull_request_summaries_time: format(localDate, 'kk:mm'),
     },
   })
 
@@ -197,7 +196,7 @@ export default function PullRequestSumariesSettingsForm(
                               <SelectItem value="4">Thursday</SelectItem>
                               <SelectItem value="5">Friday</SelectItem>
                               <SelectItem value="6">Saturday</SelectItem>
-                              <SelectItem value="0">Sunday</SelectItem>
+                              <SelectItem value="7">Sunday</SelectItem>
                             </SelectContent>
                           </Select>
                         </FormControl>

@@ -1,10 +1,11 @@
 import { dbClient } from '@/lib/db/client'
 import { getDefaultQueue } from '@/queue/default-queue'
+import { formatInTimeZone } from 'date-fns-tz'
 
 export async function handleSendPullRequestSummaries() {
-  const isoTime = new Date().toISOString().split('T')[1].split(':')
-  const hours = isoTime[0]
-  const minutes = isoTime[1]
+  const today = formatInTimeZone(new Date(), 'UTC', 'i')
+  const time = formatInTimeZone(new Date(), 'UTC', 'kk:mm')
+
   const defaultQueue = getDefaultQueue()
 
   const organizations = await dbClient
@@ -15,7 +16,7 @@ export async function handleSendPullRequestSummaries() {
       'voidpm.organization.id',
     )
     .where('send_pull_request_summaries_enabled', '=', true)
-    .where('send_pull_request_summaries_time', '=', `${hours}:${minutes}`)
+    .where('send_pull_request_summaries_time', '=', time)
     .select([
       'voidpm.organization.id',
       'send_pull_request_summaries_time',
@@ -27,8 +28,7 @@ export async function handleSendPullRequestSummaries() {
     .execute()
 
   for (const organization of organizations) {
-    const isCorrectDay =
-      organization.send_pull_request_summaries_day === now.getDay().toString()
+    const isCorrectDay = organization.send_pull_request_summaries_day === today
 
     if (
       organization.send_pull_request_summaries_interval === 'weekly' &&
