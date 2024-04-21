@@ -10,7 +10,7 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
   const { pull_request, installation } = job.data
 
   logger.debug('Start save merged PR', {
-    event: 'save_merged_pr.start',
+    event: 'save_merged_pull_request.start',
     data: {
       pull_request: getPullRequestLogData(pull_request),
     },
@@ -41,7 +41,7 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
 
   if (!organization) {
     logger.debug('Missing organization', {
-      event: 'save_merged_pr.missing_organization',
+      event: 'save_merged_pull_request.missing_organization',
       data: {
         pull_request: getPullRequestLogData(pull_request),
       },
@@ -51,7 +51,7 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
 
   if (organization.is_over_plan_pr_limit && !organization.has_unlimited_usage) {
     logger.debug('org over plan limit', {
-      event: 'save_merged_pr.org_over_plan_limit',
+      event: 'save_merged_pull_request.org_over_plan_limit',
       data: {
         pull_request: getPullRequestLogData(pull_request),
         organization: getOrganizationLogData(organization),
