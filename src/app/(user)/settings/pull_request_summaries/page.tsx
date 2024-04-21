@@ -1,5 +1,5 @@
 import { Separator } from '@/lib/ui/Separator'
-import SettingsForm from '@/app/(user)/settings/pull_request_summaries/_components/SettingsForm'
+import PullRequestSumariesSettingsForm from '@/app/(user)/settings/pull_request_summaries/_components/PullRequestSumariesSettingsForm'
 import { getUserOrganization } from '@/lib/auth/get-user-organization'
 
 interface PRSummariesPage {}
@@ -22,7 +22,7 @@ export default async function PRSummariesPage(props: PRSummariesPage) {
       </div>
       <Separator />
       <div className="space-y-4">
-        <SettingsForm organization={organization} />
+        <PullRequestSumariesSettingsForm organization={organization} />
       </div>
     </div>
   )

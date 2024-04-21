@@ -30,12 +30,15 @@ import {
   organizationData,
 } from '@/app/api/organizations/[organization_id]/types'
 import { useToast } from '@/lib/ui/Toast/use-toast'
+import { format } from 'date-fns'
+import { getLocalDate } from '@/lib/date/get-local-date'
+import { getUTCDate } from '@/lib/date/get-utc-date'
 
 interface EnablePullRequestSummariesSwitchProps {
   organization: Organization
 }
 
-export default function SettingsForm(
+export default function PullRequestSumariesSettingsForm(
   props: EnablePullRequestSummariesSwitchProps,
 ) {
   const [organization, setOrganization] = useState<Organization>(
@@ -56,10 +59,30 @@ export default function SettingsForm(
 
     setProcessing(true)
 
+    const utcDate = getUTCDate({
+      day: parseInt(data.send_pull_request_summaries_day ?? ''),
+      hours: parseInt(
+        (data.send_pull_request_summaries_time ?? '').split(':')[0],
+      ),
+      minutes: parseInt(
+        (data.send_pull_request_summaries_time ?? '').split(':')[1],
+      ),
+    })
+
+    // const utc = addMinutes(m, new Date().getTimezoneOffset())
+
+    const hours = format(utcDate, 'kk')
+    const localizedHours = hours === '24' ? '00' : hours
+    const minutes = format(utcDate, 'mm')
+
     http
       .patch<{ organization: OrganizationResponse }>(
         `/api/organizations/${organization.id}`,
-        data,
+        {
+          ...data,
+          send_pull_request_summaries_day: utcDate.getDay().toString(),
+          send_pull_request_summaries_time: `${localizedHours}:${minutes}`,
+        },
       )
       .then(() => {
         setOrganization({
@@ -82,15 +105,23 @@ export default function SettingsForm(
       })
   }
 
+  const dateTime = getLocalDate({
+    day: parseInt(organization.send_pull_request_summaries_day),
+    hours: parseInt(
+      organization.send_pull_request_summaries_time.split(':')[0],
+    ),
+    minutes: parseInt(
+      organization.send_pull_request_summaries_time.split(':')[1],
+    ),
+  })
+
   const form = useForm<OrganizationData>({
     resolver: zodResolver(organizationData.partial()),
     defaultValues: {
       send_pull_request_summaries_interval:
         organization.send_pull_request_summaries_interval as any,
-      send_pull_request_summaries_day:
-        organization.send_pull_request_summaries_day as any,
-      send_pull_request_summaries_time:
-        organization.send_pull_request_summaries_time,
+      send_pull_request_summaries_day: dateTime.getDay().toString() as any,
+      send_pull_request_summaries_time: format(dateTime, 'kk:mm'),
     },
   })
 
