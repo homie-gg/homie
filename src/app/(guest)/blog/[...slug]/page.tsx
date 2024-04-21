@@ -44,6 +44,7 @@ export default function BlogPost(props: BlogPostProps) {
               <img {...props} />
             </span>
           ),
+          li: (props) => <li className="list-disc ml-4" {...props} />,
         }}
       />
     </div>
