@@ -73,6 +73,12 @@ export const getDefaultWorker = () => {
             stack: error.stack,
           })
         }
+
+        logger.debug(`Failed job: ${job.name}`, {
+          event: 'job.failed',
+          data: job.data,
+          error,
+        })
       }
     },
     {
