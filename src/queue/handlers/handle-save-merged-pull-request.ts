@@ -65,7 +65,7 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
     pr_limit_per_month: organization.pr_limit_per_month,
   })
 
-  if (isOverPlanPRLimit) {
+  if (isOverPlanPRLimit && !organization.has_unlimited_usage) {
     await dbClient
       .updateTable('voidpm.organization')
       .set({
@@ -73,6 +73,13 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
       })
       .where('voidpm.organization.id', '=', organization.id)
       .executeTakeFirstOrThrow()
+    logger.debug('org over plan limit', {
+      event: 'save_merged_pull_request.org_over_plan_limit',
+      data: {
+        pull_request: getPullRequestLogData(pull_request),
+        organization: getOrganizationLogData(organization),
+      },
+    })
 
     return
   }
