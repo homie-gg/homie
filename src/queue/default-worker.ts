@@ -56,14 +56,24 @@ export const getDefaultWorker = () => {
         return
       }
 
-      const result = handle(job as any) // Ignore TS, as already type-safe when accessing hadnle
-
-      logger.debug(`Completed job: ${job.name}`, {
-        event: 'job.complete',
-        data: job.data,
-        result,
-      })
-      return result
+      try {
+        const result = handle(job as any) // Ignore TS, as already type-safe when accessing hadnle
+        logger.debug(`Completed job: ${job.name}`, {
+          event: 'job.complete',
+          data: job.data,
+          result,
+        })
+        return result
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          logger.debug(`Failed job: ${job.name}`, {
+            event: 'job.failed',
+            data: job.data,
+            error: error.message,
+            stack: error.stack,
+          })
+        }
+      }
     },
     {
       connection,
