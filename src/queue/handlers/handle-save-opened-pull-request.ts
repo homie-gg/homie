@@ -1,10 +1,20 @@
+import { getIsOverPlanPRLimit } from '@/lib/billing/get-is-over-plan-pr-limit'
 import { dbClient } from '@/lib/db/client'
+import { getOrganizationLogData } from '@/lib/log/get-organization-log-data'
+import { getPullRequestLogData } from '@/lib/log/get-pull-request-log-data'
+import { logger } from '@/lib/log/logger'
 import { SaveOpenedPullRequest } from '@/queue/jobs'
 import { parseISO } from 'date-fns'
 
 export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
-  
   const { pull_request, installation } = job.data
+
+  logger.debug('Start save opened PR', {
+    event: 'save_opened_pull_request.start',
+    data: {
+      pull_request: getPullRequestLogData(pull_request),
+    },
+  })
 
   const organization = await dbClient
     .selectFrom('voidpm.organization')
@@ -13,20 +23,65 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
       'github.organization.organization_id',
       'voidpm.organization.id',
     )
+    .leftJoin(
+      'voidpm.subscription',
+      'voidpm.subscription.organization_id',
+      'voidpm.organization.id',
+    )
+    .leftJoin('voidpm.plan', 'voidpm.plan.id', 'voidpm.subscription.plan_id')
     .where('ext_gh_install_id', '=', installation?.id!)
     .select([
       'voidpm.organization.id',
       'github.organization.ext_gh_install_id',
       'is_over_plan_pr_limit',
       'has_unlimited_usage',
+      'pr_limit_per_month',
     ])
     .executeTakeFirst()
 
   if (!organization) {
+    logger.debug('Missing organization', {
+      event: 'save_opened_pull_request.missing_organization',
+      data: {
+        pull_request: getPullRequestLogData(pull_request),
+      },
+    })
     return
   }
 
   if (organization.is_over_plan_pr_limit && !organization.has_unlimited_usage) {
+    logger.debug('org over plan limit', {
+      event: 'save_opened_pull_request.org_over_plan_limit',
+      data: {
+        pull_request: getPullRequestLogData(pull_request),
+        organization: getOrganizationLogData(organization),
+      },
+    })
+    return
+  }
+
+  const isOverPlanPRLimit = await getIsOverPlanPRLimit({
+    organization,
+    pr_limit_per_month: organization.pr_limit_per_month,
+  })
+
+  if (isOverPlanPRLimit && !organization.has_unlimited_usage) {
+    await dbClient
+      .updateTable('voidpm.organization')
+      .set({
+        is_over_plan_pr_limit: true,
+      })
+      .where('voidpm.organization.id', '=', organization.id)
+      .executeTakeFirstOrThrow()
+
+    logger.debug('org over plan limit', {
+      event: 'save_opened_pull_request.org_over_plan_limit',
+      data: {
+        pull_request: getPullRequestLogData(pull_request),
+        organization: getOrganizationLogData(organization),
+      },
+    })
+
     return
   }
 
@@ -80,4 +135,12 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
     })
     .returningAll()
     .executeTakeFirstOrThrow()
+
+  logger.debug('Finished saving opened PR', {
+    event: 'save_opened_pull_request.complete',
+    data: {
+      pull_request: getPullRequestLogData(pull_request),
+      organization: getOrganizationLogData(organization),
+    },
+  })
 }

@@ -88,4 +88,12 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
     pullRequest: pull_request,
     organization,
   })
+
+  logger.debug('Finished saving merged PR', {
+    event: 'save_merged_pull_request.complete',
+    data: {
+      pull_request: getPullRequestLogData(pull_request),
+      organization: getOrganizationLogData(organization),
+    },
+  })
 }
