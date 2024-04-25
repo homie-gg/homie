@@ -1,6 +1,6 @@
 import { getUserOrganization } from '@/lib/auth/get-user-organization'
 import { getPlanLabel } from '@/lib/billing/get-plan-label'
-import { dbClient } from '@/lib/db/client'
+import { dbClient } from '@/database/client'
 import { Badge } from '@/lib/ui/Badge'
 import Link from 'next/link'
 

@@ -1,4 +1,4 @@
-import { dbClient } from '@/lib/db/client'
+import { dbClient } from '@/database/client'
 ;(async () => {
   const plans = [
     {

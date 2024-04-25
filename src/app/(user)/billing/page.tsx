@@ -1,6 +1,6 @@
 import { plans } from '@/app/_components/PricingTable'
 import { getUserOrganization } from '@/lib/auth/get-user-organization'
-import { dbClient } from '@/lib/db/client'
+import { dbClient } from '@/database/client'
 import { Card, CardContent, CardHeader, CardTitle } from '@/lib/ui/Card'
 import OpenStripeCustomerPortalButton from '@/app/(user)/billing/_components/OpenStripeCustomerPortalButton'
 import SubscribeButton from '@/app/(user)/billing/_components/SubscribeButton'

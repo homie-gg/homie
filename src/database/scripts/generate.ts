@@ -22,6 +22,6 @@ const database = process.env.POSTGRES_DB
         },
       ]),
     ),
-    outDir: 'src/lib/db/schema',
+    outDir: 'src/database/schema',
   })
 })()

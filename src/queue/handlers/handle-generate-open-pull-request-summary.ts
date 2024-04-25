@@ -1,6 +1,6 @@
 import { summarizeGithubPullRequest } from '@/lib/ai/summarize-github-pull-request'
 import { getOverPRLimitMessage } from '@/lib/billing/get-over-pr-limit-message'
-import { dbClient } from '@/lib/db/client'
+import { dbClient } from '@/database/client'
 import { createGithubClient } from '@/lib/github/create-github-client'
 import { findLinkedIssue } from '@/lib/github/find-linked-issue'
 import { GenerateOpenPullRequestSummary } from '@/queue/jobs'

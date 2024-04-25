@@ -1,4 +1,4 @@
-import { dbClient } from '@/lib/db/client'
+import { dbClient } from '@/database/client'
 
 export async function handleResetOrganizationsOverPRLimit() {
   await dbClient

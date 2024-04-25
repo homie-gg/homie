@@ -1,5 +1,5 @@
 import { getUserOrganization } from '@/lib/auth/get-user-organization'
-import { dbClient } from '@/lib/db/client'
+import { dbClient } from '@/database/client'
 import { createRoute } from '@/lib/http/server/create-route'
 import { NotFoundException } from '@/lib/http/server/exceptions'
 import { NextResponse } from 'next/server'

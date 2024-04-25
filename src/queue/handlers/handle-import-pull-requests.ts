@@ -1,4 +1,4 @@
-import { dbClient } from '@/lib/db/client'
+import { dbClient } from '@/database/client'
 import { createGithubClient } from '@/lib/github/create-github-client'
 import { saveMergedPullRequest } from '@/lib/github/save-merged-pull-request'
 import { getOrganizationLogData } from '@/lib/log/get-organization-log-data'

@@ -2,7 +2,7 @@
 
 import { CreateStripeCheckoutResponse } from '@/app/api/stripe/checkout/route'
 import { getStripeUserClient } from '@/lib/billing/get-stripe-user-client'
-import { Plan } from '@/lib/db/types'
+import { Plan } from '@/database/types'
 import { http } from '@/lib/http/client/http'
 import { Button, ButtonProps } from '@/lib/ui/Button'
 import { captureException } from '@sentry/nextjs'

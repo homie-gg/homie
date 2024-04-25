@@ -1,5 +1,5 @@
 import { SlackClient } from '@/lib/api/slack/create-slack-client'
-import { dbClient } from '@/lib/db/client'
+import { dbClient } from '@/database/client'
 import { getPullRequestCutoffDate } from '@/lib/reporting/get-pull-request-cut-off-date'
 import {
   ChatPostMessageArguments,

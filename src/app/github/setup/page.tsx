@@ -1,4 +1,4 @@
-import { dbClient } from '@/lib/db/client'
+import { dbClient } from '@/database/client'
 import { PageProps } from '@/lib/next-js/page-props'
 import { getDefaultQueue } from '@/queue/default-queue'
 import { auth } from '@clerk/nextjs'

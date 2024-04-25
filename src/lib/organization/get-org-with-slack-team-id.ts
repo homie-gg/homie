@@ -1,4 +1,4 @@
-import { dbClient } from '@/lib/db/client'
+import { dbClient } from '@/database/client'
 
 export const findOrgWithSlackTeamId = async (teamId: string) => {
   return await dbClient

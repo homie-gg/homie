@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker'
 
 import ms from 'ms'
-import { dbClient } from '@/lib/db/client'
-import { Contributor, GithubRepo, Organization } from '@/lib/db/types'
+import { dbClient } from '@/database/client'
+import { Contributor, GithubRepo, Organization } from '@/database/types'
 ;(async () => {
   const organization = await dbClient
     .selectFrom('voidpm.organization')

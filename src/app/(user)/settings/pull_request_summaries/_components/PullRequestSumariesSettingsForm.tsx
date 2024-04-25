@@ -22,7 +22,7 @@ import {
 } from '@/lib/ui/Select'
 import { Button } from '@/lib/ui/Button'
 import { Input } from '@/lib/ui/Input'
-import { Organization } from '@/lib/db/types'
+import { Organization } from '@/database/types'
 import { http } from '@/lib/http/client/http'
 import {
   OrganizationData,

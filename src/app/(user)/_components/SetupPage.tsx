@@ -1,4 +1,4 @@
-import { Organization } from '@/lib/db/types'
+import { Organization } from '@/database/types'
 import { Button } from '@/lib/ui/Button'
 
 interface SetupPageProps {

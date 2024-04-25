@@ -1,5 +1,5 @@
 import { getIsOverPlanPRLimit } from '@/lib/billing/get-is-over-plan-pr-limit'
-import { dbClient } from '@/lib/db/client'
+import { dbClient } from '@/database/client'
 import { getOrganizationLogData } from '@/lib/log/get-organization-log-data'
 import { getPullRequestLogData } from '@/lib/log/get-pull-request-log-data'
 import { logger } from '@/lib/log/logger'

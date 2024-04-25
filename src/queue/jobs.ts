@@ -1,4 +1,4 @@
-import { GithubOrganization } from '@/lib/db/types'
+import { GithubOrganization } from '@/database/types'
 import { Job as BullMQJob } from 'bullmq'
 import { PullRequest, InstallationLite } from '@octokit/webhooks-types'
 

@@ -1,4 +1,4 @@
-import { dbClient } from '@/lib/db/client'
+import { dbClient } from '@/database/client'
 import { getDefaultQueue } from '@/queue/default-queue'
 import { formatInTimeZone } from 'date-fns-tz'
 

@@ -1,7 +1,7 @@
 import { getUserOrganization } from '@/lib/auth/get-user-organization'
 import { createStripeCustomer } from '@/lib/billing/create-stripe-customer'
 import { stripeServerClient } from '@/lib/billing/stripe-server-client'
-import { dbClient } from '@/lib/db/client'
+import { dbClient } from '@/database/client'
 import { NotFoundException } from '@/lib/http/server/exceptions'
 import Stripe from 'stripe'
 

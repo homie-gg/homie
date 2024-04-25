@@ -2,7 +2,7 @@ import {
   organizationData,
   organizationResponse,
 } from '@/app/api/organizations/[organization_id]/types'
-import { dbClient } from '@/lib/db/client'
+import { dbClient } from '@/database/client'
 import { createRoute } from '@/lib/http/server/create-route'
 import { auth } from '@clerk/nextjs'
 import { NextResponse } from 'next/server'

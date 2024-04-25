@@ -1,5 +1,5 @@
-import { dbClient } from '@/lib/db/client'
-import { Organization } from '@/lib/db/types'
+import { dbClient } from '@/database/client'
+import { Organization } from '@/database/types'
 
 interface GetPullRequestsParams {
   startDate: Date

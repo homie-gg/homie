@@ -1,4 +1,4 @@
-import { Plan } from '@/lib/db/types'
+import { Plan } from '@/database/types'
 
 export function getPlanLabel(plan: Plan['name']) {
   switch (plan) {

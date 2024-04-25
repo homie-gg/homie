@@ -1,7 +1,7 @@
 import { embedDiff } from '@/lib/ai/embed-diff'
 import { embedGithubPullRequest } from '@/lib/ai/embed-github-pull-request'
 import { summarizeGithubPullRequest } from '@/lib/ai/summarize-github-pull-request'
-import { dbClient } from '@/lib/db/client'
+import { dbClient } from '@/database/client'
 import { createGithubClient } from '@/lib/github/create-github-client'
 import { findLinkedIssue } from '@/lib/github/find-linked-issue'
 import { getOrganizationLogData } from '@/lib/log/get-organization-log-data'

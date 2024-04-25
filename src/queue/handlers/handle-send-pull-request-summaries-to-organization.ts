@@ -1,5 +1,5 @@
 import { createSlackClient } from '@/lib/api/slack/create-slack-client'
-import { dbClient } from '@/lib/db/client'
+import { dbClient } from '@/database/client'
 import { SendPullRequestSummariesToOrganization } from '@/queue/jobs'
 import { sendContributorPullRequests } from '@/lib/reporting/send-contributor-pull-requests'
 
