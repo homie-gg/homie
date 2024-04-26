@@ -1,4 +1,4 @@
-import { createSlackClient } from '@/lib/api/slack/create-slack-client'
+import { createSlackClient } from '@/lib/slack/create-slack-client'
 import { createGithubClient } from '@/lib/github/create-github-client'
 import { AskSlackSelectGithubRepoForIssue } from '@/queue/jobs'
 import { http } from '@/lib/http/client/http'

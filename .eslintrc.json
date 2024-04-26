@@ -1,6 +1,6 @@
 {
-  "extends": "next/core-web-vitals",
-  "plugins": ["@typescript-eslint/eslint-plugin"],
+  "extends": ["next/core-web-vitals", "plugin:jest/recommended"],
+  "plugins": ["@typescript-eslint/eslint-plugin", "jest"],
   "rules": {
     "no-console": "warn",
     "@typescript-eslint/no-unused-vars": [
@@ -9,6 +9,9 @@
         "argsIgnorePattern": "^_",
         "varsIgnorePattern": "^_"
       }
-    ]
+    ],
+    "jest/no-try-expect": "off",
+    "jest/no-test-callback": "off",
+    "jest/no-conditional-expect": "off"
   }
 }

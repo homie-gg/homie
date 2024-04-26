@@ -1,7 +1,7 @@
 import { extractCodeSnippets, prompt } from '@/lib/ai/extract-code-snippets'
 import { v4 as uuid } from 'uuid'
 import { chunkDiff } from '@/lib/ai/summarize-diff'
-import { pineconeClient } from '@/lib/pinecone/pinecone-client'
+import { getPineconeClient } from '@/lib/pinecone/pinecone-client'
 import { OpenAIEmbeddings } from '@langchain/openai'
 import { PineconeRecord } from '@pinecone-database/pinecone'
 
@@ -66,7 +66,7 @@ export async function embedDiff(params: EmbedDiffParams) {
         metadata,
       }
 
-      const index = pineconeClient.Index(process.env.PINECONE_INDEX_MAIN!)
+      const index = getPineconeClient().Index(process.env.PINECONE_INDEX_MAIN!)
 
       await index.upsert([record])
     }

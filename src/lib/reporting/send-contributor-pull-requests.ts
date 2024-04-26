@@ -1,4 +1,4 @@
-import { SlackClient } from '@/lib/api/slack/create-slack-client'
+import { SlackClient } from '@/lib/slack/create-slack-client'
 import { dbClient } from '@/database/client'
 import { getPullRequestCutoffDate } from '@/lib/reporting/get-pull-request-cut-off-date'
 import {

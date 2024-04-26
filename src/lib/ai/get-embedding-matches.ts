@@ -1,4 +1,4 @@
-import { pineconeClient } from '@/lib/pinecone/pinecone-client'
+import { getPineconeClient } from '@/lib/pinecone/pinecone-client'
 
 interface GetEmbeddingMatchesParams {
   embeddings: number[]
@@ -9,7 +9,7 @@ interface GetEmbeddingMatchesParams {
 export async function getEmbeddingMatches(params: GetEmbeddingMatchesParams) {
   const { embeddings, numTopResults, organizationId } = params
 
-  const index = pineconeClient.Index(process.env.PINECONE_INDEX_MAIN!)
+  const index = getPineconeClient().Index(process.env.PINECONE_INDEX_MAIN!)
 
   try {
     const result = await index.query({

@@ -48,3 +48,28 @@ jobs:
       - name: Fail
         if: steps.auto_commit_action.outputs.changes_detected == 'true'
         run: echo "Fixed formatting, and pushed changes" && exit 1
+
+  test:
+    name: 🧪 Test
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16.2
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: void
+          POSTGRES_HOST_AUTH_METHOD: trust # No PW required
+          options: |-
+            --health-cmd pg_isready
+            --health-interval 10s
+            --health-timeout 5s
+            --health-retries 5
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - run: npm i
+      - run: npm run test

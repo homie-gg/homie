@@ -1,4 +1,4 @@
-import { SlackClient } from '@/lib/api/slack/create-slack-client'
+import { SlackClient } from '@/lib/slack/create-slack-client'
 import { Conversation } from '@/lib/slack/types'
 
 interface GetTextRepliesParams {

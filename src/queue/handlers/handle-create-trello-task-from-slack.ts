@@ -1,4 +1,4 @@
-import { createSlackClient } from '@/lib/api/slack/create-slack-client'
+import { createSlackClient } from '@/lib/slack/create-slack-client'
 import { Conversation, TextMessageEvent } from '@/lib/slack/types'
 import { CreateTrelloTaskFromSlack } from '@/queue/jobs'
 import { getMessageLink } from '@/lib/slack/get-message-link'

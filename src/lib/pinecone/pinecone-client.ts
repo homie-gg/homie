@@ -1,5 +1,15 @@
 import { Pinecone } from '@pinecone-database/pinecone'
 
-export const pineconeClient = new Pinecone({
-  apiKey: process.env.PINECONE_API_KEY!,
-})
+let client: Pinecone | null
+
+export const getPineconeClient = (): Pinecone => {
+  if (client) {
+    return client
+  }
+
+  client = new Pinecone({
+    apiKey: process.env.PINECONE_API_KEY!,
+  })
+
+  return client
+}

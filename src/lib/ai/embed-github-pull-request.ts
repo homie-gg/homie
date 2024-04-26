@@ -1,6 +1,6 @@
 import { PineconeRecord } from '@pinecone-database/pinecone'
 import { OpenAIEmbeddings } from '@langchain/openai'
-import { pineconeClient } from '@/lib/pinecone/pinecone-client'
+import { getPineconeClient } from '@/lib/pinecone/pinecone-client'
 import { v4 as uuid } from 'uuid'
 
 interface EmbedGithubPullRequestParams {
@@ -50,7 +50,7 @@ export async function embedGithubPullRequest(
       },
     }
 
-    const index = pineconeClient.Index(process.env.PINECONE_INDEX_MAIN!)
+    const index = getPineconeClient().Index(process.env.PINECONE_INDEX_MAIN!)
 
     await index.upsert([record])
   }

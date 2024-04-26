@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifySlackRequest } from '@/lib/api/slack/verify-slack-request'
+import { verifySlackRequest } from '@/lib/slack/verify-slack-request'
 import { SlackShortcut, ViewSubmitAction } from '@slack/bolt'
 import { getDefaultQueue } from '@/queue/default-queue'
 import { CreateGithubIssueSelectedRepoMetadata } from '@/queue/handlers/handle-ask-slack-select-github-repo-for-issue'

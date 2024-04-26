@@ -27,7 +27,9 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "queue-dashboard.ts"
+    "queue-dashboard.ts",
+    "setupTests.ts"
   ],
+  "allowJs": true,
   "exclude": ["node_modules", ".next"]
 }

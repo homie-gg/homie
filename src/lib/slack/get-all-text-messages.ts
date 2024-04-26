@@ -1,4 +1,4 @@
-import { SlackClient } from '@/lib/api/slack/create-slack-client'
+import { SlackClient } from '@/lib/slack/create-slack-client'
 import { getTextReplies } from '@/lib/slack/get-text-replies'
 import { TextMessageEvent } from '@/lib/slack/types'
 import { MessageEvent } from '@slack/bolt'
