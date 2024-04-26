@@ -1,7 +1,6 @@
 'use client'
 
 import { http } from '@/lib/http/client/http'
-import { createTrelloClient } from '@/lib/trello/create-trello-client'
 import { TrelloBoard, TrelloList } from '@/lib/trello/types'
 import { Button } from '@/lib/ui/Button'
 import {
@@ -49,6 +48,7 @@ type ConfigureTrelloData = z.infer<typeof configureTrelloData>
 
 export default function ConfigureTrelloForm(props: ConfigureTrelloFormProps) {
   const { trelloBoards, trelloWorkspace, organization } = props
+  const { id: organizationId } = organization
 
   const { trello_access_token } = trelloWorkspace
 
@@ -77,11 +77,12 @@ export default function ConfigureTrelloForm(props: ConfigureTrelloFormProps) {
 
     setLists([])
 
-    const trelloClient = createTrelloClient(trello_access_token)
-    trelloClient
-      .get<TrelloList[]>(`/boards/${boardId}/lists`)
-      .then((lists) => setLists(lists))
-  }, [boardId, trello_access_token])
+    http
+      .get<{
+        lists: TrelloList[]
+      }>(`/api/organizations/${organizationId}/trello/boards/${boardId}/lists`)
+      .then((data) => setLists(data.lists))
+  }, [boardId, trello_access_token, organizationId])
 
   const submit = (data: ConfigureTrelloData) => {
     if (processing) {

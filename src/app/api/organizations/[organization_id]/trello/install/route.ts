@@ -1,12 +1,12 @@
 import { dbClient } from '@/database/client'
-import { getUserOrganization } from '@/lib/auth/get-user-organization'
 import { createRoute } from '@/lib/http/server/create-route'
-import { NotFoundException } from '@/lib/http/server/exceptions'
+import { auth } from '@clerk/nextjs'
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 
 export const POST = createRoute(
   {
+    routeParams: z.object({ organization_id: z.string() }),
     body: z.object({
       access_token: z.string(),
     }),
@@ -14,15 +14,17 @@ export const POST = createRoute(
   async (req) => {
     const {
       body: { access_token },
+      routeParams,
     } = req
-    const organization = await getUserOrganization()
 
-    if (!organization) {
-      throw new NotFoundException({
-        message: 'Failed to install Trello app; missing organization',
-        type: 'trello_install.failed',
-      })
-    }
+    const { userId } = auth()
+
+    const organization = await dbClient
+      .selectFrom('voidpm.organization')
+      .where('ext_clerk_user_id', '=', userId)
+      .where('id', '=', parseInt(routeParams.organization_id))
+      .select('id')
+      .executeTakeFirstOrThrow()
 
     await dbClient
       .insertInto('trello.workspace')

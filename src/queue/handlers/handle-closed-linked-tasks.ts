@@ -1,4 +1,3 @@
-import { getIsOverPlanPRLimit } from '@/lib/billing/get-is-over-plan-pr-limit'
 import { dbClient } from '@/database/client'
 import { CloseLinkedTasks } from '@/queue/jobs'
 import { closeLinkedTrelloTasks } from '@/lib/trello/close-linked-trello-tasks'

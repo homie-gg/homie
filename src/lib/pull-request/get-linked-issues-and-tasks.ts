@@ -1,7 +1,4 @@
-import {
-  GithubClient,
-  createGithubClient,
-} from '@/lib/github/create-github-client'
+import { createGithubClient } from '@/lib/github/create-github-client'
 import { findLinkedGithubIssue } from '@/lib/github/find-linked-github-issue'
 import { getLinkedTrelloTask } from '@/lib/trello/find-linked-trello-task'
 
