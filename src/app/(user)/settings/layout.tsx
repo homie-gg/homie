@@ -26,6 +26,10 @@ export default function SettingsPage(props: SettingsPageProps) {
                 href: '/settings/pull_request_summaries',
                 text: 'Pull Request Summaries',
               },
+              {
+                href: '/settings/trello',
+                text: 'Trello',
+              },
             ]}
           />
         </aside>

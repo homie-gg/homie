@@ -2,8 +2,8 @@ import { summarizeGithubPullRequest } from '@/lib/ai/summarize-github-pull-reque
 import { getOverPRLimitMessage } from '@/lib/billing/get-over-pr-limit-message'
 import { dbClient } from '@/database/client'
 import { createGithubClient } from '@/lib/github/create-github-client'
-import { findLinkedIssue } from '@/lib/github/find-linked-issue'
 import { GenerateOpenPullRequestSummary } from '@/queue/jobs'
+import { getLinkedIssuesAndTasks } from '@/lib/pull-request/get-linked-issues-and-tasks'
 
 /**
  * Void will replace this string inside a PR body with a generated summary.
@@ -22,12 +22,18 @@ export async function handleGenerateOpenPullRequestSummary(
       'github.organization.organization_id',
       'voidpm.organization.id',
     )
+    .leftJoin(
+      'trello.workspace',
+      'trello.workspace.organization_id',
+      'voidpm.organization.id',
+    )
     .where('ext_gh_install_id', '=', installation?.id!)
     .select([
       'voidpm.organization.id',
       'github.organization.ext_gh_install_id',
       'is_over_plan_pr_limit',
       'has_unlimited_usage',
+      'trello_access_token',
     ])
     .executeTakeFirst()
 
@@ -56,13 +62,9 @@ export async function handleGenerateOpenPullRequestSummary(
     return
   }
 
-  const issue = await findLinkedIssue({
-    pullRequest: {
-      body: pull_request.body,
-    },
-    repo: pull_request.base.repo.name,
-    owner,
-    github,
+  const issue = await getLinkedIssuesAndTasks({
+    pullRequest: pull_request,
+    organization,
   })
 
   // Create Github User if doesn't exits
@@ -95,7 +97,7 @@ export async function handleGenerateOpenPullRequestSummary(
     repo: pull_request.base.repo.name,
     owner,
     github,
-    issue: issue?.body ?? null,
+    issue,
     length: 'short',
     contributor_id: contributor.id,
   })

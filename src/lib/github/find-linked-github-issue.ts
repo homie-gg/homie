@@ -3,7 +3,7 @@ import { GithubClient } from '@/lib/github/create-github-client'
 /**
  * Reference: https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue
  */
-const linkIssueKeywords = [
+export const linkIssueKeywords = [
   'close',
   'closes',
   'closed',
@@ -23,7 +23,7 @@ interface GetLinkedIssueParams {
   owner: string
   github: GithubClient
 }
-export async function findLinkedIssue(params: GetLinkedIssueParams) {
+export async function findLinkedGithubIssue(params: GetLinkedIssueParams) {
   const { pullRequest, github: githubClient, owner, repo } = params
 
   if (!pullRequest.body) {

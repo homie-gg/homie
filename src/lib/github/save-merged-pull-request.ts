@@ -3,11 +3,11 @@ import { embedGithubPullRequest } from '@/lib/ai/embed-github-pull-request'
 import { summarizeGithubPullRequest } from '@/lib/ai/summarize-github-pull-request'
 import { dbClient } from '@/database/client'
 import { createGithubClient } from '@/lib/github/create-github-client'
-import { findLinkedIssue } from '@/lib/github/find-linked-issue'
 import { getOrganizationLogData } from '@/lib/log/get-organization-log-data'
 import { getPullRequestLogData } from '@/lib/log/get-pull-request-log-data'
 import { logger } from '@/lib/log/logger'
 import { parseISO } from 'date-fns'
+import { getLinkedIssuesAndTasks } from '@/lib/pull-request/get-linked-issues-and-tasks'
 
 interface SaveMergedPullRequestParams {
   pullRequest: {
@@ -36,6 +36,7 @@ interface SaveMergedPullRequestParams {
   organization: {
     id: number
     ext_gh_install_id: number
+    trello_access_token: string | null
   }
 }
 
@@ -124,13 +125,9 @@ export async function saveMergedPullRequest(
 
   const owner = pullRequest.base.repo.full_name.split('/')[0]
 
-  const issue = await findLinkedIssue({
-    pullRequest: {
-      body: pullRequest.body,
-    },
-    repo: pullRequest.base.repo.name,
-    owner,
-    github,
+  const issue = await getLinkedIssuesAndTasks({
+    pullRequest,
+    organization,
   })
 
   const { summary, diff } = await summarizeGithubPullRequest({
@@ -146,7 +143,7 @@ export async function saveMergedPullRequest(
     repo: pullRequest.base.repo.name,
     owner,
     github,
-    issue: issue?.body ?? null,
+    issue,
     length: 'long',
     contributor_id: contributor.id,
   })

@@ -3885,55 +3885,547 @@ declare module 'zapatos/schema' {
     export type AllTablesAndViews = [workspace.Table]
   }
 
+  /* === schema: trello === */
+
+  export namespace trello {
+    /* --- enums --- */
+    /* (none) */
+
+    /* --- tables --- */
+
+    /**
+     * **trello.workspace**
+     * - Table in database
+     */
+    export namespace workspace {
+      export type Table = 'trello.workspace'
+      export interface Selectable {
+        /**
+         * **trello.workspace.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at: Date
+        /**
+         * **trello.workspace.ext_trello_board_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_trello_board_id: string | null
+        /**
+         * **trello.workspace.ext_trello_done_task_list_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_trello_done_task_list_id: string | null
+        /**
+         * **trello.workspace.ext_trello_new_task_list_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_trello_new_task_list_id: string | null
+        /**
+         * **trello.workspace.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('trello.workspace_id_seq'::regclass)`
+         */
+        id: number
+        /**
+         * **trello.workspace.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id: number
+        /**
+         * **trello.workspace.trello_access_token**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        trello_access_token: string
+        /**
+         * **trello.workspace.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at: Date
+      }
+      export interface JSONSelectable {
+        /**
+         * **trello.workspace.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at: db.TimestampTzString
+        /**
+         * **trello.workspace.ext_trello_board_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_trello_board_id: string | null
+        /**
+         * **trello.workspace.ext_trello_done_task_list_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_trello_done_task_list_id: string | null
+        /**
+         * **trello.workspace.ext_trello_new_task_list_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_trello_new_task_list_id: string | null
+        /**
+         * **trello.workspace.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('trello.workspace_id_seq'::regclass)`
+         */
+        id: number
+        /**
+         * **trello.workspace.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id: number
+        /**
+         * **trello.workspace.trello_access_token**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        trello_access_token: string
+        /**
+         * **trello.workspace.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at: db.TimestampTzString
+      }
+      export interface Whereable {
+        /**
+         * **trello.workspace.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+        /**
+         * **trello.workspace.ext_trello_board_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_trello_board_id?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **trello.workspace.ext_trello_done_task_list_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_trello_done_task_list_id?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **trello.workspace.ext_trello_new_task_list_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_trello_new_task_list_id?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **trello.workspace.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('trello.workspace_id_seq'::regclass)`
+         */
+        id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **trello.workspace.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **trello.workspace.trello_access_token**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        trello_access_token?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **trello.workspace.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+      }
+      export interface Insertable {
+        /**
+         * **trello.workspace.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **trello.workspace.ext_trello_board_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_trello_board_id?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **trello.workspace.ext_trello_done_task_list_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_trello_done_task_list_id?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **trello.workspace.ext_trello_new_task_list_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_trello_new_task_list_id?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **trello.workspace.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('trello.workspace_id_seq'::regclass)`
+         */
+        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+        /**
+         * **trello.workspace.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id: number | db.Parameter<number> | db.SQLFragment
+        /**
+         * **trello.workspace.trello_access_token**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        trello_access_token: string | db.Parameter<string> | db.SQLFragment
+        /**
+         * **trello.workspace.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+      }
+      export interface Updatable {
+        /**
+         * **trello.workspace.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **trello.workspace.ext_trello_board_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_trello_board_id?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | string
+              | db.Parameter<string>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **trello.workspace.ext_trello_done_task_list_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_trello_done_task_list_id?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | string
+              | db.Parameter<string>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **trello.workspace.ext_trello_new_task_list_id**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        ext_trello_new_task_list_id?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | string
+              | db.Parameter<string>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **trello.workspace.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('trello.workspace_id_seq'::regclass)`
+         */
+        id?:
+          | number
+          | db.Parameter<number>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **trello.workspace.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
+        /**
+         * **trello.workspace.trello_access_token**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        trello_access_token?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
+        /**
+         * **trello.workspace.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.DefaultType
+              | db.SQLFragment
+            >
+      }
+      export type UniqueIndex =
+        | 'workspace_organization_id_key'
+        | 'workspace_pkey'
+      export type Column = keyof Selectable
+      export type OnlyCols<T extends readonly Column[]> = Pick<
+        Selectable,
+        T[number]
+      >
+      export type SQLExpression =
+        | Table
+        | db.ColumnNames<Updatable | (keyof Updatable)[]>
+        | db.ColumnValues<Updatable>
+        | Whereable
+        | Column
+        | db.ParentColumn
+        | db.GenericSQLExpression
+      export type SQL = SQLExpression | SQLExpression[]
+    }
+
+    /* --- aggregate types --- */
+
+    export type Table = workspace.Table
+    export type Selectable = workspace.Selectable
+    export type JSONSelectable = workspace.JSONSelectable
+    export type Whereable = workspace.Whereable
+    export type Insertable = workspace.Insertable
+    export type Updatable = workspace.Updatable
+    export type UniqueIndex = workspace.UniqueIndex
+    export type Column = workspace.Column
+
+    export type AllBaseTables = [workspace.Table]
+    export type AllForeignTables = []
+    export type AllViews = []
+    export type AllMaterializedViews = []
+    export type AllTablesAndViews = [workspace.Table]
+  }
+
   /* === global aggregate types === */
 
-  export type Schema = 'voidpm' | 'github' | 'slack'
-  export type Table = voidpm.Table | github.Table | slack.Table
+  export type Schema = 'voidpm' | 'github' | 'slack' | 'trello'
+  export type Table = voidpm.Table | github.Table | slack.Table | trello.Table
   export type Selectable =
     | voidpm.Selectable
     | github.Selectable
     | slack.Selectable
+    | trello.Selectable
   export type JSONSelectable =
     | voidpm.JSONSelectable
     | github.JSONSelectable
     | slack.JSONSelectable
-  export type Whereable = voidpm.Whereable | github.Whereable | slack.Whereable
+    | trello.JSONSelectable
+  export type Whereable =
+    | voidpm.Whereable
+    | github.Whereable
+    | slack.Whereable
+    | trello.Whereable
   export type Insertable =
     | voidpm.Insertable
     | github.Insertable
     | slack.Insertable
-  export type Updatable = voidpm.Updatable | github.Updatable | slack.Updatable
+    | trello.Insertable
+  export type Updatable =
+    | voidpm.Updatable
+    | github.Updatable
+    | slack.Updatable
+    | trello.Updatable
   export type UniqueIndex =
     | voidpm.UniqueIndex
     | github.UniqueIndex
     | slack.UniqueIndex
-  export type Column = voidpm.Column | github.Column | slack.Column
+    | trello.UniqueIndex
+  export type Column =
+    | voidpm.Column
+    | github.Column
+    | slack.Column
+    | trello.Column
 
-  export type AllSchemas = ['voidpm', 'github', 'slack']
+  export type AllSchemas = ['voidpm', 'github', 'slack', 'trello']
   export type AllBaseTables = [
     ...voidpm.AllBaseTables,
     ...github.AllBaseTables,
     ...slack.AllBaseTables,
+    ...trello.AllBaseTables,
   ]
   export type AllForeignTables = [
     ...voidpm.AllForeignTables,
     ...github.AllForeignTables,
     ...slack.AllForeignTables,
+    ...trello.AllForeignTables,
   ]
   export type AllViews = [
     ...voidpm.AllViews,
     ...github.AllViews,
     ...slack.AllViews,
+    ...trello.AllViews,
   ]
   export type AllMaterializedViews = [
     ...voidpm.AllMaterializedViews,
     ...github.AllMaterializedViews,
     ...slack.AllMaterializedViews,
+    ...trello.AllMaterializedViews,
   ]
   export type AllTablesAndViews = [
     ...voidpm.AllTablesAndViews,
     ...github.AllTablesAndViews,
     ...slack.AllTablesAndViews,
+    ...trello.AllTablesAndViews,
   ]
 
   /* === lookups === */
@@ -3947,6 +4439,7 @@ declare module 'zapatos/schema' {
     'github.pull_request': github.pull_request.Selectable
     'github.repo': github.repo.Selectable
     'slack.workspace': slack.workspace.Selectable
+    'trello.workspace': trello.workspace.Selectable
   }[T]
 
   export type JSONSelectableForTable<T extends Table> = {
@@ -3958,6 +4451,7 @@ declare module 'zapatos/schema' {
     'github.pull_request': github.pull_request.JSONSelectable
     'github.repo': github.repo.JSONSelectable
     'slack.workspace': slack.workspace.JSONSelectable
+    'trello.workspace': trello.workspace.JSONSelectable
   }[T]
 
   export type WhereableForTable<T extends Table> = {
@@ -3969,6 +4463,7 @@ declare module 'zapatos/schema' {
     'github.pull_request': github.pull_request.Whereable
     'github.repo': github.repo.Whereable
     'slack.workspace': slack.workspace.Whereable
+    'trello.workspace': trello.workspace.Whereable
   }[T]
 
   export type InsertableForTable<T extends Table> = {
@@ -3980,6 +4475,7 @@ declare module 'zapatos/schema' {
     'github.pull_request': github.pull_request.Insertable
     'github.repo': github.repo.Insertable
     'slack.workspace': slack.workspace.Insertable
+    'trello.workspace': trello.workspace.Insertable
   }[T]
 
   export type UpdatableForTable<T extends Table> = {
@@ -3991,6 +4487,7 @@ declare module 'zapatos/schema' {
     'github.pull_request': github.pull_request.Updatable
     'github.repo': github.repo.Updatable
     'slack.workspace': slack.workspace.Updatable
+    'trello.workspace': trello.workspace.Updatable
   }[T]
 
   export type UniqueIndexForTable<T extends Table> = {
@@ -4002,6 +4499,7 @@ declare module 'zapatos/schema' {
     'github.pull_request': github.pull_request.UniqueIndex
     'github.repo': github.repo.UniqueIndex
     'slack.workspace': slack.workspace.UniqueIndex
+    'trello.workspace': trello.workspace.UniqueIndex
   }[T]
 
   export type ColumnForTable<T extends Table> = {
@@ -4013,6 +4511,7 @@ declare module 'zapatos/schema' {
     'github.pull_request': github.pull_request.Column
     'github.repo': github.repo.Column
     'slack.workspace': slack.workspace.Column
+    'trello.workspace': trello.workspace.Column
   }[T]
 
   export type SQLForTable<T extends Table> = {
@@ -4024,5 +4523,6 @@ declare module 'zapatos/schema' {
     'github.pull_request': github.pull_request.SQL
     'github.repo': github.repo.SQL
     'slack.workspace': slack.workspace.SQL
+    'trello.workspace': trello.workspace.SQL
   }[T]
 }

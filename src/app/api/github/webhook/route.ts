@@ -28,6 +28,11 @@ export const POST = async (request: NextRequest) => {
       pull_request,
       installation,
     })
+
+    await getDefaultQueue().add('close_linked_tasks', {
+      pull_request,
+      installation,
+    })
   })
 
   app.webhooks.on('pull_request.edited', async (params) => {

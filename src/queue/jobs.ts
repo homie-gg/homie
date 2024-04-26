@@ -52,6 +52,15 @@ export type SaveMergedPullRequest = BullMQJob<
   'save_merged_pull_request'
 >
 
+export type CloseLinkedTasks = BullMQJob<
+  {
+    pull_request: PullRequest
+    installation: InstallationLite | undefined
+  },
+  void, // return type
+  'close_linked_tasks'
+>
+
 export type GenerateOpenPullRequestSummary = BullMQJob<
   {
     pull_request: PullRequest
@@ -99,14 +108,27 @@ export type SendPullRequestSummariesToOrganization = BullMQJob<
   'send_pull_request_summaries_to_organization'
 >
 
+export type CreateTrelloTaskFromSlack = BullMQJob<
+  {
+    team_id: string
+    channel_id: string
+    target_message_ts: string
+    response_url: string
+  },
+  void, // return type
+  'create_trello_task_from_slack'
+>
+
 export type Job =
   | CreateGithubIssueFromSlack
   | AskSlackSelectGithubRepoForIssue
   | ImportPullRequests
   | SaveOpenedPullRequest
   | SaveMergedPullRequest
+  | CloseLinkedTasks
   | GenerateOpenPullRequestSummary
   | AnswerSlackQuestion
   | ResetOrganizationsOverPRLimit
   | SendPullRequestSummaries
   | SendPullRequestSummariesToOrganization
+  | CreateTrelloTaskFromSlack

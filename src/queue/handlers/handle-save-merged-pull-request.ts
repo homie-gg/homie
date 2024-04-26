@@ -29,6 +29,11 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
       'voidpm.organization.id',
     )
     .leftJoin('voidpm.plan', 'voidpm.plan.id', 'voidpm.subscription.plan_id')
+    .leftJoin(
+      'trello.workspace',
+      'trello.workspace.organization_id',
+      'voidpm.organization.id',
+    )
     .where('ext_gh_install_id', '=', installation?.id!)
     .select([
       'voidpm.organization.id',
@@ -36,6 +41,7 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
       'is_over_plan_pr_limit',
       'pr_limit_per_month',
       'has_unlimited_usage',
+      'trello_access_token',
     ])
     .executeTakeFirst()
 

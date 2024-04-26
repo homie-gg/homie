@@ -13,6 +13,8 @@ import Redis from 'ioredis'
 import { handleSendPullRequestSummaries } from '@/queue/handlers/handle-send-pull-request-summaries'
 import { handleSendPullRequestSummariesToOrganization } from '@/queue/handlers/handle-send-pull-request-summaries-to-organization'
 import { logger } from '@/lib/log/logger'
+import { handleCreateTrelloTaskFromSlack } from '@/queue/handlers/handle-create-trello-task-from-slack'
+import { handleCloseLinkedTasks } from '@/queue/handlers/handle-closed-linked-tasks'
 
 let defaultWorker: Worker | null = null
 
@@ -20,9 +22,11 @@ const handlers: Handlers = {
   create_github_issue_from_slack: handleCreateGithubIssueFromSlack,
   ask_slack_select_github_repo_for_issue:
     handleAskSlackSelectGithubRepoForIssue,
+  create_trello_task_from_slack: handleCreateTrelloTaskFromSlack,
   import_pull_requests: handleImportPullRequests,
   save_opened_pull_request: handleSaveOpenedPullRequest,
   save_merged_pull_request: handleSaveMergedPullRequest,
+  close_linked_tasks: handleCloseLinkedTasks,
   generate_open_pull_request_summary: handleGenerateOpenPullRequestSummary,
   answer_slack_question: handleAnswerSlackQuestion,
   reset_organizations_over_pr_limit: handleResetOrganizationsOverPRLimit,

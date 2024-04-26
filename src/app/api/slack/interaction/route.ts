@@ -61,5 +61,18 @@ export const POST = async (request: NextRequest) => {
     })
   }
 
+  if (
+    shortcut.type === 'message_action' &&
+    shortcut.callback_id === 'trello_task_create'
+  ) {
+    await getDefaultQueue().add('create_trello_task_from_slack', {
+      team_id: shortcut.team.id,
+      trigger_id: shortcut.trigger_id,
+      channel_id: shortcut.channel.id,
+      target_message_ts: shortcut.message.ts,
+      response_url: shortcut.response_url,
+    })
+  }
+
   return NextResponse.json({})
 }
