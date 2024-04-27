@@ -15,7 +15,7 @@ afterAll(async () => {
   await dbClient.destroy()
 })
 
-it('should create a github issue', async () => {
+it('should ask to select repo', async () => {
   const formData = {
     get: () =>
       JSON.stringify({
@@ -53,7 +53,7 @@ it('should create a github issue', async () => {
   const organization = await dbClient
     .insertInto('voidpm.organization')
     .values({
-      ext_clerk_user_id: 'some_user_id',
+      ext_clerk_user_id: 'ask_repo_user_id',
     })
     .returningAll()
     .executeTakeFirstOrThrow()

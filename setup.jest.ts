@@ -3,17 +3,12 @@ import { Client } from 'pg'
 import { getConnectionStringFromEnv } from 'pg-connection-from-env'
 import migrate from 'node-pg-migrate'
 import { join } from 'node:path'
-import { dbClient } from '@/database/client'
 
 dotenv.config({ path: '.env.local' })
 
 process.env['QUEUE_DRIVER'] = 'sync'
 
-beforeAll(async () => {
-  await initDatabase()
-})
-
-const initDatabase = async () => {
+module.exports = async () => {
   const database = process.env.POSTGRES_DB
 
   const rootClient = new Client({

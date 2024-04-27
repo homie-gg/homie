@@ -1,5 +1,5 @@
+import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
 import { PromptTemplate } from '@langchain/core/prompts'
-import { OpenAI } from '@langchain/openai'
 
 interface SummarizeTaskParams {
   messages: Array<{ text: string }>
@@ -16,7 +16,11 @@ export async function summarizeTask(params: SummarizeTaskParams) {
     context: JSON.stringify(messages),
   })
 
-  const model = new OpenAI({ temperature: 0, modelName: 'gpt-3.5-turbo' })
+  const model = createOpenAIClient({
+    temperature: 0,
+    modelName: 'gpt-3.5-turbo',
+  })
+
   const output = await model.invoke(input)
 
   const regex = /.*Task.*\n(.*)\n*([\s\S]+)/

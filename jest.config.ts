@@ -10,7 +10,7 @@ const createJestConfig = nextJest({
 const config: Config = {
   coverageProvider: 'v8',
   testEnvironment: 'node',
-  setupFilesAfterEnv: ['<rootDir>/setup.jest.ts'],
+  globalSetup: '<rootDir>/setup.jest.ts',
   watchPlugins: [
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname',
