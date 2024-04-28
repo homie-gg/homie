@@ -1,7 +1,7 @@
 import { PineconeRecord } from '@pinecone-database/pinecone'
-import { OpenAIEmbeddings } from '@langchain/openai'
 import { getPineconeClient } from '@/lib/pinecone/pinecone-client'
 import { v4 as uuid } from 'uuid'
+import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
 
 interface EmbedGithubPullRequestParams {
   summary: string
@@ -35,7 +35,7 @@ export async function embedGithubPullRequest(
     }
     const text = attributes.join('. ')
 
-    const embedder = new OpenAIEmbeddings({
+    const embedder = createOpenAIEmbedder({
       modelName: 'text-embedding-3-large',
     })
 

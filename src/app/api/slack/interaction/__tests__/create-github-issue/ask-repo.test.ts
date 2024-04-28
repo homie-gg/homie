@@ -1,15 +1,9 @@
+import { mockCreateGithubClient } from '@/__utils__/mock-create-github-client'
+import { mockCreateSlackClient } from '@/__utils__/mock-create-slack-client'
 import { POST } from '@/app/api/slack/interaction/route'
 import { dbClient } from '@/database/client'
 
-import { createGithubClient } from '@/lib/github/create-github-client'
-import { createSlackClient } from '@/lib/slack/create-slack-client'
-
-jest.mock('lib/github/create-github-client')
 jest.mock('lib/slack/verify-slack-request')
-jest.mock('lib/slack/create-slack-client')
-
-const mockCreateGithubClient = createGithubClient as jest.Mock
-const mockCreateSlackClient = createSlackClient as jest.Mock
 
 afterAll(async () => {
   await dbClient.destroy()

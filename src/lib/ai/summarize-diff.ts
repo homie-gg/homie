@@ -1,7 +1,7 @@
 import { PromptTemplate } from '@langchain/core/prompts'
-import { OpenAI } from '@langchain/openai'
 import { Document } from '@langchain/core/documents'
 import { loadSummarizationChain } from 'langchain/chains'
+import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
 
 interface SummarizeDiffParams {
   diff: string
@@ -24,7 +24,7 @@ export async function summarizeDiff(
     (file) => new Document({ pageContent: file }),
   )
 
-  const model = new OpenAI({
+  const model = createOpenAIClient({
     temperature: 0,
     modelName: 'gpt-3.5-turbo',
   })

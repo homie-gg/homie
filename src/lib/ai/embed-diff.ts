@@ -4,6 +4,7 @@ import { chunkDiff } from '@/lib/ai/summarize-diff'
 import { getPineconeClient } from '@/lib/pinecone/pinecone-client'
 import { OpenAIEmbeddings } from '@langchain/openai'
 import { PineconeRecord } from '@pinecone-database/pinecone'
+import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
 
 interface EmbedDiffParams {
   diff: string
@@ -32,7 +33,7 @@ export async function embedDiff(params: EmbedDiffParams) {
       summary,
     })
 
-    const embedder = new OpenAIEmbeddings({
+    const embedder = createOpenAIEmbedder({
       modelName: 'text-embedding-3-large',
     })
 

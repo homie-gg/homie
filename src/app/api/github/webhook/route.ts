@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { App } from 'octokit'
-import { getPrivateKey } from '@/lib/github/create-github-client'
 import { getDefaultQueue } from '@/queue/default-queue'
 import { summaryKey } from '@/queue/handlers/handle-generate-open-pull-request-summary'
 import { logger } from '@/lib/log/logger'
+import { createGithubApp } from '@/lib/github/create-github-app'
 
 export const POST = async (request: NextRequest) => {
   logger.debug('Received Github webhook', {
@@ -11,13 +10,7 @@ export const POST = async (request: NextRequest) => {
     data: JSON.stringify(await request.clone().json()),
   })
 
-  const app = new App({
-    appId: process.env.GITHUB_APP_ID!,
-    privateKey: getPrivateKey().toString('utf-8'),
-    webhooks: {
-      secret: process.env.GITHUB_WEBHOOK_SECRET!,
-    },
-  })
+  const app = createGithubApp()
 
   app.webhooks.on('pull_request.closed', async (params) => {
     const {

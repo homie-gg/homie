@@ -1,5 +1,5 @@
+import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
 import { PromptTemplate } from '@langchain/core/prompts'
-import { OpenAI } from '@langchain/openai'
 
 interface ExtractCodeSnippetsParams {
   diff: string
@@ -9,7 +9,7 @@ interface ExtractCodeSnippetsParams {
 export async function extractCodeSnippets(params: ExtractCodeSnippetsParams) {
   const { diff, summary } = params
 
-  const model = new OpenAI({
+  const model = createOpenAIClient({
     temperature: 0,
     modelName: 'gpt-3.5-turbo',
   })

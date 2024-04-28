@@ -1,5 +1,6 @@
 import { summarizeDiff } from '@/lib/ai/summarize-diff'
 import { GithubClient } from '@/lib/github/create-github-client'
+import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
 import { PromptTemplate } from '@langchain/core/prompts'
 import { OpenAI } from '@langchain/openai'
 
@@ -75,7 +76,10 @@ async function getSummary(params: GetSummaryParams) {
     type,
   })
 
-  const model = new OpenAI({ temperature: 0, modelName: 'gpt-3.5-turbo' })
+  const model = createOpenAIClient({
+    temperature: 0,
+    modelName: 'gpt-3.5-turbo',
+  })
 
   return await model.invoke(input)
 }
