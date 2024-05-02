@@ -4,7 +4,7 @@
 sudo chmod 777 -R /app
 
 # Retrieve env files from S3
-sudo aws s3 cp s3://prod-app-env-voidpm/.env /app/.env.local
+sudo aws s3 cp s3://void-prod-app-env/.env /app/.env.local
 
 # kill existing dashboard
 sudo kill -9 $(lsof -i:3100 -t) 2> /dev/null || true
