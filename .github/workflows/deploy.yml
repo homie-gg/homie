@@ -29,7 +29,7 @@ jobs:
       docker:
         image: docker:19.03.11-dind
     env:
-      CONTAINER: void-prod-app-webserver
+      CONTAINER: homie-prod-app-webserver
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     container: alpine:3.18
     env:
-      CLUSTER: void-prod-app-web-server
+      CLUSTER: homie-prod-app-web-server
       SERVICE: web-server
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -73,7 +73,7 @@ jobs:
       docker:
         image: docker:19.03.11-dind
     env:
-      CONTAINER: void-prod-app-worker
+      CONTAINER: homie-prod-app-worker
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -94,7 +94,7 @@ jobs:
     runs-on: ubuntu-latest
     container: alpine:3.18
     env:
-      CLUSTER: void-prod-app-workers
+      CLUSTER: homie-prod-app-workers
       SERVICE: workers
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -115,9 +115,9 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      CD_BUCKET: void-prod-app-deploy
+      CD_BUCKET: homie-prod-app-deploy
       CD_FILE: app.tar
-      CD_APP: void-prod-app-server
+      CD_APP: homie-prod-app-server
       CD_GROUP: prod
     steps:
       - uses: actions/checkout@v3
