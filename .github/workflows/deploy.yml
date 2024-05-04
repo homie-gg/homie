@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     container: alpine:3.18
     env:
-      CLUSTER: homie-prod-app-web-server
+      CLUSTER: homie-prod-app-server
       SERVICE: web-server
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
