@@ -18,7 +18,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
         type: 'integer',
         notNull: true,
         references: {
-          schema: 'voidpm',
+          schema: 'homie',
           name: 'organization',
         },
       },

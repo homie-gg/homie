@@ -20,7 +20,7 @@ export const PATCH = createRoute(
     const { userId } = auth()
 
     const organization = await dbClient
-      .updateTable('voidpm.organization')
+      .updateTable('homie.organization')
       .where('ext_clerk_user_id', '=', userId)
       .where('id', '=', parseInt(request.routeParams.organization_id))
       .set(request.body)

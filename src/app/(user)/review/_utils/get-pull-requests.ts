@@ -29,8 +29,8 @@ export async function getPullRequests(
     .where('github.pull_request.created_at', '<=', endDate)
     .where('github.pull_request.organization_id', '=', organization.id)
     .innerJoin(
-      'voidpm.contributor',
-      'voidpm.contributor.id',
+      'homie.contributor',
+      'homie.contributor.id',
       'github.pull_request.contributor_id',
     )
     .innerJoin('github.repo', 'github.repo.id', 'github.pull_request.repo_id')
@@ -39,7 +39,7 @@ export async function getPullRequests(
       'github.pull_request.created_at',
       'github.pull_request.merged_at',
       'github.pull_request.closed_at',
-      'voidpm.contributor.username as user_username',
+      'homie.contributor.username as user_username',
       'github.pull_request.title',
       'github.pull_request.contributor_id',
       'github.repo.name as repo_name',

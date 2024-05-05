@@ -21,15 +21,15 @@ module.exports = async () => {
   await rootClient.query(`CREATE DATABASE ${database};`)
   await rootClient.end()
 
-  const voidClient = new Client({
+  const homieClient = new Client({
     connectionString: getConnectionStringFromEnv({
       database,
     }),
   })
-  await voidClient.connect()
+  await homieClient.connect()
 
   await migrate({
-    dbClient: voidClient,
+    dbClient: homieClient,
     direction: 'up',
     schema: 'public',
     createSchema: true,
@@ -41,5 +41,5 @@ module.exports = async () => {
     dir: join(__dirname, 'src', 'database', 'migrations'),
   })
 
-  await voidClient.end()
+  await homieClient.end()
 }

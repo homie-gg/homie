@@ -86,7 +86,7 @@ export async function saveMergedPullRequest(
 
   // Create Github User if doesn't exits
   const contributor = await dbClient
-    .insertInto('voidpm.contributor')
+    .insertInto('homie.contributor')
     .values({
       ext_gh_user_id: pullRequest.user.id,
       organization_id: organization.id,

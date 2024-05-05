@@ -41,7 +41,7 @@ export const Hero = () => {
         <MuxPlayerClient
           streamType="on-demand"
           playbackId="MJ9SXa005c9NpG4K8tg3g6x5nw1qrsGV01G02bk1SjvDPg"
-          metadataVideoTitle="Void in 20secs"
+          metadataVideoTitle="homie in 20secs"
           primaryColor="#FFFFFF"
           secondaryColor="#000000"
         />

@@ -11,7 +11,7 @@ export async function handleSendPullRequestSummariesToOrganization(
   const slackClient = createSlackClient(slack_access_token)
 
   const contributors = await dbClient
-    .selectFrom('voidpm.contributor')
+    .selectFrom('homie.contributor')
     .select(['id', 'ext_slack_member_id', 'username'])
     .where('organization_id', '=', organization.id)
     .execute()

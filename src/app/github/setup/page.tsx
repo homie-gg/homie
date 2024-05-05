@@ -27,8 +27,8 @@ export default async function GithubSetup(
   const installId = parseInt(installation_id)
 
   const organization = await dbClient
-    .selectFrom('voidpm.organization')
-    .where('voidpm.organization.id', '=', parseInt(organization_id))
+    .selectFrom('homie.organization')
+    .where('homie.organization.id', '=', parseInt(organization_id))
     .where('ext_clerk_user_id', '=', userId)
     .select('id')
     .executeTakeFirst()

@@ -6,7 +6,7 @@ export const shorthands: ColumnDefinitions | undefined = undefined
 export async function up(pgm: MigrationBuilder): Promise<void> {
   pgm.addColumn(
     {
-      schema: 'voidpm',
+      schema: 'homie',
       name: 'contributor',
     },
     {
@@ -22,7 +22,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
 export async function down(pgm: MigrationBuilder): Promise<void> {
   pgm.dropColumn(
     {
-      schema: 'voidpm',
+      schema: 'homie',
       name: 'contributor',
     },
     'ext_slack_member_id',

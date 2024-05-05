@@ -6,7 +6,7 @@ export const shorthands: ColumnDefinitions | undefined = undefined
 export async function up(pgm: MigrationBuilder): Promise<void> {
   return pgm.createTable(
     {
-      schema: 'voidpm',
+      schema: 'homie',
       name: 'contributor',
     },
     {
@@ -19,7 +19,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
         type: 'integer',
         notNull: true,
         references: {
-          schema: 'voidpm',
+          schema: 'homie',
           name: 'organization',
         },
       },
@@ -28,5 +28,5 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
 }
 
 export async function down(pgm: MigrationBuilder): Promise<void> {
-  pgm.dropTable('voidpm.contributor')
+  pgm.dropTable('homie.contributor')
 }

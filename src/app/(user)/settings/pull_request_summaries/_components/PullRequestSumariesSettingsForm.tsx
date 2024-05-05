@@ -133,7 +133,7 @@ export default function PullRequestSumariesSettingsForm(
         <div className="space-y-0.5">
           <Label>Enabled</Label>
           <p className="text-[0.8rem] text-muted-foreground">
-            Void will send a list of merged pull requests.
+            homie will send a list of merged pull requests.
           </p>
         </div>
         <Switch

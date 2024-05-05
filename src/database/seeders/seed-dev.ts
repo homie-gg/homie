@@ -5,7 +5,7 @@ import { dbClient } from '@/database/client'
 import { Contributor, GithubRepo, Organization } from '@/database/types'
 ;(async () => {
   const organization = await dbClient
-    .selectFrom('voidpm.organization')
+    .selectFrom('homie.organization')
     .selectAll()
     .executeTakeFirstOrThrow()
 
@@ -29,7 +29,7 @@ async function seedGithubUsers(
     Array.from({ length: 20 }).map(
       async (_, index) =>
         await dbClient
-          .insertInto('voidpm.contributor')
+          .insertInto('homie.contributor')
           .values({
             organization_id: organization.id,
             ext_gh_user_id: index + 800,
@@ -52,7 +52,7 @@ async function seedGithubRepos(
           .values({
             organization_id: organization.id,
             name: `repo-${index}`,
-            html_url: `https://github.com/void/repo-${index}`,
+            html_url: `https://github.com/homie/repo-${index}`,
             ext_gh_repo_id: index + 1,
           })
           .returningAll()
@@ -82,7 +82,7 @@ async function seedPullRequests(repos: GithubRepo[], contributor: Contributor) {
           number: index + 1,
           created_at: new Date(Date.now() - ms(`${createdDaysAgo} days`)),
           ext_gh_pull_request_id: ghPullRequestId,
-          html_url: `https://github.com/void-pm/void/pull/${ghPullRequestId}`,
+          html_url: `https://github.com/homie-gg/homie/pull/${ghPullRequestId}`,
           title: `Fake PR: ${ghPullRequestId}`,
           repo_id: repo.id,
           contributor_id: contributor.id,

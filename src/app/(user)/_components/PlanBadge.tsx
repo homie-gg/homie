@@ -14,12 +14,12 @@ export default async function PlanBadge(props: PlanBadgeProps) {
   }
 
   const subscription = await dbClient
-    .selectFrom('voidpm.subscription')
-    .innerJoin('voidpm.plan', 'voidpm.plan.id', 'voidpm.subscription.plan_id')
+    .selectFrom('homie.subscription')
+    .innerJoin('homie.plan', 'homie.plan.id', 'homie.subscription.plan_id')
     .select([
-      'voidpm.subscription.id',
-      'voidpm.plan.name as plan_name',
-      'voidpm.plan.billing_interval',
+      'homie.subscription.id',
+      'homie.plan.name as plan_name',
+      'homie.plan.billing_interval',
     ])
     .where('organization_id', '=', organization.id)
     .where('stripe_status', '=', 'active')

@@ -21,7 +21,7 @@ export async function handleAskSlackSelectGithubRepoForIssue(
 
   if (!organization) {
     await http.post(response_url, {
-      text: `Error creating issue. Was Void App installed correctly to this workspace?`,
+      text: `Error creating issue. Was homie App installed correctly to this workspace?`,
     })
 
     return

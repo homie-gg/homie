@@ -19,7 +19,7 @@ export const Navbar = () => {
           <div className="flex justify-center items-center gap-8">
             <NavigationMenuItem className="font-bold flex">
               <a href="/" className="ml-2 font-bold text-xl flex">
-                <Image src={logo.src} alt="void" width={100} height={29} />
+                <Image src={logo.src} alt="homie" width={100} height={29} />
               </a>
             </NavigationMenuItem>
             <NavigationMenuItem>

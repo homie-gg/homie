@@ -10,7 +10,7 @@ export async function getUserOrganization(): Promise<Organization | null> {
   }
 
   const organization = await dbClient
-    .selectFrom('voidpm.organization')
+    .selectFrom('homie.organization')
     .where('ext_clerk_user_id', '=', userId)
     .selectAll()
     .executeTakeFirst()

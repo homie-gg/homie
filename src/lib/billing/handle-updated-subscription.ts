@@ -15,7 +15,7 @@ export async function handleUpdatedSubscription(
   const { ext_stripe_customer_id, ext_stripe_subscription_id } = params
 
   const organization = await dbClient
-    .selectFrom('voidpm.organization')
+    .selectFrom('homie.organization')
     .where('ext_stripe_customer_id', '=', ext_stripe_customer_id)
     .selectAll()
     .executeTakeFirst()
@@ -42,7 +42,7 @@ export async function handleUpdatedSubscription(
   const priceId = stripeSubscription.items.data[0].price.id
 
   const plan = await dbClient
-    .selectFrom('voidpm.plan')
+    .selectFrom('homie.plan')
     .select(['id', 'pr_limit_per_month'])
     .where('ext_stripe_price_id', '=', priceId)
     .executeTakeFirst()
@@ -59,7 +59,7 @@ export async function handleUpdatedSubscription(
   }
 
   const existingSubscription = await dbClient
-    .insertInto('voidpm.subscription')
+    .insertInto('homie.subscription')
     .values({
       name: 'main',
       ext_stripe_subscription_id: ext_stripe_subscription_id,
@@ -105,7 +105,7 @@ export async function handleUpdatedSubscription(
   })
 
   await dbClient
-    .updateTable('voidpm.organization')
+    .updateTable('homie.organization')
     .set({ is_over_plan_pr_limit: isOverPlanLimit })
     .where('id', '=', organization.id)
     .executeTakeFirstOrThrow()

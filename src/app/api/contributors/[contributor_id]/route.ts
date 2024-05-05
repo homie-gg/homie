@@ -34,7 +34,7 @@ export const PATCH = createRoute(
     }
 
     const contributor = await dbClient
-      .updateTable('voidpm.contributor')
+      .updateTable('homie.contributor')
       .set({
         ext_slack_member_id: request.body.ext_slack_member_id,
       })

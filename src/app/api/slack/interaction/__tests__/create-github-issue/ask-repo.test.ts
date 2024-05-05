@@ -45,7 +45,7 @@ it('should ask to select repo', async () => {
   req.text.mockImplementationOnce(() => 'req_body')
 
   const organization = await dbClient
-    .insertInto('voidpm.organization')
+    .insertInto('homie.organization')
     .values({
       ext_clerk_user_id: 'ask_repo_user_id',
     })

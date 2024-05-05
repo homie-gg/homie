@@ -13,7 +13,7 @@ export default function SettingsPage(props: SettingsPageProps) {
       <div className="space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">Settings</h2>
         <p className="text-muted-foreground">
-          Customize Void to how your team works
+          Customize homie to how your team works
         </p>
       </div>
       <Separator className="my-6" />

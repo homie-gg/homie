@@ -17,20 +17,20 @@ export async function handleImportPullRequests(job: ImportPullRequests) {
   const { github_organization } = job.data
 
   const organization = await dbClient
-    .selectFrom('voidpm.organization')
+    .selectFrom('homie.organization')
     .innerJoin(
       'github.organization',
       'github.organization.organization_id',
-      'voidpm.organization.id',
+      'homie.organization.id',
     )
     .leftJoin(
       'trello.workspace',
       'trello.workspace.organization_id',
-      'voidpm.organization.id',
+      'homie.organization.id',
     )
     .where('ext_gh_install_id', '=', github_organization.ext_gh_install_id)
     .select([
-      'voidpm.organization.id',
+      'homie.organization.id',
       'github.organization.ext_gh_install_id',
       'trello_access_token',
     ])

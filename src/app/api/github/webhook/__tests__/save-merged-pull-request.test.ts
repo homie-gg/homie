@@ -37,7 +37,7 @@ it('should create and embed a pr', async () => {
   })[1]
 
   const organization = await dbClient
-    .insertInto('voidpm.organization')
+    .insertInto('homie.organization')
     .values({
       ext_clerk_user_id: 'test_save_merged_pr_user_id',
     })
@@ -141,7 +141,7 @@ it('should create and embed a pr', async () => {
   })
 
   const contributor = await dbClient
-    .selectFrom('voidpm.contributor')
+    .selectFrom('homie.contributor')
     .where('ext_gh_user_id', '=', 92383)
     .select(['username'])
     .executeTakeFirstOrThrow()

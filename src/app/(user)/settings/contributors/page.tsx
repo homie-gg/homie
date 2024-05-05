@@ -26,14 +26,14 @@ export default async function ContributorsPage(props: ContributorsPageProps) {
   }
 
   const organization = await dbClient
-    .selectFrom('voidpm.organization')
+    .selectFrom('homie.organization')
     .innerJoin(
       'slack.workspace',
       'slack.workspace.organization_id',
-      'voidpm.organization.id',
+      'homie.organization.id',
     )
     .where('ext_clerk_user_id', '=', userId)
-    .select(['slack_access_token', 'voidpm.organization.id'])
+    .select(['slack_access_token', 'homie.organization.id'])
     .executeTakeFirst()
 
   if (!organization) {
@@ -50,7 +50,7 @@ export default async function ContributorsPage(props: ContributorsPageProps) {
   }
 
   const contributors = await dbClient
-    .selectFrom('voidpm.contributor')
+    .selectFrom('homie.contributor')
     .where('organization_id', '=', organization.id)
     .select(['username', 'id', 'ext_slack_member_id'])
     .execute()

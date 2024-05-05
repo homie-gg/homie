@@ -9,16 +9,16 @@ export async function handleSendPullRequestSummaries() {
   const defaultQueue = getDefaultQueue()
 
   const organizations = await dbClient
-    .selectFrom('voidpm.organization')
+    .selectFrom('homie.organization')
     .innerJoin(
       'slack.workspace',
       'slack.workspace.organization_id',
-      'voidpm.organization.id',
+      'homie.organization.id',
     )
     .where('send_pull_request_summaries_enabled', '=', true)
     .where('send_pull_request_summaries_time', '=', time)
     .select([
-      'voidpm.organization.id',
+      'homie.organization.id',
       'send_pull_request_summaries_time',
       'send_pull_request_summaries_interval',
       'send_pull_request_summaries_day',

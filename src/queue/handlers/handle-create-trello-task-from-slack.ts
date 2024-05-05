@@ -20,7 +20,7 @@ export async function handleCreateTrelloTaskFromSlack(
 
   if (!organization) {
     await http.post(response_url, {
-      text: `Error creating issue. Was Void App installed correctly to this workspace?`,
+      text: `Error creating issue. Was homie App installed correctly to this workspace?`,
     })
 
     return
@@ -46,7 +46,7 @@ export async function handleCreateTrelloTaskFromSlack(
 
   if (!trelloWorkspace) {
     await http.post(response_url, {
-      text: `Trello has not been installed to this organization. Please login to Void, and go to 'Settings > Trello' to install.`,
+      text: `Trello has not been installed to this organization. Please login to homie, and go to 'Settings > Trello' to install.`,
     })
     return
   }

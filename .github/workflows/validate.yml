@@ -36,9 +36,9 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4.2.0
         id: auto_commit_action
         with:
-          commit_user_name: void_bot
-          commit_user_email: bot.voidpm.io
-          commit_author: void bot <bot@voidpm.io>
+          commit_user_name: homie_bot
+          commit_user_email: bot@homie.gg
+          commit_author: homie bot <bot@homie.gg>
           commit_message: Bot - Fix Formatting
 
       - name: Success
@@ -59,7 +59,7 @@ jobs:
           - 5432:5432
         env:
           POSTGRES_USER: postgres
-          POSTGRES_DB: void
+          POSTGRES_DB: homie
           POSTGRES_HOST_AUTH_METHOD: trust # No PW required
           options: |-
             --health-cmd pg_isready

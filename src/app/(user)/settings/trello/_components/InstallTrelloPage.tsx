@@ -1,7 +1,7 @@
 import { Button } from '@/lib/ui/Button'
 import Link from 'next/link'
 
-const name = 'Void'
+const name = 'homie'
 const scopes = ['read', 'write']
 const expiration = 'never'
 const callbackMethod = 'fragment' // redirect back (not POST)

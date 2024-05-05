@@ -19,7 +19,7 @@ export const PATCH = createRoute(
     const { userId } = auth()
 
     const organization = await dbClient
-      .selectFrom('voidpm.organization')
+      .selectFrom('homie.organization')
       .where('ext_clerk_user_id', '=', userId)
       .where('id', '=', parseInt(routeParams.organization_id))
       .select('id')

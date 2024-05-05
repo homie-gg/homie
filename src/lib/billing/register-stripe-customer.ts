@@ -18,7 +18,7 @@ export async function registerStripeCustomer(
 
   if (!organization) {
     throw new NotFoundException({
-      message: 'Failed creating Stripe customer; missing Void organization.',
+      message: 'Failed creating Stripe customer; missing homie organization.',
       type: 'stripe_customer_create.failed',
     })
   }
@@ -28,9 +28,9 @@ export async function registerStripeCustomer(
   })
 
   await dbClient
-    .updateTable('voidpm.organization')
+    .updateTable('homie.organization')
     .set({ ext_stripe_customer_id: customer.id })
-    .where('voidpm.organization.id', '=', organization.id)
+    .where('homie.organization.id', '=', organization.id)
     .executeTakeFirstOrThrow()
 
   return customer

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 export const metadata = {
-  title: `Privacy Policy | Void`,
+  title: `Privacy Policy | homie`,
   canonicalUrlRelative: '/privacy',
 }
 
@@ -25,7 +25,7 @@ export default function PrivacyPolicy() {
           Back
         </Link>
         <h1 className="text-3xl font-extrabold pb-6">
-          Privacy Policy for Void
+          Privacy Policy for homie
         </h1>
 
         <pre
@@ -34,19 +34,19 @@ export default function PrivacyPolicy() {
         >
           {`Last Updated: 2024-04-10
 
-Thank you for choosing Void PM ("Void," "we," "us," "our"). This Privacy Policy outlines how Void collects, uses, and protects your information when you use our website (https://voidpm.io) and services.
+Thank you for choosing homie PM ("homie," "we," "us," "our"). This Privacy Policy outlines how homie collects, uses, and protects your information when you use our website (https://homie.gg) and services.
 
 Information We Collect
 
 We collect the following types of information for the purposes of providing and improving our services:
 
-Personal Information: When you sign up for Void PM, we collect your name, email address, and payment information to process orders and manage your account.
+Personal Information: When you sign up for homie PM, we collect your name, email address, and payment information to process orders and manage your account.
 
 Non-Personal Information: We may use web cookies to gather non-personal information about your interactions with our website. This information helps us improve our website and services.
 
 Purpose of Data Collection
 
-We collect your information solely for the purpose of order processing and providing you with access to Void PM's services. Your information helps us manage your account, process payments, and communicate important updates.
+We collect your information solely for the purpose of order processing and providing you with access to homie's services. Your information helps us manage your account, process payments, and communicate important updates.
 
 Data Sharing
 
@@ -54,17 +54,17 @@ We do not share your personal information with any third parties. Your data is s
 
 Children's Privacy
 
-Void PM does not knowingly collect any personal information from children under the age of 13. Our services are intended for individuals who are at least 13 years old or older.
+homie does not knowingly collect any personal information from children under the age of 13. Our services are intended for individuals who are at least 13 years old or older.
 
 Updates to the Privacy Policy
 
-We may update this Privacy Policy from time to time to reflect changes in our practices and services. We will notify you of any significant changes by sending an email to the address associated with your Void PM account.
+We may update this Privacy Policy from time to time to reflect changes in our practices and services. We will notify you of any significant changes by sending an email to the address associated with your homie account.
 
 Contact Us
 
 If you have any questions or concerns about this Privacy Policy or our data practices, please contact us at mike@wu.studio.
 
-By using Void PM's website and services, you consent to the terms of this Privacy Policy.`}
+By using homie's website and services, you consent to the terms of this Privacy Policy.`}
         </pre>
       </div>
     </main>

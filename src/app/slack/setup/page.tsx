@@ -26,8 +26,8 @@ export default async function SlackSetup(
   const data = await GetAccessToken({ code })
 
   const organization = await dbClient
-    .selectFrom('voidpm.organization')
-    .where('voidpm.organization.id', '=', parseInt(organization_id))
+    .selectFrom('homie.organization')
+    .where('homie.organization.id', '=', parseInt(organization_id))
     .where('ext_clerk_user_id', '=', userId)
     .select('id')
     .executeTakeFirst()

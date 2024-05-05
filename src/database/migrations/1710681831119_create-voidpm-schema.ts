@@ -9,9 +9,9 @@ export const shorthands: ColumnDefinitions | undefined = {
 }
 
 export async function up(pgm: MigrationBuilder): Promise<void> {
-  pgm.createSchema('voidpm', { ifNotExists: true })
+  pgm.createSchema('homie', { ifNotExists: true })
 }
 
 export async function down(pgm: MigrationBuilder): Promise<void> {
-  pgm.dropSchema('voidpm', { cascade: true })
+  pgm.dropSchema('homie', { cascade: true })
 }

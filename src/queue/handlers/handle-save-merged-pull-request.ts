@@ -17,26 +17,26 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
   })
 
   const organization = await dbClient
-    .selectFrom('voidpm.organization')
+    .selectFrom('homie.organization')
     .innerJoin(
       'github.organization',
       'github.organization.organization_id',
-      'voidpm.organization.id',
+      'homie.organization.id',
     )
     .leftJoin(
-      'voidpm.subscription',
-      'voidpm.subscription.organization_id',
-      'voidpm.organization.id',
+      'homie.subscription',
+      'homie.subscription.organization_id',
+      'homie.organization.id',
     )
-    .leftJoin('voidpm.plan', 'voidpm.plan.id', 'voidpm.subscription.plan_id')
+    .leftJoin('homie.plan', 'homie.plan.id', 'homie.subscription.plan_id')
     .leftJoin(
       'trello.workspace',
       'trello.workspace.organization_id',
-      'voidpm.organization.id',
+      'homie.organization.id',
     )
     .where('ext_gh_install_id', '=', installation?.id!)
     .select([
-      'voidpm.organization.id',
+      'homie.organization.id',
       'github.organization.ext_gh_install_id',
       'is_over_plan_pr_limit',
       'pr_limit_per_month',
@@ -73,11 +73,11 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
 
   if (isOverPlanPRLimit && !organization.has_unlimited_usage) {
     await dbClient
-      .updateTable('voidpm.organization')
+      .updateTable('homie.organization')
       .set({
         is_over_plan_pr_limit: true,
       })
-      .where('voidpm.organization.id', '=', organization.id)
+      .where('homie.organization.id', '=', organization.id)
       .executeTakeFirstOrThrow()
     logger.debug('org over plan limit', {
       event: 'save_merged_pull_request.org_over_plan_limit',

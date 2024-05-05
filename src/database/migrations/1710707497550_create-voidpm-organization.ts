@@ -5,7 +5,7 @@ export const shorthands: ColumnDefinitions | undefined = undefined
 
 export async function up(pgm: MigrationBuilder): Promise<void> {
   return pgm.createTable(
-    { schema: 'voidpm', name: 'organization' },
+    { schema: 'homie', name: 'organization' },
     {
       id: 'id',
       created_at: 'timestamp',

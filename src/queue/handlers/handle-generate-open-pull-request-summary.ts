@@ -8,7 +8,7 @@ import { getLinkedIssuesAndTasks } from '@/lib/pull-request/get-linked-issues-an
 /**
  * Void will replace this string inside a PR body with a generated summary.
  */
-export const summaryKey = ':void-summary:'
+export const summaryKey = ':homie-summary:'
 
 export async function handleGenerateOpenPullRequestSummary(
   job: GenerateOpenPullRequestSummary,
@@ -16,20 +16,20 @@ export async function handleGenerateOpenPullRequestSummary(
   const { pull_request, installation } = job.data
 
   const organization = await dbClient
-    .selectFrom('voidpm.organization')
+    .selectFrom('homie.organization')
     .innerJoin(
       'github.organization',
       'github.organization.organization_id',
-      'voidpm.organization.id',
+      'homie.organization.id',
     )
     .leftJoin(
       'trello.workspace',
       'trello.workspace.organization_id',
-      'voidpm.organization.id',
+      'homie.organization.id',
     )
     .where('ext_gh_install_id', '=', installation?.id!)
     .select([
-      'voidpm.organization.id',
+      'homie.organization.id',
       'github.organization.ext_gh_install_id',
       'is_over_plan_pr_limit',
       'has_unlimited_usage',
@@ -69,7 +69,7 @@ export async function handleGenerateOpenPullRequestSummary(
 
   // Create Github User if doesn't exits
   const contributor = await dbClient
-    .insertInto('voidpm.contributor')
+    .insertInto('homie.contributor')
     .values({
       ext_gh_user_id: pull_request.user.id,
       organization_id: organization.id,

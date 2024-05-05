@@ -17,7 +17,7 @@ export default async function PRSummariesPage(props: PRSummariesPage) {
       <div>
         <h3 className="text-lg font-medium">Pull Request Summaries</h3>
         <p className="text-sm text-muted-foreground">
-          Schedule Void to send a list of merged pull requests to Slack.
+          Schedule homie to send a list of merged pull requests to Slack.
         </p>
       </div>
       <Separator />

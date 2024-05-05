@@ -13,7 +13,7 @@ export const SampleQuestions = () => {
           Example Questions
         </span>
         <span className="text-xl font-medium">
-          Real answers provided by Void&apos;s AI
+          Real answers provided by homie&apos;s AI
         </span>
       </div>
 
@@ -28,7 +28,7 @@ export const SampleQuestions = () => {
             <div>
               The queue dashboards were added in the Pull Request titled
               &quot;feat: add bullmq dashboard&quot;. The URL for this Pull
-              Request is https://github.com/void-pm/void/pull/77.
+              Request is https://github.com/homie-gg/homie/pull/77.
             </div>
           </AccordionContent>
         </AccordionItem>
@@ -46,7 +46,7 @@ export const SampleQuestions = () => {
               replacing the existing summary key in the pull request body. The
               fix was contributed by mikewuu in a pull request titled
               &quot;fix(Github): improve generated summary&quot;
-              (https://github.com/void-pm/void/pull/81).
+              (https://github.com/homie-gg/homie/pull/81).
             </div>
           </AccordionContent>
         </AccordionItem>
@@ -67,7 +67,7 @@ export const SampleQuestions = () => {
               <pre>
                 {`
 jsx
-<Link href="https://voidpm.nolt.io/roadmap">
+<Link href="https://homie.nolt.io/roadmap">
   <DropdownMenuItem>Request Feature</DropdownMenuItem>
 </Link>
                   `}
@@ -76,7 +76,7 @@ jsx
               item with &quot;Request Feature&quot; and added a new link for
               feature requests in the navigation bar. The Pull Request for this
               change is titled &quot;feat(Nav): add feature request link&quot;
-              and can be found at https://github.com/void-pm/void/pull/100.
+              and can be found at https://github.com/homie-gg/homie/pull/100.
             </div>
           </AccordionContent>
         </AccordionItem>
@@ -138,7 +138,7 @@ await defaultQueue.add('answer_slack_question', {
               saveMergedPullRequest function and added to the metadata object in
               the embedGithubPullRequest function. This change was made as part
               of the Pull Request titled &quot;fix(PR): embedding missing
-              text&quot; (URL: https://github.com/void-pm/void/pull/104),
+              text&quot; (URL: https://github.com/homie-gg/homie/pull/104),
               contributed by mikewuu.
             </div>
           </AccordionContent>

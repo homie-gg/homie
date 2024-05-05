@@ -17,7 +17,7 @@ import { dbClient } from '@/database/client'
 
   for (const plan of plans) {
     const existingPlan = await dbClient
-      .selectFrom('voidpm.plan')
+      .selectFrom('homie.plan')
       .where('name', '=', plan.name)
       .where('billing_interval', '=', plan.billing_interval)
       .select('id')
@@ -25,21 +25,21 @@ import { dbClient } from '@/database/client'
 
     if (existingPlan) {
       await dbClient
-        .updateTable('voidpm.plan')
+        .updateTable('homie.plan')
         .set({
           name: plan.name,
           billing_interval: plan.billing_interval,
           ext_stripe_price_id: plan.ext_stripe_price_id,
           pr_limit_per_month: plan.pr_limit_per_month,
         })
-        .where('voidpm.plan.id', '=', existingPlan.id)
+        .where('homie.plan.id', '=', existingPlan.id)
         .executeTakeFirstOrThrow()
 
       continue
     }
 
     await dbClient
-      .insertInto('voidpm.plan')
+      .insertInto('homie.plan')
       .values({
         name: plan.name,
         billing_interval: plan.billing_interval,

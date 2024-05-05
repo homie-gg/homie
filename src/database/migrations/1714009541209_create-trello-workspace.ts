@@ -22,7 +22,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
         unique: true,
         notNull: true,
         references: {
-          schema: 'voidpm',
+          schema: 'homie',
           name: 'organization',
         },
       },

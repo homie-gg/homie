@@ -8,7 +8,7 @@ export default async function TrelloSettingsPage() {
       <div>
         <h3 className="text-lg font-medium">Trello</h3>
         <p className="text-sm text-muted-foreground">
-          Add Void to your Trello workspace to create cards, link PRs, and get
+          Add homie to your Trello workspace to create cards, link PRs, and get
           context from your boards.
         </p>
       </div>

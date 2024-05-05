@@ -12,12 +12,12 @@ export default function SetupPage(props: SetupPageProps) {
 
   return (
     <div className="text-center mt-6">
-      <h2 className="text-3xl font-bold tracking-tight">Welcome to Void.</h2>
+      <h2 className="text-3xl font-bold tracking-tight">Welcome to homie.</h2>
       <p className="text-muted-foreground text-xs">
         (we hope you&apos;ll like it here)
       </p>
       <p className="my-3">
-        Install the Void Github, and Void Slack App to get started.
+        Install the homie Github, and homie Slack App to get started.
       </p>
       <div className="flex flex-col gap-3">
         <a

@@ -59,8 +59,8 @@ export default async function Home() {
               <div className="z-10 flex flex-col items-start gap-1 bg-white p-5 lg:h-[12.5rem] xl:h-[10rem]">
                 <h5 className="text-xl font-medium">Unblocks the team</h5>
                 <p className="text-md font-normal text-zinc-700 ">
-                  Ask Void anything from business to technical questions,
-                  Void&apos;s got you.
+                  Ask homie anything from business to technical questions,
+                  homie&apos;s got you.
                 </p>
               </div>
             </div>
@@ -82,7 +82,7 @@ export default async function Home() {
 
             <div className="relative flex  flex-col overflow-hidden  rounded-md border bg-white transition-all duration-500 ease-in-out hover:shadow-md h-full">
               <div className="relative  transition-all duration-500 ease-in-out flex flex-1 items-center justify-center">
-                <Image src={featureReview} alt="Void dashboard" />
+                <Image src={featureReview} alt="homie dashboard" />
               </div>
               <div className="z-10 flex flex-col items-start gap-1 bg-white p-5 lg:h-[12.5rem] xl:h-[10rem]">
                 <h5 className="text-xl font-medium">

@@ -17,21 +17,21 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
   })
 
   const organization = await dbClient
-    .selectFrom('voidpm.organization')
+    .selectFrom('homie.organization')
     .innerJoin(
       'github.organization',
       'github.organization.organization_id',
-      'voidpm.organization.id',
+      'homie.organization.id',
     )
     .leftJoin(
-      'voidpm.subscription',
-      'voidpm.subscription.organization_id',
-      'voidpm.organization.id',
+      'homie.subscription',
+      'homie.subscription.organization_id',
+      'homie.organization.id',
     )
-    .leftJoin('voidpm.plan', 'voidpm.plan.id', 'voidpm.subscription.plan_id')
+    .leftJoin('homie.plan', 'homie.plan.id', 'homie.subscription.plan_id')
     .where('ext_gh_install_id', '=', installation?.id!)
     .select([
-      'voidpm.organization.id',
+      'homie.organization.id',
       'github.organization.ext_gh_install_id',
       'is_over_plan_pr_limit',
       'has_unlimited_usage',
@@ -67,11 +67,11 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
 
   if (isOverPlanPRLimit && !organization.has_unlimited_usage) {
     await dbClient
-      .updateTable('voidpm.organization')
+      .updateTable('homie.organization')
       .set({
         is_over_plan_pr_limit: true,
       })
-      .where('voidpm.organization.id', '=', organization.id)
+      .where('homie.organization.id', '=', organization.id)
       .executeTakeFirstOrThrow()
 
     logger.debug('org over plan limit', {
@@ -87,7 +87,7 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
 
   // Create Github User if doesn't exits
   const contributor = await dbClient
-    .insertInto('voidpm.contributor')
+    .insertInto('homie.contributor')
     .values({
       ext_gh_user_id: pull_request.user.id,
       organization_id: organization.id,

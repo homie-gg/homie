@@ -5,7 +5,7 @@ export const shorthands: ColumnDefinitions | undefined = undefined
 
 export async function up(pgm: MigrationBuilder): Promise<void> {
   return pgm.createTable(
-    { schema: 'voidpm', name: 'subscription' },
+    { schema: 'homie', name: 'subscription' },
     {
       id: 'id',
       created_at: 'timestamp',
@@ -21,7 +21,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
         unique: false,
         notNull: true,
         references: {
-          schema: 'voidpm',
+          schema: 'homie',
           name: 'plan',
         },
       },
@@ -30,7 +30,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
         unique: true,
         notNull: true,
         references: {
-          schema: 'voidpm',
+          schema: 'homie',
           name: 'organization',
         },
       },
@@ -39,5 +39,5 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
 }
 
 export async function down(pgm: MigrationBuilder): Promise<void> {
-  pgm.dropTable('voidpm.subscription')
+  pgm.dropTable('homie.subscription')
 }

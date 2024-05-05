@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 export const metadata = {
-  title: `Privacy Policy | Void`,
+  title: `Privacy Policy | homie`,
   canonicalUrlRelative: '/privacy',
 }
 
@@ -25,7 +25,7 @@ export default function PrivacyPolicy() {
           Back
         </Link>
         <h1 className="text-3xl font-extrabold pb-6">
-          Terms and Conditions for Void
+          Terms and Conditions for homie
         </h1>
 
         <pre
@@ -34,7 +34,7 @@ export default function PrivacyPolicy() {
         >
           {`Last Updated: 2024-04-10
 
-These Terms of Service ("Terms") govern your use of our website located at https://voidpm.io (the "Site") and the services provided therein (collectively, the "Service"), operated by Void ("we", "us", or "our").
+These Terms of Service ("Terms") govern your use of our website located at https://homie.gg (the "Site") and the services provided therein (collectively, the "Service"), operated by homie ("we", "us", or "our").
 
 By accessing or using the Service, you agree to be bound by these Terms. If you disagree with any part of the Terms, then you may not access the Service.
 
@@ -44,7 +44,7 @@ You must be at least 13 years old to use the Service. By using the Service, you 
 
 2. User Data
 
-By using the Service, you agree to our Privacy Policy, available at https://voidpm.io/privacy, which describes how we collect, use, and disclose your information.
+By using the Service, you agree to our Privacy Policy, available at https://homie.gg/privacy, which describes how we collect, use, and disclose your information.
 
 3. Payment Information
 
@@ -66,7 +66,7 @@ We reserve the right to update or modify these Terms at any time. If we make any
 
 If you have any questions about these Terms, please contact us at mike@wu.studio.
 
-Thank you for using Void PM!
+Thank you for using homie!
 
 `}
         </pre>

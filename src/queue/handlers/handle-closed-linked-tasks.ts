@@ -6,21 +6,21 @@ export async function handleCloseLinkedTasks(job: CloseLinkedTasks) {
   const { pull_request, installation } = job.data
 
   const organization = await dbClient
-    .selectFrom('voidpm.organization')
+    .selectFrom('homie.organization')
     .innerJoin(
       'github.organization',
       'github.organization.organization_id',
-      'voidpm.organization.id',
+      'homie.organization.id',
     )
     .leftJoin(
-      'voidpm.subscription',
-      'voidpm.subscription.organization_id',
-      'voidpm.organization.id',
+      'homie.subscription',
+      'homie.subscription.organization_id',
+      'homie.organization.id',
     )
-    .leftJoin('voidpm.plan', 'voidpm.plan.id', 'voidpm.subscription.plan_id')
+    .leftJoin('homie.plan', 'homie.plan.id', 'homie.subscription.plan_id')
     .where('ext_gh_install_id', '=', installation?.id!)
     .select([
-      'voidpm.organization.id',
+      'homie.organization.id',
       'github.organization.ext_gh_install_id',
       'is_over_plan_pr_limit',
       'pr_limit_per_month',

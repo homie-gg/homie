@@ -4,7 +4,7 @@ services:
   postgres:
     image: 'postgres:16.2'
     environment:
-      POSTGRES_DB: void
+      POSTGRES_DB: homie
       POSTGRES_USER: postgres # Default
       POSTGRES_HOST_AUTH_METHOD: trust # No PW required
     ports:

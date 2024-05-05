@@ -14,7 +14,7 @@ export default withSentryConfig(
     // Suppresses source map uploading logs during build
     silent: true,
     org: 'world-united-studios',
-    project: 'void',
+    project: 'homie',
   },
   {
     // For all available options, see:

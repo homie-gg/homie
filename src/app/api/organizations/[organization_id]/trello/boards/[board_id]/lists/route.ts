@@ -28,19 +28,19 @@ export const GET = createRoute(
     const { userId } = auth()
 
     const organization = await dbClient
-      .selectFrom('voidpm.organization')
+      .selectFrom('homie.organization')
       .where('ext_clerk_user_id', '=', userId)
       .where(
-        'voidpm.organization.id',
+        'homie.organization.id',
         '=',
         parseInt(routeParams.organization_id),
       )
       .leftJoin(
         'trello.workspace',
         'trello.workspace.organization_id',
-        'voidpm.organization.id',
+        'homie.organization.id',
       )
-      .select(['voidpm.organization.id', 'trello_access_token'])
+      .select(['homie.organization.id', 'trello_access_token'])
       .executeTakeFirstOrThrow()
 
     if (!organization.trello_access_token) {

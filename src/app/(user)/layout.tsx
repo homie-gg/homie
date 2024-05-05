@@ -22,18 +22,18 @@ export default async function UserLayout(props: UserLayoutProps) {
   const user = await clerkClient.users.getUser(userId)
 
   const organization = await dbClient
-    .selectFrom('voidpm.organization')
+    .selectFrom('homie.organization')
     .leftJoin(
       'github.organization',
       'github.organization.organization_id',
-      'voidpm.organization.id',
+      'homie.organization.id',
     )
     .leftJoin(
       'slack.workspace',
       'slack.workspace.organization_id',
-      'voidpm.organization.id',
+      'homie.organization.id',
     )
-    .selectAll('voidpm.organization')
+    .selectAll('homie.organization')
     .select([
       'github.organization.ext_gh_install_id',
       'slack.workspace.ext_slack_team_id',
@@ -44,7 +44,7 @@ export default async function UserLayout(props: UserLayoutProps) {
 
   if (!organization) {
     const newOrganization = await dbClient
-      .insertInto('voidpm.organization')
+      .insertInto('homie.organization')
       .values({
         ext_clerk_user_id: userId,
       })
