@@ -44,7 +44,6 @@ export default async function Home() {
             Everything to speed up your development lifecycle.
           </span>
         </div>
-
         <div className="flex flex-col items-start justify-center gap-16">
           <div className="grid grid-cols-1 flex-wrap items-start justify-center gap-10 lg:grid-cols-3">
             <div className="relative flex  flex-col overflow-hidden  rounded-md border bg-white transition-all duration-500 ease-in-out hover:shadow-md h-full">
