@@ -12,7 +12,7 @@ export default function SetupPage(props: SetupPageProps) {
 
   return (
     <div className="text-center mt-6">
-      <h2 className="text-3xl font-bold tracking-tight">Welcome to homie.</h2>
+      <h2 className="text-3xl font-bold tracking-tight">Welcome homie.</h2>
       <p className="text-muted-foreground text-xs">
         (we hope you&apos;ll like it here)
       </p>
