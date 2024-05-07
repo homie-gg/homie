@@ -13,6 +13,11 @@ export const findOrgWithSlackTeamId = async (teamId: string) => {
       'github.organization.organization_id',
       'homie.organization.id',
     )
+    .leftJoin(
+      'github.organization',
+      'github.organization.organization_id',
+      'voidpm.organization.id',
+    )
     .select([
       'homie.organization.id',
       'ext_gh_install_id',
