@@ -14,7 +14,7 @@ const database = process.env.POSTGRES_DB
       }),
     },
     schemas: Object.fromEntries(
-      ['homie', 'github', 'slack', 'trello'].map((s) => [
+      ['homie', 'github', 'slack', 'trello', 'gitlab'].map((s) => [
         s,
         {
           include: '*',

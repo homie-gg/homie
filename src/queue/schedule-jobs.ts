@@ -19,6 +19,13 @@ import { getDefaultQueue } from '@/queue/default-queue'
     },
   })
 
+  await queue.add('refresh_gitlab_tokens', null, {
+    repeat: {
+      // refresh every 30 mins as gitlab has a 2 hour expiry
+      pattern: '*/30 * * * *',
+    },
+  })
+
   // eslint-disable-next-line no-console
   console.log('Scheduled jobs added.')
   process.exit()

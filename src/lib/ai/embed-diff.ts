@@ -9,21 +9,16 @@ import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
 interface EmbedDiffParams {
   diff: string
   summary: string
-  pullRequest: {
-    id: number
-    title: string
-    html_url: string
-    ext_gh_pull_request_id: number
-    repo_id: number
-    contributor_id: number
-    merged_at: Date | null
-  }
+  title: string
+  url: string
   contributor: string
   organization_id: number
+  metadata: Record<string, any>
+  mergedAt: Date | null
 }
 
 export async function embedDiff(params: EmbedDiffParams) {
-  const { diff, summary, pullRequest, organization_id, contributor } = params
+  const { diff, summary, title, url, contributor, metadata, mergedAt } = params
 
   const chunks = chunkDiff(diff, 4000 - prompt.length)
 
@@ -39,32 +34,26 @@ export async function embedDiff(params: EmbedDiffParams) {
 
     for (const snippet of snippets) {
       const attributes = [
-        `Pull Request ${pullRequest.title}`,
-        `URL: ${pullRequest.html_url}`,
+        `Pull Request ${title}`,
+        `URL: ${url}`,
         `Contributed by ${contributor}`,
         `Changed: ${snippet}`,
       ]
 
-      if (pullRequest.merged_at) {
-        attributes.push(`Merged at ${pullRequest.merged_at.toISOString()}.`)
+      if (mergedAt) {
+        attributes.push(`Merged at ${mergedAt.toISOString()}.`)
       }
 
       const text = attributes.join('. ')
       const embedding = await embedder.embedQuery(text)
 
-      const metadata = {
-        type: 'pr_diff',
-        text,
-        organization_id,
-        pull_request_id: pullRequest.id,
-        ext_gh_pull_request_id: pullRequest.ext_gh_pull_request_id,
-        repo_id: pullRequest.repo_id,
-        contributor_id: pullRequest.contributor_id,
-      }
       const record: PineconeRecord = {
         id: uuid(),
         values: embedding,
-        metadata,
+        metadata: {
+          ...metadata,
+          text,
+        },
       }
 
       const index = getPineconeClient().Index(process.env.PINECONE_INDEX_MAIN!)

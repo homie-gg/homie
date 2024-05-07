@@ -35,7 +35,7 @@ export default function TrelloInstaller(props: TrelloInstallerProps) {
     }
 
     http
-      .post(`/api/organizations/${organizationId}/trello/install`, {
+      .post(`/api/trello/install`, {
         access_token: accessToken,
       })
       .then(() => {

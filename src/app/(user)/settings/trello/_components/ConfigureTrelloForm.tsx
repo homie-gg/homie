@@ -80,7 +80,7 @@ export default function ConfigureTrelloForm(props: ConfigureTrelloFormProps) {
     http
       .get<{
         lists: TrelloList[]
-      }>(`/api/organizations/${organizationId}/trello/boards/${boardId}/lists`)
+      }>(`/api/trello/boards/${boardId}/lists`)
       .then((data) => setLists(data.lists))
   }, [boardId, trello_access_token, organizationId])
 
@@ -92,7 +92,7 @@ export default function ConfigureTrelloForm(props: ConfigureTrelloFormProps) {
     setProcessing(true)
 
     http
-      .patch(`/api/organizations/${organization.id}/trello/settings`, data)
+      .patch(`/api/trello/settings`, data)
       .then(() => {
         toast({
           title: 'Saved',

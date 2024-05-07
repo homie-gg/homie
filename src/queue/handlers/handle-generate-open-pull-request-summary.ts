@@ -1,9 +1,9 @@
-import { summarizeGithubPullRequest } from '@/lib/ai/summarize-github-pull-request'
+import { summarizeGithubPullRequest } from '@/lib/github/summarize-github-pull-request'
 import { getOverPRLimitMessage } from '@/lib/billing/get-over-pr-limit-message'
 import { dbClient } from '@/database/client'
 import { createGithubClient } from '@/lib/github/create-github-client'
 import { GenerateOpenPullRequestSummary } from '@/queue/jobs'
-import { getLinkedIssuesAndTasks } from '@/lib/pull-request/get-linked-issues-and-tasks'
+import { getLinkedIssuesAndTasksInPullRequest } from '@/lib/github/get-linked-issues-and-tasks-in-pull-request'
 
 /**
  * Void will replace this string inside a PR body with a generated summary.
@@ -62,13 +62,13 @@ export async function handleGenerateOpenPullRequestSummary(
     return
   }
 
-  const issue = await getLinkedIssuesAndTasks({
+  const issue = await getLinkedIssuesAndTasksInPullRequest({
     pullRequest: pull_request,
     organization,
   })
 
   // Create Github User if doesn't exits
-  const contributor = await dbClient
+  await dbClient
     .insertInto('homie.contributor')
     .values({
       ext_gh_user_id: pull_request.user.id,
@@ -99,7 +99,6 @@ export async function handleGenerateOpenPullRequestSummary(
     github,
     issue,
     length: 'short',
-    contributor_id: contributor.id,
   })
 
   const bodyWithSummary = pull_request.body

@@ -15,7 +15,8 @@ export interface PullRequest {
   title: string
   user_username: string
   contributor_id: number
-  repo_name: string
+  github_repo_name: string | null
+  gitlab_project_name: string | null
 }
 
 export async function getPullRequests(
@@ -24,25 +25,35 @@ export async function getPullRequests(
   const { startDate, endDate, organization } = params
 
   return dbClient
-    .selectFrom('github.pull_request')
-    .where('github.pull_request.created_at', '>=', startDate)
-    .where('github.pull_request.created_at', '<=', endDate)
-    .where('github.pull_request.organization_id', '=', organization.id)
+    .selectFrom('homie.pull_request')
+    .where('homie.pull_request.created_at', '>=', startDate)
+    .where('homie.pull_request.created_at', '<=', endDate)
+    .where('homie.pull_request.organization_id', '=', organization.id)
     .innerJoin(
       'homie.contributor',
       'homie.contributor.id',
-      'github.pull_request.contributor_id',
+      'homie.pull_request.contributor_id',
     )
-    .innerJoin('github.repo', 'github.repo.id', 'github.pull_request.repo_id')
+    .leftJoin(
+      'github.repo',
+      'github.repo.id',
+      'homie.pull_request.github_repo_id',
+    )
+    .leftJoin(
+      'gitlab.project',
+      'gitlab.project.id',
+      'homie.pull_request.gitlab_project_id',
+    )
     .select([
-      'github.pull_request.id',
-      'github.pull_request.created_at',
-      'github.pull_request.merged_at',
-      'github.pull_request.closed_at',
+      'homie.pull_request.id',
+      'homie.pull_request.created_at',
+      'homie.pull_request.merged_at',
+      'homie.pull_request.closed_at',
       'homie.contributor.username as user_username',
-      'github.pull_request.title',
-      'github.pull_request.contributor_id',
-      'github.repo.name as repo_name',
+      'homie.pull_request.title',
+      'homie.pull_request.contributor_id',
+      'github.repo.name as github_repo_name',
+      'gitlab.project.name as gitlab_project_name',
     ])
     .execute()
 }

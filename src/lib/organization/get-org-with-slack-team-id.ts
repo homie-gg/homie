@@ -4,13 +4,13 @@ export const findOrgWithSlackTeamId = async (teamId: string) => {
   return await dbClient
     .selectFrom('homie.organization')
     .innerJoin(
-      'github.organization',
-      'github.organization.organization_id',
-      'homie.organization.id',
-    )
-    .innerJoin(
       'slack.workspace',
       'slack.workspace.organization_id',
+      'homie.organization.id',
+    )
+    .leftJoin(
+      'github.organization',
+      'github.organization.organization_id',
       'homie.organization.id',
     )
     .select([
