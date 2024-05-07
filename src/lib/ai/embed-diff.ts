@@ -2,7 +2,6 @@ import { extractCodeSnippets, prompt } from '@/lib/ai/extract-code-snippets'
 import { v4 as uuid } from 'uuid'
 import { chunkDiff } from '@/lib/ai/summarize-diff'
 import { getPineconeClient } from '@/lib/pinecone/pinecone-client'
-import { OpenAIEmbeddings } from '@langchain/openai'
 import { PineconeRecord } from '@pinecone-database/pinecone'
 import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
 
