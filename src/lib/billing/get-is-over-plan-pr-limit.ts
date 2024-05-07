@@ -17,7 +17,7 @@ export async function getIsOverPlanPRLimit(
   const { organization, pr_limit_per_month } = params
 
   const { pr_count_this_month } = await dbClient
-    .selectFrom('github.pull_request')
+    .selectFrom('voidpm.pull_request')
     .where('organization_id', '=', organization.id)
     .where('created_at', '>=', startOfMonth(new Date()))
     .select(sql<number>`count(*)`.as('pr_count_this_month'))

@@ -12,7 +12,6 @@
     "postdb:migrate": "npm run db:generate",
     "db:generate": "dotenv -e .env.local tsx src/database/scripts/generate.ts",
     "db:drop": "dotenv -e .env.local tsx src/database/scripts/drop.ts",
-    "db:seed-dev": "dotenv -e .env.local tsx src/database/seeders/seed-dev.ts",
     "billing:create-plans": "dotenv -e .env.local tsx src/lib/billing/create-plans.ts",
     "db:reset": "npm run db:drop && npm run db:migrate && npm run db:generate && npm run billing:create-plans",
     "worker:default": "dotenv -e .env.local tsx -- --watch src/queue/default-worker.ts",
@@ -21,7 +20,8 @@
     "typecheck": "tsc --noEmit",
     "queue:dashboard": "dotenv -e .env.local tsx queue-dashboard.ts",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "@axiomhq/js": "^1.0.0-rc.3",
@@ -30,6 +30,7 @@
     "@bull-board/express": "^5.15.3",
     "@bull-board/ui": "^5.15.3",
     "@clerk/nextjs": "^4.29.9",
+    "@gitbeaker/rest": "^40.0.3",
     "@hookform/resolvers": "^3.3.4",
     "@langchain/core": "^0.1.51",
     "@langchain/openai": "^0.0.23",

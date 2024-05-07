@@ -86,7 +86,7 @@ export const sendRequest = async <TData>(
 async function getException(response: Response) {
   try {
     const data: Record<string, any> = await response.clone().json()
-    const message: string = data.message ?? 'Request failed.'
+    const message: string = data.message ?? data.error ?? 'Request failed.'
     return new HttpRequestException(response.status, message, data)
   } catch {
     const errorMessage = await response.text()

@@ -1,7 +1,7 @@
 import { getIsOverPlanPRLimit } from '@/lib/billing/get-is-over-plan-pr-limit'
 import { stripeServerClient } from '@/lib/billing/stripe-server-client'
 import { dbClient } from '@/database/client'
-import { getOrganizationLogData } from '@/lib/log/get-organization-log-data'
+import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { logger } from '@/lib/log/logger'
 
 interface HandleUpdatedSubscriptionParams {

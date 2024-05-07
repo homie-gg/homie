@@ -1,7 +1,7 @@
 import { getIsOverPlanPRLimit } from '@/lib/billing/get-is-over-plan-pr-limit'
 import { dbClient } from '@/database/client'
-import { getOrganizationLogData } from '@/lib/log/get-organization-log-data'
-import { getPullRequestLogData } from '@/lib/log/get-pull-request-log-data'
+import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
+import { getPullRequestLogData } from '@/lib/github/get-pull-request-log-data'
 import { logger } from '@/lib/log/logger'
 import { SaveOpenedPullRequest } from '@/queue/jobs'
 import { parseISO } from 'date-fns'
@@ -121,7 +121,7 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
     .executeTakeFirstOrThrow()
 
   await dbClient
-    .insertInto('github.pull_request')
+    .insertInto('voidpm.pull_request')
     .values({
       created_at: parseISO(pull_request.created_at),
       ext_gh_pull_request_id: pull_request.id,
@@ -129,7 +129,7 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
       contributor_id: contributor.id,
       title: pull_request.title,
       html_url: pull_request.html_url,
-      repo_id: repo.id,
+      github_repo_id: repo.id,
       body: pull_request.body ?? '',
       number: pull_request.number,
     })

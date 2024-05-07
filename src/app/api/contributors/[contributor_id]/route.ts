@@ -8,7 +8,7 @@ import { z } from 'zod'
 const contributor = z.object({
   id: z.number(),
   created_at: z.string(),
-  ext_gh_user_id: z.number(),
+  ext_gh_user_id: z.number().nullable(),
   username: z.string(),
   organization_id: z.number(),
   ext_slack_member_id: z.string().nullable(),

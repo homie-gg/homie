@@ -1,7 +1,7 @@
 import { config } from '@/config'
 import { handlers } from '@/queue/handlers'
 import { Job } from '@/queue/jobs'
-import { Queue } from 'bullmq'
+import { JobsOptions, Queue } from 'bullmq'
 import Redis from 'ioredis'
 
 let defaultQueue: Queue<Job['data'], Job['returnvalue'], Job['name']> | null =
@@ -45,4 +45,22 @@ export const getDefaultQueue = () => {
   })
 
   return defaultQueue
+}
+
+type GetDataType<
+  SomeJob extends Job,
+  Name extends SomeJob['name'],
+> = SomeJob extends {
+  name: Name
+  data: infer InferredData
+}
+  ? InferredData
+  : never
+
+export const dispatch = async <TJob extends Job, Name extends TJob['name']>(
+  name: Name,
+  data: GetDataType<TJob, Name>,
+  opts?: JobsOptions,
+) => {
+  return getDefaultQueue().add(name, data, opts)
 }

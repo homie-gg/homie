@@ -49,12 +49,12 @@ export async function sendContributorPullRequests(
 
   for (const repo of repos) {
     const pullRequests = await dbClient
-      .selectFrom('github.pull_request')
+      .selectFrom('voidpm.pull_request')
       .where('contributor_id', '=', contributor.id)
-      .where('repo_id', '=', repo.id)
+      .where('github_repo_id', '=', repo.id)
       .where('merged_at', 'is not', null)
       .where('created_at', '>', cutOffDate)
-      .select(['github.pull_request.html_url', 'github.pull_request.title'])
+      .select(['voidpm.pull_request.html_url', 'voidpm.pull_request.title'])
       .orderBy('merged_at')
       .execute()
 

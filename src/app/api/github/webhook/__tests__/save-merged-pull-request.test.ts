@@ -164,7 +164,7 @@ it('should create and embed a pr', async () => {
   ).toContain('+++ some pr diff')
 
   const pullRequest = await dbClient
-    .selectFrom('github.pull_request')
+    .selectFrom('voidpm.pull_request')
     .where('ext_gh_pull_request_id', '=', 8282)
     .selectAll()
     .executeTakeFirstOrThrow()

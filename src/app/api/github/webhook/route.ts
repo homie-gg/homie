@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getDefaultQueue } from '@/queue/default-queue'
+import { dispatch } from '@/queue/default-queue'
 import { summaryKey } from '@/queue/handlers/handle-generate-open-pull-request-summary'
 import { logger } from '@/lib/log/logger'
 import { createGithubApp } from '@/lib/github/create-github-app'
+import { dbClient } from '@/database/client'
 
 export const POST = async (request: NextRequest) => {
   logger.debug('Received Github webhook', {
@@ -17,14 +18,30 @@ export const POST = async (request: NextRequest) => {
       payload: { pull_request, installation },
     } = params
 
-    await getDefaultQueue().add('save_merged_pull_request', {
+    await dispatch('save_merged_pull_request', {
       pull_request,
       installation,
     })
 
-    await getDefaultQueue().add('close_linked_tasks', {
-      pull_request,
-      installation,
+    const organization = await dbClient
+      .selectFrom('voidpm.organization')
+      .innerJoin(
+        'github.organization',
+        'github.organization.organization_id',
+        'voidpm.organization.id',
+      )
+
+      .where('ext_gh_install_id', '=', installation?.id!)
+      .select(['voidpm.organization.id'])
+      .executeTakeFirst()
+
+    if (!organization) {
+      return
+    }
+
+    await dispatch('close_linked_tasks', {
+      pullRequestBody: pull_request.body ?? '',
+      organization,
     })
   })
 
@@ -32,7 +49,7 @@ export const POST = async (request: NextRequest) => {
     const { pull_request, installation } = params.payload
 
     if (pull_request.body?.includes(summaryKey)) {
-      await getDefaultQueue().add('generate_open_pull_request_summary', {
+      await dispatch('generate_open_pull_request_summary', {
         pull_request,
         installation,
       })
@@ -42,13 +59,13 @@ export const POST = async (request: NextRequest) => {
   app.webhooks.on('pull_request.opened', async (params) => {
     const { pull_request, installation } = params.payload
 
-    await getDefaultQueue().add('save_opened_pull_request', {
+    await dispatch('save_opened_pull_request', {
       pull_request,
       installation,
     })
 
     if (pull_request.body?.includes(summaryKey)) {
-      await getDefaultQueue().add('generate_open_pull_request_summary', {
+      await dispatch('generate_open_pull_request_summary', {
         pull_request,
         installation,
       })

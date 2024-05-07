@@ -9,6 +9,7 @@ const middleware = authMiddleware({
     '/api/slack/event',
     '/api/slack/interaction',
     '/api/stripe/webhook',
+    '/api/gitlab/webhook',
   ],
   // Routes that can always be accessed, and have
   // no authentication information

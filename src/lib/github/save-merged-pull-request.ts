@@ -1,13 +1,13 @@
-import { embedDiff } from '@/lib/ai/embed-diff'
-import { embedGithubPullRequest } from '@/lib/ai/embed-github-pull-request'
-import { summarizeGithubPullRequest } from '@/lib/ai/summarize-github-pull-request'
+import { embedGithubDiff } from '@/lib/github/embed-github-diff'
+import { summarizeGithubPullRequest } from '@/lib/github/summarize-github-pull-request'
 import { dbClient } from '@/database/client'
 import { createGithubClient } from '@/lib/github/create-github-client'
-import { getOrganizationLogData } from '@/lib/log/get-organization-log-data'
-import { getPullRequestLogData } from '@/lib/log/get-pull-request-log-data'
+import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
+import { getPullRequestLogData } from '@/lib/github/get-pull-request-log-data'
 import { logger } from '@/lib/log/logger'
 import { parseISO } from 'date-fns'
-import { getLinkedIssuesAndTasks } from '@/lib/pull-request/get-linked-issues-and-tasks'
+import { getLinkedIssuesAndTasksInPullRequest } from '@/lib/github/get-linked-issues-and-tasks-in-pull-request'
+import { embedCodeChange } from '@/lib/ai/embed-code-change'
 
 interface SaveMergedPullRequestParams {
   pullRequest: {
@@ -125,7 +125,7 @@ export async function saveMergedPullRequest(
 
   const owner = pullRequest.base.repo.full_name.split('/')[0]
 
-  const issue = await getLinkedIssuesAndTasks({
+  const issue = await getLinkedIssuesAndTasksInPullRequest({
     pullRequest,
     organization,
   })
@@ -145,7 +145,6 @@ export async function saveMergedPullRequest(
     github,
     issue,
     length: 'long',
-    contributor_id: contributor.id,
   })
 
   const embed_metadata = {
@@ -160,7 +159,7 @@ export async function saveMergedPullRequest(
   }
 
   const pullRequestRecord = await dbClient
-    .insertInto('github.pull_request')
+    .insertInto('voidpm.pull_request')
     .values({
       created_at: parseISO(pullRequest.created_at),
       ext_gh_pull_request_id: pullRequest.id,
@@ -168,7 +167,7 @@ export async function saveMergedPullRequest(
       contributor_id: contributor.id,
       title: pullRequest.title,
       html_url: pullRequest.html_url,
-      repo_id: repo.id,
+      github_repo_id: repo.id,
       body: pullRequest.body ?? '',
       merged_at: parseISO(pullRequest.merged_at),
       number: pullRequest.number,
@@ -182,7 +181,7 @@ export async function saveMergedPullRequest(
         contributor_id: contributor.id,
         title: pullRequest.title,
         html_url: pullRequest.html_url,
-        repo_id: repo.id,
+        github_repo_id: repo.id,
         body: pullRequest.body ?? '',
         merged_at: parseISO(pullRequest.merged_at!),
         number: pullRequest.number,
@@ -193,15 +192,18 @@ export async function saveMergedPullRequest(
     .returningAll()
     .executeTakeFirstOrThrow()
 
-  await embedGithubPullRequest({
+  await embedCodeChange({
+    label: 'Pull Request',
+    title: pullRequest.title,
+    url: pullRequest.html_url,
     summary,
     metadata: embed_metadata,
-    pullRequest: pullRequestRecord,
     contributor: pullRequest.user.login,
+    mergedAt: pullRequestRecord.merged_at,
   })
 
   if (diff) {
-    await embedDiff({
+    await embedGithubDiff({
       pullRequest: pullRequestRecord,
       diff,
       summary,

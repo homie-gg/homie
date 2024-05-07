@@ -30,7 +30,7 @@ export async function handleCreateGithubIssueFromSlack(
 
   const organization = await findOrgWithSlackTeamId(team_id)
 
-  if (!organization) {
+  if (!organization || !organization.ext_gh_install_id) {
     await http.post(response_url, {
       text: `Error creating issue. Was Void App installed correctly to this workspace?`,
     })

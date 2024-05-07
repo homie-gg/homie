@@ -17,7 +17,7 @@ export const columns: ColumnDef<PullRequest>[] = [
     ),
   },
   {
-    accessorKey: 'repo_name',
+    accessorKey: 'github_repo_name',
     header: ({ column }: { column: Column<PullRequest> }) => {
       return (
         <span
@@ -29,6 +29,7 @@ export const columns: ColumnDef<PullRequest>[] = [
         </span>
       )
     },
+    accessorFn: (row) => row.github_repo_name ?? row.gitlab_project_name,
   },
   {
     accessorKey: 'title',

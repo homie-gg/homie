@@ -54,8 +54,10 @@ export type SaveMergedPullRequest = BullMQJob<
 
 export type CloseLinkedTasks = BullMQJob<
   {
-    pull_request: PullRequest
-    installation: InstallationLite | undefined
+    pullRequestBody: string
+    organization: {
+      id: number
+    }
   },
   void, // return type
   'close_linked_tasks'
@@ -119,6 +121,114 @@ export type CreateTrelloTaskFromSlack = BullMQJob<
   'create_trello_task_from_slack'
 >
 
+export type ImportGitlabProjects = BullMQJob<
+  {
+    organization: {
+      id: number
+      gitlab_access_token: string
+      gitlab_webhook_secret: string
+    }
+  },
+  void, // return type
+  'import_gitlab_projects'
+>
+
+export type ImportGitlabMergeRequests = BullMQJob<
+  {
+    project: {
+      id: number
+      ext_gitlab_project_id: number
+    }
+    organization: {
+      id: number
+      gitlab_access_token: string
+      trello_access_token: string | null
+    }
+  },
+  void, // return type
+  'import_gitlab_merge_requests'
+>
+
+export type SaveMergedMergeRequest = BullMQJob<
+  {
+    merge_request: {
+      created_at: string
+      id: number
+      iid: number
+      title: string
+      target_project_id: number
+      author_id: number
+      description: string | null
+      merged_at?: string
+    }
+    organization: {
+      id: number
+      is_over_plan_pr_limit: boolean | null
+      has_unlimited_usage: boolean | null
+      pr_limit_per_month: number | null
+      gitlab_access_token: string
+      trello_access_token: string | null
+    }
+  },
+  void, // return type
+  'save_merged_merge_request'
+>
+
+export type GenerateOpenMergeRequestSummary = BullMQJob<
+  {
+    merge_request: {
+      created_at: string
+      id: number
+      iid: number
+      title: string
+      target_project_id: number
+      author_id: number
+      description: string | null
+      merged_at?: string
+    }
+    organization: {
+      id: number
+      is_over_plan_pr_limit: boolean | null
+      has_unlimited_usage: boolean | null
+      pr_limit_per_month: number | null
+      gitlab_access_token: string
+      trello_access_token: string | null
+    }
+  },
+  void, // return type
+  'generate_open_merge_request_summary'
+>
+
+export type SaveOpenedMergeRequest = BullMQJob<
+  {
+    merge_request: {
+      created_at: string
+      id: number
+      iid: number
+      title: string
+      target_project_id: number
+      author_id: number
+      description?: string
+      merged_at?: string
+    }
+    organization: {
+      id: number
+      is_over_plan_pr_limit: boolean | null
+      has_unlimited_usage: boolean | null
+      pr_limit_per_month: number | null
+      gitlab_access_token: string
+    }
+  },
+  void, // return type
+  'save_opened_merge_request'
+>
+
+export type RefreshGitlabTokens = BullMQJob<
+  null,
+  void, // return type
+  'refresh_gitlab_tokens'
+>
+
 export type Job =
   | CreateGithubIssueFromSlack
   | AskSlackSelectGithubRepoForIssue
@@ -132,3 +242,9 @@ export type Job =
   | SendPullRequestSummaries
   | SendPullRequestSummariesToOrganization
   | CreateTrelloTaskFromSlack
+  | ImportGitlabProjects
+  | ImportGitlabMergeRequests
+  | SaveMergedMergeRequest
+  | GenerateOpenMergeRequestSummary
+  | SaveOpenedMergeRequest
+  | RefreshGitlabTokens

@@ -1,8 +1,8 @@
 import { getIsOverPlanPRLimit } from '@/lib/billing/get-is-over-plan-pr-limit'
 import { dbClient } from '@/database/client'
 import { saveMergedPullRequest } from '@/lib/github/save-merged-pull-request'
-import { getOrganizationLogData } from '@/lib/log/get-organization-log-data'
-import { getPullRequestLogData } from '@/lib/log/get-pull-request-log-data'
+import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
+import { getPullRequestLogData } from '@/lib/github/get-pull-request-log-data'
 import { logger } from '@/lib/log/logger'
 import { SaveMergedPullRequest } from '@/queue/jobs'
 

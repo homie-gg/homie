@@ -39,9 +39,15 @@ declare module 'zapatos/schema' {
         /**
          * **voidpm.contributor.ext_gh_user_id**
          * - `int4` in database
-         * - `NOT NULL`, no default
+         * - Nullable, no default
          */
-        ext_gh_user_id: number
+        ext_gh_user_id: number | null
+        /**
+         * **voidpm.contributor.ext_gitlab_author_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gitlab_author_id: number | null
         /**
          * **voidpm.contributor.ext_slack_member_id**
          * - `text` in database
@@ -83,9 +89,15 @@ declare module 'zapatos/schema' {
         /**
          * **voidpm.contributor.ext_gh_user_id**
          * - `int4` in database
-         * - `NOT NULL`, no default
+         * - Nullable, no default
          */
-        ext_gh_user_id: number
+        ext_gh_user_id: number | null
+        /**
+         * **voidpm.contributor.ext_gitlab_author_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gitlab_author_id: number | null
         /**
          * **voidpm.contributor.ext_slack_member_id**
          * - `text` in database
@@ -138,9 +150,23 @@ declare module 'zapatos/schema' {
         /**
          * **voidpm.contributor.ext_gh_user_id**
          * - `int4` in database
-         * - `NOT NULL`, no default
+         * - Nullable, no default
          */
         ext_gh_user_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.contributor.ext_gitlab_author_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gitlab_author_id?:
           | number
           | db.Parameter<number>
           | db.SQLFragment
@@ -237,9 +263,25 @@ declare module 'zapatos/schema' {
         /**
          * **voidpm.contributor.ext_gh_user_id**
          * - `int4` in database
-         * - `NOT NULL`, no default
+         * - Nullable, no default
          */
-        ext_gh_user_id: number | db.Parameter<number> | db.SQLFragment
+        ext_gh_user_id?:
+          | number
+          | db.Parameter<number>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **voidpm.contributor.ext_gitlab_author_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gitlab_author_id?:
+          | number
+          | db.Parameter<number>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
         /**
          * **voidpm.contributor.ext_slack_member_id**
          * - `text` in database
@@ -301,13 +343,41 @@ declare module 'zapatos/schema' {
         /**
          * **voidpm.contributor.ext_gh_user_id**
          * - `int4` in database
-         * - `NOT NULL`, no default
+         * - Nullable, no default
          */
         ext_gh_user_id?:
           | number
           | db.Parameter<number>
+          | null
+          | db.DefaultType
           | db.SQLFragment
-          | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
+          | db.SQLFragment<
+              any,
+              | number
+              | db.Parameter<number>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **voidpm.contributor.ext_gitlab_author_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gitlab_author_id?:
+          | number
+          | db.Parameter<number>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | number
+              | db.Parameter<number>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
         /**
          * **voidpm.contributor.ext_slack_member_id**
          * - `text` in database
@@ -381,6 +451,7 @@ declare module 'zapatos/schema' {
       }
       export type UniqueIndex =
         | 'contributor_ext_gh_user_id_key'
+        | 'contributor_ext_gitlab_author_id_key'
         | 'contributor_pkey'
       export type Column = keyof Selectable
       export type OnlyCols<T extends readonly Column[]> = Pick<
@@ -1376,6 +1447,965 @@ declare module 'zapatos/schema' {
     }
 
     /**
+     * **voidpm.pull_request**
+     * - Table in database
+     */
+    export namespace pull_request {
+      export type Table = 'voidpm.pull_request'
+      export interface Selectable {
+        /**
+         * **voidpm.pull_request.body**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        body: string
+        /**
+         * **voidpm.pull_request.closed_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        closed_at: Date | null
+        /**
+         * **voidpm.pull_request.contributor_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        contributor_id: number
+        /**
+         * **voidpm.pull_request.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at: Date
+        /**
+         * **voidpm.pull_request.embed_metadata**
+         * - `json` in database
+         * - Nullable, no default
+         */
+        embed_metadata: db.JSONValue | null
+        /**
+         * **voidpm.pull_request.embed_value**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        embed_value: string | null
+        /**
+         * **voidpm.pull_request.ext_gh_pull_request_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gh_pull_request_id: number | null
+        /**
+         * **voidpm.pull_request.ext_gitlab_merge_request_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gitlab_merge_request_id: number | null
+        /**
+         * **voidpm.pull_request.ext_gitlab_merge_request_iid**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gitlab_merge_request_iid: number | null
+        /**
+         * **voidpm.pull_request.github_repo_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        github_repo_id: number | null
+        /**
+         * **voidpm.pull_request.gitlab_project_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        gitlab_project_id: number | null
+        /**
+         * **voidpm.pull_request.html_url**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        html_url: string
+        /**
+         * **voidpm.pull_request.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('voidpm.pull_request_id_seq'::regclass)`
+         */
+        id: number
+        /**
+         * **voidpm.pull_request.merged_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        merged_at: Date | null
+        /**
+         * **voidpm.pull_request.number**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        number: number
+        /**
+         * **voidpm.pull_request.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id: number
+        /**
+         * **voidpm.pull_request.title**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        title: string
+        /**
+         * **voidpm.pull_request.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at: Date
+      }
+      export interface JSONSelectable {
+        /**
+         * **voidpm.pull_request.body**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        body: string
+        /**
+         * **voidpm.pull_request.closed_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        closed_at: db.TimestampTzString | null
+        /**
+         * **voidpm.pull_request.contributor_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        contributor_id: number
+        /**
+         * **voidpm.pull_request.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at: db.TimestampTzString
+        /**
+         * **voidpm.pull_request.embed_metadata**
+         * - `json` in database
+         * - Nullable, no default
+         */
+        embed_metadata: db.JSONValue | null
+        /**
+         * **voidpm.pull_request.embed_value**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        embed_value: string | null
+        /**
+         * **voidpm.pull_request.ext_gh_pull_request_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gh_pull_request_id: number | null
+        /**
+         * **voidpm.pull_request.ext_gitlab_merge_request_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gitlab_merge_request_id: number | null
+        /**
+         * **voidpm.pull_request.ext_gitlab_merge_request_iid**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gitlab_merge_request_iid: number | null
+        /**
+         * **voidpm.pull_request.github_repo_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        github_repo_id: number | null
+        /**
+         * **voidpm.pull_request.gitlab_project_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        gitlab_project_id: number | null
+        /**
+         * **voidpm.pull_request.html_url**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        html_url: string
+        /**
+         * **voidpm.pull_request.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('voidpm.pull_request_id_seq'::regclass)`
+         */
+        id: number
+        /**
+         * **voidpm.pull_request.merged_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        merged_at: db.TimestampTzString | null
+        /**
+         * **voidpm.pull_request.number**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        number: number
+        /**
+         * **voidpm.pull_request.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id: number
+        /**
+         * **voidpm.pull_request.title**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        title: string
+        /**
+         * **voidpm.pull_request.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at: db.TimestampTzString
+      }
+      export interface Whereable {
+        /**
+         * **voidpm.pull_request.body**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        body?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.pull_request.closed_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        closed_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+        /**
+         * **voidpm.pull_request.contributor_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        contributor_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.pull_request.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+        /**
+         * **voidpm.pull_request.embed_metadata**
+         * - `json` in database
+         * - Nullable, no default
+         */
+        embed_metadata?:
+          | db.JSONValue
+          | db.Parameter<db.JSONValue>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | db.JSONValue
+              | db.Parameter<db.JSONValue>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+        /**
+         * **voidpm.pull_request.embed_value**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        embed_value?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.pull_request.ext_gh_pull_request_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gh_pull_request_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.pull_request.ext_gitlab_merge_request_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gitlab_merge_request_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.pull_request.ext_gitlab_merge_request_iid**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gitlab_merge_request_iid?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.pull_request.github_repo_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        github_repo_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.pull_request.gitlab_project_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        gitlab_project_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.pull_request.html_url**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        html_url?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.pull_request.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('voidpm.pull_request_id_seq'::regclass)`
+         */
+        id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.pull_request.merged_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        merged_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+        /**
+         * **voidpm.pull_request.number**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        number?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.pull_request.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.pull_request.title**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        title?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **voidpm.pull_request.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+      }
+      export interface Insertable {
+        /**
+         * **voidpm.pull_request.body**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        body: string | db.Parameter<string> | db.SQLFragment
+        /**
+         * **voidpm.pull_request.closed_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        closed_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **voidpm.pull_request.contributor_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        contributor_id: number | db.Parameter<number> | db.SQLFragment
+        /**
+         * **voidpm.pull_request.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **voidpm.pull_request.embed_metadata**
+         * - `json` in database
+         * - Nullable, no default
+         */
+        embed_metadata?:
+          | db.JSONValue
+          | db.Parameter<db.JSONValue>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **voidpm.pull_request.embed_value**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        embed_value?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **voidpm.pull_request.ext_gh_pull_request_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gh_pull_request_id?:
+          | number
+          | db.Parameter<number>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **voidpm.pull_request.ext_gitlab_merge_request_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gitlab_merge_request_id?:
+          | number
+          | db.Parameter<number>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **voidpm.pull_request.ext_gitlab_merge_request_iid**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gitlab_merge_request_iid?:
+          | number
+          | db.Parameter<number>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **voidpm.pull_request.github_repo_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        github_repo_id?:
+          | number
+          | db.Parameter<number>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **voidpm.pull_request.gitlab_project_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        gitlab_project_id?:
+          | number
+          | db.Parameter<number>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **voidpm.pull_request.html_url**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        html_url: string | db.Parameter<string> | db.SQLFragment
+        /**
+         * **voidpm.pull_request.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('voidpm.pull_request_id_seq'::regclass)`
+         */
+        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+        /**
+         * **voidpm.pull_request.merged_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        merged_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **voidpm.pull_request.number**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        number: number | db.Parameter<number> | db.SQLFragment
+        /**
+         * **voidpm.pull_request.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id: number | db.Parameter<number> | db.SQLFragment
+        /**
+         * **voidpm.pull_request.title**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        title: string | db.Parameter<string> | db.SQLFragment
+        /**
+         * **voidpm.pull_request.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+      }
+      export interface Updatable {
+        /**
+         * **voidpm.pull_request.body**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        body?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
+        /**
+         * **voidpm.pull_request.closed_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        closed_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **voidpm.pull_request.contributor_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        contributor_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
+        /**
+         * **voidpm.pull_request.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **voidpm.pull_request.embed_metadata**
+         * - `json` in database
+         * - Nullable, no default
+         */
+        embed_metadata?:
+          | db.JSONValue
+          | db.Parameter<db.JSONValue>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | db.JSONValue
+              | db.Parameter<db.JSONValue>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **voidpm.pull_request.embed_value**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        embed_value?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | string
+              | db.Parameter<string>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **voidpm.pull_request.ext_gh_pull_request_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gh_pull_request_id?:
+          | number
+          | db.Parameter<number>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | number
+              | db.Parameter<number>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **voidpm.pull_request.ext_gitlab_merge_request_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gitlab_merge_request_id?:
+          | number
+          | db.Parameter<number>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | number
+              | db.Parameter<number>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **voidpm.pull_request.ext_gitlab_merge_request_iid**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gitlab_merge_request_iid?:
+          | number
+          | db.Parameter<number>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | number
+              | db.Parameter<number>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **voidpm.pull_request.github_repo_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        github_repo_id?:
+          | number
+          | db.Parameter<number>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | number
+              | db.Parameter<number>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **voidpm.pull_request.gitlab_project_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        gitlab_project_id?:
+          | number
+          | db.Parameter<number>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | number
+              | db.Parameter<number>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **voidpm.pull_request.html_url**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        html_url?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
+        /**
+         * **voidpm.pull_request.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('voidpm.pull_request_id_seq'::regclass)`
+         */
+        id?:
+          | number
+          | db.Parameter<number>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **voidpm.pull_request.merged_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        merged_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **voidpm.pull_request.number**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        number?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
+        /**
+         * **voidpm.pull_request.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
+        /**
+         * **voidpm.pull_request.title**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        title?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
+        /**
+         * **voidpm.pull_request.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.DefaultType
+              | db.SQLFragment
+            >
+      }
+      export type UniqueIndex =
+        | 'pull_request_ext_gh_pull_request_id_key'
+        | 'pull_request_ext_gitlab_merge_request_id_key'
+        | 'pull_request_pkey'
+      export type Column = keyof Selectable
+      export type OnlyCols<T extends readonly Column[]> = Pick<
+        Selectable,
+        T[number]
+      >
+      export type SQLExpression =
+        | Table
+        | db.ColumnNames<Updatable | (keyof Updatable)[]>
+        | db.ColumnValues<Updatable>
+        | Whereable
+        | Column
+        | db.ParentColumn
+        | db.GenericSQLExpression
+      export type SQL = SQLExpression | SQLExpression[]
+    }
+
+    /**
      * **voidpm.subscription**
      * - Table in database
      */
@@ -1905,47 +2935,56 @@ declare module 'zapatos/schema' {
       | contributor.Table
       | organization.Table
       | plan.Table
+      | pull_request.Table
       | subscription.Table
     export type Selectable =
       | contributor.Selectable
       | organization.Selectable
       | plan.Selectable
+      | pull_request.Selectable
       | subscription.Selectable
     export type JSONSelectable =
       | contributor.JSONSelectable
       | organization.JSONSelectable
       | plan.JSONSelectable
+      | pull_request.JSONSelectable
       | subscription.JSONSelectable
     export type Whereable =
       | contributor.Whereable
       | organization.Whereable
       | plan.Whereable
+      | pull_request.Whereable
       | subscription.Whereable
     export type Insertable =
       | contributor.Insertable
       | organization.Insertable
       | plan.Insertable
+      | pull_request.Insertable
       | subscription.Insertable
     export type Updatable =
       | contributor.Updatable
       | organization.Updatable
       | plan.Updatable
+      | pull_request.Updatable
       | subscription.Updatable
     export type UniqueIndex =
       | contributor.UniqueIndex
       | organization.UniqueIndex
       | plan.UniqueIndex
+      | pull_request.UniqueIndex
       | subscription.UniqueIndex
     export type Column =
       | contributor.Column
       | organization.Column
       | plan.Column
+      | pull_request.Column
       | subscription.Column
 
     export type AllBaseTables = [
       contributor.Table,
       organization.Table,
       plan.Table,
+      pull_request.Table,
       subscription.Table,
     ]
     export type AllForeignTables = []
@@ -1955,6 +2994,7 @@ declare module 'zapatos/schema' {
       contributor.Table,
       organization.Table,
       plan.Table,
+      pull_request.Table,
       subscription.Table,
     ]
   }
@@ -2229,768 +3269,6 @@ declare module 'zapatos/schema' {
         | 'organization_ext_gh_install_id_key'
         | 'organization_organization_id_key'
         | 'organization_pkey'
-      export type Column = keyof Selectable
-      export type OnlyCols<T extends readonly Column[]> = Pick<
-        Selectable,
-        T[number]
-      >
-      export type SQLExpression =
-        | Table
-        | db.ColumnNames<Updatable | (keyof Updatable)[]>
-        | db.ColumnValues<Updatable>
-        | Whereable
-        | Column
-        | db.ParentColumn
-        | db.GenericSQLExpression
-      export type SQL = SQLExpression | SQLExpression[]
-    }
-
-    /**
-     * **github.pull_request**
-     * - Table in database
-     */
-    export namespace pull_request {
-      export type Table = 'github.pull_request'
-      export interface Selectable {
-        /**
-         * **github.pull_request.body**
-         * - `text` in database
-         * - `NOT NULL`, no default
-         */
-        body: string
-        /**
-         * **github.pull_request.closed_at**
-         * - `timestamptz` in database
-         * - Nullable, no default
-         */
-        closed_at: Date | null
-        /**
-         * **github.pull_request.contributor_id**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        contributor_id: number
-        /**
-         * **github.pull_request.created_at**
-         * - `timestamptz` in database
-         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
-         */
-        created_at: Date
-        /**
-         * **github.pull_request.embed_metadata**
-         * - `json` in database
-         * - Nullable, no default
-         */
-        embed_metadata: db.JSONValue | null
-        /**
-         * **github.pull_request.embed_value**
-         * - `text` in database
-         * - Nullable, no default
-         */
-        embed_value: string | null
-        /**
-         * **github.pull_request.ext_gh_pull_request_id**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        ext_gh_pull_request_id: number
-        /**
-         * **github.pull_request.html_url**
-         * - `text` in database
-         * - `NOT NULL`, no default
-         */
-        html_url: string
-        /**
-         * **github.pull_request.id**
-         * - `int4` in database
-         * - `NOT NULL`, default: `nextval('github.pull_request_id_seq'::regclass)`
-         */
-        id: number
-        /**
-         * **github.pull_request.merged_at**
-         * - `timestamptz` in database
-         * - Nullable, no default
-         */
-        merged_at: Date | null
-        /**
-         * **github.pull_request.number**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        number: number
-        /**
-         * **github.pull_request.organization_id**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        organization_id: number
-        /**
-         * **github.pull_request.repo_id**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        repo_id: number
-        /**
-         * **github.pull_request.title**
-         * - `text` in database
-         * - `NOT NULL`, no default
-         */
-        title: string
-        /**
-         * **github.pull_request.updated_at**
-         * - `timestamptz` in database
-         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
-         */
-        updated_at: Date
-      }
-      export interface JSONSelectable {
-        /**
-         * **github.pull_request.body**
-         * - `text` in database
-         * - `NOT NULL`, no default
-         */
-        body: string
-        /**
-         * **github.pull_request.closed_at**
-         * - `timestamptz` in database
-         * - Nullable, no default
-         */
-        closed_at: db.TimestampTzString | null
-        /**
-         * **github.pull_request.contributor_id**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        contributor_id: number
-        /**
-         * **github.pull_request.created_at**
-         * - `timestamptz` in database
-         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
-         */
-        created_at: db.TimestampTzString
-        /**
-         * **github.pull_request.embed_metadata**
-         * - `json` in database
-         * - Nullable, no default
-         */
-        embed_metadata: db.JSONValue | null
-        /**
-         * **github.pull_request.embed_value**
-         * - `text` in database
-         * - Nullable, no default
-         */
-        embed_value: string | null
-        /**
-         * **github.pull_request.ext_gh_pull_request_id**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        ext_gh_pull_request_id: number
-        /**
-         * **github.pull_request.html_url**
-         * - `text` in database
-         * - `NOT NULL`, no default
-         */
-        html_url: string
-        /**
-         * **github.pull_request.id**
-         * - `int4` in database
-         * - `NOT NULL`, default: `nextval('github.pull_request_id_seq'::regclass)`
-         */
-        id: number
-        /**
-         * **github.pull_request.merged_at**
-         * - `timestamptz` in database
-         * - Nullable, no default
-         */
-        merged_at: db.TimestampTzString | null
-        /**
-         * **github.pull_request.number**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        number: number
-        /**
-         * **github.pull_request.organization_id**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        organization_id: number
-        /**
-         * **github.pull_request.repo_id**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        repo_id: number
-        /**
-         * **github.pull_request.title**
-         * - `text` in database
-         * - `NOT NULL`, no default
-         */
-        title: string
-        /**
-         * **github.pull_request.updated_at**
-         * - `timestamptz` in database
-         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
-         */
-        updated_at: db.TimestampTzString
-      }
-      export interface Whereable {
-        /**
-         * **github.pull_request.body**
-         * - `text` in database
-         * - `NOT NULL`, no default
-         */
-        body?:
-          | string
-          | db.Parameter<string>
-          | db.SQLFragment
-          | db.ParentColumn
-          | db.SQLFragment<
-              any,
-              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
-            >
-        /**
-         * **github.pull_request.closed_at**
-         * - `timestamptz` in database
-         * - Nullable, no default
-         */
-        closed_at?:
-          | (db.TimestampTzString | Date)
-          | db.Parameter<db.TimestampTzString | Date>
-          | db.SQLFragment
-          | db.ParentColumn
-          | db.SQLFragment<
-              any,
-              | (db.TimestampTzString | Date)
-              | db.Parameter<db.TimestampTzString | Date>
-              | db.SQLFragment
-              | db.ParentColumn
-            >
-        /**
-         * **github.pull_request.contributor_id**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        contributor_id?:
-          | number
-          | db.Parameter<number>
-          | db.SQLFragment
-          | db.ParentColumn
-          | db.SQLFragment<
-              any,
-              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
-            >
-        /**
-         * **github.pull_request.created_at**
-         * - `timestamptz` in database
-         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
-         */
-        created_at?:
-          | (db.TimestampTzString | Date)
-          | db.Parameter<db.TimestampTzString | Date>
-          | db.SQLFragment
-          | db.ParentColumn
-          | db.SQLFragment<
-              any,
-              | (db.TimestampTzString | Date)
-              | db.Parameter<db.TimestampTzString | Date>
-              | db.SQLFragment
-              | db.ParentColumn
-            >
-        /**
-         * **github.pull_request.embed_metadata**
-         * - `json` in database
-         * - Nullable, no default
-         */
-        embed_metadata?:
-          | db.JSONValue
-          | db.Parameter<db.JSONValue>
-          | db.SQLFragment
-          | db.ParentColumn
-          | db.SQLFragment<
-              any,
-              | db.JSONValue
-              | db.Parameter<db.JSONValue>
-              | db.SQLFragment
-              | db.ParentColumn
-            >
-        /**
-         * **github.pull_request.embed_value**
-         * - `text` in database
-         * - Nullable, no default
-         */
-        embed_value?:
-          | string
-          | db.Parameter<string>
-          | db.SQLFragment
-          | db.ParentColumn
-          | db.SQLFragment<
-              any,
-              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
-            >
-        /**
-         * **github.pull_request.ext_gh_pull_request_id**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        ext_gh_pull_request_id?:
-          | number
-          | db.Parameter<number>
-          | db.SQLFragment
-          | db.ParentColumn
-          | db.SQLFragment<
-              any,
-              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
-            >
-        /**
-         * **github.pull_request.html_url**
-         * - `text` in database
-         * - `NOT NULL`, no default
-         */
-        html_url?:
-          | string
-          | db.Parameter<string>
-          | db.SQLFragment
-          | db.ParentColumn
-          | db.SQLFragment<
-              any,
-              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
-            >
-        /**
-         * **github.pull_request.id**
-         * - `int4` in database
-         * - `NOT NULL`, default: `nextval('github.pull_request_id_seq'::regclass)`
-         */
-        id?:
-          | number
-          | db.Parameter<number>
-          | db.SQLFragment
-          | db.ParentColumn
-          | db.SQLFragment<
-              any,
-              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
-            >
-        /**
-         * **github.pull_request.merged_at**
-         * - `timestamptz` in database
-         * - Nullable, no default
-         */
-        merged_at?:
-          | (db.TimestampTzString | Date)
-          | db.Parameter<db.TimestampTzString | Date>
-          | db.SQLFragment
-          | db.ParentColumn
-          | db.SQLFragment<
-              any,
-              | (db.TimestampTzString | Date)
-              | db.Parameter<db.TimestampTzString | Date>
-              | db.SQLFragment
-              | db.ParentColumn
-            >
-        /**
-         * **github.pull_request.number**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        number?:
-          | number
-          | db.Parameter<number>
-          | db.SQLFragment
-          | db.ParentColumn
-          | db.SQLFragment<
-              any,
-              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
-            >
-        /**
-         * **github.pull_request.organization_id**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        organization_id?:
-          | number
-          | db.Parameter<number>
-          | db.SQLFragment
-          | db.ParentColumn
-          | db.SQLFragment<
-              any,
-              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
-            >
-        /**
-         * **github.pull_request.repo_id**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        repo_id?:
-          | number
-          | db.Parameter<number>
-          | db.SQLFragment
-          | db.ParentColumn
-          | db.SQLFragment<
-              any,
-              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
-            >
-        /**
-         * **github.pull_request.title**
-         * - `text` in database
-         * - `NOT NULL`, no default
-         */
-        title?:
-          | string
-          | db.Parameter<string>
-          | db.SQLFragment
-          | db.ParentColumn
-          | db.SQLFragment<
-              any,
-              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
-            >
-        /**
-         * **github.pull_request.updated_at**
-         * - `timestamptz` in database
-         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
-         */
-        updated_at?:
-          | (db.TimestampTzString | Date)
-          | db.Parameter<db.TimestampTzString | Date>
-          | db.SQLFragment
-          | db.ParentColumn
-          | db.SQLFragment<
-              any,
-              | (db.TimestampTzString | Date)
-              | db.Parameter<db.TimestampTzString | Date>
-              | db.SQLFragment
-              | db.ParentColumn
-            >
-      }
-      export interface Insertable {
-        /**
-         * **github.pull_request.body**
-         * - `text` in database
-         * - `NOT NULL`, no default
-         */
-        body: string | db.Parameter<string> | db.SQLFragment
-        /**
-         * **github.pull_request.closed_at**
-         * - `timestamptz` in database
-         * - Nullable, no default
-         */
-        closed_at?:
-          | (db.TimestampTzString | Date)
-          | db.Parameter<db.TimestampTzString | Date>
-          | null
-          | db.DefaultType
-          | db.SQLFragment
-        /**
-         * **github.pull_request.contributor_id**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        contributor_id: number | db.Parameter<number> | db.SQLFragment
-        /**
-         * **github.pull_request.created_at**
-         * - `timestamptz` in database
-         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
-         */
-        created_at?:
-          | (db.TimestampTzString | Date)
-          | db.Parameter<db.TimestampTzString | Date>
-          | db.DefaultType
-          | db.SQLFragment
-        /**
-         * **github.pull_request.embed_metadata**
-         * - `json` in database
-         * - Nullable, no default
-         */
-        embed_metadata?:
-          | db.JSONValue
-          | db.Parameter<db.JSONValue>
-          | null
-          | db.DefaultType
-          | db.SQLFragment
-        /**
-         * **github.pull_request.embed_value**
-         * - `text` in database
-         * - Nullable, no default
-         */
-        embed_value?:
-          | string
-          | db.Parameter<string>
-          | null
-          | db.DefaultType
-          | db.SQLFragment
-        /**
-         * **github.pull_request.ext_gh_pull_request_id**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        ext_gh_pull_request_id: number | db.Parameter<number> | db.SQLFragment
-        /**
-         * **github.pull_request.html_url**
-         * - `text` in database
-         * - `NOT NULL`, no default
-         */
-        html_url: string | db.Parameter<string> | db.SQLFragment
-        /**
-         * **github.pull_request.id**
-         * - `int4` in database
-         * - `NOT NULL`, default: `nextval('github.pull_request_id_seq'::regclass)`
-         */
-        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment
-        /**
-         * **github.pull_request.merged_at**
-         * - `timestamptz` in database
-         * - Nullable, no default
-         */
-        merged_at?:
-          | (db.TimestampTzString | Date)
-          | db.Parameter<db.TimestampTzString | Date>
-          | null
-          | db.DefaultType
-          | db.SQLFragment
-        /**
-         * **github.pull_request.number**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        number: number | db.Parameter<number> | db.SQLFragment
-        /**
-         * **github.pull_request.organization_id**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        organization_id: number | db.Parameter<number> | db.SQLFragment
-        /**
-         * **github.pull_request.repo_id**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        repo_id: number | db.Parameter<number> | db.SQLFragment
-        /**
-         * **github.pull_request.title**
-         * - `text` in database
-         * - `NOT NULL`, no default
-         */
-        title: string | db.Parameter<string> | db.SQLFragment
-        /**
-         * **github.pull_request.updated_at**
-         * - `timestamptz` in database
-         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
-         */
-        updated_at?:
-          | (db.TimestampTzString | Date)
-          | db.Parameter<db.TimestampTzString | Date>
-          | db.DefaultType
-          | db.SQLFragment
-      }
-      export interface Updatable {
-        /**
-         * **github.pull_request.body**
-         * - `text` in database
-         * - `NOT NULL`, no default
-         */
-        body?:
-          | string
-          | db.Parameter<string>
-          | db.SQLFragment
-          | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
-        /**
-         * **github.pull_request.closed_at**
-         * - `timestamptz` in database
-         * - Nullable, no default
-         */
-        closed_at?:
-          | (db.TimestampTzString | Date)
-          | db.Parameter<db.TimestampTzString | Date>
-          | null
-          | db.DefaultType
-          | db.SQLFragment
-          | db.SQLFragment<
-              any,
-              | (db.TimestampTzString | Date)
-              | db.Parameter<db.TimestampTzString | Date>
-              | null
-              | db.DefaultType
-              | db.SQLFragment
-            >
-        /**
-         * **github.pull_request.contributor_id**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        contributor_id?:
-          | number
-          | db.Parameter<number>
-          | db.SQLFragment
-          | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
-        /**
-         * **github.pull_request.created_at**
-         * - `timestamptz` in database
-         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
-         */
-        created_at?:
-          | (db.TimestampTzString | Date)
-          | db.Parameter<db.TimestampTzString | Date>
-          | db.DefaultType
-          | db.SQLFragment
-          | db.SQLFragment<
-              any,
-              | (db.TimestampTzString | Date)
-              | db.Parameter<db.TimestampTzString | Date>
-              | db.DefaultType
-              | db.SQLFragment
-            >
-        /**
-         * **github.pull_request.embed_metadata**
-         * - `json` in database
-         * - Nullable, no default
-         */
-        embed_metadata?:
-          | db.JSONValue
-          | db.Parameter<db.JSONValue>
-          | null
-          | db.DefaultType
-          | db.SQLFragment
-          | db.SQLFragment<
-              any,
-              | db.JSONValue
-              | db.Parameter<db.JSONValue>
-              | null
-              | db.DefaultType
-              | db.SQLFragment
-            >
-        /**
-         * **github.pull_request.embed_value**
-         * - `text` in database
-         * - Nullable, no default
-         */
-        embed_value?:
-          | string
-          | db.Parameter<string>
-          | null
-          | db.DefaultType
-          | db.SQLFragment
-          | db.SQLFragment<
-              any,
-              | string
-              | db.Parameter<string>
-              | null
-              | db.DefaultType
-              | db.SQLFragment
-            >
-        /**
-         * **github.pull_request.ext_gh_pull_request_id**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        ext_gh_pull_request_id?:
-          | number
-          | db.Parameter<number>
-          | db.SQLFragment
-          | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
-        /**
-         * **github.pull_request.html_url**
-         * - `text` in database
-         * - `NOT NULL`, no default
-         */
-        html_url?:
-          | string
-          | db.Parameter<string>
-          | db.SQLFragment
-          | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
-        /**
-         * **github.pull_request.id**
-         * - `int4` in database
-         * - `NOT NULL`, default: `nextval('github.pull_request_id_seq'::regclass)`
-         */
-        id?:
-          | number
-          | db.Parameter<number>
-          | db.DefaultType
-          | db.SQLFragment
-          | db.SQLFragment<
-              any,
-              number | db.Parameter<number> | db.DefaultType | db.SQLFragment
-            >
-        /**
-         * **github.pull_request.merged_at**
-         * - `timestamptz` in database
-         * - Nullable, no default
-         */
-        merged_at?:
-          | (db.TimestampTzString | Date)
-          | db.Parameter<db.TimestampTzString | Date>
-          | null
-          | db.DefaultType
-          | db.SQLFragment
-          | db.SQLFragment<
-              any,
-              | (db.TimestampTzString | Date)
-              | db.Parameter<db.TimestampTzString | Date>
-              | null
-              | db.DefaultType
-              | db.SQLFragment
-            >
-        /**
-         * **github.pull_request.number**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        number?:
-          | number
-          | db.Parameter<number>
-          | db.SQLFragment
-          | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
-        /**
-         * **github.pull_request.organization_id**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        organization_id?:
-          | number
-          | db.Parameter<number>
-          | db.SQLFragment
-          | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
-        /**
-         * **github.pull_request.repo_id**
-         * - `int4` in database
-         * - `NOT NULL`, no default
-         */
-        repo_id?:
-          | number
-          | db.Parameter<number>
-          | db.SQLFragment
-          | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
-        /**
-         * **github.pull_request.title**
-         * - `text` in database
-         * - `NOT NULL`, no default
-         */
-        title?:
-          | string
-          | db.Parameter<string>
-          | db.SQLFragment
-          | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
-        /**
-         * **github.pull_request.updated_at**
-         * - `timestamptz` in database
-         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
-         */
-        updated_at?:
-          | (db.TimestampTzString | Date)
-          | db.Parameter<db.TimestampTzString | Date>
-          | db.DefaultType
-          | db.SQLFragment
-          | db.SQLFragment<
-              any,
-              | (db.TimestampTzString | Date)
-              | db.Parameter<db.TimestampTzString | Date>
-              | db.DefaultType
-              | db.SQLFragment
-            >
-      }
-      export type UniqueIndex =
-        | 'pull_request_ext_gh_pull_request_id_key'
-        | 'pull_request_pkey'
       export type Column = keyof Selectable
       export type OnlyCols<T extends readonly Column[]> = Pick<
         Selectable,
@@ -3368,46 +3646,22 @@ declare module 'zapatos/schema' {
 
     /* --- aggregate types --- */
 
-    export type Table = organization.Table | pull_request.Table | repo.Table
-    export type Selectable =
-      | organization.Selectable
-      | pull_request.Selectable
-      | repo.Selectable
+    export type Table = organization.Table | repo.Table
+    export type Selectable = organization.Selectable | repo.Selectable
     export type JSONSelectable =
       | organization.JSONSelectable
-      | pull_request.JSONSelectable
       | repo.JSONSelectable
-    export type Whereable =
-      | organization.Whereable
-      | pull_request.Whereable
-      | repo.Whereable
-    export type Insertable =
-      | organization.Insertable
-      | pull_request.Insertable
-      | repo.Insertable
-    export type Updatable =
-      | organization.Updatable
-      | pull_request.Updatable
-      | repo.Updatable
-    export type UniqueIndex =
-      | organization.UniqueIndex
-      | pull_request.UniqueIndex
-      | repo.UniqueIndex
-    export type Column = organization.Column | pull_request.Column | repo.Column
+    export type Whereable = organization.Whereable | repo.Whereable
+    export type Insertable = organization.Insertable | repo.Insertable
+    export type Updatable = organization.Updatable | repo.Updatable
+    export type UniqueIndex = organization.UniqueIndex | repo.UniqueIndex
+    export type Column = organization.Column | repo.Column
 
-    export type AllBaseTables = [
-      organization.Table,
-      pull_request.Table,
-      repo.Table,
-    ]
+    export type AllBaseTables = [organization.Table, repo.Table]
     export type AllForeignTables = []
     export type AllViews = []
     export type AllMaterializedViews = []
-    export type AllTablesAndViews = [
-      organization.Table,
-      pull_request.Table,
-      repo.Table,
-    ]
+    export type AllTablesAndViews = [organization.Table, repo.Table]
   }
 
   /* === schema: slack === */
@@ -4356,76 +4610,941 @@ declare module 'zapatos/schema' {
     export type AllTablesAndViews = [workspace.Table]
   }
 
+  /* === schema: gitlab === */
+
+  export namespace gitlab {
+    /* --- enums --- */
+    /* (none) */
+
+    /* --- tables --- */
+
+    /**
+     * **gitlab.app_user**
+     * - Table in database
+     */
+    export namespace app_user {
+      export type Table = 'gitlab.app_user'
+      export interface Selectable {
+        /**
+         * **gitlab.app_user.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at: Date
+        /**
+         * **gitlab.app_user.gitlab_access_token**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        gitlab_access_token: string
+        /**
+         * **gitlab.app_user.gitlab_refresh_token**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        gitlab_refresh_token: string
+        /**
+         * **gitlab.app_user.gitlab_webhook_secret**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        gitlab_webhook_secret: string
+        /**
+         * **gitlab.app_user.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('gitlab.app_user_id_seq'::regclass)`
+         */
+        id: number
+        /**
+         * **gitlab.app_user.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id: number
+        /**
+         * **gitlab.app_user.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at: Date
+      }
+      export interface JSONSelectable {
+        /**
+         * **gitlab.app_user.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at: db.TimestampTzString
+        /**
+         * **gitlab.app_user.gitlab_access_token**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        gitlab_access_token: string
+        /**
+         * **gitlab.app_user.gitlab_refresh_token**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        gitlab_refresh_token: string
+        /**
+         * **gitlab.app_user.gitlab_webhook_secret**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        gitlab_webhook_secret: string
+        /**
+         * **gitlab.app_user.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('gitlab.app_user_id_seq'::regclass)`
+         */
+        id: number
+        /**
+         * **gitlab.app_user.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id: number
+        /**
+         * **gitlab.app_user.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at: db.TimestampTzString
+      }
+      export interface Whereable {
+        /**
+         * **gitlab.app_user.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+        /**
+         * **gitlab.app_user.gitlab_access_token**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        gitlab_access_token?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **gitlab.app_user.gitlab_refresh_token**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        gitlab_refresh_token?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **gitlab.app_user.gitlab_webhook_secret**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        gitlab_webhook_secret?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **gitlab.app_user.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('gitlab.app_user_id_seq'::regclass)`
+         */
+        id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **gitlab.app_user.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **gitlab.app_user.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+      }
+      export interface Insertable {
+        /**
+         * **gitlab.app_user.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **gitlab.app_user.gitlab_access_token**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        gitlab_access_token: string | db.Parameter<string> | db.SQLFragment
+        /**
+         * **gitlab.app_user.gitlab_refresh_token**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        gitlab_refresh_token: string | db.Parameter<string> | db.SQLFragment
+        /**
+         * **gitlab.app_user.gitlab_webhook_secret**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        gitlab_webhook_secret: string | db.Parameter<string> | db.SQLFragment
+        /**
+         * **gitlab.app_user.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('gitlab.app_user_id_seq'::regclass)`
+         */
+        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+        /**
+         * **gitlab.app_user.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id: number | db.Parameter<number> | db.SQLFragment
+        /**
+         * **gitlab.app_user.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+      }
+      export interface Updatable {
+        /**
+         * **gitlab.app_user.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **gitlab.app_user.gitlab_access_token**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        gitlab_access_token?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
+        /**
+         * **gitlab.app_user.gitlab_refresh_token**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        gitlab_refresh_token?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
+        /**
+         * **gitlab.app_user.gitlab_webhook_secret**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        gitlab_webhook_secret?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
+        /**
+         * **gitlab.app_user.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('gitlab.app_user_id_seq'::regclass)`
+         */
+        id?:
+          | number
+          | db.Parameter<number>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **gitlab.app_user.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
+        /**
+         * **gitlab.app_user.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.DefaultType
+              | db.SQLFragment
+            >
+      }
+      export type UniqueIndex = 'app_user_organization_id_key' | 'app_user_pkey'
+      export type Column = keyof Selectable
+      export type OnlyCols<T extends readonly Column[]> = Pick<
+        Selectable,
+        T[number]
+      >
+      export type SQLExpression =
+        | Table
+        | db.ColumnNames<Updatable | (keyof Updatable)[]>
+        | db.ColumnValues<Updatable>
+        | Whereable
+        | Column
+        | db.ParentColumn
+        | db.GenericSQLExpression
+      export type SQL = SQLExpression | SQLExpression[]
+    }
+
+    /**
+     * **gitlab.project**
+     * - Table in database
+     */
+    export namespace project {
+      export type Table = 'gitlab.project'
+      export interface Selectable {
+        /**
+         * **gitlab.project.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at: Date
+        /**
+         * **gitlab.project.enabled**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        enabled: boolean
+        /**
+         * **gitlab.project.ext_gitlab_project_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        ext_gitlab_project_id: number
+        /**
+         * **gitlab.project.has_completed_setup**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        has_completed_setup: boolean
+        /**
+         * **gitlab.project.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('gitlab.project_id_seq'::regclass)`
+         */
+        id: number
+        /**
+         * **gitlab.project.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name: string
+        /**
+         * **gitlab.project.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id: number
+        /**
+         * **gitlab.project.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at: Date
+        /**
+         * **gitlab.project.web_url**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        web_url: string
+      }
+      export interface JSONSelectable {
+        /**
+         * **gitlab.project.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at: db.TimestampTzString
+        /**
+         * **gitlab.project.enabled**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        enabled: boolean
+        /**
+         * **gitlab.project.ext_gitlab_project_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        ext_gitlab_project_id: number
+        /**
+         * **gitlab.project.has_completed_setup**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        has_completed_setup: boolean
+        /**
+         * **gitlab.project.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('gitlab.project_id_seq'::regclass)`
+         */
+        id: number
+        /**
+         * **gitlab.project.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name: string
+        /**
+         * **gitlab.project.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id: number
+        /**
+         * **gitlab.project.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at: db.TimestampTzString
+        /**
+         * **gitlab.project.web_url**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        web_url: string
+      }
+      export interface Whereable {
+        /**
+         * **gitlab.project.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+        /**
+         * **gitlab.project.enabled**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        enabled?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **gitlab.project.ext_gitlab_project_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        ext_gitlab_project_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **gitlab.project.has_completed_setup**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        has_completed_setup?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **gitlab.project.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('gitlab.project_id_seq'::regclass)`
+         */
+        id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **gitlab.project.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **gitlab.project.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **gitlab.project.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+        /**
+         * **gitlab.project.web_url**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        web_url?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+      }
+      export interface Insertable {
+        /**
+         * **gitlab.project.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **gitlab.project.enabled**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        enabled?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **gitlab.project.ext_gitlab_project_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        ext_gitlab_project_id: number | db.Parameter<number> | db.SQLFragment
+        /**
+         * **gitlab.project.has_completed_setup**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        has_completed_setup?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **gitlab.project.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('gitlab.project_id_seq'::regclass)`
+         */
+        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+        /**
+         * **gitlab.project.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name: string | db.Parameter<string> | db.SQLFragment
+        /**
+         * **gitlab.project.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id: number | db.Parameter<number> | db.SQLFragment
+        /**
+         * **gitlab.project.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **gitlab.project.web_url**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        web_url: string | db.Parameter<string> | db.SQLFragment
+      }
+      export interface Updatable {
+        /**
+         * **gitlab.project.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **gitlab.project.enabled**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        enabled?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **gitlab.project.ext_gitlab_project_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        ext_gitlab_project_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
+        /**
+         * **gitlab.project.has_completed_setup**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        has_completed_setup?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **gitlab.project.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('gitlab.project_id_seq'::regclass)`
+         */
+        id?:
+          | number
+          | db.Parameter<number>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **gitlab.project.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
+        /**
+         * **gitlab.project.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
+        /**
+         * **gitlab.project.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **gitlab.project.web_url**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        web_url?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
+      }
+      export type UniqueIndex =
+        | 'project_ext_gitlab_project_id_key'
+        | 'project_pkey'
+      export type Column = keyof Selectable
+      export type OnlyCols<T extends readonly Column[]> = Pick<
+        Selectable,
+        T[number]
+      >
+      export type SQLExpression =
+        | Table
+        | db.ColumnNames<Updatable | (keyof Updatable)[]>
+        | db.ColumnValues<Updatable>
+        | Whereable
+        | Column
+        | db.ParentColumn
+        | db.GenericSQLExpression
+      export type SQL = SQLExpression | SQLExpression[]
+    }
+
+    /* --- aggregate types --- */
+
+    export type Table = app_user.Table | project.Table
+    export type Selectable = app_user.Selectable | project.Selectable
+    export type JSONSelectable =
+      | app_user.JSONSelectable
+      | project.JSONSelectable
+    export type Whereable = app_user.Whereable | project.Whereable
+    export type Insertable = app_user.Insertable | project.Insertable
+    export type Updatable = app_user.Updatable | project.Updatable
+    export type UniqueIndex = app_user.UniqueIndex | project.UniqueIndex
+    export type Column = app_user.Column | project.Column
+
+    export type AllBaseTables = [app_user.Table, project.Table]
+    export type AllForeignTables = []
+    export type AllViews = []
+    export type AllMaterializedViews = []
+    export type AllTablesAndViews = [app_user.Table, project.Table]
+  }
+
   /* === global aggregate types === */
 
-  export type Schema = 'voidpm' | 'github' | 'slack' | 'trello'
-  export type Table = voidpm.Table | github.Table | slack.Table | trello.Table
+  export type Schema = 'voidpm' | 'github' | 'slack' | 'trello' | 'gitlab'
+  export type Table =
+    | voidpm.Table
+    | github.Table
+    | slack.Table
+    | trello.Table
+    | gitlab.Table
   export type Selectable =
     | voidpm.Selectable
     | github.Selectable
     | slack.Selectable
     | trello.Selectable
+    | gitlab.Selectable
   export type JSONSelectable =
     | voidpm.JSONSelectable
     | github.JSONSelectable
     | slack.JSONSelectable
     | trello.JSONSelectable
+    | gitlab.JSONSelectable
   export type Whereable =
     | voidpm.Whereable
     | github.Whereable
     | slack.Whereable
     | trello.Whereable
+    | gitlab.Whereable
   export type Insertable =
     | voidpm.Insertable
     | github.Insertable
     | slack.Insertable
     | trello.Insertable
+    | gitlab.Insertable
   export type Updatable =
     | voidpm.Updatable
     | github.Updatable
     | slack.Updatable
     | trello.Updatable
+    | gitlab.Updatable
   export type UniqueIndex =
     | voidpm.UniqueIndex
     | github.UniqueIndex
     | slack.UniqueIndex
     | trello.UniqueIndex
+    | gitlab.UniqueIndex
   export type Column =
     | voidpm.Column
     | github.Column
     | slack.Column
     | trello.Column
+    | gitlab.Column
 
-  export type AllSchemas = ['voidpm', 'github', 'slack', 'trello']
+  export type AllSchemas = ['voidpm', 'github', 'slack', 'trello', 'gitlab']
   export type AllBaseTables = [
     ...voidpm.AllBaseTables,
     ...github.AllBaseTables,
     ...slack.AllBaseTables,
     ...trello.AllBaseTables,
+    ...gitlab.AllBaseTables,
   ]
   export type AllForeignTables = [
     ...voidpm.AllForeignTables,
     ...github.AllForeignTables,
     ...slack.AllForeignTables,
     ...trello.AllForeignTables,
+    ...gitlab.AllForeignTables,
   ]
   export type AllViews = [
     ...voidpm.AllViews,
     ...github.AllViews,
     ...slack.AllViews,
     ...trello.AllViews,
+    ...gitlab.AllViews,
   ]
   export type AllMaterializedViews = [
     ...voidpm.AllMaterializedViews,
     ...github.AllMaterializedViews,
     ...slack.AllMaterializedViews,
     ...trello.AllMaterializedViews,
+    ...gitlab.AllMaterializedViews,
   ]
   export type AllTablesAndViews = [
     ...voidpm.AllTablesAndViews,
     ...github.AllTablesAndViews,
     ...slack.AllTablesAndViews,
     ...trello.AllTablesAndViews,
+    ...gitlab.AllTablesAndViews,
   ]
 
   /* === lookups === */
@@ -4434,95 +5553,111 @@ declare module 'zapatos/schema' {
     'voidpm.contributor': voidpm.contributor.Selectable
     'voidpm.organization': voidpm.organization.Selectable
     'voidpm.plan': voidpm.plan.Selectable
+    'voidpm.pull_request': voidpm.pull_request.Selectable
     'voidpm.subscription': voidpm.subscription.Selectable
     'github.organization': github.organization.Selectable
-    'github.pull_request': github.pull_request.Selectable
     'github.repo': github.repo.Selectable
     'slack.workspace': slack.workspace.Selectable
     'trello.workspace': trello.workspace.Selectable
+    'gitlab.app_user': gitlab.app_user.Selectable
+    'gitlab.project': gitlab.project.Selectable
   }[T]
 
   export type JSONSelectableForTable<T extends Table> = {
     'voidpm.contributor': voidpm.contributor.JSONSelectable
     'voidpm.organization': voidpm.organization.JSONSelectable
     'voidpm.plan': voidpm.plan.JSONSelectable
+    'voidpm.pull_request': voidpm.pull_request.JSONSelectable
     'voidpm.subscription': voidpm.subscription.JSONSelectable
     'github.organization': github.organization.JSONSelectable
-    'github.pull_request': github.pull_request.JSONSelectable
     'github.repo': github.repo.JSONSelectable
     'slack.workspace': slack.workspace.JSONSelectable
     'trello.workspace': trello.workspace.JSONSelectable
+    'gitlab.app_user': gitlab.app_user.JSONSelectable
+    'gitlab.project': gitlab.project.JSONSelectable
   }[T]
 
   export type WhereableForTable<T extends Table> = {
     'voidpm.contributor': voidpm.contributor.Whereable
     'voidpm.organization': voidpm.organization.Whereable
     'voidpm.plan': voidpm.plan.Whereable
+    'voidpm.pull_request': voidpm.pull_request.Whereable
     'voidpm.subscription': voidpm.subscription.Whereable
     'github.organization': github.organization.Whereable
-    'github.pull_request': github.pull_request.Whereable
     'github.repo': github.repo.Whereable
     'slack.workspace': slack.workspace.Whereable
     'trello.workspace': trello.workspace.Whereable
+    'gitlab.app_user': gitlab.app_user.Whereable
+    'gitlab.project': gitlab.project.Whereable
   }[T]
 
   export type InsertableForTable<T extends Table> = {
     'voidpm.contributor': voidpm.contributor.Insertable
     'voidpm.organization': voidpm.organization.Insertable
     'voidpm.plan': voidpm.plan.Insertable
+    'voidpm.pull_request': voidpm.pull_request.Insertable
     'voidpm.subscription': voidpm.subscription.Insertable
     'github.organization': github.organization.Insertable
-    'github.pull_request': github.pull_request.Insertable
     'github.repo': github.repo.Insertable
     'slack.workspace': slack.workspace.Insertable
     'trello.workspace': trello.workspace.Insertable
+    'gitlab.app_user': gitlab.app_user.Insertable
+    'gitlab.project': gitlab.project.Insertable
   }[T]
 
   export type UpdatableForTable<T extends Table> = {
     'voidpm.contributor': voidpm.contributor.Updatable
     'voidpm.organization': voidpm.organization.Updatable
     'voidpm.plan': voidpm.plan.Updatable
+    'voidpm.pull_request': voidpm.pull_request.Updatable
     'voidpm.subscription': voidpm.subscription.Updatable
     'github.organization': github.organization.Updatable
-    'github.pull_request': github.pull_request.Updatable
     'github.repo': github.repo.Updatable
     'slack.workspace': slack.workspace.Updatable
     'trello.workspace': trello.workspace.Updatable
+    'gitlab.app_user': gitlab.app_user.Updatable
+    'gitlab.project': gitlab.project.Updatable
   }[T]
 
   export type UniqueIndexForTable<T extends Table> = {
     'voidpm.contributor': voidpm.contributor.UniqueIndex
     'voidpm.organization': voidpm.organization.UniqueIndex
     'voidpm.plan': voidpm.plan.UniqueIndex
+    'voidpm.pull_request': voidpm.pull_request.UniqueIndex
     'voidpm.subscription': voidpm.subscription.UniqueIndex
     'github.organization': github.organization.UniqueIndex
-    'github.pull_request': github.pull_request.UniqueIndex
     'github.repo': github.repo.UniqueIndex
     'slack.workspace': slack.workspace.UniqueIndex
     'trello.workspace': trello.workspace.UniqueIndex
+    'gitlab.app_user': gitlab.app_user.UniqueIndex
+    'gitlab.project': gitlab.project.UniqueIndex
   }[T]
 
   export type ColumnForTable<T extends Table> = {
     'voidpm.contributor': voidpm.contributor.Column
     'voidpm.organization': voidpm.organization.Column
     'voidpm.plan': voidpm.plan.Column
+    'voidpm.pull_request': voidpm.pull_request.Column
     'voidpm.subscription': voidpm.subscription.Column
     'github.organization': github.organization.Column
-    'github.pull_request': github.pull_request.Column
     'github.repo': github.repo.Column
     'slack.workspace': slack.workspace.Column
     'trello.workspace': trello.workspace.Column
+    'gitlab.app_user': gitlab.app_user.Column
+    'gitlab.project': gitlab.project.Column
   }[T]
 
   export type SQLForTable<T extends Table> = {
     'voidpm.contributor': voidpm.contributor.SQL
     'voidpm.organization': voidpm.organization.SQL
     'voidpm.plan': voidpm.plan.SQL
+    'voidpm.pull_request': voidpm.pull_request.SQL
     'voidpm.subscription': voidpm.subscription.SQL
     'github.organization': github.organization.SQL
-    'github.pull_request': github.pull_request.SQL
     'github.repo': github.repo.SQL
     'slack.workspace': slack.workspace.SQL
     'trello.workspace': trello.workspace.SQL
+    'gitlab.app_user': gitlab.app_user.SQL
+    'gitlab.project': gitlab.project.SQL
   }[T]
 }

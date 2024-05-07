@@ -33,11 +33,17 @@ export default async function UserLayout(props: UserLayoutProps) {
       'slack.workspace.organization_id',
       'voidpm.organization.id',
     )
+    .leftJoin(
+      'gitlab.app_user',
+      'gitlab.app_user.organization_id',
+      'voidpm.organization.id',
+    )
     .selectAll('voidpm.organization')
     .select([
       'github.organization.ext_gh_install_id',
       'slack.workspace.ext_slack_team_id',
       'is_over_plan_pr_limit',
+      'gitlab_access_token',
     ])
     .where('ext_clerk_user_id', '=', userId)
     .executeTakeFirst()
@@ -61,7 +67,10 @@ export default async function UserLayout(props: UserLayoutProps) {
     )
   }
 
-  if (!organization.ext_slack_team_id || !organization.ext_gh_install_id) {
+  if (
+    !organization.ext_slack_team_id ||
+    (!organization.ext_gh_install_id && !organization.gitlab_access_token)
+  ) {
     return (
       <div className="flex flex-col">
         <AppBar user={user} />
@@ -70,6 +79,7 @@ export default async function UserLayout(props: UserLayoutProps) {
             organization={organization}
             slackTeamId={organization.ext_slack_team_id}
             githubInstallId={organization.ext_gh_install_id}
+            gitlabAccessToken={organization.gitlab_access_token}
           />
         </Content>
       </div>

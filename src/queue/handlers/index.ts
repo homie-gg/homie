@@ -11,6 +11,12 @@ import { handleSendPullRequestSummaries } from '@/queue/handlers/handle-send-pul
 import { handleSendPullRequestSummariesToOrganization } from '@/queue/handlers/handle-send-pull-request-summaries-to-organization'
 import { handleCreateTrelloTaskFromSlack } from '@/queue/handlers/handle-create-trello-task-from-slack'
 import { handleCloseLinkedTasks } from '@/queue/handlers/handle-closed-linked-tasks'
+import { handleImportGitlabProjects } from '@/queue/handlers/handle-import-gitlab-projects'
+import { handleImportGitlabMergeRequests } from '@/queue/handlers/handle-import-gitlab-merge-requests'
+import { handleSaveMergedMergeRequest } from '@/queue/handlers/handle-save-merged-merge-request'
+import { handleGenerateOpenMergeRequestSummary } from '@/queue/handlers/handle-generate-open-merge-request-summary'
+import { handleSaveOpenedMergeRequest } from '@/queue/handlers/handle-save-opened-merge-request'
+import { handleRefreshGitlabTokens } from '@/queue/handlers/handle-refresh-gitlab-tokens'
 
 type HandlerFunc<TJob extends Job> = (job: TJob) => void | Promise<void>
 
@@ -33,4 +39,10 @@ export const handlers: Handlers = {
   send_pull_request_summaries: handleSendPullRequestSummaries,
   send_pull_request_summaries_to_organization:
     handleSendPullRequestSummariesToOrganization,
+  import_gitlab_projects: handleImportGitlabProjects,
+  import_gitlab_merge_requests: handleImportGitlabMergeRequests,
+  save_merged_merge_request: handleSaveMergedMergeRequest,
+  generate_open_merge_request_summary: handleGenerateOpenMergeRequestSummary,
+  save_opened_merge_request: handleSaveOpenedMergeRequest,
+  refresh_gitlab_tokens: handleRefreshGitlabTokens,
 }

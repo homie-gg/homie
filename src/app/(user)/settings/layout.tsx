@@ -30,6 +30,10 @@ export default function SettingsPage(props: SettingsPageProps) {
                 href: '/settings/trello',
                 text: 'Trello',
               },
+              {
+                href: '/settings/gitlab',
+                text: 'Gitlab',
+              },
             ]}
           />
         </aside>
