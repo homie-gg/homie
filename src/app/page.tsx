@@ -126,7 +126,6 @@ export default async function Home() {
           />
         </div>
       </div>
-
       <div className="container grid grid-cols-1 lg:grid-cols-2 place-items-center text-center mb-64">
         <div className="hidden lg:block">
           <MuxPlayerClient
