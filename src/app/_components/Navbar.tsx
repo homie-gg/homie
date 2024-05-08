@@ -18,21 +18,12 @@ export const Navbar = () => {
         <NavigationMenuList className="container h-14 px-4 w-screen flex justify-between ">
           <div className="flex justify-center items-center gap-8">
             <NavigationMenuItem className="font-bold flex">
-              <a href="/" className="ml-2 font-bold text-xl flex">
-                <Image src={logo.src} alt="homie" width={100} height={29} />
+              <a href="/" className="ml-2 font-black text-xl flex">
+                homie
               </a>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href="/blog">Blog</Link>
             </NavigationMenuItem>
           </div>
 
-          {/* mobile */}
-          {/* <div className="flex md:hidden">
-            <MobileMenu />
-          </div> */}
-
-          {/* desktop */}
           <nav className="hidden md:flex gap-2">
             <Link
               href="/login"
