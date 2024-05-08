@@ -1,24 +1,13 @@
-import { Hero } from '@/app/_components/Hero'
 import { Navbar } from '@/app/_components/Navbar'
 import { auth } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 import Image from 'next/image'
-import featureUnblock from '@/app/_assets/feature-unblock.png'
-import featureAutomate from '@/app/_assets/feature-automate.png'
-import featureReview from '@/app/_assets/feature-review.png'
-import {
-  ChartIcon,
-  GiftIcon,
-  LightBulbIcon,
-  MagnifierIcon,
-  MapIcon,
-  MedalIcon,
-  PlaneIcon,
-  WalletIcon,
-} from '@/app/_components/Icons'
 import PricingTable from '@/app/_components/PricingTable'
 import { Footer } from '@/app/_components/Footer'
 import { SampleQuestions } from '@/app/_components/SampleQuestions'
+import MuxPlayerClient from '@/lib/ui/MuxPlayerClient'
+import { Button, buttonVariants } from '@/lib/ui/Button'
+import Link from 'next/link'
 
 export default async function Home() {
   const { userId } = auth()
@@ -30,142 +19,167 @@ export default async function Home() {
   return (
     <>
       <Navbar />
-      <Hero />
-
-      <div
-        id="features"
-        className="container py-24 sm:py-32 flex flex-col gap-7"
-      >
-        <div className="z-30 flex flex-col items-start gap-1">
-          <span className="bg-purple-500 bg-clip-text text-sm font-semibold text-transparent">
-            Features
-          </span>
-          <span className="text-xl font-medium">
-            Everything to speed up your development lifecycle.
-          </span>
-        </div>
-        <div className="flex flex-col items-start justify-center gap-16">
-          <div className="grid grid-cols-1 flex-wrap items-start justify-center gap-10 lg:grid-cols-3">
-            <div className="relative flex  flex-col overflow-hidden  rounded-md border bg-white transition-all duration-500 ease-in-out hover:shadow-md h-full">
-              <div className="relative  transition-all duration-500 ease-in-out flex flex-1 items-center justify-center">
-                <Image
-                  src={featureUnblock}
-                  alt="Slack message"
-                  width={250}
-                  height={220}
-                />
-              </div>
-              <div className="z-10 flex flex-col items-start gap-1 bg-white p-5 lg:h-[12.5rem] xl:h-[10rem]">
-                <h5 className="text-xl font-medium">Unblocks the team</h5>
-                <p className="text-md font-normal text-zinc-700 ">
-                  Ask homie anything from business to technical questions,
-                  homie&apos;s got you.
-                </p>
-              </div>
-            </div>
-
-            <div className="relative flex  flex-col overflow-hidden  rounded-md border bg-white transition-all duration-500 ease-in-out hover:shadow-md h-full">
-              <div className="relative  transition-all duration-500 ease-in-out flex flex-1 items-center justify-center">
-                <Image src={featureAutomate} alt="Github PR summary" />
-              </div>
-              <div className="z-10 flex flex-col items-start gap-1 bg-white p-5 lg:h-[12.5rem] xl:h-[10rem]">
-                <h5 className="text-xl font-medium">
-                  Automates the boring stuff
-                </h5>
-                <p className="text-md font-normal text-zinc-700 ">
-                  One-click issue creation, and PR summary generation that is
-                  scary good.
-                </p>
-              </div>
-            </div>
-
-            <div className="relative flex  flex-col overflow-hidden  rounded-md border bg-white transition-all duration-500 ease-in-out hover:shadow-md h-full">
-              <div className="relative  transition-all duration-500 ease-in-out flex flex-1 items-center justify-center">
-                <Image src={featureReview} alt="homie dashboard" />
-              </div>
-              <div className="z-10 flex flex-col items-start gap-1 bg-white p-5 lg:h-[12.5rem] xl:h-[10rem]">
-                <h5 className="text-xl font-medium">
-                  Helps with reviews, and reminders
-                </h5>
-                <p className="text-md font-normal text-zinc-700 ">
-                  100% automated, always know what the team&apos; working on.
-                </p>
-              </div>
-            </div>
+      <div className="container">
+        <div className="mb-64">
+          <div className="text-center mt-32">
+            <h1 className="text-8xl font-black text-center mb-2">homie</h1>
+            <p className="text-lg">
+              Lives with your dev team.
+              <br />
+              Automates. Answers questions. Sends reminders.
+              <br />
+              All-round good homie.
+            </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-16 md:grid-cols-3 lg:grid-cols-4">
-            <div className="flex flex-col items-start gap-1">
-              <LightBulbIcon className="h-[50px]" />
-              <h5 className="pt-1 text-lg font-medium">Quickly Create Tasks</h5>
-              <p className="text-sm font-normal text-zinc-700">
-                One click to create issues from Slack threads.
-              </p>
-            </div>
+          <div className="flex justify-center">
+            <Image
+              src="/homie-taco.png"
+              alt="homie taco"
+              width={256}
+              height={256}
+            />
+          </div>
+        </div>
 
-            <div className="flex flex-col items-start gap-1">
-              <PlaneIcon className="h-[50px]" />
-              <h5 className="pt-1 text-lg font-medium">Continous Retrain</h5>
-              <p className="text-sm font-normal text-zinc-700">
-                Accurate, and up-to-date context at every step.
-              </p>
-            </div>
-            <div className="flex flex-col items-start gap-1">
-              <MapIcon className="h-[50px]" />
-              <h5 className="pt-1 text-lg font-medium">
-                Multiple Data Sources
-              </h5>
-              <p className="text-sm font-normal text-zinc-700">
-                Import data from multiple sources to train your chatbot.
-              </p>
-            </div>
-            <div className="flex flex-col items-start gap-1">
-              <WalletIcon className="h-[50px]" />
-              <h5 className="pt-1 text-lg font-medium">
-                Project Milestone Analysis
-              </h5>
-              <p className="text-sm font-normal text-zinc-700">
-                Automatic PR analysis to make sure efforts are going towards key
-                objectives.
-              </p>
-            </div>
-            <div className="flex flex-col items-start gap-1">
-              <MedalIcon className="h-[50px]" />
-              <h5 className="pt-1 text-lg font-medium">
-                Generate Pull Request Summaries
-              </h5>
-              <p className="text-sm font-normal text-zinc-700">
-                Context-rich summaries that are include what was changed, and
-                why.
-              </p>
-            </div>
-            <div className="flex flex-col items-start gap-1">
-              <ChartIcon className="h-[50px]" />
-              <h5 className="pt-1 text-lg font-medium">Charts and Metrics</h5>
-              <p className="text-sm font-normal text-zinc-700">
-                Review team performance, and load by looking at PR, and
-                contributor statistics.
-              </p>
-            </div>
-            <div className="flex flex-col items-start gap-1">
-              <MagnifierIcon className="h-[50px]" />
-              <h5 className="pt-1 text-lg font-medium">Weekly Reports*</h5>
-              <p className="text-sm font-normal text-zinc-700">
-                See the PRs closed each week in Slack.
-              </p>
-            </div>
-            <div className="flex flex-col items-start gap-1">
-              <GiftIcon className="h-[50px]" />
-              <h5 className="pt-1 text-lg font-medium">Custom Reminders*</h5>
-              <p className="text-sm font-normal text-zinc-700">
-                ever miss a review, or let issues go stale again.
-              </p>
-            </div>
+        <div className="container grid grid-cols-1 lg:grid-cols-2 place-items-center text-center mb-64">
+          <div>
+            <h3 className="text-3xl lg:text-4xl font-bold mb-2">
+              Add the GitHub app
+            </h3>
+            <p className="lg:text-lg mb-4 lg:mb-0">
+              homie ingests each Pull Request. <br />
+              Learns about your project.
+            </p>
+          </div>
+          <div>
+            <MuxPlayerClient
+              streamType="on-demand"
+              playbackId="MJ9SXa005c9NpG4K8tg3g6x5nw1qrsGV01G02bk1SjvDPg"
+              metadataVideoTitle="homie in 20secs"
+              primaryColor="#FFFFFF"
+              secondaryColor="#000000"
+              autoPlay
+              muted
+              loop
+            />
+          </div>
+        </div>
+
+        <div className="container grid grid-cols-1 lg:grid-cols-2 place-items-center text-center mb-64">
+          <div className="hidden lg:block">
+            <MuxPlayerClient
+              streamType="on-demand"
+              playbackId="MJ9SXa005c9NpG4K8tg3g6x5nw1qrsGV01G02bk1SjvDPg"
+              metadataVideoTitle="homie in 20secs"
+              primaryColor="#FFFFFF"
+              secondaryColor="#000000"
+              autoPlay
+              muted
+              loop
+            />
+          </div>
+          <div>
+            <h3 className="text-3xl lg:text-4xl font-bold mb-2">
+              Add the Slack app
+            </h3>
+            <p className="lg:text-lg mb-4 lg:mb-0">
+              homie becomes a part of your team.
+            </p>
+          </div>
+          <div className="lg:hidden">
+            <MuxPlayerClient
+              streamType="on-demand"
+              playbackId="MJ9SXa005c9NpG4K8tg3g6x5nw1qrsGV01G02bk1SjvDPg"
+              metadataVideoTitle="homie in 20secs"
+              primaryColor="#FFFFFF"
+              secondaryColor="#000000"
+              autoPlay
+              muted
+              loop
+            />
           </div>
         </div>
       </div>
+
+      <div className="container grid grid-cols-1 lg:grid-cols-2 place-items-center text-center mb-64">
+        <div>
+          <h3 className="text-3xl lg:text-4xl font-bold mb-2">
+            Ask homie questions
+          </h3>
+          <p className="lg:text-lg mb-4 lg:mb-0">
+            Has that bug already been fixed yet? How do we add a queued job?{' '}
+            <br />
+            Why did it timeout? Who knows how to do this?
+          </p>
+        </div>
+        <div>
+          <MuxPlayerClient
+            streamType="on-demand"
+            playbackId="MJ9SXa005c9NpG4K8tg3g6x5nw1qrsGV01G02bk1SjvDPg"
+            metadataVideoTitle="homie in 20secs"
+            primaryColor="#FFFFFF"
+            secondaryColor="#000000"
+            autoPlay
+            muted
+            loop
+          />
+        </div>
+      </div>
+      <div className="container grid grid-cols-1 lg:grid-cols-2 place-items-center text-center mb-64">
+        <div className="hidden lg:block">
+          <MuxPlayerClient
+            streamType="on-demand"
+            playbackId="MJ9SXa005c9NpG4K8tg3g6x5nw1qrsGV01G02bk1SjvDPg"
+            metadataVideoTitle="homie in 20secs"
+            primaryColor="#FFFFFF"
+            secondaryColor="#000000"
+            autoPlay
+            muted
+            loop
+          />
+        </div>
+        <div>
+          <h3 className="text-3xl lg:text-4xl font-bold mb-2">
+            Let homie help
+          </h3>
+          <p className="lg:text-lg mb-4 lg:mb-0">
+            Quickly summarize Slack threads to issues. <br />
+            Generate PR summaries. Collect list of merged PRs.
+          </p>
+        </div>
+        <div className="lg:hidden">
+          <MuxPlayerClient
+            streamType="on-demand"
+            playbackId="MJ9SXa005c9NpG4K8tg3g6x5nw1qrsGV01G02bk1SjvDPg"
+            metadataVideoTitle="homie in 20secs"
+            primaryColor="#FFFFFF"
+            secondaryColor="#000000"
+            autoPlay
+            muted
+            loop
+          />
+        </div>
+      </div>
+
       <PricingTable />
       <SampleQuestions />
+      <div className="flex justify-center container mb-16">
+        <div className="w-full bg-black py-32 text-white rounded-3xl flex flex-col items-center">
+          <p className="text-4xl font-black mb-4">
+            Let&apos;s be homies :&#41;
+          </p>
+          <Link
+            href="/sign_up"
+            className={buttonVariants({
+              variant: 'secondary',
+              size: 'lg',
+            })}
+          >
+            Sign Up
+          </Link>
+        </div>
+      </div>
       <Footer />
     </>
   )

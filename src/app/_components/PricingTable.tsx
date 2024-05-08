@@ -24,17 +24,17 @@ interface Plan {
 export const plans: Plan[] = [
   {
     title: 'Free',
-    isPopular: false,
+    isPopular: true,
     price: 0,
     isComingSoon: false,
     description: 'No credit card required. Setup takes less than 20 seconds.',
-    buttonText: 'Get Started',
+    buttonText: 'Sign up',
     benefitList: [
+      'Up to 30 PRs / month',
       'Ask anything in Slack',
       'Quickly create tasks',
       'Auto-generate PR summaries',
       'PR & Contributor statistics',
-      'Up to 30 PRs / month',
     ],
     afterSignUpUrl: '/review',
   },
@@ -46,25 +46,25 @@ export const plans: Plan[] = [
     description: 'Perfect for new projects that want to hit the road running.',
     buttonText: 'Subscribe',
     benefitList: [
-      'Everything in Free',
       'Up to 50 PRs / month',
+      'Everything in Free',
       'Learn Slack messages*',
       'Trello, and Asana integration*',
-      'Learn from Notion',
+      'Learn from Notion*',
     ],
     afterSignUpUrl: '/billing?plan=basic',
   },
   {
     title: 'Team',
-    isPopular: true,
+    isPopular: false,
     price: 349,
     isComingSoon: false,
     description:
       'Save hundreds of engineer-hours each month. Boost developer & manager well-being.',
     buttonText: 'Subscribe',
     benefitList: [
-      'Everything in Basic',
       'Up to 200 PRs / month',
+      'Everything in Basic',
       'Milestone Analysis*',
       'Custom reminders*',
       'Slack message reports*',
@@ -80,8 +80,8 @@ export const plans: Plan[] = [
       'Advanced management features. Most cost effective for multi-team organizations.',
     buttonText: 'Coming Soon',
     benefitList: [
-      'Everything in Team',
       'Up to 500 PRs / month',
+      'Everything in Team',
       'Multiple organizations*',
       'Generate report PDFs*',
       'API Access*',
@@ -93,16 +93,12 @@ export const plans: Plan[] = [
 export default function PricingTable() {
   return (
     <section id="pricing" className="container py-24 sm:py-32">
-      <h2 className="text-3xl md:text-4xl font-bold text-center">
-        Simple pricing that
-        <span className="inline bg-gradient-to-r from-[#7C3AED]  to-[#F80282] text-transparent bg-clip-text">
-          {' '}
-          scales with your team
-        </span>
+      <h2 className="text-3xl md:text-6xl font-black text-center">
+        homie grows with you.
       </h2>
       <h3 className="text-xl text-center text-muted-foreground pt-4 pb-8">
-        Usage based on Pull Request count, so you don&apos;t need to worry about
-        whether a contributor will take up a license.
+        homie is free forever for small projects that might only require a few
+        PRs a week.
       </h3>
       <div className="grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-8">
         {plans.map((plan) => (

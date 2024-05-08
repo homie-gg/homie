@@ -7,139 +7,140 @@ import {
 
 export const SampleQuestions = () => {
   return (
-    <section id="faq" className="container py-24 sm:py-32">
+    <section
+      id="faq"
+      className="container py-24 sm:py-24 mb-24 max-w-screen-md"
+    >
       <div className="z-30 flex flex-col items-start gap-1 mb-4">
-        <span className="bg-purple-500 bg-clip-text text-sm font-semibold text-transparent">
-          Example Questions
-        </span>
-        <span className="text-xl font-medium">
-          Real answers provided by homie&apos;s AI
-        </span>
+        <span className="text-8xl font-bold">FAQ</span>
       </div>
 
       <Accordion type="single" collapsible className="w-full AccordionRoot">
         <AccordionItem value="question_1">
-          <AccordionTrigger className="text-left">
-            <div>
-              <strong>Which</strong> PR added queue dashboards?
-            </div>
+          <AccordionTrigger className="text-left font-bold">
+            <div>Is homie secure?</div>
           </AccordionTrigger>
           <AccordionContent>
-            <div>
-              The queue dashboards were added in the Pull Request titled
-              &quot;feat: add bullmq dashboard&quot;. The URL for this Pull
-              Request is https://github.com/homie-gg/homie/pull/77.
+            <div className="leading-6">
+              Yes! We get that you&apos;re trusting us with your code, and take
+              that responsibility very seriously.
+              <br />
+              <br />
+              <ul className="list-disc pl-8">
+                <li>
+                  We do not store your code. Only summaries, and embeddings.
+                </li>
+                <li>Your code is not used to re-train models.</li>
+                <li>
+                  homie is run within our own VPC hosted on AWS in us-east-1.
+                </li>
+                <li>
+                  We follow security best practices including not exposing the
+                  database, least privelege permissions, and MFA for all
+                  accounts.
+                </li>
+              </ul>
             </div>
           </AccordionContent>
         </AccordionItem>
 
         <AccordionItem value="question_2">
-          <AccordionTrigger className="text-left">
-            <div>
-              <strong>What</strong> caused the Github infinite PR loop?
-            </div>
+          <AccordionTrigger className="text-left font-bold">
+            <div>Is homie right for our dev team?</div>
           </AccordionTrigger>
           <AccordionContent>
-            <div>
-              The Github infinite PR loop was caused by the
-              `handleGenerateOpenPullRequestSummary function. This was fixed by
-              replacing the existing summary key in the pull request body. The
-              fix was contributed by mikewuu in a pull request titled
-              &quot;fix(Github): improve generated summary&quot;
-              (https://github.com/homie-gg/homie/pull/81).
+            <div className="leading-6">
+              homie was built for async teams that need to ship fast.
+              <br />
+              <br />
+              If you ever find yourself policing processes, struggling with
+              context switching, or waiting for &apos;the expert&apos; to come
+              online, homie can help.
+              <br />
+              <br />
+              homie was built with 3 goals in mind:
+              <ul className="list-disc pl-8">
+                <li>Automate, automate, and automate</li>
+                <li>No new processes for the team (they’re busy enough)</li>
+                <li>Opt-in at every step (only use the features you want)</li>
+              </ul>
             </div>
           </AccordionContent>
         </AccordionItem>
 
         <AccordionItem value="question_3">
-          <AccordionTrigger className="text-left">
-            <div>
-              <strong>Was</strong> the navbar updated to allow feature requests?
-              If so, <strong>when</strong> was it updated?
-            </div>
+          <AccordionTrigger className="text-left font-bold">
+            <div>Who made homie?</div>
           </AccordionTrigger>
           <AccordionContent>
-            <div>
-              Yes, the navbar was updated to allow feature requests. The update
-              was made on April 9, 2024. The change allows users to easily
-              access the feature request page from the navigation bar. The
-              relevant code snippet is:
-              <pre>
-                {`
-jsx
-<Link href="https://homie.nolt.io/roadmap">
-  <DropdownMenuItem>Request Feature</DropdownMenuItem>
-</Link>
-                  `}
-              </pre>
-              This code change replaced the &quot;Settings&quot; dropdown menu
-              item with &quot;Request Feature&quot; and added a new link for
-              feature requests in the navigation bar. The Pull Request for this
-              change is titled &quot;feat(Nav): add feature request link&quot;
-              and can be found at https://github.com/homie-gg/homie/pull/100.
+            <div className="leading-6">
+              👋 Hello, my name is Mike, and I&apos;m the creator of homie.
+              I&apos;m also a freelance dev living Japan. I regularly work with
+              global teams that work async and need to ship fast. Here are a
+              couple links where you can find me:
+              <br />
+              <br />
+              <ul className="list-disc pl-8">
+                <li>
+                  <a
+                    href="https://www.upwork.com/freelancers/~0119f4693d8416340e?viewMode=1"
+                    className="underline"
+                  >
+                    Upwork
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://www.freelancer.com/u/forkeverything"
+                    className="underline"
+                  >
+                    Freelancer
+                  </a>
+                </li>
+                <li>
+                  <a href="https://wu.studio" className="underline">
+                    Portfolio
+                  </a>
+                </li>
+              </ul>
+              <br />
+              <br />
+              I built homie for myself and I’ll continue to use, and maintain
+              homie until the machines take over. Until then, I hope you enjoy
+              using it too.
+              <br />
             </div>
           </AccordionContent>
         </AccordionItem>
 
         <AccordionItem value="question_4">
-          <AccordionTrigger className="text-left">
-            <div>
-              <strong>Who</strong> worked on analytics?
-            </div>
+          <AccordionTrigger className="text-left font-bold">
+            <div>Is homie just another Chat GPT wrapper?</div>
           </AccordionTrigger>
           <AccordionContent>
-            <div>The analytics work was done by mikewuu.</div>
+            <div className="leading-6">
+              Nope. homie is a collection of project management automations that
+              integrate with your team&apos;s existing tooling. AI is mainly
+              used as a natural language interface.
+              <br />
+              <br />
+              More interestingly, homie provides the processes, and tools that
+              I&apos;ve picked up from high-performing teams over the years.
+            </div>
           </AccordionContent>
         </AccordionItem>
 
         <AccordionItem value="question_5">
-          <AccordionTrigger className="text-left">
-            <div>
-              <strong>How</strong> do you add a queued task?
-            </div>
+          <AccordionTrigger className="text-left font-bold">
+            <div>Can you tell me more?</div>
           </AccordionTrigger>
           <AccordionContent>
-            <div>
-              To add a queued task, you need to import the defaultQueue from the
-              relevant module. Then, you can use the add method on defaultQueue
-              to add a task. The task is represented as a string identifier and
-              an object containing the necessary data for the task. Here is an
-              example:
-              <br />
-              <br />
-              <pre>
-                {`
-import { defaultQueue } from '@/queue/default-queue'
-await defaultQueue.add('answer_slack_question', {
-  team_id,
-  channel_id: event.channel,
-  target_message_ts: event.ts,
-  text: event.text,
-})
-        `}
-              </pre>
-              In this example, a task is added to the queue to answer a slack
-              question. The task data includes the team id, channel id, target
-              message timestamp, and the text of the event.
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="question_6">
-          <AccordionTrigger className="text-left">
-            <div>
-              <strong>Why</strong> did we change the embedded metadata?
-            </div>
-          </AccordionTrigger>
-          <AccordionContent>
-            <div>
-              The embedded metadata was changed to fix an issue with embedding
-              missing text. Specifically, the &apos;text&apos; property was
-              removed from the embed_metadata object in the
-              saveMergedPullRequest function and added to the metadata object in
-              the embedGithubPullRequest function. This change was made as part
-              of the Pull Request titled &quot;fix(PR): embedding missing
-              text&quot; (URL: https://github.com/homie-gg/homie/pull/104),
-              contributed by mikewuu.
+            <div className="leading-6">
+              Yea! Feel free to send me an email at{' '}
+              <a href="mailto:mike@wu.studio" className="underline">
+                mike@wu.studio
+              </a>
+              , and I&apos;d be happy to answer any questions you have.
             </div>
           </AccordionContent>
         </AccordionItem>
