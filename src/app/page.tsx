@@ -6,8 +6,9 @@ import PricingTable from '@/app/_components/PricingTable'
 import { Footer } from '@/app/_components/Footer'
 import { SampleQuestions } from '@/app/_components/SampleQuestions'
 import MuxPlayerClient from '@/lib/ui/MuxPlayerClient'
-import { Button, buttonVariants } from '@/lib/ui/Button'
+import { buttonVariants } from '@/lib/ui/Button'
 import Link from 'next/link'
+import OnScrollRevealer from '@/lib/ui/OnScrollRevealer'
 
 export default async function Home() {
   const { userId } = auth()
@@ -41,7 +42,9 @@ export default async function Home() {
             />
           </div>
         </div>
+      </div>
 
+      <OnScrollRevealer>
         <div className="container grid grid-cols-1 lg:grid-cols-2 place-items-center text-center mb-64">
           <div>
             <h3 className="text-3xl lg:text-4xl font-bold mb-2">
@@ -52,7 +55,7 @@ export default async function Home() {
               Learns about your project.
             </p>
           </div>
-          <div>
+          <div className="w-full">
             <MuxPlayerClient
               streamType="on-demand"
               playbackId="MJ9SXa005c9NpG4K8tg3g6x5nw1qrsGV01G02bk1SjvDPg"
@@ -65,9 +68,11 @@ export default async function Home() {
             />
           </div>
         </div>
+      </OnScrollRevealer>
 
+      <OnScrollRevealer>
         <div className="container grid grid-cols-1 lg:grid-cols-2 place-items-center text-center mb-64">
-          <div className="hidden lg:block">
+          <div className="hidden lg:block w-full">
             <MuxPlayerClient
               streamType="on-demand"
               playbackId="MJ9SXa005c9NpG4K8tg3g6x5nw1qrsGV01G02bk1SjvDPg"
@@ -87,7 +92,7 @@ export default async function Home() {
               homie becomes a part of your team.
             </p>
           </div>
-          <div className="lg:hidden">
+          <div className="lg:hidden w-full">
             <MuxPlayerClient
               streamType="on-demand"
               playbackId="MJ9SXa005c9NpG4K8tg3g6x5nw1qrsGV01G02bk1SjvDPg"
@@ -100,86 +105,97 @@ export default async function Home() {
             />
           </div>
         </div>
-      </div>
+      </OnScrollRevealer>
 
-      <div className="container grid grid-cols-1 lg:grid-cols-2 place-items-center text-center mb-64">
-        <div>
-          <h3 className="text-3xl lg:text-4xl font-bold mb-2">
-            Ask homie questions
-          </h3>
-          <p className="lg:text-lg mb-4 lg:mb-0">
-            Has that bug already been fixed yet? How do we add a queued job?{' '}
-            <br />
-            Why did it timeout? Who knows how to do this?
-          </p>
+      <OnScrollRevealer>
+        <div className="container grid grid-cols-1 lg:grid-cols-2 place-items-center text-center mb-64">
+          <div>
+            <h3 className="text-3xl lg:text-4xl font-bold mb-2">
+              Ask homie questions
+            </h3>
+            <p className="lg:text-lg mb-4 lg:mb-0">
+              Has that bug already been fixed yet? How do we add a queued job?{' '}
+              <br />
+              Why did it timeout? Who knows how to do this?
+            </p>
+          </div>
+          <div className="w-full">
+            <MuxPlayerClient
+              streamType="on-demand"
+              playbackId="MJ9SXa005c9NpG4K8tg3g6x5nw1qrsGV01G02bk1SjvDPg"
+              metadataVideoTitle="homie in 20secs"
+              primaryColor="#FFFFFF"
+              secondaryColor="#000000"
+              autoPlay
+              muted
+              loop
+            />
+          </div>
         </div>
-        <div>
-          <MuxPlayerClient
-            streamType="on-demand"
-            playbackId="MJ9SXa005c9NpG4K8tg3g6x5nw1qrsGV01G02bk1SjvDPg"
-            metadataVideoTitle="homie in 20secs"
-            primaryColor="#FFFFFF"
-            secondaryColor="#000000"
-            autoPlay
-            muted
-            loop
-          />
-        </div>
-      </div>
-      <div className="container grid grid-cols-1 lg:grid-cols-2 place-items-center text-center mb-64">
-        <div className="hidden lg:block">
-          <MuxPlayerClient
-            streamType="on-demand"
-            playbackId="MJ9SXa005c9NpG4K8tg3g6x5nw1qrsGV01G02bk1SjvDPg"
-            metadataVideoTitle="homie in 20secs"
-            primaryColor="#FFFFFF"
-            secondaryColor="#000000"
-            autoPlay
-            muted
-            loop
-          />
-        </div>
-        <div>
-          <h3 className="text-3xl lg:text-4xl font-bold mb-2">
-            Let homie help
-          </h3>
-          <p className="lg:text-lg mb-4 lg:mb-0">
-            Quickly summarize Slack threads to issues. <br />
-            Generate PR summaries. Collect list of merged PRs.
-          </p>
-        </div>
-        <div className="lg:hidden">
-          <MuxPlayerClient
-            streamType="on-demand"
-            playbackId="MJ9SXa005c9NpG4K8tg3g6x5nw1qrsGV01G02bk1SjvDPg"
-            metadataVideoTitle="homie in 20secs"
-            primaryColor="#FFFFFF"
-            secondaryColor="#000000"
-            autoPlay
-            muted
-            loop
-          />
-        </div>
-      </div>
+      </OnScrollRevealer>
 
-      <PricingTable />
-      <SampleQuestions />
-      <div className="flex justify-center container mb-16">
-        <div className="w-full bg-black py-32 text-white rounded-3xl flex flex-col items-center">
-          <p className="text-4xl font-black mb-4">
-            Let&apos;s be homies :&#41;
-          </p>
-          <Link
-            href="/sign_up"
-            className={buttonVariants({
-              variant: 'secondary',
-              size: 'lg',
-            })}
-          >
-            Sign Up
-          </Link>
+      <OnScrollRevealer>
+        <div className="container grid grid-cols-1 lg:grid-cols-2 place-items-center text-center mb-64">
+          <div className="hidden lg:block w-full">
+            <MuxPlayerClient
+              streamType="on-demand"
+              playbackId="MJ9SXa005c9NpG4K8tg3g6x5nw1qrsGV01G02bk1SjvDPg"
+              metadataVideoTitle="homie in 20secs"
+              primaryColor="#FFFFFF"
+              secondaryColor="#000000"
+              autoPlay
+              muted
+              loop
+            />
+          </div>
+          <div>
+            <h3 className="text-3xl lg:text-4xl font-bold mb-2">
+              Let homie help
+            </h3>
+            <p className="lg:text-lg mb-4 lg:mb-0">
+              Quickly summarize Slack threads to issues. <br />
+              Generate PR summaries. Collect list of merged PRs.
+            </p>
+          </div>
+          <div className="lg:hidden w-full">
+            <MuxPlayerClient
+              streamType="on-demand"
+              playbackId="MJ9SXa005c9NpG4K8tg3g6x5nw1qrsGV01G02bk1SjvDPg"
+              metadataVideoTitle="homie in 20secs"
+              primaryColor="#FFFFFF"
+              secondaryColor="#000000"
+              autoPlay
+              muted
+              loop
+            />
+          </div>
         </div>
-      </div>
+      </OnScrollRevealer>
+
+      <OnScrollRevealer>
+        <PricingTable />
+      </OnScrollRevealer>
+      <OnScrollRevealer>
+        <SampleQuestions />
+      </OnScrollRevealer>
+      <OnScrollRevealer>
+        <div className="flex justify-center container mb-16">
+          <div className="w-full bg-black py-32 text-white rounded-3xl flex flex-col items-center">
+            <p className="text-4xl font-black mb-4">
+              Let&apos;s be homies :&#41;
+            </p>
+            <Link
+              href="/sign_up"
+              className={buttonVariants({
+                variant: 'secondary',
+                size: 'lg',
+              })}
+            >
+              Sign Up
+            </Link>
+          </div>
+        </div>
+      </OnScrollRevealer>
       <Footer />
     </>
   )
