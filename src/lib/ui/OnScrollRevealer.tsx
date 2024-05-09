@@ -16,7 +16,7 @@ export default function OnScrollRevealer(props: OnScrollRevealerProps) {
     if (isInView) {
       mainControls.start('visible')
     }
-  }, [isInView, mainControls])
+  }, [mainControls, isInView])
 
   return (
     <div ref={ref} className="relative overflow-hidden">
