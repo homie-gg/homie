@@ -58,7 +58,7 @@ export default async function Home() {
           <div className="w-full">
             <MuxPlayerClient
               streamType="on-demand"
-              playbackId="MJ9SXa005c9NpG4K8tg3g6x5nw1qrsGV01G02bk1SjvDPg"
+              playbackId="Wm4cegqcaFdu8fNTlQw1D7EF02tRNMPl6Z5fHe9PeFrE"
               metadataVideoTitle="homie in 20secs"
               primaryColor="#FFFFFF"
               secondaryColor="#000000"
@@ -95,7 +95,7 @@ export default async function Home() {
           <div className="lg:hidden w-full">
             <MuxPlayerClient
               streamType="on-demand"
-              playbackId="MJ9SXa005c9NpG4K8tg3g6x5nw1qrsGV01G02bk1SjvDPg"
+              playbackId="aKIXkEmoB6N2HDgsVGfsmI7aZdEsNbsRp4gV02Q2CQVU"
               metadataVideoTitle="homie in 20secs"
               primaryColor="#FFFFFF"
               secondaryColor="#000000"
@@ -122,7 +122,7 @@ export default async function Home() {
           <div className="w-full">
             <MuxPlayerClient
               streamType="on-demand"
-              playbackId="MJ9SXa005c9NpG4K8tg3g6x5nw1qrsGV01G02bk1SjvDPg"
+              playbackId="KhMrdgT6yJ2c01qyjDvgiKmq9B026uG02Jul8CSpVjS2lo"
               metadataVideoTitle="homie in 20secs"
               primaryColor="#FFFFFF"
               secondaryColor="#000000"
@@ -160,7 +160,7 @@ export default async function Home() {
           <div className="lg:hidden w-full">
             <MuxPlayerClient
               streamType="on-demand"
-              playbackId="MJ9SXa005c9NpG4K8tg3g6x5nw1qrsGV01G02bk1SjvDPg"
+              playbackId="B3xjvJeEGBmoFRwk6UrLNryoUWz4xTMBlD1hGwBW02gY"
               metadataVideoTitle="homie in 20secs"
               primaryColor="#FFFFFF"
               secondaryColor="#000000"
