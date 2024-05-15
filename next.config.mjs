@@ -15,7 +15,6 @@ export default withSentryConfig(
     silent: true,
     org: 'world-united-studios',
     project: 'homie',
-    authToken: process.env.SENTRY_AUTH_TOKEN,
   },
   {
     // For all available options, see:
