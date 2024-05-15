@@ -5,11 +5,11 @@ import Image from 'next/image'
 import PricingTable from '@/app/_components/PricingTable'
 import { Footer } from '@/app/_components/Footer'
 import { SampleQuestions } from '@/app/_components/SampleQuestions'
-import MuxPlayerClient from '@/lib/ui/MuxPlayerClient'
 import { buttonVariants } from '@/lib/ui/Button'
 import Link from 'next/link'
 import OnScrollRevealer from '@/lib/ui/OnScrollRevealer'
 import DemoVideos from '@/app/_components/DemoVideos'
+import CustomizePlayground from '@/app/_components/CustomizePersonaPlayground'
 
 export default async function Home() {
   const { userId } = auth()
@@ -26,11 +26,11 @@ export default async function Home() {
           <div className="text-center mt-32">
             <h1 className="text-8xl font-black text-center mb-2">homie</h1>
             <p className="text-lg">
-              Lives with your dev team.
+              AI Project Manager
               <br />
               Automates. Answers questions. Sends reminders.
               <br />
-              All-round good homie.
+              Helps your team ship faster.
             </p>
           </div>
 
@@ -46,7 +46,9 @@ export default async function Home() {
       </div>
 
       <DemoVideos />
-
+      <OnScrollRevealer>
+        <CustomizePlayground />
+      </OnScrollRevealer>
       <OnScrollRevealer>
         <PricingTable />
       </OnScrollRevealer>

@@ -3,17 +3,24 @@ import { questions } from '@/lib/ai/chat/questions'
 import { answerGeneralQuestion } from '@/lib/ai/chat/answers/00-general-question'
 
 interface AnswerQuestionParams {
-  organizationId: number
+  organization: {
+    id: number
+    is_persona_enabled: boolean
+    persona_positivity_level: number
+    persona_g_level: number
+    persona_affection_level: number
+    persona_emoji_level: number
+  }
   question: string
 }
 
 export async function answerQuestion(params: AnswerQuestionParams) {
-  const { organizationId, question } = params
+  const { organization, question } = params
   const questionParams = await tryGetQuestionParams(question)
 
   const handler = questions[params.question]
   if (!handler) {
-    return answerGeneralQuestion({ question, organizationId })
+    return answerGeneralQuestion({ question, organization })
   }
 
   return JSON.stringify(questionParams)

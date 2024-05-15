@@ -31,7 +31,7 @@ export async function handleAnswerSlackQuestion(job: AnswerSlackQuestion) {
 
   const answer = await answerQuestion({
     question: input,
-    organizationId: organization.id,
+    organization,
   })
 
   // Reply

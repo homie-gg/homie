@@ -21,6 +21,7 @@ export default function SettingsPage(props: SettingsPageProps) {
         <aside className="lg:w-1/6">
           <Sidebar
             items={[
+              { href: '/settings/persona', text: 'Persona' },
               { href: '/settings/contributors', text: 'Contributors' },
               {
                 href: '/settings/pull_request_summaries',

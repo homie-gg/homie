@@ -8,16 +8,24 @@ import { OpenAI, OpenAIEmbeddings } from '@langchain/openai'
 
 import { PromptTemplate } from '@langchain/core/prompts'
 import { logger } from '@/lib/log/logger'
+import { rephraseWithPersona } from '@/lib/ai/rephrase-with-persona'
 
 interface AnswerGeneralQuestionParams {
   question: string
-  organizationId: number
+  organization: {
+    id: number
+    is_persona_enabled: boolean
+    persona_positivity_level: number
+    persona_g_level: number
+    persona_affection_level: number
+    persona_emoji_level: number
+  }
 }
 
 export async function answerGeneralQuestion(
   params: AnswerGeneralQuestionParams,
 ): Promise<string> {
-  const { question, organizationId } = params
+  const { question, organization } = params
 
   const embedder = new OpenAIEmbeddings({
     modelName: 'text-embedding-3-large',
@@ -32,7 +40,7 @@ export async function answerGeneralQuestion(
   const { matches } = await getEmbeddingMatches({
     embeddings,
     numTopResults: 30, // fetch lots of results, but we'll re-rank and take top x
-    organizationId,
+    organizationId: organization.id,
   })
 
   if (matches.length === 0) {
@@ -61,8 +69,6 @@ export async function answerGeneralQuestion(
 
   // 5. Get answer
 
-  const model = new OpenAI({ temperature: 0, modelName: 'gpt-4' })
-
   const promptTemplate = new PromptTemplate({
     template: prompt,
     inputVariables: ['question', 'context'],
@@ -73,7 +79,7 @@ export async function answerGeneralQuestion(
     context,
   })
 
-  const answer = await model.invoke(input)
+  const answer = await getAnswer(input, organization)
 
   logger.debug('Answered general question', {
     event: 'answer_general_question',
@@ -83,11 +89,38 @@ export async function answerGeneralQuestion(
     context,
     answer,
     organization: {
-      id: organizationId,
+      id: organization.id,
     },
   })
 
   return answer
+}
+
+async function getAnswer(
+  input: string,
+  organization: {
+    id: number
+    is_persona_enabled: boolean
+    persona_positivity_level: number
+    persona_g_level: number
+    persona_affection_level: number
+    persona_emoji_level: number
+  },
+) {
+  const model = new OpenAI({ temperature: 0, modelName: 'gpt-4' })
+  const answer = await model.invoke(input)
+
+  if (!organization.is_persona_enabled) {
+    return answer
+  }
+
+  return rephraseWithPersona({
+    affectionLevel: organization.persona_affection_level,
+    gLevel: organization.persona_g_level,
+    emojiLevel: organization.persona_emoji_level,
+    positivityLevel: organization.persona_positivity_level,
+    text: answer,
+  })
 }
 
 async function getContext(question: string, documents: string[]) {

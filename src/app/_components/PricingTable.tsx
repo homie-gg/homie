@@ -94,7 +94,7 @@ export default function PricingTable() {
   return (
     <section id="pricing" className="container py-24 sm:py-32">
       <h2 className="text-3xl md:text-6xl font-black text-center">
-        homie grows with you.
+        homie <span className="text-8xl">grows</span> with you.
       </h2>
       <h3 className="text-xl text-center text-muted-foreground pt-4 pb-8">
         homie is free forever for small projects that might only require a few
