@@ -8,7 +8,7 @@ export const createRedisClient = async () => {
   }
 
   client = await createClient({
-    url: `redis://${process.env.REDIS_HOST}:6379`,
+    url: `redis://${process.env.REDIS_HOST}`,
   }).connect()
 
   return client
