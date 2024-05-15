@@ -1,11 +1,9 @@
 'use client'
-import Image from 'next/image'
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
 } from '@/lib/ui/NavigationMenu'
-import logo from '@/assets/logo.svg'
 
 import { buttonVariants } from '@/lib/ui/Button'
 // import { MobileMenu } from '@/app/_components/MobileMenu'

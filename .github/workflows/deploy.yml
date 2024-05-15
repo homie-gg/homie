@@ -41,7 +41,7 @@ jobs:
         # Reference: https://github.com/aws/aws-cli/issues/3064#issuecomment-701513960
         run: |
           IMAGE=435193955274.dkr.ecr.$AWS_REGION.amazonaws.com/$CONTAINER:latest
-          docker build --compress -f app.Dockerfile -t $IMAGE .
+          docker build --compress -f app.Dockerfile -t $IMAGE --build-arg SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} .
           docker push $IMAGE
 
   update_app:
@@ -85,7 +85,7 @@ jobs:
         # Reference: https://github.com/aws/aws-cli/issues/3064#issuecomment-701513960
         run: |
           IMAGE=435193955274.dkr.ecr.$AWS_REGION.amazonaws.com/$CONTAINER:latest
-          docker build --compress -f worker.Dockerfile -t $IMAGE .
+          docker build --compress -f worker.Dockerfile -t $IMAGE --build-arg SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} .
           docker push $IMAGE
 
   update_worker:

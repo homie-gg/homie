@@ -1,5 +1,8 @@
 FROM node:20.10.0
 
+ARG SENTRY_AUTH_TOKEN
+ENV SENTRY_AUTH_TOKEN $SENTRY_AUTH_TOKEN
+
 # Setting working directory. All the path will be relative to WORKDIR
 WORKDIR /app
 

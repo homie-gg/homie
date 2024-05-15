@@ -22,9 +22,6 @@ import {
 } from '@/app/api/organizations/[organization_id]/types'
 import { useToast } from '@/lib/ui/Toast/use-toast'
 import { Slider } from '@/lib/ui/Slider'
-import { AnimatePresence, motion } from 'framer-motion'
-import slackBg from '@/app/_components/slack-bg.jpg'
-import Image from 'next/image'
 import SlackMessage from '@/lib/ui/SlackMessage'
 
 interface PersonaSettingsFormProps {
