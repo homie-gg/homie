@@ -19,7 +19,7 @@ export async function getQuestionParams(
     question,
   })
 
-  const model = new OpenAI({ temperature: 0, modelName: 'gpt-3.5-turbo' })
+  const model = new OpenAI({ temperature: 0, modelName: 'gpt-4o' })
 
   const output = await model.invoke(input)
 

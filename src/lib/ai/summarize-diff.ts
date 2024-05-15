@@ -26,7 +26,7 @@ export async function summarizeDiff(
 
   const model = createOpenAIClient({
     temperature: 0,
-    modelName: 'gpt-3.5-turbo',
+    modelName: 'gpt-4o',
   })
 
   const summarizeChain = loadSummarizationChain(model, {

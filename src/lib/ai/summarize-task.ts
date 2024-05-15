@@ -18,7 +18,7 @@ export async function summarizeTask(params: SummarizeTaskParams) {
 
   const model = createOpenAIClient({
     temperature: 0,
-    modelName: 'gpt-3.5-turbo',
+    modelName: 'gpt-4o',
   })
 
   const output = await model.invoke(input)

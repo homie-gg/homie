@@ -107,7 +107,7 @@ async function getAnswer(
     persona_emoji_level: number
   },
 ) {
-  const model = new OpenAI({ temperature: 0, modelName: 'gpt-4' })
+  const model = new OpenAI({ temperature: 0, modelName: 'gpt-4o' })
   const answer = await model.invoke(input)
 
   if (!organization.is_persona_enabled) {
