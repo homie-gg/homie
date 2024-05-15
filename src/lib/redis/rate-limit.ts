@@ -1,4 +1,4 @@
-import { redis } from '@/lib/redis/redis'
+import { createRedisClient } from '@/lib/redis/create-redis-client'
 
 interface RateLimitParams {
   max: number
@@ -7,6 +7,8 @@ interface RateLimitParams {
 
 export async function rateLimit(key: string, params: RateLimitParams) {
   const { durationSecs, max } = params
+
+  const redis = await createRedisClient()
 
   const [current] = await redis
     .multi()
