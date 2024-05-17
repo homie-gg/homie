@@ -30,8 +30,8 @@ export const plans: Plan[] = [
     description: 'No credit card required. Setup takes less than 20 seconds.',
     buttonText: 'Sign up',
     benefitList: [
-      'Up to 30 PRs / month',
-      'Ask anything in Slack',
+      'Up to 3 contributors',
+      'Chat with homie in Slack',
       'Quickly create tasks',
       'Auto-generate PR summaries',
       'PR & Contributor statistics',
@@ -39,54 +39,36 @@ export const plans: Plan[] = [
     afterSignUpUrl: '/review',
   },
   {
-    title: 'Basic',
-    isPopular: false,
-    price: 29,
-    isComingSoon: false,
-    description: 'Perfect for new projects that want to hit the road running.',
-    buttonText: 'Subscribe',
-    benefitList: [
-      'Up to 50 PRs / month',
-      'Everything in Free',
-      'Learn Slack messages*',
-      'Trello, and Asana integration*',
-      'Learn from Notion*',
-    ],
-    afterSignUpUrl: '/billing?plan=basic',
-  },
-  {
     title: 'Team',
     isPopular: false,
-    price: 349,
-    isComingSoon: false,
+    price: 15,
+    isComingSoon: true,
     description:
       'Save hundreds of engineer-hours each month. Boost developer & manager well-being.',
     buttonText: 'Subscribe',
     benefitList: [
-      'Up to 200 PRs / month',
-      'Everything in Basic',
-      'Milestone Analysis*',
+      'Up to 10 contributors',
+      'Learn Slack conversations*',
+      'More app integration*',
+      'Sync to Notion*',
       'Custom reminders*',
-      'Slack message reports*',
     ],
     afterSignUpUrl: '/billing?plan=team',
   },
   {
-    title: 'Agency',
+    title: 'Enterprise',
     isPopular: false,
+    price: 30,
     isComingSoon: true,
-    price: 499,
-    description:
-      'Advanced management features. Most cost effective for multi-team organizations.',
-    buttonText: 'Coming Soon',
+    description: 'Advanced analytics, and reporting for large teams that ',
+    buttonText: 'Subscribe',
     benefitList: [
-      'Up to 500 PRs / month',
-      'Everything in Team',
-      'Multiple organizations*',
-      'Generate report PDFs*',
-      'API Access*',
+      'Advanced dashboards & analytics*',
+      'Milestone Analysis*',
+      'PDF reports*',
+      'Centralized billing*',
     ],
-    afterSignUpUrl: '/billing?plan=agency',
+    afterSignUpUrl: '/billing?plan=enterprise',
   },
 ]
 
@@ -94,11 +76,11 @@ export default function PricingTable() {
   return (
     <section id="pricing" className="container py-24 sm:py-32">
       <h2 className="text-3xl md:text-6xl font-black text-center">
-        homie <span className="text-8xl">grows</span> with you.
+        homie <span className="text-8xl">grows</span> with your team.
       </h2>
       <h3 className="text-xl text-center text-muted-foreground pt-4 pb-8">
-        homie is free forever for small projects that might only require a few
-        PRs a week.
+        homie is free forever for teams up to 3 contributors that open a Pull
+        Request per month.
       </h3>
       <div className="grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-8">
         {plans.map((plan) => (
@@ -116,7 +98,9 @@ export default function PricingTable() {
               </CardTitle>
               <div>
                 <span className="text-3xl font-bold">${plan.price}</span>
-                <span className="text-muted-foreground"> /month</span>
+                <span className="text-muted-foreground">
+                  /contributor/month
+                </span>
               </div>
 
               <CardDescription className="h-[60px]">
