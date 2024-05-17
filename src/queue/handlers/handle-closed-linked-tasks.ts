@@ -16,20 +16,12 @@ export async function handleCloseLinkedTasks(job: CloseLinkedTasks) {
     .where('homie.organization.id', '=', organization.id)
     .select([
       'homie.organization.id',
-      'is_over_plan_pr_limit',
       'pr_limit_per_month',
       'has_unlimited_usage',
     ])
     .executeTakeFirst()
 
   if (!organizationWithBilling) {
-    return
-  }
-
-  if (
-    organizationWithBilling.is_over_plan_pr_limit &&
-    !organizationWithBilling.has_unlimited_usage
-  ) {
     return
   }
 
@@ -44,5 +36,4 @@ export async function handleCloseLinkedTasks(job: CloseLinkedTasks) {
       pullRequestBody,
       trelloWorkspace,
     })
-  }
-}
+  }}

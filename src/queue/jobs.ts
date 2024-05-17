@@ -96,12 +96,6 @@ export type ReplySlackThread = BullMQJob<
   'reply_slack_thread'
 >
 
-export type ResetOrganizationsOverPRLimit = BullMQJob<
-  null,
-  void, // return type
-  'reset_organizations_over_pr_limit'
->
-
 export type SendPullRequestSummaries = BullMQJob<
   null,
   void, // return type
@@ -176,7 +170,6 @@ export type SaveMergedMergeRequest = BullMQJob<
     }
     organization: {
       id: number
-      is_over_plan_pr_limit: boolean | null
       has_unlimited_usage: boolean | null
       pr_limit_per_month: number | null
       gitlab_access_token: string
@@ -201,7 +194,6 @@ export type GenerateOpenMergeRequestSummary = BullMQJob<
     }
     organization: {
       id: number
-      is_over_plan_pr_limit: boolean | null
       has_unlimited_usage: boolean | null
       pr_limit_per_month: number | null
       gitlab_access_token: string
@@ -226,7 +218,6 @@ export type SaveOpenedMergeRequest = BullMQJob<
     }
     organization: {
       id: number
-      is_over_plan_pr_limit: boolean | null
       has_unlimited_usage: boolean | null
       pr_limit_per_month: number | null
       gitlab_access_token: string
@@ -269,7 +260,6 @@ export type Job =
   | GenerateOpenPullRequestSummary
   | ReplySlackMention
   | ReplySlackThread
-  | ResetOrganizationsOverPRLimit
   | SendPullRequestSummaries
   | SendPullRequestSummariesToOrganization
   | CreateTrelloTaskFromSlack

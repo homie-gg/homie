@@ -1,4 +1,3 @@
-import { getIsOverPlanPRLimit } from '@/lib/billing/get-is-over-plan-pr-limit'
 import { dbClient } from '@/database/client'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { getPullRequestLogData } from '@/lib/github/get-pull-request-log-data'
@@ -33,7 +32,6 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
     .select([
       'homie.organization.id',
       'github.organization.ext_gh_install_id',
-      'is_over_plan_pr_limit',
       'has_unlimited_usage',
       'pr_limit_per_month',
     ])
@@ -46,42 +44,6 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
         pull_request: getPullRequestLogData(pull_request),
       },
     })
-    return
-  }
-
-  if (organization.is_over_plan_pr_limit && !organization.has_unlimited_usage) {
-    logger.debug('org over plan limit', {
-      event: 'save_opened_pull_request.org_over_plan_limit',
-      data: {
-        pull_request: getPullRequestLogData(pull_request),
-        organization: getOrganizationLogData(organization),
-      },
-    })
-    return
-  }
-
-  const isOverPlanPRLimit = await getIsOverPlanPRLimit({
-    organization,
-    pr_limit_per_month: organization.pr_limit_per_month,
-  })
-
-  if (isOverPlanPRLimit && !organization.has_unlimited_usage) {
-    await dbClient
-      .updateTable('homie.organization')
-      .set({
-        is_over_plan_pr_limit: true,
-      })
-      .where('homie.organization.id', '=', organization.id)
-      .executeTakeFirstOrThrow()
-
-    logger.debug('org over plan limit', {
-      event: 'save_opened_pull_request.org_over_plan_limit',
-      data: {
-        pull_request: getPullRequestLogData(pull_request),
-        organization: getOrganizationLogData(organization),
-      },
-    })
-
     return
   }
 

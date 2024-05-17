@@ -1,5 +1,4 @@
 import { summarizeGithubPullRequest } from '@/lib/github/summarize-github-pull-request'
-import { getOverPRLimitMessage } from '@/lib/billing/get-over-pr-limit-message'
 import { dbClient } from '@/database/client'
 import { createGithubClient } from '@/lib/github/create-github-client'
 import { GenerateOpenPullRequestSummary } from '@/queue/jobs'
@@ -31,7 +30,6 @@ export async function handleGenerateOpenPullRequestSummary(
     .select([
       'homie.organization.id',
       'github.organization.ext_gh_install_id',
-      'is_over_plan_pr_limit',
       'has_unlimited_usage',
       'trello_access_token',
     ])
@@ -46,21 +44,6 @@ export async function handleGenerateOpenPullRequestSummary(
   })
 
   const owner = pull_request.base.repo.full_name.split('/')[0]
-
-  if (organization.is_over_plan_pr_limit && !organization.has_unlimited_usage) {
-    const bodyWithSummary = pull_request.body?.replace(
-      summaryKey,
-      getOverPRLimitMessage(),
-    ) // avoid infinite loop of summaries by replacing the key if it exists
-
-    await github.rest.pulls.update({
-      owner,
-      repo: pull_request.base.repo.name,
-      pull_number: pull_request.number,
-      body: bodyWithSummary,
-    })
-    return
-  }
 
   const issue = await getLinkedIssuesAndTasksInPullRequest({
     pullRequest: pull_request,
