@@ -28,6 +28,11 @@ export async function handleGenerateOpenPullRequestSummary(
       'homie.organization.id',
     )
     .where('ext_gh_install_id', '=', installation?.id!)
+
+
+
+
+
     .select([
       'homie.organization.id',
       'github.organization.ext_gh_install_id',
