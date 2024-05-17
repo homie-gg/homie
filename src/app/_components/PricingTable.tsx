@@ -82,7 +82,7 @@ export default function PricingTable() {
         homie is free forever for teams up to 3 contributors that open a Pull
         Request per month.
       </h3>
-      <div className="grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-8">
+      <div className="grid lg:grid-cols-3 gap-8">
         {plans.map((plan) => (
           <Card
             key={plan.title}
