@@ -507,12 +507,6 @@ declare module 'zapatos/schema' {
          */
         id: number
         /**
-         * **homie.organization.is_over_plan_pr_limit**
-         * - `bool` in database
-         * - Nullable, default: `false`
-         */
-        is_over_plan_pr_limit: boolean | null
-        /**
          * **homie.organization.is_persona_enabled**
          * - `bool` in database
          * - `NOT NULL`, default: `false`
@@ -604,12 +598,6 @@ declare module 'zapatos/schema' {
          * - `NOT NULL`, default: `nextval('homie.organization_id_seq'::regclass)`
          */
         id: number
-        /**
-         * **homie.organization.is_over_plan_pr_limit**
-         * - `bool` in database
-         * - Nullable, default: `false`
-         */
-        is_over_plan_pr_limit: boolean | null
         /**
          * **homie.organization.is_persona_enabled**
          * - `bool` in database
@@ -744,20 +732,6 @@ declare module 'zapatos/schema' {
           | db.SQLFragment<
               any,
               number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
-            >
-        /**
-         * **homie.organization.is_over_plan_pr_limit**
-         * - `bool` in database
-         * - Nullable, default: `false`
-         */
-        is_over_plan_pr_limit?:
-          | boolean
-          | db.Parameter<boolean>
-          | db.SQLFragment
-          | db.ParentColumn
-          | db.SQLFragment<
-              any,
-              boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn
             >
         /**
          * **homie.organization.is_persona_enabled**
@@ -949,17 +923,6 @@ declare module 'zapatos/schema' {
          */
         id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment
         /**
-         * **homie.organization.is_over_plan_pr_limit**
-         * - `bool` in database
-         * - Nullable, default: `false`
-         */
-        is_over_plan_pr_limit?:
-          | boolean
-          | db.Parameter<boolean>
-          | null
-          | db.DefaultType
-          | db.SQLFragment
-        /**
          * **homie.organization.is_persona_enabled**
          * - `bool` in database
          * - `NOT NULL`, default: `false`
@@ -1139,25 +1102,6 @@ declare module 'zapatos/schema' {
           | db.SQLFragment<
               any,
               number | db.Parameter<number> | db.DefaultType | db.SQLFragment
-            >
-        /**
-         * **homie.organization.is_over_plan_pr_limit**
-         * - `bool` in database
-         * - Nullable, default: `false`
-         */
-        is_over_plan_pr_limit?:
-          | boolean
-          | db.Parameter<boolean>
-          | null
-          | db.DefaultType
-          | db.SQLFragment
-          | db.SQLFragment<
-              any,
-              | boolean
-              | db.Parameter<boolean>
-              | null
-              | db.DefaultType
-              | db.SQLFragment
             >
         /**
          * **homie.organization.is_persona_enabled**
@@ -1361,12 +1305,6 @@ declare module 'zapatos/schema' {
          */
         name: string
         /**
-         * **homie.plan.pr_limit_per_month**
-         * - `int4` in database
-         * - Nullable, no default
-         */
-        pr_limit_per_month: number | null
-        /**
          * **homie.plan.updated_at**
          * - `timestamptz` in database
          * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -1404,12 +1342,6 @@ declare module 'zapatos/schema' {
          * - `NOT NULL`, no default
          */
         name: string
-        /**
-         * **homie.plan.pr_limit_per_month**
-         * - `int4` in database
-         * - Nullable, no default
-         */
-        pr_limit_per_month: number | null
         /**
          * **homie.plan.updated_at**
          * - `timestamptz` in database
@@ -1492,20 +1424,6 @@ declare module 'zapatos/schema' {
               string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
             >
         /**
-         * **homie.plan.pr_limit_per_month**
-         * - `int4` in database
-         * - Nullable, no default
-         */
-        pr_limit_per_month?:
-          | number
-          | db.Parameter<number>
-          | db.SQLFragment
-          | db.ParentColumn
-          | db.SQLFragment<
-              any,
-              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
-            >
-        /**
          * **homie.plan.updated_at**
          * - `timestamptz` in database
          * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -1558,17 +1476,6 @@ declare module 'zapatos/schema' {
          * - `NOT NULL`, no default
          */
         name: string | db.Parameter<string> | db.SQLFragment
-        /**
-         * **homie.plan.pr_limit_per_month**
-         * - `int4` in database
-         * - Nullable, no default
-         */
-        pr_limit_per_month?:
-          | number
-          | db.Parameter<number>
-          | null
-          | db.DefaultType
-          | db.SQLFragment
         /**
          * **homie.plan.updated_at**
          * - `timestamptz` in database
@@ -1642,25 +1549,6 @@ declare module 'zapatos/schema' {
           | db.Parameter<string>
           | db.SQLFragment
           | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
-        /**
-         * **homie.plan.pr_limit_per_month**
-         * - `int4` in database
-         * - Nullable, no default
-         */
-        pr_limit_per_month?:
-          | number
-          | db.Parameter<number>
-          | null
-          | db.DefaultType
-          | db.SQLFragment
-          | db.SQLFragment<
-              any,
-              | number
-              | db.Parameter<number>
-              | null
-              | db.DefaultType
-              | db.SQLFragment
-            >
         /**
          * **homie.plan.updated_at**
          * - `timestamptz` in database

@@ -1,4 +1,3 @@
-import { getIsOverPlanPRLimit } from '@/lib/billing/get-is-over-plan-pr-limit'
 import { stripeServerClient } from '@/lib/billing/stripe-server-client'
 import { dbClient } from '@/database/client'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
@@ -43,7 +42,7 @@ export async function handleUpdatedSubscription(
 
   const plan = await dbClient
     .selectFrom('homie.plan')
-    .select(['id', 'pr_limit_per_month'])
+    .select(['id'])
     .where('ext_stripe_price_id', '=', priceId)
     .executeTakeFirst()
 
@@ -98,17 +97,6 @@ export async function handleUpdatedSubscription(
 
     return
   }
-
-  const isOverPlanLimit = await getIsOverPlanPRLimit({
-    pr_limit_per_month: plan.pr_limit_per_month,
-    organization,
-  })
-
-  await dbClient
-    .updateTable('homie.organization')
-    .set({ is_over_plan_pr_limit: isOverPlanLimit })
-    .where('id', '=', organization.id)
-    .executeTakeFirstOrThrow()
 
   logger.debug('Created subscription', {
     event: 'set_subscription.success',

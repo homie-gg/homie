@@ -1,5 +1,4 @@
 import { dbClient } from '@/database/client'
-import { getOverPRLimitMessage } from '@/lib/billing/get-over-pr-limit-message'
 import { createGitlabClient } from '@/lib/gitlab/create-gitlab-client'
 import { getLinkedIssuesAndTasksInMergeRequest } from '@/lib/gitlab/get-linked-issues-and-tasks-in-merge-request'
 import { getMergeRequestLogData } from '@/lib/gitlab/get-merge-request-log-data'
@@ -35,23 +34,6 @@ export async function handleGenerateOpenMergeRequestSummary(
   }
 
   const gitlab = createGitlabClient(organization.gitlab_access_token)
-
-  if (organization.is_over_plan_pr_limit && !organization.has_unlimited_usage) {
-    const bodyWithSummary = merge_request.description?.replace(
-      summaryKey,
-      getOverPRLimitMessage(),
-    ) // avoid infinite loop of summaries by replacing the key if it exists
-
-    await gitlab.MergeRequests.edit(
-      project.ext_gitlab_project_id,
-      merge_request.iid,
-      {
-        description: bodyWithSummary,
-      },
-    )
-
-    return
-  }
 
   const issue = await getLinkedIssuesAndTasksInMergeRequest({
     mergeRequest: merge_request,

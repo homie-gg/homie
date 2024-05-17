@@ -76,7 +76,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
 }
 
 export async function down(pgm: MigrationBuilder): Promise<void> {
-  pgm.dropColumns('homie', [
+  pgm.dropColumns('homie.organization', [
     'is_persona_enabled',
     'persona_g_level',
     'persona_positivity_level',

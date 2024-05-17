@@ -2,7 +2,6 @@ import { createSlackClient } from '@/lib/slack/create-slack-client'
 import { ReplySlackMention } from '@/queue/jobs'
 import { findOrgWithSlackTeamId } from '@/lib/organization/get-org-with-slack-team-id'
 import { getAnswer } from '@/lib/ai/chat/get-answer'
-import { getOverPRLimitMessage } from '@/lib/billing/get-over-pr-limit-message'
 import { getTextReplies } from '@/lib/slack/get-text-replies'
 
 export async function handleReplySlackMention(job: ReplySlackMention) {
@@ -14,16 +13,6 @@ export async function handleReplySlackMention(job: ReplySlackMention) {
   }
 
   const slackClient = createSlackClient(organization.slack_access_token)
-
-  if (organization.is_over_plan_pr_limit && !organization.has_unlimited_usage) {
-    await slackClient.post('chat.postMessage', {
-      channel: channel_id,
-      thread_ts: target_message_ts,
-      text: getOverPRLimitMessage(),
-    })
-
-    return
-  }
 
   // Remove any unecessary info, eg. bot user ids
   const input = text

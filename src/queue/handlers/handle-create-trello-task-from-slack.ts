@@ -6,7 +6,6 @@ import { getAllTextMessages } from '@/lib/slack/get-all-text-messages'
 import { summarizeTask } from '@/lib/ai/summarize-task'
 import { http } from '@/lib/http/client/http'
 import { findOrgWithSlackTeamId } from '@/lib/organization/get-org-with-slack-team-id'
-import { getOverPRLimitMessage } from '@/lib/billing/get-over-pr-limit-message'
 import { dbClient } from '@/database/client'
 import { createTrelloClient } from '@/lib/trello/create-trello-client'
 import { TrelloCard } from '@/lib/trello/types'
@@ -27,16 +26,6 @@ export async function handleCreateTrelloTaskFromSlack(
   }
 
   const slackClient = createSlackClient(organization.slack_access_token)
-
-  if (organization.is_over_plan_pr_limit && !organization.has_unlimited_usage) {
-    await slackClient.post('chat.postMessage', {
-      channel: channel_id,
-      thread_ts: target_message_ts,
-      text: getOverPRLimitMessage(),
-    })
-
-    return
-  }
 
   const trelloWorkspace = await dbClient
     .selectFrom('trello.workspace')

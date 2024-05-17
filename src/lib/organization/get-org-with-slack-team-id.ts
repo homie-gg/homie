@@ -18,7 +18,6 @@ export const findOrgWithSlackTeamId = async (teamId: string) => {
       'ext_gh_install_id',
       'slack_access_token',
       'ext_slack_bot_user_id',
-      'is_over_plan_pr_limit',
       'has_unlimited_usage',
       'is_persona_enabled',
       'persona_affection_level',
