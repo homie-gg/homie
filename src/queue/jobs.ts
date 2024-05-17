@@ -1,5 +1,5 @@
 import { GithubOrganization } from '@/database/types'
-import { Job as BullMQJob } from 'bullmq'
+import { Job as BullMQJob, JobsOptions } from 'bullmq'
 import { PullRequest, InstallationLite } from '@octokit/webhooks-types'
 
 export type AskSlackSelectGithubRepoForIssue = BullMQJob<
@@ -72,15 +72,28 @@ export type GenerateOpenPullRequestSummary = BullMQJob<
   'generate_open_pull_request_summary'
 >
 
-export type AnswerSlackQuestion = BullMQJob<
+export type ReplySlackMention = BullMQJob<
   {
     team_id: string
     channel_id: string
     target_message_ts: string
+    thread_ts?: string
     text: string
   },
   void, // return type
-  'answer_slack_question'
+  'reply_slack_mention'
+>
+
+export type ReplySlackThread = BullMQJob<
+  {
+    team_id: string
+    channel_id: string
+    thread_ts: string
+    target_message_ts: string
+    ext_slack_user_id: string
+  },
+  void, // return type
+  'reply_slack_thread'
 >
 
 export type ResetOrganizationsOverPRLimit = BullMQJob<
@@ -229,6 +242,23 @@ export type RefreshGitlabTokens = BullMQJob<
   'refresh_gitlab_tokens'
 >
 
+export type DispatchDebouncedJob = BullMQJob<
+  {
+    job: {
+      name: Job['name']
+      data: Job['data']
+      opts?: JobsOptions
+    }
+    debounce: {
+      key: string
+      id: string
+      delaySecs: number
+    }
+  },
+  void, // return type
+  'dispatch_debounced_job'
+>
+
 export type Job =
   | CreateGithubIssueFromSlack
   | AskSlackSelectGithubRepoForIssue
@@ -237,7 +267,8 @@ export type Job =
   | SaveMergedPullRequest
   | CloseLinkedTasks
   | GenerateOpenPullRequestSummary
-  | AnswerSlackQuestion
+  | ReplySlackMention
+  | ReplySlackThread
   | ResetOrganizationsOverPRLimit
   | SendPullRequestSummaries
   | SendPullRequestSummariesToOrganization
@@ -248,3 +279,4 @@ export type Job =
   | GenerateOpenMergeRequestSummary
   | SaveOpenedMergeRequest
   | RefreshGitlabTokens
+  | DispatchDebouncedJob

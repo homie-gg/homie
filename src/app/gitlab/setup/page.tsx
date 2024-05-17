@@ -72,22 +72,5 @@ export default async function GitlabSetupPage(props: GitlabSetupPageProps) {
     },
   })
 
-  // TODO:
-  // - import each project
-  // - register webhook
-  // - pull latest X MRs per project
-
-  // - handle webhook events for MR
-  //    - save on open
-  //    - handle save merged
-  //    - handle generate MR summary
-  //    - update on merge/close
-  //    - close linked tasks
-  // - update to only import selected projects
-
-  // - ignore not enabled projects
-
-  // - refresh token job every 2 hours
-
   return redirect('/review')
 }

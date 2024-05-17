@@ -2,7 +2,7 @@ import { createSlackClient } from '@/lib/slack/create-slack-client'
 import { Conversation, TextMessageEvent } from '@/lib/slack/types'
 import { CreateTrelloTaskFromSlack } from '@/queue/jobs'
 import { getMessageLink } from '@/lib/slack/get-message-link'
-import { GetAllTextMessages } from '@/lib/slack/get-all-text-messages'
+import { getAllTextMessages } from '@/lib/slack/get-all-text-messages'
 import { summarizeTask } from '@/lib/ai/summarize-task'
 import { http } from '@/lib/http/client/http'
 import { findOrgWithSlackTeamId } from '@/lib/organization/get-org-with-slack-team-id'
@@ -79,7 +79,7 @@ export async function handleCreateTrelloTaskFromSlack(
     (message) => !('bot_profile' in message),
   )
 
-  const messages: TextMessageEvent[] = await GetAllTextMessages({
+  const messages: TextMessageEvent[] = await getAllTextMessages({
     channelID: channel_id,
     messages: userMessages,
     slackClient,

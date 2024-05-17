@@ -1,4 +1,4 @@
-import { handleAnswerSlackQuestion } from '@/queue/handlers/handle-answer-slack-question'
+import { handleReplySlackMention } from '@/queue/handlers/handle-reply-slack-mention'
 import { handleAskSlackSelectGithubRepoForIssue } from '@/queue/handlers/handle-ask-slack-select-github-repo-for-issue'
 import { handleCreateGithubIssueFromSlack } from '@/queue/handlers/handle-create-github-issue-from-slack'
 import { handleGenerateOpenPullRequestSummary } from '@/queue/handlers/handle-generate-open-pull-request-summary'
@@ -17,6 +17,8 @@ import { handleSaveMergedMergeRequest } from '@/queue/handlers/handle-save-merge
 import { handleGenerateOpenMergeRequestSummary } from '@/queue/handlers/handle-generate-open-merge-request-summary'
 import { handleSaveOpenedMergeRequest } from '@/queue/handlers/handle-save-opened-merge-request'
 import { handleRefreshGitlabTokens } from '@/queue/handlers/handle-refresh-gitlab-tokens'
+import { handleReplySlackThread } from '@/queue/handlers/handle-reply-slack-thread'
+import { handleDispatchDebouncedJob } from '@/queue/handlers/handle-dispatch-debounced-job'
 
 type HandlerFunc<TJob extends Job> = (job: TJob) => void | Promise<void>
 
@@ -34,7 +36,8 @@ export const handlers: Handlers = {
   save_merged_pull_request: handleSaveMergedPullRequest,
   close_linked_tasks: handleCloseLinkedTasks,
   generate_open_pull_request_summary: handleGenerateOpenPullRequestSummary,
-  answer_slack_question: handleAnswerSlackQuestion,
+  reply_slack_mention: handleReplySlackMention,
+  reply_slack_thread: handleReplySlackThread,
   reset_organizations_over_pr_limit: handleResetOrganizationsOverPRLimit,
   send_pull_request_summaries: handleSendPullRequestSummaries,
   send_pull_request_summaries_to_organization:
@@ -45,4 +48,5 @@ export const handlers: Handlers = {
   generate_open_merge_request_summary: handleGenerateOpenMergeRequestSummary,
   save_opened_merge_request: handleSaveOpenedMergeRequest,
   refresh_gitlab_tokens: handleRefreshGitlabTokens,
+  dispatch_debounced_job: handleDispatchDebouncedJob,
 }

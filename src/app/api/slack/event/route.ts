@@ -3,6 +3,15 @@ import { verifySlackRequest } from '@/lib/slack/verify-slack-request'
 import { dispatch } from '@/queue/default-queue'
 import { SlackEvent } from '@slack/bolt'
 import { logger } from '@/lib/log/logger'
+import { debouncedDispatch } from '@/queue/debounced-dispatch'
+import { generateUuid } from '@/lib/crypto/generate-uuid'
+
+/**
+ * How long to wait before sending a reply to a thread. This is to prevent
+ * cases where users fire off multiple messsages consecutively, and we
+ * reply multiple times.
+ */
+const threadReplyDebounceSecs = 2
 
 export const POST = async (request: NextRequest) => {
   const payload = await request.clone().json()
@@ -42,14 +51,55 @@ interface HandleEventParams {
 
 async function handleEvent(params: HandleEventParams) {
   const { event, team_id } = params
+
   switch (event.type) {
-    case 'app_mention':
-      await dispatch('answer_slack_question', {
-        team_id,
-        channel_id: event.channel,
-        target_message_ts: event.ts,
-        text: event.text,
+    case 'app_mention': {
+      await debouncedDispatch({
+        job: {
+          name: 'reply_slack_mention',
+          data: {
+            team_id,
+            channel_id: event.channel,
+            target_message_ts: event.ts,
+            thread_ts: event.thread_ts,
+            text: event.text,
+          },
+        },
+        debounce: {
+          key: `reply_slack:${event.thread_ts ?? event.ts}`,
+          id: generateUuid(),
+          delaySecs: threadReplyDebounceSecs,
+        },
       })
+    }
+    case 'message': {
+      // Only care about messages in threads
+      if (!('thread_ts' in event) || !event.thread_ts) {
+        return
+      }
+
+      if (!event.user) {
+        return
+      }
+
+      await debouncedDispatch({
+        job: {
+          name: 'reply_slack_thread',
+          data: {
+            team_id,
+            channel_id: event.channel,
+            thread_ts: event.thread_ts,
+            target_message_ts: event.ts,
+            ext_slack_user_id: event.user,
+          },
+        },
+        debounce: {
+          key: `reply_slack:${event.thread_ts}`,
+          id: generateUuid(),
+          delaySecs: threadReplyDebounceSecs,
+        },
+      })
+    }
     default:
       return
   }

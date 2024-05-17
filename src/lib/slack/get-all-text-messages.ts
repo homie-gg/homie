@@ -9,7 +9,7 @@ interface GetAllTextMessagesParams {
   slackClient: SlackClient
 }
 
-export async function GetAllTextMessages(
+export async function getAllTextMessages(
   params: GetAllTextMessagesParams,
 ): Promise<TextMessageEvent[]> {
   const { channelID, messages, slackClient } = params

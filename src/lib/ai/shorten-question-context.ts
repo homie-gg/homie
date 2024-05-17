@@ -4,18 +4,17 @@ import { OpenAI } from '@langchain/openai'
 interface ShortenQuestionContextParams {
   question: string
   context: string
-  promptLength: number
 }
 
-export const chatGPTCharLimit = 4000
+export const contextCharacterLimit = 128000
 
 export async function shortenQuestionContext(
   params: ShortenQuestionContextParams,
 ): Promise<string> {
-  const { question, context, promptLength } = params
+  const { question, context } = params
 
   // If we're under the limit, no need to shorten
-  if (question.length + context.length + promptLength < chatGPTCharLimit) {
+  if (question.length + context.length < contextCharacterLimit) {
     return context
   }
 
@@ -26,7 +25,6 @@ export async function shortenQuestionContext(
       summarize({
         context: chunk,
         question: question,
-        promptLength,
       }),
     ),
   )
@@ -34,11 +32,10 @@ export async function shortenQuestionContext(
   const result = shortenedChunks.join('\n')
 
   // If we're still over the limit, we'll re-summarize
-  if (question.length + result.length + promptLength > chatGPTCharLimit) {
+  if (question.length + result.length > contextCharacterLimit) {
     return shortenQuestionContext({
       context: result,
       question: question,
-      promptLength,
     })
   }
 

@@ -22,6 +22,7 @@ export const getDefaultQueue = () => {
       },
       getRepeatableJobs: () => [],
       removeRepeatableByKey: (_key: string) => {},
+      remove: (_key: string) => {},
     }
   }
 
@@ -47,7 +48,7 @@ export const getDefaultQueue = () => {
   return defaultQueue
 }
 
-type GetDataType<
+export type GetDataType<
   SomeJob extends Job,
   Name extends SomeJob['name'],
 > = SomeJob extends {

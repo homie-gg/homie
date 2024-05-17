@@ -9,6 +9,7 @@ interface GetTextRepliesParams {
 
 type TextMessageEvent = {
   text: string
+  user?: string
 }
 
 export async function getTextReplies(
@@ -25,6 +26,7 @@ export async function getTextReplies(
     if ('text' in message && !!message.text) {
       textMessages.push({
         text: message.text,
+        user: message.user,
       })
     }
   }
