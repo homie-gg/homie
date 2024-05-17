@@ -6,7 +6,7 @@ import { GenerateOpenPullRequestSummary } from '@/queue/jobs'
 import { getLinkedIssuesAndTasksInPullRequest } from '@/lib/github/get-linked-issues-and-tasks-in-pull-request'
 
 /**
- * Void will replace this string inside a PR body with a generated summary.
+ * homie will replace this string inside a PR body with a generated summary.
  */
 export const summaryKey = ':homie-summary:'
 
