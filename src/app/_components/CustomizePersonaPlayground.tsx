@@ -37,7 +37,7 @@ export default function CustomizePlayground() {
           Customize homie&apos;s tone to match your team or just for fun.
         </p>
       </div>
-      <div className="grid gap-12 grid-cols-[25%_75%]">
+      <div className="grid gap-12 lg:gap-[5%] lg:grid-cols-[25%_70%]">
         <div className="flex flex-col gap-4">
           <div className="grid gap-4">
             <div className="flex items-center justify-between">
