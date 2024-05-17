@@ -30,7 +30,6 @@ export const POST = async (request: NextRequest) => {
       'gitlab.app_user.gitlab_webhook_secret',
       'homie.organization.id',
       'gitlab_access_token',
-      'pr_limit_per_month',
       'has_unlimited_usage',
       'trello_access_token',
     ])

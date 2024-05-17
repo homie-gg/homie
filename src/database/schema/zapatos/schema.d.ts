@@ -798,12 +798,6 @@ declare module 'zapatos/schema' {
         */
         name: string;
         /**
-        * **homie.plan.pr_limit_per_month**
-        * - `int4` in database
-        * - Nullable, no default
-        */
-        pr_limit_per_month: number | null;
-        /**
         * **homie.plan.updated_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -841,12 +835,6 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, no default
         */
         name: string;
-        /**
-        * **homie.plan.pr_limit_per_month**
-        * - `int4` in database
-        * - Nullable, no default
-        */
-        pr_limit_per_month: number | null;
         /**
         * **homie.plan.updated_at**
         * - `timestamptz` in database
@@ -886,12 +874,6 @@ declare module 'zapatos/schema' {
         */
         name?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
         /**
-        * **homie.plan.pr_limit_per_month**
-        * - `int4` in database
-        * - Nullable, no default
-        */
-        pr_limit_per_month?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
-        /**
         * **homie.plan.updated_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -930,12 +912,6 @@ declare module 'zapatos/schema' {
         */
         name: string | db.Parameter<string> | db.SQLFragment;
         /**
-        * **homie.plan.pr_limit_per_month**
-        * - `int4` in database
-        * - Nullable, no default
-        */
-        pr_limit_per_month?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment;
-        /**
         * **homie.plan.updated_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -973,12 +949,6 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, no default
         */
         name?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
-        /**
-        * **homie.plan.pr_limit_per_month**
-        * - `int4` in database
-        * - Nullable, no default
-        */
-        pr_limit_per_month?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment>;
         /**
         * **homie.plan.updated_at**
         * - `timestamptz` in database

@@ -37,7 +37,6 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
     .select([
       'homie.organization.id',
       'github.organization.ext_gh_install_id',
-      'pr_limit_per_month',
       'has_unlimited_usage',
       'trello_access_token',
     ])

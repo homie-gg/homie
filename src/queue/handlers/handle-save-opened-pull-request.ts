@@ -33,7 +33,6 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
       'homie.organization.id',
       'github.organization.ext_gh_install_id',
       'has_unlimited_usage',
-      'pr_limit_per_month',
     ])
     .executeTakeFirst()
 

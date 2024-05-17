@@ -42,7 +42,7 @@ export async function handleUpdatedSubscription(
 
   const plan = await dbClient
     .selectFrom('homie.plan')
-    .select(['id', 'pr_limit_per_month'])
+    .select(['id'])
     .where('ext_stripe_price_id', '=', priceId)
     .executeTakeFirst()
 

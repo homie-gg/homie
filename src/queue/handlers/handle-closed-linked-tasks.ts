@@ -14,11 +14,7 @@ export async function handleCloseLinkedTasks(job: CloseLinkedTasks) {
     )
     .leftJoin('homie.plan', 'homie.plan.id', 'homie.subscription.plan_id')
     .where('homie.organization.id', '=', organization.id)
-    .select([
-      'homie.organization.id',
-      'pr_limit_per_month',
-      'has_unlimited_usage',
-    ])
+    .select(['homie.organization.id', 'has_unlimited_usage'])
     .executeTakeFirst()
 
   if (!organizationWithBilling) {
@@ -36,4 +32,5 @@ export async function handleCloseLinkedTasks(job: CloseLinkedTasks) {
       pullRequestBody,
       trelloWorkspace,
     })
-  }}
+  }
+}

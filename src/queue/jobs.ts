@@ -171,7 +171,6 @@ export type SaveMergedMergeRequest = BullMQJob<
     organization: {
       id: number
       has_unlimited_usage: boolean | null
-      pr_limit_per_month: number | null
       gitlab_access_token: string
       trello_access_token: string | null
     }
@@ -195,7 +194,6 @@ export type GenerateOpenMergeRequestSummary = BullMQJob<
     organization: {
       id: number
       has_unlimited_usage: boolean | null
-      pr_limit_per_month: number | null
       gitlab_access_token: string
       trello_access_token: string | null
     }
@@ -219,7 +217,6 @@ export type SaveOpenedMergeRequest = BullMQJob<
     organization: {
       id: number
       has_unlimited_usage: boolean | null
-      pr_limit_per_month: number | null
       gitlab_access_token: string
     }
   },

@@ -5,13 +5,11 @@ import { dbClient } from '@/database/client'
       name: 'basic',
       billing_interval: 'monthly',
       ext_stripe_price_id: process.env.STRIPE_PRICE_ID_HOMIE_BASIC_MONTHLY!,
-      pr_limit_per_month: 50,
     },
     {
       name: 'team',
       billing_interval: 'monthly',
       ext_stripe_price_id: process.env.STRIPE_PRICE_ID_HOMIE_TEAM_MONTHLY!,
-      pr_limit_per_month: 200,
     },
   ]
 
@@ -30,7 +28,6 @@ import { dbClient } from '@/database/client'
           name: plan.name,
           billing_interval: plan.billing_interval,
           ext_stripe_price_id: plan.ext_stripe_price_id,
-          pr_limit_per_month: plan.pr_limit_per_month,
         })
         .where('homie.plan.id', '=', existingPlan.id)
         .executeTakeFirstOrThrow()
@@ -44,7 +41,6 @@ import { dbClient } from '@/database/client'
         name: plan.name,
         billing_interval: plan.billing_interval,
         ext_stripe_price_id: plan.ext_stripe_price_id,
-        pr_limit_per_month: plan.pr_limit_per_month,
       })
       .executeTakeFirstOrThrow()
   }
