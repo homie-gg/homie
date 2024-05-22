@@ -1,5 +1,7 @@
 import { dbClient } from '@/database/client'
-import { DynamicTool } from '@langchain/core/tools'
+import { DynamicStructuredTool } from '@langchain/core/tools'
+import { endOfDay, startOfDay } from 'date-fns'
+import { z } from 'zod'
 
 interface getListPullRequestsToolParams {
   organization: {
@@ -9,11 +11,21 @@ interface getListPullRequestsToolParams {
 
 export function getListPullRequestsTool(params: getListPullRequestsToolParams) {
   const { organization } = params
-  return new DynamicTool({
+  return new DynamicStructuredTool({
     name: 'list_pull_requests',
     description: 'List pull requests',
-    func: async () => {
-      const pullRequests = await dbClient
+    schema: z.object({
+      startDate: z.coerce
+        .date()
+        .describe('The lower bound of the generated number')
+        .optional(),
+      endDate: z.coerce
+        .date()
+        .describe('The upper bound of the generated number')
+        .optional(),
+    }),
+    func: async ({ startDate, endDate }) => {
+      const query = dbClient
         .selectFrom('homie.pull_request')
         .where('homie.pull_request.organization_id', '=', organization.id)
         .innerJoin(
@@ -24,16 +36,26 @@ export function getListPullRequestsTool(params: getListPullRequestsToolParams) {
         .orderBy('homie.pull_request.created_at desc')
         .select([
           'title',
+          'body',
           'homie.contributor.username',
           'merged_at',
           'html_url',
         ])
-        .execute()
+
+      if (startDate) {
+        query.where('created_at', '>', startOfDay(new Date(startDate)))
+      }
+
+      if (endDate) {
+        query.where('created_at', '<', endOfDay(new Date(endDate)))
+      }
+
+      const pullRequests = await query.execute()
 
       return pullRequests
         .map(
           (pullRequest) =>
-            `Title: ${pullRequest.title} | Contributor: ${pullRequest.username} | ${pullRequest.merged_at ? `Merged at ${pullRequest.merged_at}` : 'Not merged'} | URL: ${pullRequest.html_url}`,
+            `Title: ${pullRequest.title} | Description: ${pullRequest.body} | Contributor: ${pullRequest.username} | ${pullRequest.merged_at ? `Merged at ${pullRequest.merged_at}` : 'Not merged'} | URL: ${pullRequest.html_url}`,
         )
         .join('\n')
     },

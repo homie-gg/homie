@@ -17,6 +17,7 @@ import { convertToOpenAIFunction } from '@langchain/core/utils/function_calling'
 import { getSearchGeneralContextTool } from '@/lib/ai/chat/tools/get-search-context-tool'
 import { rephraseWithPersona } from '@/lib/ai/rephrase-with-persona'
 import { getListPullRequestsTool } from '@/lib/ai/chat/tools/get-list-pull-requests-tool'
+import { getTodaysDateTool } from '@/lib/ai/chat/tools/get-todays-date-tool'
 
 interface Message {
   type: 'human' | 'bot'
@@ -51,6 +52,7 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
     getListPullRequestsTool({
       organization,
     }),
+    getTodaysDateTool(),
   ]
 
   const model = createOpenAIChatClient({ model: 'gpt-4o' })
