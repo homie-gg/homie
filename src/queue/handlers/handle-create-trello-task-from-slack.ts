@@ -9,6 +9,7 @@ import { findOrgWithSlackTeamId } from '@/lib/organization/get-org-with-slack-te
 import { dbClient } from '@/database/client'
 import { createTrelloClient } from '@/lib/trello/create-trello-client'
 import { TrelloCard } from '@/lib/trello/types'
+import { getConversation } from '@/lib/slack/get-conversation'
 
 export async function handleCreateTrelloTaskFromSlack(
   job: CreateTrelloTaskFromSlack,
@@ -40,37 +41,22 @@ export async function handleCreateTrelloTaskFromSlack(
     return
   }
 
-  const history = await slackClient.post<Conversation>(
-    'conversations.history',
-    {
-      channel: channel_id, // same channel
-      latest: target_message_ts, // start from target message
-      inclusive: true, // include the target message
-      limit: 30, // include the previous 30 messages for context
-    },
-  )
+  const messages = await getConversation({
+    slackClient,
+    channelID: channel_id,
+    messageTS: target_message_ts,
+    includeBotReplies: false,
+  })
 
-  if (history.messages.length === 0) {
+  if (messages.length === 0) {
     return
   }
 
-  const initialMessage =
-    'text' in history.messages[0] ? history.messages[0].text : 'Message'
+  const initialMessage = 'text' in messages[0] ? messages[0].text : 'Message'
 
   const slackMessageUrl = await getMessageLink({
     channelID: channel_id,
-    messageTS: history.messages[0].ts,
-    slackClient,
-  })
-
-  // Ignore previous bot messages
-  const userMessages = history.messages.filter(
-    (message) => !('bot_profile' in message),
-  )
-
-  const messages: TextMessageEvent[] = await getAllTextMessages({
-    channelID: channel_id,
-    messages: userMessages,
+    messageTS: messages[0].ts,
     slackClient,
   })
 
