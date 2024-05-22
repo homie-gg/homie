@@ -17,11 +17,11 @@ export function getListPullRequestsTool(params: getListPullRequestsToolParams) {
     schema: z.object({
       startDate: z.coerce
         .date()
-        .describe('The lower bound of the generated number')
+        .describe('The lower bound date of pull requests')
         .optional(),
       endDate: z.coerce
         .date()
-        .describe('The upper bound of the generated number')
+        .describe('The upper bound date of pull requests')
         .optional(),
     }),
     func: async ({ startDate, endDate }) => {
