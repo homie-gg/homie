@@ -101,9 +101,6 @@ it('should ask to select repo', async () => {
   })
 
   slackRequest.mockResolvedValueOnce({
-    permalink: 'https://some_message_url.slack.com',
-  })
-  slackRequest.mockResolvedValueOnce({
     messages: [
       {
         text: 'some slack message',
@@ -112,6 +109,10 @@ it('should ask to select repo', async () => {
         text: 'some reply',
       },
     ],
+  })
+
+  slackRequest.mockResolvedValueOnce({
+    permalink: 'https://some_message_url.slack.com',
   })
 
   const openAIInvoke = jest.fn()

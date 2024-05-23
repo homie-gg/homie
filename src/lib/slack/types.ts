@@ -8,6 +8,7 @@ export type Conversation = {
 
 export type TextMessageEvent = {
   text: string
+  ts: string
 }
 
 export type SlackAccessTokenResponse = {

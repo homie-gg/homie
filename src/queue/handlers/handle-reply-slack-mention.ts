@@ -24,11 +24,13 @@ export async function handleReplySlackMention(job: ReplySlackMention) {
     const answer = await getAnswer({
       messages: [
         {
-          content: input,
+          text: input,
           type: 'human',
+          ts: target_message_ts,
         },
       ],
       organization,
+      channelID: channel_id,
     })
 
     // Reply
@@ -62,11 +64,13 @@ export async function handleReplySlackMention(job: ReplySlackMention) {
       .filter((t) => t.user)
       .map((t) => {
         return {
-          content: t.text,
+          text: t.text,
           type: t.user === organization.ext_slack_bot_user_id ? 'bot' : 'human',
+          ts: t.ts,
         }
       }),
     organization,
+    channelID: channel_id,
   })
 
   // Reply

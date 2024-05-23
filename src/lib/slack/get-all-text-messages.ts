@@ -38,6 +38,7 @@ export async function getAllTextMessages(
     if ('text' in message && !!message.text) {
       result.push({
         text: message.text,
+        ts: message.ts,
       })
       continue
     }

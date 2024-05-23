@@ -41,10 +41,12 @@ export async function handleReplySlackThread(job: ReplySlackThread) {
 
   const answer = await getAnswer({
     messages: threadMessages.map((t) => ({
-      content: t.text,
+      text: t.text,
       type: t.user === organization.ext_slack_bot_user_id ? 'bot' : 'human',
+      ts: t.ts,
     })),
     organization,
+    channelID: channel_id,
   })
 
   // Reply

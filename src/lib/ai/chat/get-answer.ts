@@ -18,11 +18,8 @@ import { getSearchGeneralContextTool } from '@/lib/ai/chat/tools/get-search-cont
 import { rephraseWithPersona } from '@/lib/ai/rephrase-with-persona'
 import { getListPullRequestsTool } from '@/lib/ai/chat/tools/get-list-pull-requests-tool'
 import { getTodaysDateTool } from '@/lib/ai/chat/tools/get-todays-date-tool'
-
-interface Message {
-  type: 'human' | 'bot'
-  content: string
-}
+import { getRememberConversationTool } from '@/lib/ai/chat/tools/get-remember-conversation-tool'
+import { Message } from '@/lib/ai/chat/types'
 
 interface GetAnswerParams {
   organization: {
@@ -32,12 +29,14 @@ interface GetAnswerParams {
     persona_g_level: number
     persona_affection_level: number
     persona_emoji_level: number
+    slack_access_token: string
   }
   messages: Message[]
+  channelID: string
 }
 
 export async function getAnswer(params: GetAnswerParams): Promise<string> {
-  const { organization, messages } = params
+  const { organization, messages, channelID } = params
 
   const currentMessage = messages.pop()
 
@@ -53,6 +52,12 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       organization,
     }),
     getTodaysDateTool(),
+    getRememberConversationTool({
+      targetMessageTS: currentMessage.ts,
+      organization,
+      messages,
+      channelID: channelID,
+    }),
   ]
 
   const model = createOpenAIChatClient({ model: 'gpt-4o' })
@@ -63,10 +68,10 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
   const chatHistory: BaseMessage[] = messages.map((message) => {
     switch (message.type) {
       case 'bot':
-        return new SystemMessage({ content: message.content })
+        return new SystemMessage({ content: message.text })
       case 'human':
         return new HumanMessage({
-          content: message.content,
+          content: message.text,
         })
     }
   })
@@ -95,7 +100,7 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
   })
 
   const result = await executor.invoke({
-    input: currentMessage.content,
+    input: currentMessage.text,
     chat_history: chatHistory,
   })
 
