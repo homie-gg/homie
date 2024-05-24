@@ -1,4 +1,4 @@
-import { plans } from '@/app/_components/PricingTable'
+import { plans } from '@/lib/billing/plans'
 import { getUserOrganization } from '@/lib/auth/get-user-organization'
 import { dbClient } from '@/database/client'
 import { Card, CardContent, CardHeader, CardTitle } from '@/lib/ui/Card'
