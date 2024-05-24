@@ -8,6 +8,5 @@ export default async function Home() {
     return redirect('/review')
   }
 
-  location.href = 'https://homie.gg'
-  return null
+  return redirect('https://homie.gg')
 }
