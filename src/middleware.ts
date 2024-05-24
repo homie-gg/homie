@@ -14,7 +14,7 @@ const middleware = authMiddleware({
   ],
   // Routes that can always be accessed, and have
   // no authentication information
-  ignoredRoutes: ['/privacy', '/terms', '/blog', '/blog/(.*)'],
+  ignoredRoutes: ['/health', '/privacy', '/terms', '/blog', '/blog/(.*)'],
 })
 
 const withLogging =
