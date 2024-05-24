@@ -5,6 +5,7 @@ const middleware = authMiddleware({
   // Routes that can be accessed while signed out
   publicRoutes: [
     '/',
+    '/health',
     '/api/github/webhook',
     '/api/slack/event',
     '/api/slack/interaction',
