@@ -1,4 +1,4 @@
-import { Navbar } from '@/app/_components/Navbar'
+import { Navbar } from '@/app/(guest)/_components/Navbar'
 import { Footer } from '@/app/_components/Footer'
 
 interface GuestLayoutProps {
