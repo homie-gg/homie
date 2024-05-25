@@ -37,7 +37,7 @@ export const Navbar = () => {
                 variant: 'default',
               })}`}
             >
-              Try for free
+              Sign Up
             </Link>
           </nav>
         </NavigationMenuList>
