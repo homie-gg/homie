@@ -22,6 +22,7 @@ const middleware = authMiddleware({
     '/blog',
     '/blog/(.*)',
     '/docs',
+    '/docs/(.*)',
   ],
 })
 
