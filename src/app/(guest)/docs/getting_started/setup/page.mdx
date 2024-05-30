@@ -1,12 +1,71 @@
 # Setup
 
-<Description>Just a couple steps for Homie to start automatically tracking your project</Description>
- 
-This is some **bold** and _italics_ text.
- 
-This is a list in markdown:
- 
-- One
-- Two
-- Three
- 
+<Description>
+  Before Homie can start tracking your project, you’ll need to install the Homie
+  application to GitHub (or Gitlab), and Slack.
+</Description>
+
+## 1. Install GitHub or Gitlab App
+
+Homie will use the app install to track Pull Requests, and generate summaries.
+
+### GitHub
+
+Click the GitHub button to be redirected to the GitHub app install screen.
+
+![Install GitHub button](/docs/getting-started/setup/github-install-button.png)
+
+Select the GitHub Organization that you'd like to install Homie to:
+
+![Select GitHub Organization](/docs/getting-started/setup/github-select-organization.png)
+
+Select the repositories you'd like to track, or just track everything by leaving it as 'All repositories':
+
+![Select GitHub Repositories](/docs/getting-started/setup/github-select-repositories.png)
+
+Finally, click Install, and you're done!
+
+### Gitlab
+
+![Install Gitlab button](/docs/getting-started/setup/gitlab-install-button.png)
+
+Select Gitlab by clicking the Install Gitlab button. You'll then be asked to authorize Homie to use your account:
+
+![Authorize gitlab prompt](/docs/getting-started/setup/gitlab-authorize.png)
+
+**Selecting projects**
+
+Gitlab requires you to select which Projects you'd like Homie to track. By
+default, Homie won't track any projects.
+
+To track projects, go into **Settings > Gitlab**, and select the projects that you'd like Homie to track.
+
+### Note on Code Security
+
+<Alert>
+Homie will never push code to your repository, and does not store your code.
+Only summaries, and snippets. This is to comply with our own strict security
+practices to make sure user code is never leaked, by not storing them in the
+first place. Feel free to read more about our security best practices here.
+</Alert>
+
+### 2. Install Slack App
+
+Slack is where you'll chat with Homie. You can send messages, receive reports, and
+trigger manual actions. To do all that, we need to install the Homie app to
+your team's Slack workspace.
+
+Click the install Slack button to get started.
+
+![Install slack button](/docs/getting-started/setup/slack-install-button.png)
+
+Then, select your workspace on the top-right, as well as a Slack channel that Homie will be able to messages to.
+
+![Allow slack permissions](/docs/getting-started/setup/slack-allow.png)
+
+To add Homie to other channels, simply mention @Homie, and follow the Slack
+prompt to invite him to each channel.
+
+<Alert>
+Homie can reply to messages in _any_ channel, but can only initiate messages in the channel selected above.
+</Alert>
