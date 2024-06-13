@@ -31,6 +31,7 @@ export async function summarizeTask(
   })
 
   const chatPrompt = ChatPromptTemplate.fromTemplate(prompt)
+  console.log(RunnableSequence)
 
   const chain = RunnableSequence.from([chatPrompt, model, parser])
 
