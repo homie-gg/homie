@@ -470,6 +470,281 @@ declare module 'zapatos/schema' {
     }
 
     /**
+     * **homie.contributor_task**
+     * - Table in database
+     */
+    export namespace contributor_task {
+      export type Table = 'homie.contributor_task'
+      export interface Selectable {
+        /**
+         * **homie.contributor_task.contributor_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        contributor_id: number
+        /**
+         * **homie.contributor_task.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at: Date
+        /**
+         * **homie.contributor_task.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.contributor_task_id_seq'::regclass)`
+         */
+        id: number
+        /**
+         * **homie.contributor_task.task_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        task_id: number
+        /**
+         * **homie.contributor_task.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at: Date
+      }
+      export interface JSONSelectable {
+        /**
+         * **homie.contributor_task.contributor_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        contributor_id: number
+        /**
+         * **homie.contributor_task.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at: db.TimestampTzString
+        /**
+         * **homie.contributor_task.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.contributor_task_id_seq'::regclass)`
+         */
+        id: number
+        /**
+         * **homie.contributor_task.task_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        task_id: number
+        /**
+         * **homie.contributor_task.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at: db.TimestampTzString
+      }
+      export interface Whereable {
+        /**
+         * **homie.contributor_task.contributor_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        contributor_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.contributor_task.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+        /**
+         * **homie.contributor_task.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.contributor_task_id_seq'::regclass)`
+         */
+        id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.contributor_task.task_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        task_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.contributor_task.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+      }
+      export interface Insertable {
+        /**
+         * **homie.contributor_task.contributor_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        contributor_id: number | db.Parameter<number> | db.SQLFragment
+        /**
+         * **homie.contributor_task.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **homie.contributor_task.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.contributor_task_id_seq'::regclass)`
+         */
+        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+        /**
+         * **homie.contributor_task.task_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        task_id: number | db.Parameter<number> | db.SQLFragment
+        /**
+         * **homie.contributor_task.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+      }
+      export interface Updatable {
+        /**
+         * **homie.contributor_task.contributor_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        contributor_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
+        /**
+         * **homie.contributor_task.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **homie.contributor_task.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.contributor_task_id_seq'::regclass)`
+         */
+        id?:
+          | number
+          | db.Parameter<number>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **homie.contributor_task.task_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        task_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
+        /**
+         * **homie.contributor_task.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.DefaultType
+              | db.SQLFragment
+            >
+      }
+      export type UniqueIndex = 'contributor_task_pkey'
+      export type Column = keyof Selectable
+      export type OnlyCols<T extends readonly Column[]> = Pick<
+        Selectable,
+        T[number]
+      >
+      export type SQLExpression =
+        | Table
+        | db.ColumnNames<Updatable | (keyof Updatable)[]>
+        | db.ColumnValues<Updatable>
+        | Whereable
+        | Column
+        | db.ParentColumn
+        | db.GenericSQLExpression
+      export type SQL = SQLExpression | SQLExpression[]
+    }
+
+    /**
      * **homie.organization**
      * - Table in database
      */
@@ -3067,73 +3342,1173 @@ declare module 'zapatos/schema' {
       export type SQL = SQLExpression | SQLExpression[]
     }
 
+    /**
+     * **homie.task**
+     * - Table in database
+     */
+    export namespace task {
+      export type Table = 'homie.task'
+      export interface Selectable {
+        /**
+         * **homie.task.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at: Date
+        /**
+         * **homie.task.description**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        description: string
+        /**
+         * **homie.task.due_date**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        due_date: Date | null
+        /**
+         * **homie.task.html_url**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        html_url: string
+        /**
+         * **homie.task.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.task_id_seq'::regclass)`
+         */
+        id: number
+        /**
+         * **homie.task.is_assigned**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        is_assigned: boolean
+        /**
+         * **homie.task.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name: string
+        /**
+         * **homie.task.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id: number
+        /**
+         * **homie.task.priority_level**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        priority_level: number
+        /**
+         * **homie.task.task_status_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        task_status_id: number
+        /**
+         * **homie.task.task_type_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        task_type_id: number
+        /**
+         * **homie.task.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at: Date
+      }
+      export interface JSONSelectable {
+        /**
+         * **homie.task.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at: db.TimestampTzString
+        /**
+         * **homie.task.description**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        description: string
+        /**
+         * **homie.task.due_date**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        due_date: db.TimestampTzString | null
+        /**
+         * **homie.task.html_url**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        html_url: string
+        /**
+         * **homie.task.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.task_id_seq'::regclass)`
+         */
+        id: number
+        /**
+         * **homie.task.is_assigned**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        is_assigned: boolean
+        /**
+         * **homie.task.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name: string
+        /**
+         * **homie.task.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id: number
+        /**
+         * **homie.task.priority_level**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        priority_level: number
+        /**
+         * **homie.task.task_status_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        task_status_id: number
+        /**
+         * **homie.task.task_type_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        task_type_id: number
+        /**
+         * **homie.task.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at: db.TimestampTzString
+      }
+      export interface Whereable {
+        /**
+         * **homie.task.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+        /**
+         * **homie.task.description**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        description?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.task.due_date**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        due_date?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+        /**
+         * **homie.task.html_url**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        html_url?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.task.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.task_id_seq'::regclass)`
+         */
+        id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.task.is_assigned**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        is_assigned?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.task.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.task.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.task.priority_level**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        priority_level?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.task.task_status_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        task_status_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.task.task_type_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        task_type_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.task.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+      }
+      export interface Insertable {
+        /**
+         * **homie.task.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **homie.task.description**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        description: string | db.Parameter<string> | db.SQLFragment
+        /**
+         * **homie.task.due_date**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        due_date?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **homie.task.html_url**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        html_url: string | db.Parameter<string> | db.SQLFragment
+        /**
+         * **homie.task.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.task_id_seq'::regclass)`
+         */
+        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+        /**
+         * **homie.task.is_assigned**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        is_assigned?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **homie.task.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name: string | db.Parameter<string> | db.SQLFragment
+        /**
+         * **homie.task.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id: number | db.Parameter<number> | db.SQLFragment
+        /**
+         * **homie.task.priority_level**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        priority_level: number | db.Parameter<number> | db.SQLFragment
+        /**
+         * **homie.task.task_status_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        task_status_id: number | db.Parameter<number> | db.SQLFragment
+        /**
+         * **homie.task.task_type_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        task_type_id: number | db.Parameter<number> | db.SQLFragment
+        /**
+         * **homie.task.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+      }
+      export interface Updatable {
+        /**
+         * **homie.task.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **homie.task.description**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        description?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
+        /**
+         * **homie.task.due_date**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        due_date?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **homie.task.html_url**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        html_url?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
+        /**
+         * **homie.task.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.task_id_seq'::regclass)`
+         */
+        id?:
+          | number
+          | db.Parameter<number>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **homie.task.is_assigned**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        is_assigned?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **homie.task.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
+        /**
+         * **homie.task.organization_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        organization_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
+        /**
+         * **homie.task.priority_level**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        priority_level?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
+        /**
+         * **homie.task.task_status_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        task_status_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
+        /**
+         * **homie.task.task_type_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        task_type_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
+        /**
+         * **homie.task.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.DefaultType
+              | db.SQLFragment
+            >
+      }
+      export type UniqueIndex = 'task_pkey'
+      export type Column = keyof Selectable
+      export type OnlyCols<T extends readonly Column[]> = Pick<
+        Selectable,
+        T[number]
+      >
+      export type SQLExpression =
+        | Table
+        | db.ColumnNames<Updatable | (keyof Updatable)[]>
+        | db.ColumnValues<Updatable>
+        | Whereable
+        | Column
+        | db.ParentColumn
+        | db.GenericSQLExpression
+      export type SQL = SQLExpression | SQLExpression[]
+    }
+
+    /**
+     * **homie.task_status**
+     * - Table in database
+     */
+    export namespace task_status {
+      export type Table = 'homie.task_status'
+      export interface Selectable {
+        /**
+         * **homie.task_status.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at: Date
+        /**
+         * **homie.task_status.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.task_status_id_seq'::regclass)`
+         */
+        id: number
+        /**
+         * **homie.task_status.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name: string
+        /**
+         * **homie.task_status.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at: Date
+      }
+      export interface JSONSelectable {
+        /**
+         * **homie.task_status.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at: db.TimestampTzString
+        /**
+         * **homie.task_status.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.task_status_id_seq'::regclass)`
+         */
+        id: number
+        /**
+         * **homie.task_status.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name: string
+        /**
+         * **homie.task_status.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at: db.TimestampTzString
+      }
+      export interface Whereable {
+        /**
+         * **homie.task_status.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+        /**
+         * **homie.task_status.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.task_status_id_seq'::regclass)`
+         */
+        id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.task_status.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.task_status.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+      }
+      export interface Insertable {
+        /**
+         * **homie.task_status.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **homie.task_status.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.task_status_id_seq'::regclass)`
+         */
+        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+        /**
+         * **homie.task_status.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name: string | db.Parameter<string> | db.SQLFragment
+        /**
+         * **homie.task_status.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+      }
+      export interface Updatable {
+        /**
+         * **homie.task_status.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **homie.task_status.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.task_status_id_seq'::regclass)`
+         */
+        id?:
+          | number
+          | db.Parameter<number>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **homie.task_status.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
+        /**
+         * **homie.task_status.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.DefaultType
+              | db.SQLFragment
+            >
+      }
+      export type UniqueIndex = 'task_status_pkey'
+      export type Column = keyof Selectable
+      export type OnlyCols<T extends readonly Column[]> = Pick<
+        Selectable,
+        T[number]
+      >
+      export type SQLExpression =
+        | Table
+        | db.ColumnNames<Updatable | (keyof Updatable)[]>
+        | db.ColumnValues<Updatable>
+        | Whereable
+        | Column
+        | db.ParentColumn
+        | db.GenericSQLExpression
+      export type SQL = SQLExpression | SQLExpression[]
+    }
+
+    /**
+     * **homie.task_type**
+     * - Table in database
+     */
+    export namespace task_type {
+      export type Table = 'homie.task_type'
+      export interface Selectable {
+        /**
+         * **homie.task_type.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at: Date
+        /**
+         * **homie.task_type.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.task_type_id_seq'::regclass)`
+         */
+        id: number
+        /**
+         * **homie.task_type.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name: string
+        /**
+         * **homie.task_type.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at: Date
+      }
+      export interface JSONSelectable {
+        /**
+         * **homie.task_type.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at: db.TimestampTzString
+        /**
+         * **homie.task_type.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.task_type_id_seq'::regclass)`
+         */
+        id: number
+        /**
+         * **homie.task_type.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name: string
+        /**
+         * **homie.task_type.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at: db.TimestampTzString
+      }
+      export interface Whereable {
+        /**
+         * **homie.task_type.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+        /**
+         * **homie.task_type.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.task_type_id_seq'::regclass)`
+         */
+        id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.task_type.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.task_type.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+      }
+      export interface Insertable {
+        /**
+         * **homie.task_type.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **homie.task_type.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.task_type_id_seq'::regclass)`
+         */
+        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+        /**
+         * **homie.task_type.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name: string | db.Parameter<string> | db.SQLFragment
+        /**
+         * **homie.task_type.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+      }
+      export interface Updatable {
+        /**
+         * **homie.task_type.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **homie.task_type.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.task_type_id_seq'::regclass)`
+         */
+        id?:
+          | number
+          | db.Parameter<number>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **homie.task_type.name**
+         * - `text` in database
+         * - `NOT NULL`, no default
+         */
+        name?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>
+        /**
+         * **homie.task_type.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.DefaultType
+              | db.SQLFragment
+            >
+      }
+      export type UniqueIndex = 'task_type_pkey'
+      export type Column = keyof Selectable
+      export type OnlyCols<T extends readonly Column[]> = Pick<
+        Selectable,
+        T[number]
+      >
+      export type SQLExpression =
+        | Table
+        | db.ColumnNames<Updatable | (keyof Updatable)[]>
+        | db.ColumnValues<Updatable>
+        | Whereable
+        | Column
+        | db.ParentColumn
+        | db.GenericSQLExpression
+      export type SQL = SQLExpression | SQLExpression[]
+    }
+
     /* --- aggregate types --- */
 
     export type Table =
       | contributor.Table
+      | contributor_task.Table
       | organization.Table
       | plan.Table
       | pull_request.Table
       | subscription.Table
+      | task.Table
+      | task_status.Table
+      | task_type.Table
     export type Selectable =
       | contributor.Selectable
+      | contributor_task.Selectable
       | organization.Selectable
       | plan.Selectable
       | pull_request.Selectable
       | subscription.Selectable
+      | task.Selectable
+      | task_status.Selectable
+      | task_type.Selectable
     export type JSONSelectable =
       | contributor.JSONSelectable
+      | contributor_task.JSONSelectable
       | organization.JSONSelectable
       | plan.JSONSelectable
       | pull_request.JSONSelectable
       | subscription.JSONSelectable
+      | task.JSONSelectable
+      | task_status.JSONSelectable
+      | task_type.JSONSelectable
     export type Whereable =
       | contributor.Whereable
+      | contributor_task.Whereable
       | organization.Whereable
       | plan.Whereable
       | pull_request.Whereable
       | subscription.Whereable
+      | task.Whereable
+      | task_status.Whereable
+      | task_type.Whereable
     export type Insertable =
       | contributor.Insertable
+      | contributor_task.Insertable
       | organization.Insertable
       | plan.Insertable
       | pull_request.Insertable
       | subscription.Insertable
+      | task.Insertable
+      | task_status.Insertable
+      | task_type.Insertable
     export type Updatable =
       | contributor.Updatable
+      | contributor_task.Updatable
       | organization.Updatable
       | plan.Updatable
       | pull_request.Updatable
       | subscription.Updatable
+      | task.Updatable
+      | task_status.Updatable
+      | task_type.Updatable
     export type UniqueIndex =
       | contributor.UniqueIndex
+      | contributor_task.UniqueIndex
       | organization.UniqueIndex
       | plan.UniqueIndex
       | pull_request.UniqueIndex
       | subscription.UniqueIndex
+      | task.UniqueIndex
+      | task_status.UniqueIndex
+      | task_type.UniqueIndex
     export type Column =
       | contributor.Column
+      | contributor_task.Column
       | organization.Column
       | plan.Column
       | pull_request.Column
       | subscription.Column
+      | task.Column
+      | task_status.Column
+      | task_type.Column
 
     export type AllBaseTables = [
       contributor.Table,
+      contributor_task.Table,
       organization.Table,
       plan.Table,
       pull_request.Table,
       subscription.Table,
+      task.Table,
+      task_status.Table,
+      task_type.Table,
     ]
     export type AllForeignTables = []
     export type AllViews = []
     export type AllMaterializedViews = []
     export type AllTablesAndViews = [
       contributor.Table,
+      contributor_task.Table,
       organization.Table,
       plan.Table,
       pull_request.Table,
       subscription.Table,
+      task.Table,
+      task_status.Table,
+      task_type.Table,
     ]
   }
 
@@ -5689,10 +7064,14 @@ declare module 'zapatos/schema' {
 
   export type SelectableForTable<T extends Table> = {
     'homie.contributor': homie.contributor.Selectable
+    'homie.contributor_task': homie.contributor_task.Selectable
     'homie.organization': homie.organization.Selectable
     'homie.plan': homie.plan.Selectable
     'homie.pull_request': homie.pull_request.Selectable
     'homie.subscription': homie.subscription.Selectable
+    'homie.task': homie.task.Selectable
+    'homie.task_status': homie.task_status.Selectable
+    'homie.task_type': homie.task_type.Selectable
     'github.organization': github.organization.Selectable
     'github.repo': github.repo.Selectable
     'slack.workspace': slack.workspace.Selectable
@@ -5703,10 +7082,14 @@ declare module 'zapatos/schema' {
 
   export type JSONSelectableForTable<T extends Table> = {
     'homie.contributor': homie.contributor.JSONSelectable
+    'homie.contributor_task': homie.contributor_task.JSONSelectable
     'homie.organization': homie.organization.JSONSelectable
     'homie.plan': homie.plan.JSONSelectable
     'homie.pull_request': homie.pull_request.JSONSelectable
     'homie.subscription': homie.subscription.JSONSelectable
+    'homie.task': homie.task.JSONSelectable
+    'homie.task_status': homie.task_status.JSONSelectable
+    'homie.task_type': homie.task_type.JSONSelectable
     'github.organization': github.organization.JSONSelectable
     'github.repo': github.repo.JSONSelectable
     'slack.workspace': slack.workspace.JSONSelectable
@@ -5717,10 +7100,14 @@ declare module 'zapatos/schema' {
 
   export type WhereableForTable<T extends Table> = {
     'homie.contributor': homie.contributor.Whereable
+    'homie.contributor_task': homie.contributor_task.Whereable
     'homie.organization': homie.organization.Whereable
     'homie.plan': homie.plan.Whereable
     'homie.pull_request': homie.pull_request.Whereable
     'homie.subscription': homie.subscription.Whereable
+    'homie.task': homie.task.Whereable
+    'homie.task_status': homie.task_status.Whereable
+    'homie.task_type': homie.task_type.Whereable
     'github.organization': github.organization.Whereable
     'github.repo': github.repo.Whereable
     'slack.workspace': slack.workspace.Whereable
@@ -5731,10 +7118,14 @@ declare module 'zapatos/schema' {
 
   export type InsertableForTable<T extends Table> = {
     'homie.contributor': homie.contributor.Insertable
+    'homie.contributor_task': homie.contributor_task.Insertable
     'homie.organization': homie.organization.Insertable
     'homie.plan': homie.plan.Insertable
     'homie.pull_request': homie.pull_request.Insertable
     'homie.subscription': homie.subscription.Insertable
+    'homie.task': homie.task.Insertable
+    'homie.task_status': homie.task_status.Insertable
+    'homie.task_type': homie.task_type.Insertable
     'github.organization': github.organization.Insertable
     'github.repo': github.repo.Insertable
     'slack.workspace': slack.workspace.Insertable
@@ -5745,10 +7136,14 @@ declare module 'zapatos/schema' {
 
   export type UpdatableForTable<T extends Table> = {
     'homie.contributor': homie.contributor.Updatable
+    'homie.contributor_task': homie.contributor_task.Updatable
     'homie.organization': homie.organization.Updatable
     'homie.plan': homie.plan.Updatable
     'homie.pull_request': homie.pull_request.Updatable
     'homie.subscription': homie.subscription.Updatable
+    'homie.task': homie.task.Updatable
+    'homie.task_status': homie.task_status.Updatable
+    'homie.task_type': homie.task_type.Updatable
     'github.organization': github.organization.Updatable
     'github.repo': github.repo.Updatable
     'slack.workspace': slack.workspace.Updatable
@@ -5759,10 +7154,14 @@ declare module 'zapatos/schema' {
 
   export type UniqueIndexForTable<T extends Table> = {
     'homie.contributor': homie.contributor.UniqueIndex
+    'homie.contributor_task': homie.contributor_task.UniqueIndex
     'homie.organization': homie.organization.UniqueIndex
     'homie.plan': homie.plan.UniqueIndex
     'homie.pull_request': homie.pull_request.UniqueIndex
     'homie.subscription': homie.subscription.UniqueIndex
+    'homie.task': homie.task.UniqueIndex
+    'homie.task_status': homie.task_status.UniqueIndex
+    'homie.task_type': homie.task_type.UniqueIndex
     'github.organization': github.organization.UniqueIndex
     'github.repo': github.repo.UniqueIndex
     'slack.workspace': slack.workspace.UniqueIndex
@@ -5773,10 +7172,14 @@ declare module 'zapatos/schema' {
 
   export type ColumnForTable<T extends Table> = {
     'homie.contributor': homie.contributor.Column
+    'homie.contributor_task': homie.contributor_task.Column
     'homie.organization': homie.organization.Column
     'homie.plan': homie.plan.Column
     'homie.pull_request': homie.pull_request.Column
     'homie.subscription': homie.subscription.Column
+    'homie.task': homie.task.Column
+    'homie.task_status': homie.task_status.Column
+    'homie.task_type': homie.task_type.Column
     'github.organization': github.organization.Column
     'github.repo': github.repo.Column
     'slack.workspace': slack.workspace.Column
@@ -5787,10 +7190,14 @@ declare module 'zapatos/schema' {
 
   export type SQLForTable<T extends Table> = {
     'homie.contributor': homie.contributor.SQL
+    'homie.contributor_task': homie.contributor_task.SQL
     'homie.organization': homie.organization.SQL
     'homie.plan': homie.plan.SQL
     'homie.pull_request': homie.pull_request.SQL
     'homie.subscription': homie.subscription.SQL
+    'homie.task': homie.task.SQL
+    'homie.task_status': homie.task_status.SQL
+    'homie.task_type': homie.task_type.SQL
     'github.organization': github.organization.SQL
     'github.repo': github.repo.SQL
     'slack.workspace': slack.workspace.SQL
