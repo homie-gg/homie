@@ -77,7 +77,7 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
   })
 
   const prompt = ChatPromptTemplate.fromMessages([
-    ['system', 'You are help project manager.'],
+    ['system', 'You are helpful project manager.'],
     new MessagesPlaceholder('chat_history'),
     ['user', '{input}'],
     new MessagesPlaceholder('agent_scratchpad'),

@@ -1,6 +1,6 @@
 import { mockCreateGithubClient } from '@/__utils__/mock-create-github-client'
-import { mockCreateOpenAIClient } from '@/__utils__/mock-create-open-ai-client'
 import { mockCreateSlackClient } from '@/__utils__/mock-create-slack-client'
+import { mockSummarizeTask } from '@/__utils__/mock-summarize-task'
 import { POST } from '@/app/api/slack/interaction/route'
 import { dbClient } from '@/database/client'
 
@@ -115,15 +115,10 @@ it('should ask to select repo', async () => {
     permalink: 'https://some_message_url.slack.com',
   })
 
-  const openAIInvoke = jest.fn()
-
-  mockCreateOpenAIClient.mockImplementationOnce(() => ({
-    invoke: openAIInvoke,
-  }))
-
-  openAIInvoke.mockResolvedValueOnce(
-    'Task\nfix latest deployment\nmake sure it works',
-  )
+  mockSummarizeTask.mockResolvedValueOnce({
+    task: 'fix latest deployment',
+    requirements: 'Make sure it works',
+  })
 
   const mockCreateGithubIssue = jest.fn()
 
@@ -148,11 +143,11 @@ it('should ask to select repo', async () => {
 
   await POST(req as any)
 
-  expect(openAIInvoke).toHaveBeenCalledTimes(1)
+  expect(mockSummarizeTask).toHaveBeenCalledTimes(1)
 
-  const [prompt] = openAIInvoke.mock.calls[0]
-  expect(prompt).toContain('some slack message')
-  expect(prompt).toContain('some reply')
+  const [prompt] = mockSummarizeTask.mock.calls[0]
+  expect(JSON.stringify(prompt.messages)).toContain('some slack message')
+  expect(JSON.stringify(prompt.messages)).toContain('some reply')
 
   expect(mockCreateGithubIssue).toHaveBeenCalledTimes(1)
 

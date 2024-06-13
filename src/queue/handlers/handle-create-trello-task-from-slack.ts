@@ -68,9 +68,9 @@ export async function handleCreateTrelloTaskFromSlack(
     return
   }
 
-  const { task: issue, description } = data
+  const { task: issue, requirements } = data
 
-  const issueDescription = `**Slack Message:**\n\n[${initialMessage}](${slackMessageUrl})\n\n${description}
+  const issueDescription = `**Slack Message:**\n\n[${initialMessage}](${slackMessageUrl})\n\n**Requirements:**\n\n${requirements}
 `
 
   const trelloClient = createTrelloClient(trelloWorkspace.trello_access_token)

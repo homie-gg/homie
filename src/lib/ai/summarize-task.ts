@@ -1,45 +1,44 @@
-import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
-import { PromptTemplate } from '@langchain/core/prompts'
+import { createOpenAIChatClient } from '@/lib/open-ai/create-open-ai-chat-client'
+import { StructuredOutputParser } from '@langchain/core/output_parsers'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { RunnableSequence } from '@langchain/core/runnables'
+import { z } from 'zod'
 
 interface SummarizeTaskParams {
   messages: Array<{ text: string }>
 }
 
-export async function summarizeTask(params: SummarizeTaskParams) {
+interface SummarizeTaskResult {
+  task: string
+  requirements: string
+}
+
+const parser = StructuredOutputParser.fromZodSchema(
+  z.object({
+    task: z.string().describe('The task to complete'),
+    requirements: z.string().describe('Task requirements in a markdown list'),
+  }),
+)
+
+export async function summarizeTask(
+  params: SummarizeTaskParams,
+): Promise<SummarizeTaskResult> {
   const { messages } = params
-  const promptTemplate = new PromptTemplate({
-    template: prompt,
-    inputVariables: ['context'],
-  })
 
-  const input = await promptTemplate.format({
-    context: JSON.stringify(messages),
-  })
-
-  const model = createOpenAIClient({
+  const model = createOpenAIChatClient({
     temperature: 0,
     modelName: 'gpt-4o',
   })
 
-  const output = await model.invoke(input)
+  const chatPrompt = ChatPromptTemplate.fromTemplate(prompt)
+  console.log(RunnableSequence)
 
-  const regex = /.*Task.*\n(.*)\n*([\s\S]+)/
-  const matches = regex.exec(output)
-  if (!matches) {
-    return null
-  }
+  const chain = RunnableSequence.from([chatPrompt, model, parser])
 
-  if (matches.length < 3) {
-    return null
-  }
-
-  const task = matches[1].replace('- ', '')
-  const description = matches[2]
-
-  return {
-    task,
-    description,
-  }
+  return chain.invoke({
+    context: JSON.stringify(messages),
+    format_instructions: parser.getFormatInstructions(),
+  })
 }
 
 const prompt = `Identify, and summarize a single Task that needs to be done from the context below. You should follow ALL of the following rules when generating an answer:
@@ -55,6 +54,8 @@ const prompt = `Identify, and summarize a single Task that needs to be done from
 - Summarize the CONTEXT to make it easier to read, but don't omit any information.
 - The summary should contain the following headings: Task, Requirements.
 - Each point should be less than 10 words.
+
+{format_instructions}
 
 CONTEXT: {context}
 `
