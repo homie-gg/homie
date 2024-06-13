@@ -65,13 +65,13 @@ export async function handleCreateGithubIssueFromSlack(
     return
   }
 
-  const { task: issue, description } = data
+  const { task: issue, requirements } = data
 
   const github = await createGithubClient({
     installationId: organization.ext_gh_install_id,
   })
 
-  const issueDescription = `**Slack Message:**\n\n[${initialMessage}](${slackMessageUrl})\n\n${description}
+  const issueDescription = `**Slack Message:**\n\n[${initialMessage}](${slackMessageUrl})\n\n**Requirements:**\n\n${requirements}
 `
 
   const gh_owner = gh_repo_full_name.split('/')[0] // repo is full name. e.g. 'octocat/hello-world'
