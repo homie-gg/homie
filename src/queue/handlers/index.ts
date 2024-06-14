@@ -5,7 +5,7 @@ import { handleGenerateOpenPullRequestSummary } from '@/queue/handlers/handle-ge
 import { handleImportPullRequests } from '@/queue/handlers/handle-import-pull-requests'
 import { handleSaveMergedPullRequest } from '@/queue/handlers/handle-save-merged-pull-request'
 import { handleSaveOpenedPullRequest } from '@/queue/handlers/handle-save-opened-pull-request'
-import { CreateTaskFromGithubIssue, Job } from '@/queue/jobs'
+import { Job } from '@/queue/jobs'
 import { handleSendPullRequestSummaries } from '@/queue/handlers/handle-send-pull-request-summaries'
 import { handleSendPullRequestSummariesToOrganization } from '@/queue/handlers/handle-send-pull-request-summaries-to-organization'
 import { handleCreateTrelloTaskFromSlack } from '@/queue/handlers/handle-create-trello-task-from-slack'
@@ -19,6 +19,7 @@ import { handleRefreshGitlabTokens } from '@/queue/handlers/handle-refresh-gitla
 import { handleReplySlackThread } from '@/queue/handlers/handle-reply-slack-thread'
 import { handleDispatchDebouncedJob } from '@/queue/handlers/handle-dispatch-debounced-job'
 import { handleCreateTaskFromGithubIssue } from '@/queue/handlers/handle-create-task-from-github-issue'
+import { handleImportGithubIssues } from '@/queue/handlers/handle-import-github-issues'
 
 type HandlerFunc<TJob extends Job> = (job: TJob) => void | Promise<void>
 
@@ -33,6 +34,7 @@ export const handlers: Handlers = {
     handleAskSlackSelectGithubRepoForIssue,
   create_trello_task_from_slack: handleCreateTrelloTaskFromSlack,
   import_pull_requests: handleImportPullRequests,
+  import_github_issues: handleImportGithubIssues,
   save_opened_pull_request: handleSaveOpenedPullRequest,
   save_merged_pull_request: handleSaveMergedPullRequest,
   close_linked_tasks: handleCloseLinkedTasks,

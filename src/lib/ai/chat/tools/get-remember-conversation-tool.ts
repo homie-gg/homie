@@ -1,10 +1,9 @@
 import { Message } from '@/lib/ai/chat/types'
 import { embedSlackConversation } from '@/lib/ai/embed-slack-conversation'
 import { summarizeConversation } from '@/lib/ai/summarize-conversation'
-import { SlackClient, createSlackClient } from '@/lib/slack/create-slack-client'
+import { createSlackClient } from '@/lib/slack/create-slack-client'
 import { getConversation } from '@/lib/slack/get-conversation'
 import { getMessageLink } from '@/lib/slack/get-message-link'
-import { Conversation } from '@/lib/slack/types'
 import { DynamicStructuredTool } from '@langchain/core/tools'
 import { z } from 'zod'
 

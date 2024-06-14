@@ -43,6 +43,14 @@ export type ImportPullRequests = BullMQJob<
   'import_pull_requests'
 >
 
+export type ImportGithubIssues = BullMQJob<
+  {
+    github_organization: GithubOrganization
+  },
+  void, // return type
+  'import_github_issues'
+>
+
 export type SaveOpenedPullRequest = BullMQJob<
   {
     pull_request: PullRequest
@@ -261,6 +269,7 @@ export type Job =
   | CreateTaskFromGithubIssue
   | AskSlackSelectGithubRepoForIssue
   | ImportPullRequests
+  | ImportGithubIssues
   | SaveOpenedPullRequest
   | SaveMergedPullRequest
   | CloseLinkedTasks
