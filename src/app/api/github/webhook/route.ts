@@ -13,6 +13,29 @@ export const POST = async (request: NextRequest) => {
 
   const app = createGithubApp()
 
+  // opened - create task
+  // assigned - add assignment
+  // unassigned - remove assignment
+  // closed - mark task done
+  // deleted - delete task
+  // edited - update task descriptiong / name
+  // re-opened - mark task as open again
+
+  app.webhooks.on('issues.opened', async (params) => {
+    const {
+      payload: { issue, installation },
+    } = params
+
+    await dispatch('create_task_from_github_issue', {
+      issue,
+      installation,
+    })
+  })
+
+  app.webhooks.on('issues.assigned', async (params) => {
+    // assign to taks
+  })
+
   app.webhooks.on('pull_request.closed', async (params) => {
     const {
       payload: { pull_request, installation },

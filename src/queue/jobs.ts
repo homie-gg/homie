@@ -1,6 +1,6 @@
 import { GithubOrganization } from '@/database/types'
 import { Job as BullMQJob, JobsOptions } from 'bullmq'
-import { PullRequest, InstallationLite } from '@octokit/webhooks-types'
+import { PullRequest, InstallationLite, Issue } from '@octokit/webhooks-types'
 
 export type AskSlackSelectGithubRepoForIssue = BullMQJob<
   {
@@ -24,6 +24,15 @@ export type CreateGithubIssueFromSlack = BullMQJob<
   },
   void, // return type
   'create_github_issue_from_slack'
+>
+
+export type CreateTaskFromGithubIssue = BullMQJob<
+  {
+    issue: Issue
+    installation: InstallationLite | undefined
+  },
+  void, // return type
+  'create_task_from_github_issue'
 >
 
 export type ImportPullRequests = BullMQJob<
@@ -249,6 +258,7 @@ export type DispatchDebouncedJob = BullMQJob<
 
 export type Job =
   | CreateGithubIssueFromSlack
+  | CreateTaskFromGithubIssue
   | AskSlackSelectGithubRepoForIssue
   | ImportPullRequests
   | SaveOpenedPullRequest

@@ -3368,6 +3368,18 @@ declare module 'zapatos/schema' {
          */
         due_date: Date | null
         /**
+         * **homie.task.ext_gh_issue_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gh_issue_id: number | null
+        /**
+         * **homie.task.github_repo_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        github_repo_id: number | null
+        /**
          * **homie.task.html_url**
          * - `text` in database
          * - `NOT NULL`, no default
@@ -3441,6 +3453,18 @@ declare module 'zapatos/schema' {
          * - Nullable, no default
          */
         due_date: db.TimestampTzString | null
+        /**
+         * **homie.task.ext_gh_issue_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gh_issue_id: number | null
+        /**
+         * **homie.task.github_repo_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        github_repo_id: number | null
         /**
          * **homie.task.html_url**
          * - `text` in database
@@ -3544,6 +3568,34 @@ declare module 'zapatos/schema' {
               | db.Parameter<db.TimestampTzString | Date>
               | db.SQLFragment
               | db.ParentColumn
+            >
+        /**
+         * **homie.task.ext_gh_issue_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gh_issue_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.task.github_repo_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        github_repo_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
             >
         /**
          * **homie.task.html_url**
@@ -3704,6 +3756,28 @@ declare module 'zapatos/schema' {
           | db.DefaultType
           | db.SQLFragment
         /**
+         * **homie.task.ext_gh_issue_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gh_issue_id?:
+          | number
+          | db.Parameter<number>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **homie.task.github_repo_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        github_repo_id?:
+          | number
+          | db.Parameter<number>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
          * **homie.task.html_url**
          * - `text` in database
          * - `NOT NULL`, no default
@@ -3814,6 +3888,44 @@ declare module 'zapatos/schema' {
               | db.SQLFragment
             >
         /**
+         * **homie.task.ext_gh_issue_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        ext_gh_issue_id?:
+          | number
+          | db.Parameter<number>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | number
+              | db.Parameter<number>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **homie.task.github_repo_id**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        github_repo_id?:
+          | number
+          | db.Parameter<number>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | number
+              | db.Parameter<number>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
          * **homie.task.html_url**
          * - `text` in database
          * - `NOT NULL`, no default
@@ -3919,7 +4031,7 @@ declare module 'zapatos/schema' {
               | db.SQLFragment
             >
       }
-      export type UniqueIndex = 'task_pkey'
+      export type UniqueIndex = 'task_ext_gh_issue_id_key' | 'task_pkey'
       export type Column = keyof Selectable
       export type OnlyCols<T extends readonly Column[]> = Pick<
         Selectable,
