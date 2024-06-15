@@ -57,7 +57,7 @@ export const POST = async (request: NextRequest) => {
       payload: { issue, installation },
     } = params
 
-    await dispatch('create_task_from_github_issue', {
+    await dispatch('update_task_from_github_issue', {
       issue,
       installation,
     })
