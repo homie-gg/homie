@@ -35,6 +35,15 @@ export type CreateTaskFromGithubIssue = BullMQJob<
   'create_task_from_github_issue'
 >
 
+export type UpdateTaskFromGithubIssue = BullMQJob<
+  {
+    issue: Issue
+    installation: InstallationLite | undefined
+  },
+  void, // return type
+  'update_task_from_github_issue'
+>
+
 export type ImportPullRequests = BullMQJob<
   {
     github_organization: GithubOrganization
@@ -267,6 +276,7 @@ export type DispatchDebouncedJob = BullMQJob<
 export type Job =
   | CreateGithubIssueFromSlack
   | CreateTaskFromGithubIssue
+  | UpdateTaskFromGithubIssue
   | AskSlackSelectGithubRepoForIssue
   | ImportPullRequests
   | ImportGithubIssues

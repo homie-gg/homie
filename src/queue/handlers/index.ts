@@ -20,6 +20,7 @@ import { handleReplySlackThread } from '@/queue/handlers/handle-reply-slack-thre
 import { handleDispatchDebouncedJob } from '@/queue/handlers/handle-dispatch-debounced-job'
 import { handleCreateTaskFromGithubIssue } from '@/queue/handlers/handle-create-task-from-github-issue'
 import { handleImportGithubIssues } from '@/queue/handlers/handle-import-github-issues'
+import { handleUpdateTaskFromGithubIssue } from '@/queue/handlers/handle-update-task-from-github-issue'
 
 type HandlerFunc<TJob extends Job> = (job: TJob) => void | Promise<void>
 
@@ -30,6 +31,7 @@ type Handlers = {
 export const handlers: Handlers = {
   create_github_issue_from_slack: handleCreateGithubIssueFromSlack,
   create_task_from_github_issue: handleCreateTaskFromGithubIssue,
+  update_task_from_github_issue: handleUpdateTaskFromGithubIssue,
   ask_slack_select_github_repo_for_issue:
     handleAskSlackSelectGithubRepoForIssue,
   create_trello_task_from_slack: handleCreateTrelloTaskFromSlack,

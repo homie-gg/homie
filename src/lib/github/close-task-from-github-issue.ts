@@ -1,6 +1,6 @@
 import { dbClient } from '@/database/client'
 import { taskStatus } from '@/lib/tasks'
-import { InstallationLite, Issue, User } from '@octokit/webhooks-types'
+import { InstallationLite, Issue } from '@octokit/webhooks-types'
 
 interface CloseTaskFromGithubIssueParams {
   issue: Issue
@@ -10,13 +10,9 @@ interface CloseTaskFromGithubIssueParams {
 export async function closeTaskFromGithubIssue(
   params: CloseTaskFromGithubIssueParams,
 ) {
-  const { assignee, installation, issue } = params
+  const { installation, issue } = params
 
   if (!installation) {
-    return
-  }
-
-  if (!assignee) {
     return
   }
 

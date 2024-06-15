@@ -52,6 +52,17 @@ export const POST = async (request: NextRequest) => {
     await deleteTaskFromGithubIssue(params.payload)
   })
 
+  app.webhooks.on('issues.edited', async (params) => {
+    const {
+      payload: { issue, installation },
+    } = params
+
+    await dispatch('create_task_from_github_issue', {
+      issue,
+      installation,
+    })
+  })
+
   app.webhooks.on('pull_request.closed', async (params) => {
     const {
       payload: { pull_request, installation },
