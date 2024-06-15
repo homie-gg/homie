@@ -17,6 +17,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
           schema: 'homie',
           name: 'contributor',
         },
+        onDelete: 'CASCADE',
       },
       task_id: {
         type: 'integer',
@@ -25,6 +26,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
           schema: 'homie',
           name: 'task',
         },
+        onDelete: 'CASCADE',
       },
     },
   )

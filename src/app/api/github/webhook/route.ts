@@ -7,6 +7,7 @@ import { dbClient } from '@/database/client'
 import { assignContributorFromGithubIssue } from '@/lib/github/assign-contributor-from-github-issue'
 import { unassignContributorFromGithubIssue } from '@/lib/github/unassign-contributor-from-github-issue'
 import { closeTaskFromGithubIssue } from '@/lib/github/close-task-from-github-issue'
+import { deleteTaskFromGithubIssue } from '@/lib/github/delete-task-from-github-issue'
 
 export const POST = async (request: NextRequest) => {
   logger.debug('Received Github webhook', {
@@ -19,8 +20,8 @@ export const POST = async (request: NextRequest) => {
   // ✅ opened - create task
   // ✅ assigned - add assignment
   // ✅ unassigned - remove assignment
-  // ✅  closed - mark task done
-  // deleted - delete task
+  // ✅ closed - mark task done
+  // ✅ deleted - delete task
   // edited - update task descriptiong / name
   // re-opened - mark task as open again
 
@@ -45,6 +46,10 @@ export const POST = async (request: NextRequest) => {
 
   app.webhooks.on('issues.closed', async (params) => {
     await closeTaskFromGithubIssue(params.payload)
+  })
+
+  app.webhooks.on('issues.deleted', async (params) => {
+    await deleteTaskFromGithubIssue(params.payload)
   })
 
   app.webhooks.on('pull_request.closed', async (params) => {

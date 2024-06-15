@@ -3,7 +3,6 @@ import { taskStatus } from '@/lib/tasks'
 import { InstallationLite, Issue, User } from '@octokit/webhooks-types'
 
 interface CloseTaskFromGithubIssueParams {
-  assignee?: User | null
   issue: Issue
   installation?: InstallationLite | undefined
 }
