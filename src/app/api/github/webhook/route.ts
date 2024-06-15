@@ -8,6 +8,7 @@ import { assignContributorFromGithubIssue } from '@/lib/github/assign-contributo
 import { unassignContributorFromGithubIssue } from '@/lib/github/unassign-contributor-from-github-issue'
 import { closeTaskFromGithubIssue } from '@/lib/github/close-task-from-github-issue'
 import { deleteTaskFromGithubIssue } from '@/lib/github/delete-task-from-github-issue'
+import { reopenTaskFromGithubIssue } from '@/lib/github/reopen-task-from-github-issue'
 
 export const POST = async (request: NextRequest) => {
   logger.debug('Received Github webhook', {
@@ -22,7 +23,7 @@ export const POST = async (request: NextRequest) => {
   // ✅ unassigned - remove assignment
   // ✅ closed - mark task done
   // ✅ deleted - delete task
-  // edited - update task descriptiong / name
+  // ✅ edited - update task descriptiong / name
   // re-opened - mark task as open again
 
   app.webhooks.on('issues.opened', async (params) => {
@@ -61,6 +62,10 @@ export const POST = async (request: NextRequest) => {
       issue,
       installation,
     })
+  })
+
+  app.webhooks.on('issues.reopened', async (params) => {
+    await reopenTaskFromGithubIssue(params.payload)
   })
 
   app.webhooks.on('pull_request.closed', async (params) => {
