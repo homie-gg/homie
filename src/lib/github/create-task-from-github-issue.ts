@@ -91,6 +91,9 @@ export async function createTaskFromGithubIssue(
           task_id: task.id,
           contributor_id: contributor.id,
         })
+        .onConflict((oc) => {
+          return oc.columns(['contributor_id', 'task_id']).doNothing()
+        })
         .executeTakeFirstOrThrow()
     }
   })

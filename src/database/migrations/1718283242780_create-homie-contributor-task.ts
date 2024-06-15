@@ -4,7 +4,7 @@ import { MigrationBuilder, ColumnDefinitions } from 'node-pg-migrate'
 export const shorthands: ColumnDefinitions | undefined = undefined
 
 export async function up(pgm: MigrationBuilder): Promise<void> {
-  return pgm.createTable(
+  pgm.createTable(
     { schema: 'homie', name: 'contributor_task' },
     {
       id: 'id',
@@ -27,6 +27,12 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
         },
       },
     },
+  )
+
+  pgm.addConstraint(
+    { schema: 'homie', name: 'contributor_task' },
+    'uniq_contributor_task_contributor_id_task_id',
+    'UNIQUE(contributor_id, task_id)',
   )
 }
 

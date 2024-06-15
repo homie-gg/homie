@@ -4,6 +4,7 @@ import { summaryKey } from '@/queue/handlers/handle-generate-open-pull-request-s
 import { logger } from '@/lib/log/logger'
 import { createGithubApp } from '@/lib/github/create-github-app'
 import { dbClient } from '@/database/client'
+import { assignContributorFromGithubIssue } from '@/lib/github/assign-contributor-from-github-issue'
 
 export const POST = async (request: NextRequest) => {
   logger.debug('Received Github webhook', {
@@ -13,8 +14,8 @@ export const POST = async (request: NextRequest) => {
 
   const app = createGithubApp()
 
-  // opened - create task
-  // assigned - add assignment
+  // ✅ opened - create task
+  // ✅ assigned - add assignment
   // unassigned - remove assignment
   // closed - mark task done
   // deleted - delete task
@@ -33,7 +34,7 @@ export const POST = async (request: NextRequest) => {
   })
 
   app.webhooks.on('issues.assigned', async (params) => {
-    // assign to taks
+    await assignContributorFromGithubIssue(params.payload)
   })
 
   app.webhooks.on('pull_request.closed', async (params) => {
