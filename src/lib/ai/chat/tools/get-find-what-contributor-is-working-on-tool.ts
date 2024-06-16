@@ -25,7 +25,11 @@ export function getFindWhatContributorIsWorkingOnTool(
     func: async (params) => {
       const contributor = await dbClient
         .selectFrom('homie.contributor')
-        .where('ext_slack_member_id', '=', params.ext_slack_member_id)
+        .where(
+          'ext_slack_member_id',
+          '=',
+          params.ext_slack_member_id.replace('@', ''),
+        )
         .where('organization_id', '=', organization.id)
         .select(['id'])
         .executeTakeFirst()
@@ -80,7 +84,7 @@ export function getFindWhatContributorIsWorkingOnTool(
           'Recently merged Pull Requests:',
           ...recentPrs.map(
             (pullRequest) =>
-              `Title: ${pullRequest.title} | Description: ${pullRequest.body} | Contributor: ${pullRequest.username} | Merged at ${pullRequest.merged_at} | URL: ${pullRequest.html_url}`,
+              `Title: ${pullRequest.title} (url: ${pullRequest.html_url}) | Description: ${pullRequest.body} | Contributor: ${pullRequest.username} | Merged at ${pullRequest.merged_at}`,
           ),
         ].join('\n')
       }
@@ -94,7 +98,7 @@ export function getFindWhatContributorIsWorkingOnTool(
         'Currently assigned tasks:',
         ...assignedTasks.map(
           (task) =>
-            `Title: ${task.name} | Description: ${task.description} | URL: ${task.html_url}`,
+            `Title: ${task.name} (url: ${task.html_url}) | Description: ${task.description}`,
         ),
       ].join('\n')
     },
