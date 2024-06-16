@@ -34,7 +34,7 @@ export function getFindOpenTasksTool(params: GetFindOpenTasksToolParams) {
       return tasks
         .map(
           (task) =>
-            `Title: ${task.name} | Description: ${task.description} | URL: ${task.html_url} | Task ID: ${task.id}`,
+            `Title: ${task.name} (url: ${task.html_url}) | Description: ${task.description} | Task ID: ${task.id}`,
         )
         .join('\n')
     },
