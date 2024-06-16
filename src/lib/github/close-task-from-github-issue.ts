@@ -46,6 +46,7 @@ export async function closeTaskFromGithubIssue(
     .where('id', '=', task.id)
     .set({
       task_status_id: taskStatus.done,
+      completed_at: new Date(),
     })
     .executeTakeFirstOrThrow()
 }

@@ -36,6 +36,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       },
       html_url: { type: 'text', notNull: true },
       due_date: { type: 'timestamptz', notNull: false },
+      completed_at: { type: 'timestamptz', notNull: false },
       priority_level: {
         type: 'integer',
         notNull: true,

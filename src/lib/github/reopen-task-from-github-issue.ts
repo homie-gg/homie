@@ -52,6 +52,7 @@ export async function reopenTaskFromGithubIssue(
     .where('id', '=', task.id)
     .set({
       task_status_id: taskStatus.open,
+      completed_at: null,
     })
     .executeTakeFirstOrThrow()
 }
