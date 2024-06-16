@@ -73,7 +73,7 @@ export function getFindWhatContributorIsWorkingOnTool(
           'Currently assigned tasks:',
           ...assignedTasks.map(
             (task) =>
-              `Title: ${task.name} | Description: ${task.description} | URL: ${task.html_url}`,
+              `- [${task.name}](${task.html_url}) - ${task.description}`,
           ),
         ].join('\n')
       }
@@ -84,21 +84,20 @@ export function getFindWhatContributorIsWorkingOnTool(
           'Recently merged Pull Requests:',
           ...recentPrs.map(
             (pullRequest) =>
-              `Title: ${pullRequest.title} (url: ${pullRequest.html_url}) | Description: ${pullRequest.body} | Contributor: ${pullRequest.username} | Merged at ${pullRequest.merged_at}`,
+              `- [${pullRequest.title}](${pullRequest.html_url}) - ${pullRequest.body} (merged at ${pullRequest.merged_at})`,
           ),
         ].join('\n')
       }
 
       return [
-        'Recently merged Pull Requests:',
-        ...recentPrs.map(
-          (pullRequest) =>
-            `Title: ${pullRequest.title} | Description: ${pullRequest.body} | Contributor: ${pullRequest.username} | Merged at ${pullRequest.merged_at} | URL: ${pullRequest.html_url}`,
-        ),
         'Currently assigned tasks:',
         ...assignedTasks.map(
-          (task) =>
-            `Title: ${task.name} (url: ${task.html_url}) | Description: ${task.description}`,
+          (task) => `- [${task.name}](${task.html_url}) - ${task.description}`,
+        ),
+        'And here are some merged Pull Requests:',
+        ...recentPrs.map(
+          (pullRequest) =>
+            `- [${pullRequest.title}](${pullRequest.html_url}) - ${pullRequest.body} (merged at ${pullRequest.merged_at})`,
         ),
       ].join('\n')
     },
