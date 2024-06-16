@@ -28,7 +28,7 @@ export function getAssignTaskToContributorTool(
 
       const contributor = await dbClient
         .selectFrom('homie.contributor')
-        .where('ext_slack_member_id', '=', ext_slack_member_id)
+        .where('ext_slack_member_id', '=', ext_slack_member_id.replace('@', ''))
         .where('organization_id', '=', organization.id)
         .select(['id', 'username'])
         .executeTakeFirst()
