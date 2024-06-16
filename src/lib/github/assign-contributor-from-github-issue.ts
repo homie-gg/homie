@@ -1,17 +1,23 @@
 import { dbClient } from '@/database/client'
 import { dispatch } from '@/queue/default-queue'
-import { InstallationLite, Issue, User } from '@octokit/webhooks-types'
+import {
+  InstallationLite,
+  Issue,
+  User,
+  Repository,
+} from '@octokit/webhooks-types'
 
 interface AssignContributorFromGithubIssueParams {
   assignee?: User | null
   issue: Issue
   installation?: InstallationLite | undefined
+  repository: Repository
 }
 
 export async function assignContributorFromGithubIssue(
   params: AssignContributorFromGithubIssueParams,
 ) {
-  const { assignee, installation, issue } = params
+  const { assignee, installation, issue, repository } = params
 
   if (!installation) {
     return
@@ -47,6 +53,7 @@ export async function assignContributorFromGithubIssue(
     await dispatch('create_task_from_github_issue', {
       issue,
       installation,
+      repository,
     })
     return
   }

@@ -6,7 +6,7 @@ import { dispatch } from '@/queue/default-queue'
 export async function handleUpdateTaskFromGithubIssue(
   job: UpdateTaskFromGithubIssue,
 ) {
-  const { issue, installation } = job.data
+  const { issue, installation, repository } = job.data
 
   const organization = await dbClient
     .selectFrom('homie.organization')
@@ -37,6 +37,7 @@ export async function handleUpdateTaskFromGithubIssue(
     await dispatch('create_task_from_github_issue', {
       issue,
       installation,
+      repository,
     })
     return
   }

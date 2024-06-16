@@ -1,17 +1,18 @@
 import { dbClient } from '@/database/client'
 import { taskStatus } from '@/lib/tasks'
 import { dispatch } from '@/queue/default-queue'
-import { InstallationLite, Issue } from '@octokit/webhooks-types'
+import { InstallationLite, Issue, Repository } from '@octokit/webhooks-types'
 
 interface ReopenTaskFromGithubIssueParams {
   issue: Issue
   installation?: InstallationLite | undefined
+  repository: Repository
 }
 
 export async function reopenTaskFromGithubIssue(
   params: ReopenTaskFromGithubIssueParams,
 ) {
-  const { installation, issue } = params
+  const { installation, issue, repository } = params
 
   if (!installation) {
     return
@@ -42,6 +43,7 @@ export async function reopenTaskFromGithubIssue(
     await dispatch('create_task_from_github_issue', {
       issue,
       installation,
+      repository,
     })
 
     return

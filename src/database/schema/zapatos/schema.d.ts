@@ -2060,6 +2060,12 @@ declare module 'zapatos/schema' {
         */
         ext_gh_issue_id: number | null;
         /**
+        * **homie.task.github_repo_id**
+        * - `int4` in database
+        * - Nullable, no default
+        */
+        github_repo_id: number | null;
+        /**
         * **homie.task.html_url**
         * - `text` in database
         * - `NOT NULL`, no default
@@ -2145,6 +2151,12 @@ declare module 'zapatos/schema' {
         * - Nullable, no default
         */
         ext_gh_issue_id: number | null;
+        /**
+        * **homie.task.github_repo_id**
+        * - `int4` in database
+        * - Nullable, no default
+        */
+        github_repo_id: number | null;
         /**
         * **homie.task.html_url**
         * - `text` in database
@@ -2232,6 +2244,12 @@ declare module 'zapatos/schema' {
         */
         ext_gh_issue_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
         /**
+        * **homie.task.github_repo_id**
+        * - `int4` in database
+        * - Nullable, no default
+        */
+        github_repo_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+        /**
         * **homie.task.html_url**
         * - `text` in database
         * - `NOT NULL`, no default
@@ -2318,6 +2336,12 @@ declare module 'zapatos/schema' {
         */
         ext_gh_issue_id?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment;
         /**
+        * **homie.task.github_repo_id**
+        * - `int4` in database
+        * - Nullable, no default
+        */
+        github_repo_id?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment;
+        /**
         * **homie.task.html_url**
         * - `text` in database
         * - `NOT NULL`, no default
@@ -2403,6 +2427,12 @@ declare module 'zapatos/schema' {
         * - Nullable, no default
         */
         ext_gh_issue_id?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment>;
+        /**
+        * **homie.task.github_repo_id**
+        * - `int4` in database
+        * - Nullable, no default
+        */
+        github_repo_id?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment>;
         /**
         * **homie.task.html_url**
         * - `text` in database
@@ -2996,6 +3026,12 @@ declare module 'zapatos/schema' {
         */
         organization_id: number;
         /**
+        * **github.repo.owner**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        owner: string | null;
+        /**
         * **github.repo.updated_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -3039,6 +3075,12 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, no default
         */
         organization_id: number;
+        /**
+        * **github.repo.owner**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        owner: string | null;
         /**
         * **github.repo.updated_at**
         * - `timestamptz` in database
@@ -3084,6 +3126,12 @@ declare module 'zapatos/schema' {
         */
         organization_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
         /**
+        * **github.repo.owner**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        owner?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        /**
         * **github.repo.updated_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -3128,6 +3176,12 @@ declare module 'zapatos/schema' {
         */
         organization_id: number | db.Parameter<number> | db.SQLFragment;
         /**
+        * **github.repo.owner**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        owner?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
+        /**
         * **github.repo.updated_at**
         * - `timestamptz` in database
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -3171,6 +3225,12 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, no default
         */
         organization_id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+        /**
+        * **github.repo.owner**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        owner?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
         /**
         * **github.repo.updated_at**
         * - `timestamptz` in database

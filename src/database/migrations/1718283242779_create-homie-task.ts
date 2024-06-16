@@ -49,6 +49,15 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
           name: 'organization',
         },
       },
+      github_repo_id: {
+        type: 'integer',
+        notNull: false,
+        references: {
+          schema: 'github',
+          name: 'repo',
+        },
+        onDelete: 'CASCADE',
+      },
     },
   )
 }

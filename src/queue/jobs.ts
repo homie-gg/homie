@@ -1,6 +1,11 @@
 import { GithubOrganization } from '@/database/types'
 import { Job as BullMQJob, JobsOptions } from 'bullmq'
-import { PullRequest, InstallationLite, Issue } from '@octokit/webhooks-types'
+import {
+  PullRequest,
+  InstallationLite,
+  Issue,
+  Repository,
+} from '@octokit/webhooks-types'
 
 export type AskSlackSelectGithubRepoForIssue = BullMQJob<
   {
@@ -30,6 +35,7 @@ export type CreateTaskFromGithubIssue = BullMQJob<
   {
     issue: Issue
     installation: InstallationLite | undefined
+    repository: Repository
   },
   void, // return type
   'create_task_from_github_issue'
@@ -39,6 +45,7 @@ export type UpdateTaskFromGithubIssue = BullMQJob<
   {
     issue: Issue
     installation: InstallationLite | undefined
+    repository: Repository
   },
   void, // return type
   'update_task_from_github_issue'

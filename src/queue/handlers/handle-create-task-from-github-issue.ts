@@ -6,7 +6,7 @@ import { createTaskFromGithubIssue } from '@/lib/github/create-task-from-github-
 export async function handleCreateTaskFromGithubIssue(
   job: CreateTaskFromGithubIssue,
 ) {
-  const { issue, installation } = job.data
+  const { issue, installation, repository } = job.data
 
   const organization = await dbClient
     .selectFrom('homie.organization')
@@ -37,5 +37,6 @@ export async function handleCreateTaskFromGithubIssue(
     task_type_id,
     priority_level,
     organization,
+    repository,
   })
 }

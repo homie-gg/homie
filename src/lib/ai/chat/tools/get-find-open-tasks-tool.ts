@@ -24,7 +24,7 @@ export function getFindOpenTasksTool(params: GetFindOpenTasksToolParams) {
         .orderBy('due_date', 'asc') // If any are due get those next
         .orderBy('created_at', 'desc') // oldest first
         .limit(8)
-        .select(['name', 'description', 'html_url'])
+        .select(['name', 'description', 'html_url', 'id'])
         .execute()
 
       if (tasks.length === 0) {
@@ -34,7 +34,7 @@ export function getFindOpenTasksTool(params: GetFindOpenTasksToolParams) {
       return tasks
         .map(
           (task) =>
-            `Title: ${task.name} | Description: ${task.description} | URL: ${task.html_url}`,
+            `Title: ${task.name} | Description: ${task.description} | URL: ${task.html_url} | Task ID: ${task.id}`,
         )
         .join('\n')
     },

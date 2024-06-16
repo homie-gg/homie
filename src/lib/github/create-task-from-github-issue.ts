@@ -23,14 +23,43 @@ interface CreateTaskFromGithubIssueParams {
   organization: {
     id: number
   }
+  repository: {
+    name: string
+    full_name: string
+    html_url: string
+    id: number
+  }
 }
 
 export async function createTaskFromGithubIssue(
   params: CreateTaskFromGithubIssueParams,
 ) {
-  const { issue, organization, priority_level, task_type_id } = params
+  const { issue, organization, priority_level, task_type_id, repository } =
+    params
+
+  const owner = repository.full_name.split('/')[0]
 
   await dbClient.transaction().execute(async (trx) => {
+    const githubRepo = await trx
+      .insertInto('github.repo')
+      .values({
+        organization_id: organization.id,
+        owner,
+        name: repository.name,
+        html_url: repository.html_url,
+        ext_gh_repo_id: repository.id,
+      })
+      .onConflict((oc) =>
+        oc.column('ext_gh_repo_id').doUpdateSet({
+          organization_id: organization.id,
+          name: repository.name,
+          owner,
+          html_url: repository.html_url,
+        }),
+      )
+      .returning('id')
+      .executeTakeFirstOrThrow()
+
     const task = await trx
       .insertInto('homie.task')
       .values({
@@ -42,6 +71,7 @@ export async function createTaskFromGithubIssue(
         priority_level,
         task_type_id,
         ext_gh_issue_id: issue.id,
+        github_repo_id: githubRepo.id,
       })
       .returning(['id'])
       .executeTakeFirstOrThrow()

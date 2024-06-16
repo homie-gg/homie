@@ -38,11 +38,16 @@ export async function handleImportGithubIssues(job: ImportGithubIssues) {
       description: issue.body ?? '',
     })
 
+    if (!issue.repository) {
+      return
+    }
+
     await createTaskFromGithubIssue({
       issue,
       task_type_id,
       priority_level,
       organization,
+      repository: issue.repository,
     })
   }
 }
