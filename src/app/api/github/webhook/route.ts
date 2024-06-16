@@ -24,7 +24,7 @@ export const POST = async (request: NextRequest) => {
   // ✅ closed - mark task done
   // ✅ deleted - delete task
   // ✅ edited - update task descriptiong / name
-  // re-opened - mark task as open again
+  // ✅  re-opened - mark task as open again
 
   app.webhooks.on('issues.opened', async (params) => {
     const {
