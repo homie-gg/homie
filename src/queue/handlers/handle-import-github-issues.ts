@@ -26,28 +26,34 @@ export async function handleImportGithubIssues(job: ImportGithubIssues) {
     installationId: github_organization.ext_gh_install_id,
   })
 
-  const openIssues = (
-    await github.rest.issues.list({
+  const repos = await github.request('GET /installation/repositories', {
+    headers: {
+      'X-GitHub-Api-Version': '2022-11-28',
+    },
+  })
+
+  for (const repo of repos.data.repositories) {
+    const owner = repo.full_name.split('/')[0] // repo is full name. e.g. 'octocat/hello-world'
+
+    const issues = await github.rest.issues.listForRepo({
+      repo: repo.name,
+      owner,
       state: 'open',
     })
-  ).data
 
-  for (const issue of openIssues) {
-    const { task_type_id, priority_level } = await classifyTask({
-      title: issue.title,
-      description: issue.body ?? '',
-    })
+    for (const issue of issues.data) {
+      const { task_type_id, priority_level } = await classifyTask({
+        title: issue.title,
+        description: issue.body ?? '',
+      })
 
-    if (!issue.repository) {
-      return
+      await createTaskFromGithubIssue({
+        issue,
+        task_type_id,
+        priority_level,
+        organization,
+        repository: repo,
+      })
     }
-
-    await createTaskFromGithubIssue({
-      issue,
-      task_type_id,
-      priority_level,
-      organization,
-      repository: issue.repository,
-    })
   }
 }
