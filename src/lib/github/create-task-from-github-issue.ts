@@ -4,6 +4,7 @@ import { taskStatus } from '@/lib/tasks'
 interface CreateTaskFromGithubIssueParams {
   issue: {
     id: number
+    number: number
     title: string
     body?: string | null
     user?: {
@@ -71,6 +72,7 @@ export async function createTaskFromGithubIssue(
         priority_level,
         task_type_id,
         ext_gh_issue_id: issue.id,
+        ext_gh_issue_number: issue.number,
         github_repo_id: githubRepo.id,
       })
       .returning(['id'])

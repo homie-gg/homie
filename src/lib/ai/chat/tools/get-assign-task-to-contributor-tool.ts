@@ -46,6 +46,8 @@ export function getAssignTaskToContributorTool(
           'homie.task.id as task_id',
           'homie.task.name as task_name',
           'homie.task.html_url as task_html_url',
+          'homie.task.ext_gh_issue_id as task_ext_gh_issue_number',
+          'homie.task.ext_gh_issue_number',
           'github.repo.name as repo_name',
           'github.repo.owner as repo_owner',
         ])
@@ -63,6 +65,10 @@ export function getAssignTaskToContributorTool(
         return 'Could not assign task. Missing GitHub repo owner.'
       }
 
+      if (!task.task_ext_gh_issue_number) {
+        return 'Could not assign task. Missing GitHub issue number.'
+      }
+
       const github = await createGithubClient({
         installationId: organization.ext_gh_install_id,
       })
@@ -71,7 +77,7 @@ export function getAssignTaskToContributorTool(
         assignees: [contributor.username],
         owner: task.repo_owner,
         repo: task.repo_name,
-        issue_number: 2,
+        issue_number: task.task_ext_gh_issue_number,
       })
 
       const assignment = await dbClient

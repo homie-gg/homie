@@ -24,6 +24,7 @@ import { getFindOpenTasksTool } from '@/lib/ai/chat/tools/get-find-open-tasks-to
 import { getFindCompletedTasksTool } from '@/lib/ai/chat/tools/get-find-completed-tasks-tool'
 import { getFindWhatContributorIsWorkingOnTool } from '@/lib/ai/chat/tools/get-find-what-contributor-is-working-on-tool'
 import { getAssignTaskToContributorTool } from '@/lib/ai/chat/tools/get-assign-task-to-contributor-tool'
+import { getMarkTaskAsDoneTool } from '@/lib/ai/chat/tools/get-mark-task-as-done-tool'
 
 interface GetAnswerParams {
   organization: {
@@ -73,6 +74,9 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       organization,
     }),
     getAssignTaskToContributorTool({
+      organization,
+    }),
+    getMarkTaskAsDoneTool({
       organization,
     }),
   ]
