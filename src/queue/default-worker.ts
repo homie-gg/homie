@@ -48,6 +48,8 @@ export const getDefaultWorker = () => {
             error: error.message,
             stack: error.stack,
           })
+
+          throw error
         }
 
         logger.debug(`Failed job: ${job.name}`, {
@@ -55,6 +57,8 @@ export const getDefaultWorker = () => {
           data: job.data,
           error,
         })
+
+        throw error
       }
     },
     {

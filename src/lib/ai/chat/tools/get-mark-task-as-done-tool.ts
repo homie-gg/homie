@@ -25,13 +25,13 @@ export function getMarkTaskAsDoneTool(params: GetMarkTaskAsDoneTool) {
       const task = await dbClient
         .selectFrom('homie.task')
         .innerJoin('github.repo', 'homie.task.github_repo_id', 'github.repo.id')
-        .where('id', '=', task_id)
-        .where('organization_id', '=', organization.id)
+        .where('homie.task.id', '=', task_id)
+        .where('homie.task.organization_id', '=', organization.id)
         .select([
           'homie.task.id as task_id',
           'homie.task.name as task_name',
           'homie.task.html_url as task_html_url',
-          'homie.task.ext_gh_issue_id as task_ext_gh_issue_number',
+          'homie.task.ext_gh_issue_number as task_ext_gh_issue_number',
           'github.repo.name as repo_name',
           'github.repo.owner as repo_owner',
         ])
@@ -73,10 +73,7 @@ export function getMarkTaskAsDoneTool(params: GetMarkTaskAsDoneTool) {
         })
         .executeTakeFirstOrThrow()
 
-      return [
-        'Task marked done:',
-        `Title: ${task.task_name} | URL: ${task.task_html_url}`,
-      ].join('\n')
+      return 'Successfully marked task as done.'
     },
   })
 }

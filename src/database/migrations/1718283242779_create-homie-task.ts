@@ -18,7 +18,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
         notNull: true,
       },
       ext_gh_issue_id: { type: 'bigint', unique: true, notNull: false },
-      ext_gh_issue_number: { type: 'integer', unique: true, notNull: false },
+      ext_gh_issue_number: { type: 'bigint', unique: true, notNull: false },
       task_status_id: {
         type: 'integer',
         notNull: true,

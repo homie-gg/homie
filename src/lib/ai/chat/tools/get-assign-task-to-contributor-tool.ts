@@ -40,14 +40,13 @@ export function getAssignTaskToContributorTool(
       const task = await dbClient
         .selectFrom('homie.task')
         .innerJoin('github.repo', 'homie.task.github_repo_id', 'github.repo.id')
-        .where('id', '=', task_id)
-        .where('organization_id', '=', organization.id)
+        .where('homie.task.id', '=', task_id)
+        .where('homie.task.organization_id', '=', organization.id)
         .select([
           'homie.task.id as task_id',
           'homie.task.name as task_name',
           'homie.task.html_url as task_html_url',
-          'homie.task.ext_gh_issue_id as task_ext_gh_issue_number',
-          'homie.task.ext_gh_issue_number',
+          'homie.task.ext_gh_issue_number as task_ext_gh_issue_number',
           'github.repo.name as repo_name',
           'github.repo.owner as repo_owner',
         ])
@@ -72,7 +71,6 @@ export function getAssignTaskToContributorTool(
       const github = await createGithubClient({
         installationId: organization.ext_gh_install_id,
       })
-
       await github.rest.issues.addAssignees({
         assignees: [contributor.username],
         owner: task.repo_owner,
@@ -80,7 +78,7 @@ export function getAssignTaskToContributorTool(
         issue_number: task.task_ext_gh_issue_number,
       })
 
-      const assignment = await dbClient
+      await dbClient
         .insertInto('homie.contributor_task')
         .values({
           task_id: task.task_id,
@@ -89,17 +87,9 @@ export function getAssignTaskToContributorTool(
         .onConflict((oc) => {
           return oc.columns(['contributor_id', 'task_id']).doNothing()
         })
-        .returning(['id'])
-        .executeTakeFirst()
+        .executeTakeFirstOrThrow()
 
-      if (!assignment?.id) {
-        return 'Something went wrong. Could not assign task.'
-      }
-
-      return [
-        'Task assigned:',
-        `Title: ${task.task_name} | URL: ${task.task_html_url}`,
-      ].join('\n')
+      return 'Successfully assigned'
     },
   })
 }
