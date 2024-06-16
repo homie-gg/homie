@@ -22,6 +22,7 @@ import { getRememberConversationTool } from '@/lib/ai/chat/tools/get-remember-co
 import { Message } from '@/lib/ai/chat/types'
 import { getFindOpenTasksTool } from '@/lib/ai/chat/tools/get-find-open-tasks-tool'
 import { getFindCompletedTasksTool } from '@/lib/ai/chat/tools/get-find-completed-tasks-tool'
+import { getFindWhatContributorIsWorkingOnTool } from '@/lib/ai/chat/tools/get-find-what-contributor-is-working-on-tool'
 
 interface GetAnswerParams {
   organization: {
@@ -64,6 +65,9 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       organization,
     }),
     getFindCompletedTasksTool({
+      organization,
+    }),
+    getFindWhatContributorIsWorkingOnTool({
       organization,
     }),
   ]
