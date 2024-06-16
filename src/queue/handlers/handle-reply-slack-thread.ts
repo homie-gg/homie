@@ -3,7 +3,7 @@ import { ReplySlackThread } from '@/queue/jobs'
 import { findOrgWithSlackTeamId } from '@/lib/organization/get-org-with-slack-team-id'
 import { getTextReplies } from '@/lib/slack/get-text-replies'
 import { getAnswer } from '@/lib/ai/chat/get-answer'
-import { markdownToBlocks } from '@tryfabric/mack'
+import { formatAnswer } from '@/lib/slack/format-answer'
 
 export async function handleReplySlackThread(job: ReplySlackThread) {
   const {
@@ -54,6 +54,6 @@ export async function handleReplySlackThread(job: ReplySlackThread) {
   await slackClient.post('chat.postMessage', {
     channel: channel_id,
     thread_ts: target_message_ts,
-    blocks: await markdownToBlocks(answer),
+    blocks: await formatAnswer(answer),
   })
 }
