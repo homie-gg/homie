@@ -20,6 +20,7 @@ import { getListPullRequestsTool } from '@/lib/ai/chat/tools/get-list-pull-reque
 import { getTodaysDateTool } from '@/lib/ai/chat/tools/get-todays-date-tool'
 import { getRememberConversationTool } from '@/lib/ai/chat/tools/get-remember-conversation-tool'
 import { Message } from '@/lib/ai/chat/types'
+import { getFindOpenTasksTool } from '@/lib/ai/chat/tools/get-available-tasks-tool'
 
 interface GetAnswerParams {
   organization: {
@@ -57,6 +58,9 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       organization,
       messages,
       channelID: channelID,
+    }),
+    getFindOpenTasksTool({
+      organization,
     }),
   ]
 
