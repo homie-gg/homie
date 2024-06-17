@@ -17,3 +17,12 @@ export interface TrelloCard {
    */
   desc: string
 }
+
+export interface TrelloWebhook {
+  id: string
+  description: string
+  idModel: string
+  callbackURL: string
+  active: boolean
+  consecutiveFailures: number
+}
