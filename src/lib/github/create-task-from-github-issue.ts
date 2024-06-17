@@ -71,7 +71,7 @@ export async function createTaskFromGithubIssue(
         task_status_id: taskStatus.open,
         priority_level,
         task_type_id,
-        ext_gh_issue_id: issue.id,
+        ext_gh_issue_id: issue.id.toString(),
         ext_gh_issue_number: issue.number,
         github_repo_id: githubRepo.id,
       })

@@ -45,7 +45,7 @@ export async function unassignContributorFromGithubIssue(
   const task = await dbClient
     .selectFrom('homie.task')
     .select(['id'])
-    .where('ext_gh_issue_id', '=', issue.id)
+    .where('ext_gh_issue_id', '=', issue.id.toString())
     .executeTakeFirst()
 
   // Create a task here if one doesn't exist here

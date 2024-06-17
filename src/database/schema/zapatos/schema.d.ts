@@ -2055,10 +2055,10 @@ declare module 'zapatos/schema' {
         due_date: Date | null;
         /**
         * **homie.task.ext_gh_issue_id**
-        * - `int4` in database
+        * - `text` in database
         * - Nullable, no default
         */
-        ext_gh_issue_id: number | null;
+        ext_gh_issue_id: string | null;
         /**
         * **homie.task.ext_gh_issue_number**
         * - `int4` in database
@@ -2153,10 +2153,10 @@ declare module 'zapatos/schema' {
         due_date: db.TimestampTzString | null;
         /**
         * **homie.task.ext_gh_issue_id**
-        * - `int4` in database
+        * - `text` in database
         * - Nullable, no default
         */
-        ext_gh_issue_id: number | null;
+        ext_gh_issue_id: string | null;
         /**
         * **homie.task.ext_gh_issue_number**
         * - `int4` in database
@@ -2251,10 +2251,10 @@ declare module 'zapatos/schema' {
         due_date?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
         /**
         * **homie.task.ext_gh_issue_id**
-        * - `int4` in database
+        * - `text` in database
         * - Nullable, no default
         */
-        ext_gh_issue_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+        ext_gh_issue_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
         /**
         * **homie.task.ext_gh_issue_number**
         * - `int4` in database
@@ -2349,10 +2349,10 @@ declare module 'zapatos/schema' {
         due_date?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | null | db.DefaultType | db.SQLFragment;
         /**
         * **homie.task.ext_gh_issue_id**
-        * - `int4` in database
+        * - `text` in database
         * - Nullable, no default
         */
-        ext_gh_issue_id?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment;
+        ext_gh_issue_id?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
         /**
         * **homie.task.ext_gh_issue_number**
         * - `int4` in database
@@ -2447,10 +2447,10 @@ declare module 'zapatos/schema' {
         due_date?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | null | db.DefaultType | db.SQLFragment>;
         /**
         * **homie.task.ext_gh_issue_id**
-        * - `int4` in database
+        * - `text` in database
         * - Nullable, no default
         */
-        ext_gh_issue_id?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment>;
+        ext_gh_issue_id?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
         /**
         * **homie.task.ext_gh_issue_number**
         * - `int4` in database

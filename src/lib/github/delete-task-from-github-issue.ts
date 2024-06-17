@@ -32,6 +32,6 @@ export async function deleteTaskFromGithubIssue(
 
   await dbClient
     .deleteFrom('homie.task')
-    .where('ext_gh_issue_id', '=', issue.id)
+    .where('ext_gh_issue_id', '=', issue.id.toString())
     .execute()
 }

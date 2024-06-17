@@ -30,7 +30,7 @@ export async function handleUpdateTaskFromGithubIssue(
   const task = await dbClient
     .selectFrom('homie.task')
     .select(['id'])
-    .where('ext_gh_issue_id', '=', issue.id)
+    .where('ext_gh_issue_id', '=', issue.id.toString())
     .executeTakeFirst()
 
   if (!task) {
