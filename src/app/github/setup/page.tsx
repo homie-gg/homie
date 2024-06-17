@@ -55,5 +55,9 @@ export default async function GithubSetup(
     github_organization: githubOrganization,
   })
 
+  await dispatch('import_github_issues', {
+    github_organization: githubOrganization,
+  })
+
   return redirect('/review')
 }

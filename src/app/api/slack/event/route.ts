@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifySlackRequest } from '@/lib/slack/verify-slack-request'
-import { dispatch } from '@/queue/default-queue'
 import { SlackEvent } from '@slack/bolt'
 import { logger } from '@/lib/log/logger'
 import { debouncedDispatch } from '@/queue/debounced-dispatch'

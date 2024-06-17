@@ -3,7 +3,7 @@ import { ReplySlackMention } from '@/queue/jobs'
 import { findOrgWithSlackTeamId } from '@/lib/organization/get-org-with-slack-team-id'
 import { getAnswer } from '@/lib/ai/chat/get-answer'
 import { getTextReplies } from '@/lib/slack/get-text-replies'
-import { markdownToBlocks } from '@tryfabric/mack'
+import { formatAnswer } from '@/lib/slack/format-answer'
 
 export async function handleReplySlackMention(job: ReplySlackMention) {
   const { channel_id, target_message_ts, text, team_id, thread_ts } = job.data
@@ -38,7 +38,7 @@ export async function handleReplySlackMention(job: ReplySlackMention) {
     await slackClient.post('chat.postMessage', {
       channel: channel_id,
       thread_ts: target_message_ts,
-      blocks: await markdownToBlocks(answer),
+      blocks: await formatAnswer(answer),
     })
 
     return
@@ -78,6 +78,6 @@ export async function handleReplySlackMention(job: ReplySlackMention) {
   await slackClient.post('chat.postMessage', {
     channel: channel_id,
     thread_ts: target_message_ts,
-    blocks: await markdownToBlocks(answer),
+    blocks: await formatAnswer(answer),
   })
 }

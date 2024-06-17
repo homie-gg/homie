@@ -1,6 +1,11 @@
 import { GithubOrganization } from '@/database/types'
 import { Job as BullMQJob, JobsOptions } from 'bullmq'
-import { PullRequest, InstallationLite } from '@octokit/webhooks-types'
+import {
+  PullRequest,
+  InstallationLite,
+  Issue,
+  Repository,
+} from '@octokit/webhooks-types'
 
 export type AskSlackSelectGithubRepoForIssue = BullMQJob<
   {
@@ -26,12 +31,40 @@ export type CreateGithubIssueFromSlack = BullMQJob<
   'create_github_issue_from_slack'
 >
 
+export type CreateTaskFromGithubIssue = BullMQJob<
+  {
+    issue: Issue
+    installation: InstallationLite | undefined
+    repository: Repository
+  },
+  void, // return type
+  'create_task_from_github_issue'
+>
+
+export type UpdateTaskFromGithubIssue = BullMQJob<
+  {
+    issue: Issue
+    installation: InstallationLite | undefined
+    repository: Repository
+  },
+  void, // return type
+  'update_task_from_github_issue'
+>
+
 export type ImportPullRequests = BullMQJob<
   {
     github_organization: GithubOrganization
   },
   void, // return type
   'import_pull_requests'
+>
+
+export type ImportGithubIssues = BullMQJob<
+  {
+    github_organization: GithubOrganization
+  },
+  void, // return type
+  'import_github_issues'
 >
 
 export type SaveOpenedPullRequest = BullMQJob<
@@ -249,8 +282,11 @@ export type DispatchDebouncedJob = BullMQJob<
 
 export type Job =
   | CreateGithubIssueFromSlack
+  | CreateTaskFromGithubIssue
+  | UpdateTaskFromGithubIssue
   | AskSlackSelectGithubRepoForIssue
   | ImportPullRequests
+  | ImportGithubIssues
   | SaveOpenedPullRequest
   | SaveMergedPullRequest
   | CloseLinkedTasks

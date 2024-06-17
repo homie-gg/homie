@@ -63,10 +63,13 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
     .returning('id')
     .executeTakeFirstOrThrow()
 
+  const owner = pull_request.base.repo.full_name.split('/')[0]
+
   const repo = await dbClient
     .insertInto('github.repo')
     .values({
       organization_id: organization.id,
+      owner,
       name: pull_request.base.repo.name,
       html_url: pull_request.base.repo.html_url,
       ext_gh_repo_id: pull_request.base.repo.id,
@@ -75,6 +78,7 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
       oc.column('ext_gh_repo_id').doUpdateSet({
         organization_id: organization.id,
         name: pull_request.base.repo.name,
+        owner,
         html_url: pull_request.base.repo.html_url,
       }),
     )

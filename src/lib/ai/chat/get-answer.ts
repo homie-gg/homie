@@ -20,6 +20,12 @@ import { getListPullRequestsTool } from '@/lib/ai/chat/tools/get-list-pull-reque
 import { getTodaysDateTool } from '@/lib/ai/chat/tools/get-todays-date-tool'
 import { getRememberConversationTool } from '@/lib/ai/chat/tools/get-remember-conversation-tool'
 import { Message } from '@/lib/ai/chat/types'
+import { getFindOpenTasksTool } from '@/lib/ai/chat/tools/get-find-open-tasks-tool'
+import { getFindCompletedTasksTool } from '@/lib/ai/chat/tools/get-find-completed-tasks-tool'
+import { getFindWhatContributorIsWorkingOnTool } from '@/lib/ai/chat/tools/get-find-what-contributor-is-working-on-tool'
+import { getAssignTaskToContributorTool } from '@/lib/ai/chat/tools/get-assign-task-to-contributor-tool'
+import { getMarkTaskAsDoneTool } from '@/lib/ai/chat/tools/get-mark-task-as-done-tool'
+import { getFindTaskTool } from '@/lib/ai/chat/tools/get-find-task-tool'
 
 interface GetAnswerParams {
   organization: {
@@ -30,6 +36,7 @@ interface GetAnswerParams {
     persona_affection_level: number
     persona_emoji_level: number
     slack_access_token: string
+    ext_gh_install_id: number | null
   }
   messages: Message[]
   channelID: string
@@ -57,6 +64,24 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       organization,
       messages,
       channelID: channelID,
+    }),
+    getFindOpenTasksTool({
+      organization,
+    }),
+    getFindCompletedTasksTool({
+      organization,
+    }),
+    getFindWhatContributorIsWorkingOnTool({
+      organization,
+    }),
+    getAssignTaskToContributorTool({
+      organization,
+    }),
+    getMarkTaskAsDoneTool({
+      organization,
+    }),
+    getFindTaskTool({
+      organization,
     }),
   ]
 

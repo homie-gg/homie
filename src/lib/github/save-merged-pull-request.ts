@@ -101,10 +101,13 @@ export async function saveMergedPullRequest(
     .returning('id')
     .executeTakeFirstOrThrow()
 
+  const owner = pullRequest.base.repo.full_name.split('/')[0]
+
   const repo = await dbClient
     .insertInto('github.repo')
     .values({
       organization_id: organization.id,
+      owner,
       name: pullRequest.base.repo.name,
       html_url: pullRequest.base.repo.html_url,
       ext_gh_repo_id: pullRequest.base.repo.id,
@@ -112,6 +115,7 @@ export async function saveMergedPullRequest(
     .onConflict((oc) =>
       oc.column('ext_gh_repo_id').doUpdateSet({
         organization_id: organization.id,
+        owner,
         name: pullRequest.base.repo.name,
         html_url: pullRequest.base.repo.html_url,
       }),
@@ -122,8 +126,6 @@ export async function saveMergedPullRequest(
   const github = await createGithubClient({
     installationId: organization.ext_gh_install_id,
   })
-
-  const owner = pullRequest.base.repo.full_name.split('/')[0]
 
   const issue = await getLinkedIssuesAndTasksInPullRequest({
     pullRequest,

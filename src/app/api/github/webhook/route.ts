@@ -4,6 +4,11 @@ import { summaryKey } from '@/queue/handlers/handle-generate-open-pull-request-s
 import { logger } from '@/lib/log/logger'
 import { createGithubApp } from '@/lib/github/create-github-app'
 import { dbClient } from '@/database/client'
+import { assignContributorFromGithubIssue } from '@/lib/github/assign-contributor-from-github-issue'
+import { unassignContributorFromGithubIssue } from '@/lib/github/unassign-contributor-from-github-issue'
+import { closeTaskFromGithubIssue } from '@/lib/github/close-task-from-github-issue'
+import { deleteTaskFromGithubIssue } from '@/lib/github/delete-task-from-github-issue'
+import { reopenTaskFromGithubIssue } from '@/lib/github/reopen-task-from-github-issue'
 
 export const POST = async (request: NextRequest) => {
   logger.debug('Received Github webhook', {
@@ -12,6 +17,50 @@ export const POST = async (request: NextRequest) => {
   })
 
   const app = createGithubApp()
+
+  app.webhooks.on('issues.opened', async (params) => {
+    const {
+      payload: { issue, installation, repository },
+    } = params
+
+    await dispatch('create_task_from_github_issue', {
+      issue,
+      repository,
+      installation,
+    })
+  })
+
+  app.webhooks.on('issues.assigned', async (params) => {
+    await assignContributorFromGithubIssue(params.payload)
+  })
+
+  app.webhooks.on('issues.unassigned', async (params) => {
+    await unassignContributorFromGithubIssue(params.payload)
+  })
+
+  app.webhooks.on('issues.closed', async (params) => {
+    await closeTaskFromGithubIssue(params.payload)
+  })
+
+  app.webhooks.on('issues.deleted', async (params) => {
+    await deleteTaskFromGithubIssue(params.payload)
+  })
+
+  app.webhooks.on('issues.edited', async (params) => {
+    const {
+      payload: { issue, installation, repository },
+    } = params
+
+    await dispatch('update_task_from_github_issue', {
+      issue,
+      installation,
+      repository,
+    })
+  })
+
+  app.webhooks.on('issues.reopened', async (params) => {
+    await reopenTaskFromGithubIssue(params.payload)
+  })
 
   app.webhooks.on('pull_request.closed', async (params) => {
     const {
