@@ -42,6 +42,13 @@ export async function handleImportGithubIssues(job: ImportGithubIssues) {
     })
 
     for (const issue of issues.data) {
+      // Every PR is also an issue. Since we don't want to import PRs here, check to
+      // see if an issue is actually a PR.
+      // Reference: https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#list-repository-issues
+      if (issue.pull_request) {
+        continue
+      }
+
       const { task_type_id, priority_level } = await classifyTask({
         title: issue.title,
         description: issue.body ?? '',

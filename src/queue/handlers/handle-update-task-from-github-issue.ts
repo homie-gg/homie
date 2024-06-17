@@ -47,7 +47,7 @@ export async function handleUpdateTaskFromGithubIssue(
     description: issue.body ?? '',
   })
 
-  dbClient
+  await dbClient
     .updateTable('homie.task')
     .where('id', '=', task.id)
     .set({
@@ -56,4 +56,5 @@ export async function handleUpdateTaskFromGithubIssue(
       priority_level,
       task_type_id,
     })
+    .executeTakeFirstOrThrow()
 }
