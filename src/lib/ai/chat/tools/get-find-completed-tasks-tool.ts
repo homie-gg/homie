@@ -38,8 +38,7 @@ export function getFindCompletedTasksTool(
 
       return tasks
         .map(
-          (task) =>
-            `Title: ${task.name} | Description: ${task.description} | URL: ${task.html_url}`,
+          (task) => `- [${task.name}](${task.html_url}): ${task.description}`,
         )
         .join('\n')
     },

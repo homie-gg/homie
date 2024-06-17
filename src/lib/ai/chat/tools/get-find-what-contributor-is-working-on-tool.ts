@@ -72,8 +72,7 @@ export function getFindWhatContributorIsWorkingOnTool(
           'No recent Pull Requests.\n',
           'Currently assigned tasks:',
           ...assignedTasks.map(
-            (task) =>
-              `- [${task.name}](${task.html_url}) - ${task.description}`,
+            (task) => `- [${task.name}](${task.html_url}): ${task.description}`,
           ),
         ].join('\n')
       }
@@ -92,7 +91,7 @@ export function getFindWhatContributorIsWorkingOnTool(
       return [
         'Currently assigned tasks:',
         ...assignedTasks.map(
-          (task) => `- [${task.name}](${task.html_url}) - ${task.description}`,
+          (task) => `- [${task.name}](${task.html_url}): ${task.description}`,
         ),
         'And here are some merged Pull Requests:',
         ...recentPrs.map(
