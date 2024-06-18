@@ -217,6 +217,7 @@ export type UpdateHomieTaskFromTrelloTask = BullMQJob<
       desc?: string
       due?: string
       closed?: boolean
+      idList?: string
     }
     updated_fields: Array<'name' | 'desc' | 'due'>
   },

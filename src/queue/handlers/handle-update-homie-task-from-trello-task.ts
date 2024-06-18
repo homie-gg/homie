@@ -62,7 +62,10 @@ export async function handleUpdateHomieTaskFromTrelloTask(
       description: card.desc ?? task.description,
       due_date: card.due ? parseISO(card.due) : task.due_date,
       organization_id: organization.id,
-      task_status_id: getTaskStatus(card),
+      task_status_id: getTaskStatus({
+        card,
+        extTrelloDoneListTaskId: trelloWorkspace.ext_trello_done_task_list_id,
+      }),
       priority_level,
       task_type_id,
     })
@@ -70,12 +73,24 @@ export async function handleUpdateHomieTaskFromTrelloTask(
     .executeTakeFirstOrThrow()
 }
 
-function getTaskStatus(card: { closed?: boolean }) {
-  if (card.closed === undefined) {
-    return undefined
+interface GetTaskStatusParams {
+  card: {
+    closed?: boolean
+    idList?: string
+  }
+  extTrelloDoneListTaskId: string | null
+}
+function getTaskStatus(params: GetTaskStatusParams) {
+  const { card, extTrelloDoneListTaskId } = params
+  if (card.closed) {
+    return taskStatus.done
   }
 
-  return card.closed ? taskStatus.done : taskStatus.open
+  if (card.idList === extTrelloDoneListTaskId) {
+    return taskStatus.done
+  }
+
+  return taskStatus.open
 }
 
 interface GetClassificationParams {
