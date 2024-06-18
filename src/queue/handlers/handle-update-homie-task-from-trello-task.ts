@@ -1,8 +1,8 @@
 import { UpdateHomieTaskFromTrelloTask } from '@/queue/jobs'
 import { dbClient } from '@/database/client'
 import { classifyTask } from '@/lib/ai/clasify-task'
-import { taskStatus } from '@/lib/tasks'
 import { dispatch } from '@/queue/default-queue'
+import { parseISO } from 'date-fns'
 
 export async function handleUpdateHomieTaskFromTrelloTask(
   job: UpdateHomieTaskFromTrelloTask,
@@ -36,7 +36,7 @@ export async function handleUpdateHomieTaskFromTrelloTask(
   const task = await dbClient
     .selectFrom('homie.task')
     .where('ext_trello_card_id', '=', card.id)
-    .select(['id'])
+    .select(['id', 'description', 'due_date'])
     .executeTakeFirst()
 
   if (!task) {
@@ -50,22 +50,18 @@ export async function handleUpdateHomieTaskFromTrelloTask(
 
   const { task_type_id, priority_level } = await classifyTask({
     title: card.name,
-    description: card.desc ?? '',
+    description: card.desc ?? task.description,
   })
-
-  const isDone = list.id === trelloWorkspace.ext_trello_done_task_list_id
 
   await dbClient
     .updateTable('homie.task')
     .set({
       name: card.name,
-      description: card.desc,
-      html_url: `https://trello.com/c/${card.shortLink}`,
+      description: card.desc ?? task.description,
+      due_date: card.due ? parseISO(card.due) : task.due_date,
       organization_id: organization.id,
-      task_status_id: isDone ? taskStatus.done : taskStatus.open,
       priority_level,
       task_type_id,
-      ext_trello_card_id: card.id,
     })
     .where('homie.task.id', '=', task.id)
     .executeTakeFirstOrThrow()
