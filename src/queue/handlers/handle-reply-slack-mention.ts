@@ -1,6 +1,6 @@
 import { createSlackClient } from '@/lib/slack/create-slack-client'
 import { ReplySlackMention } from '@/queue/jobs'
-import { findOrgWithSlackTeamId } from '@/lib/organization/get-org-with-slack-team-id'
+import { findOrgWithSlackTeamId } from '@/lib/organization/find-org-with-slack-team-id'
 import { getAnswer } from '@/lib/ai/chat/get-answer'
 import { getTextReplies } from '@/lib/slack/get-text-replies'
 import { formatAnswer } from '@/lib/slack/format-answer'

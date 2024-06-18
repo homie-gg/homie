@@ -1,7 +1,18 @@
 import { http } from '@/lib/http/client/http'
 
-const trelloApi = (path: string, accessToken: string) =>
-  `https://api.trello.com/1${path}?key=${process.env.NEXT_PUBLIC_TRELLO_API_KEY}&token=${accessToken}`
+const trelloApi = (path: string, accessToken: string) => {
+  const parts = path.split('?')
+
+  if (parts.length === 1) {
+    return `https://api.trello.com/1${path}?key=${process.env.NEXT_PUBLIC_TRELLO_API_KEY}&token=${accessToken}`
+  }
+
+  const params = new URLSearchParams(parts[1])
+  params.append('key', process.env.NEXT_PUBLIC_TRELLO_API_KEY ?? '')
+  params.append('token', accessToken)
+
+  return `https://api.trello.com/1${parts[0]}?${params.toString()}`
+}
 
 export type TrelloClient = ReturnType<typeof createTrelloClient>
 

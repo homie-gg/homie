@@ -1,5 +1,6 @@
 import { dbClient } from '@/database/client'
 import { createRoute } from '@/lib/http/server/create-route'
+import { registerTrelloBoardWebhook } from '@/lib/trello/register-trello-board-webhook'
 import { auth } from '@clerk/nextjs'
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
@@ -22,6 +23,11 @@ export const PATCH = createRoute(
       .where('ext_clerk_user_id', '=', userId)
       .select('id')
       .executeTakeFirstOrThrow()
+
+    await registerTrelloBoardWebhook({
+      organization,
+      ext_trello_board_id: body.ext_trello_board_id,
+    })
 
     await dbClient
       .updateTable('trello.workspace')

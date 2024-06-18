@@ -50,7 +50,7 @@ export async function unassignContributorFromGithubIssue(
 
   // Create a task here if one doesn't exist here
   if (!task) {
-    await dispatch('create_task_from_github_issue', {
+    await dispatch('create_homie_task_from_github_issue', {
       issue,
       installation,
       repository,

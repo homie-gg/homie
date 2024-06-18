@@ -1,10 +1,10 @@
-import { UpdateTaskFromGithubIssue } from '@/queue/jobs'
+import { UpdateHomieTaskFromGithubIssue } from '@/queue/jobs'
 import { dbClient } from '@/database/client'
 import { classifyTask } from '@/lib/ai/clasify-task'
 import { dispatch } from '@/queue/default-queue'
 
-export async function handleUpdateTaskFromGithubIssue(
-  job: UpdateTaskFromGithubIssue,
+export async function handleUpdateHomieTaskFromGithubIssue(
+  job: UpdateHomieTaskFromGithubIssue,
 ) {
   const { issue, installation, repository } = job.data
 
@@ -34,7 +34,7 @@ export async function handleUpdateTaskFromGithubIssue(
     .executeTakeFirst()
 
   if (!task) {
-    await dispatch('create_task_from_github_issue', {
+    await dispatch('create_homie_task_from_github_issue', {
       issue,
       installation,
       repository,

@@ -1,42 +1,36 @@
+import { CreateHomieTaskFromGithubIssue } from '@/queue/jobs'
 import { dbClient } from '@/database/client'
+import { classifyTask } from '@/lib/ai/clasify-task'
 import { taskStatus } from '@/lib/tasks'
 
-interface CreateTaskFromGithubIssueParams {
-  issue: {
-    id: number
-    number: number
-    title: string
-    body?: string | null
-    user?: {
-      id: number
-      login?: string
-    } | null
-    html_url: string
-    assignees?:
-      | null
-      | {
-          login?: string | null
-          id: number
-        }[]
-  }
-  priority_level: number
-  task_type_id: number
-  organization: {
-    id: number
-  }
-  repository: {
-    name: string
-    full_name: string
-    html_url: string
-    id: number
-  }
-}
-
-export async function createTaskFromGithubIssue(
-  params: CreateTaskFromGithubIssueParams,
+export async function handleCreateHomieTaskFromGithubIssue(
+  job: CreateHomieTaskFromGithubIssue,
 ) {
-  const { issue, organization, priority_level, task_type_id, repository } =
-    params
+  const { issue, installation, repository } = job.data
+
+  const organization = await dbClient
+    .selectFrom('homie.organization')
+    .innerJoin(
+      'github.organization',
+      'github.organization.organization_id',
+      'homie.organization.id',
+    )
+    .where('ext_gh_install_id', '=', installation?.id!)
+    .select([
+      'homie.organization.id',
+      'github.organization.ext_gh_install_id',
+      'has_unlimited_usage',
+    ])
+    .executeTakeFirst()
+
+  if (!organization) {
+    return
+  }
+
+  const { task_type_id, priority_level } = await classifyTask({
+    title: issue.title,
+    description: issue.body ?? '',
+  })
 
   const owner = repository.full_name.split('/')[0]
 
@@ -75,6 +69,19 @@ export async function createTaskFromGithubIssue(
         ext_gh_issue_number: issue.number,
         github_repo_id: githubRepo.id,
       })
+      .onConflict((oc) =>
+        oc.column('ext_gh_issue_id').doUpdateSet({
+          name: issue.title,
+          description: issue.body ?? '',
+          html_url: issue.html_url,
+          organization_id: organization.id,
+          task_status_id: taskStatus.open,
+          priority_level,
+          task_type_id,
+          ext_gh_issue_number: issue.number,
+          github_repo_id: githubRepo.id,
+        }),
+      )
       .returning(['id'])
       .executeTakeFirstOrThrow()
 

@@ -1,6 +1,7 @@
 'use client'
 
 import { http } from '@/lib/http/client/http'
+import { TrelloMember } from '@/lib/trello/types'
 import {
   Select,
   SelectContent,
@@ -9,7 +10,7 @@ import {
   SelectValue,
 } from '@/lib/ui/Select'
 import { TableCell, TableRow } from '@/lib/ui/Table'
-import { Member } from '@slack/web-api/dist/response/UsersListResponse'
+import { Member as SlackMember } from '@slack/web-api/dist/response/UsersListResponse'
 import { useState } from 'react'
 
 interface ContributorRowProps {
@@ -17,13 +18,20 @@ interface ContributorRowProps {
     id: number
     username: string
     ext_slack_member_id: string | null
+    ext_trello_member_id: string | null
   }
-  slackMembers: Member[]
+  slackMembers: SlackMember[]
+  trelloMembers: TrelloMember[] | null
 }
 
 export default function ContributorRow(props: ContributorRowProps) {
-  const { contributor, slackMembers } = props
-  const [value, setValue] = useState(contributor.ext_slack_member_id ?? '')
+  const { contributor, slackMembers, trelloMembers } = props
+  const [slackMemberId, setSlackMemberId] = useState(
+    contributor.ext_slack_member_id ?? '',
+  )
+  const [trelloMemberId, setTrelloMemberId] = useState(
+    contributor.ext_trello_member_id ?? '',
+  )
   const [processing, setProcessing] = useState(false)
   const { id: contributorId } = contributor
 
@@ -39,7 +47,26 @@ export default function ContributorRow(props: ContributorRowProps) {
         ext_slack_member_id: extSlackMemberId,
       })
       .then(() => {
-        setValue(extSlackMemberId)
+        setSlackMemberId(extSlackMemberId)
+      })
+      .finally(() => {
+        setProcessing(false)
+      })
+  }
+
+  const setTrelloMember = (extTrelloMemberId: string) => {
+    if (processing) {
+      return
+    }
+
+    setProcessing(true)
+
+    http
+      .patch(`/api/contributors/${contributorId}`, {
+        ext_trello_member_id: extTrelloMemberId,
+      })
+      .then(() => {
+        setTrelloMemberId(extTrelloMemberId)
       })
       .finally(() => {
         setProcessing(false)
@@ -50,9 +77,13 @@ export default function ContributorRow(props: ContributorRowProps) {
     <TableRow>
       <TableCell className="font-medium">{contributor.username}</TableCell>
       <TableCell>
-        <Select value={value} onValueChange={setSlackId} disabled={processing}>
+        <Select
+          value={slackMemberId}
+          onValueChange={setSlackId}
+          disabled={processing}
+        >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select a user" />
+            <SelectValue placeholder="Select one" />
           </SelectTrigger>
           <SelectContent>
             {slackMembers.map((slackMember, index) => (
@@ -60,17 +91,37 @@ export default function ContributorRow(props: ContributorRowProps) {
                 value={slackMember.id ?? ''}
                 key={slackMember.id ?? index}
               >
-                {getDisplayName(slackMember)}
+                {getSlackDisplayName(slackMember)}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
       </TableCell>
+      {trelloMembers && (
+        <TableCell>
+          <Select
+            value={trelloMemberId}
+            onValueChange={setTrelloMember}
+            disabled={processing}
+          >
+            <SelectTrigger className="w-[240px]">
+              <SelectValue placeholder="Select one" />
+            </SelectTrigger>
+            <SelectContent>
+              {trelloMembers.map((trelloMember) => (
+                <SelectItem value={trelloMember.id} key={trelloMember.id}>
+                  {`${trelloMember.fullName} (${trelloMember.username})`}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </TableCell>
+      )}
     </TableRow>
   )
 }
 
-function getDisplayName(slackMember: Member) {
+function getSlackDisplayName(slackMember: SlackMember) {
   if (slackMember.profile?.display_name) {
     return slackMember.profile.display_name
   }

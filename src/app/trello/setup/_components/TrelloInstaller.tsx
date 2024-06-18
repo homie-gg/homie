@@ -1,7 +1,7 @@
 'use client'
 
 import { http } from '@/lib/http/client/http'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 interface TrelloInstallerProps {

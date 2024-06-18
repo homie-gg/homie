@@ -37,6 +37,8 @@ interface GetAnswerParams {
     persona_emoji_level: number
     slack_access_token: string
     ext_gh_install_id: number | null
+    trello_access_token: string | null
+    ext_trello_done_task_list_id: string | null
   }
   messages: Message[]
   channelID: string

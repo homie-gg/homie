@@ -11,6 +11,7 @@ const middleware = authMiddleware({
     '/api/slack/interaction',
     '/api/stripe/webhook',
     '/api/gitlab/webhook',
+    '/api/trello/webhook',
     '/api/demo/sample_response',
   ],
   // Routes that can always be accessed, and have

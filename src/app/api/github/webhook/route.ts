@@ -23,7 +23,7 @@ export const POST = async (request: NextRequest) => {
       payload: { issue, installation, repository },
     } = params
 
-    await dispatch('create_task_from_github_issue', {
+    await dispatch('create_homie_task_from_github_issue', {
       issue,
       repository,
       installation,
@@ -51,7 +51,7 @@ export const POST = async (request: NextRequest) => {
       payload: { issue, installation, repository },
     } = params
 
-    await dispatch('update_task_from_github_issue', {
+    await dispatch('update_homie_task_from_github_issue', {
       issue,
       installation,
       repository,

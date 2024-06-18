@@ -4,7 +4,7 @@ import { CreateGithubIssueFromSlack } from '@/queue/jobs'
 import { getMessageLink } from '@/lib/slack/get-message-link'
 import { summarizeTask } from '@/lib/ai/summarize-task'
 import { http } from '@/lib/http/client/http'
-import { findOrgWithSlackTeamId } from '@/lib/organization/get-org-with-slack-team-id'
+import { findOrgWithSlackTeamId } from '@/lib/organization/find-org-with-slack-team-id'
 import { getConversation } from '@/lib/slack/get-conversation'
 
 export async function handleCreateGithubIssueFromSlack(
