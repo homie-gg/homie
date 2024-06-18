@@ -1,10 +1,9 @@
+import { dbClient } from '@/database/client'
 import { verifyTrelloWebhook } from '@/lib/trello/verify-trello-webhook'
 import { dispatch } from '@/queue/default-queue'
 import { NextRequest, NextResponse } from 'next/server'
 
 export const POST = async (request: NextRequest) => {
-  // TODO: handle webhooks!
-  // - create task
   const data = await request.json()
   const isValid = verifyTrelloWebhook({
     data,
@@ -31,6 +30,12 @@ export const POST = async (request: NextRequest) => {
         card: action.data.card,
         list: action.data.list,
       })
+    }
+    case 'deleteCard': {
+      await dbClient
+        .deleteFrom('homie.task')
+        .where('ext_trello_card_id', '=', action.data.card.id)
+        .executeTakeFirst()
     }
     default:
       return NextResponse.json({})
