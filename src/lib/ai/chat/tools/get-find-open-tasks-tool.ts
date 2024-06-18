@@ -31,12 +31,7 @@ export function getFindOpenTasksTool(params: GetFindOpenTasksToolParams) {
         return 'No available tasks'
       }
 
-      return tasks
-        .map(
-          (task) =>
-            `Title: ${task.name} (url: ${task.html_url}) | Description: ${task.description} | Task ID: ${task.id}`,
-        )
-        .join('\n')
+      return JSON.stringify(tasks)
     },
   })
 }
