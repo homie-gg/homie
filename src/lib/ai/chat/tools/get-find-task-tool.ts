@@ -34,7 +34,7 @@ export function getFindTaskTool(params: GetFindTaskTool) {
         return 'Could not find task.'
       }
 
-      return `[${task.name}](${task.html_url}): ${task.description}`
+      return JSON.stringify(task)
     },
   })
 }

@@ -13,9 +13,16 @@ export const findOrgWithSlackTeamId = async (teamId: string) => {
       'github.organization.organization_id',
       'homie.organization.id',
     )
+    .leftJoin(
+      'trello.workspace',
+      'trello.workspace.organization_id',
+      'homie.organization.id',
+    )
     .select([
       'homie.organization.id',
       'ext_gh_install_id',
+      'trello_access_token',
+      'ext_trello_done_task_list_id',
       'slack_access_token',
       'ext_slack_bot_user_id',
       'has_unlimited_usage',

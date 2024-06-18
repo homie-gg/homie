@@ -2,7 +2,7 @@ import { createSlackClient } from '@/lib/slack/create-slack-client'
 import { createGithubClient } from '@/lib/github/create-github-client'
 import { AskSlackSelectGithubRepoForIssue } from '@/queue/jobs'
 import { http } from '@/lib/http/client/http'
-import { findOrgWithSlackTeamId } from '@/lib/organization/get-org-with-slack-team-id'
+import { findOrgWithSlackTeamId } from '@/lib/organization/find-org-with-slack-team-id'
 import { ModalView } from '@slack/bolt'
 
 export type CreateGithubIssueSelectedRepoMetadata = {
