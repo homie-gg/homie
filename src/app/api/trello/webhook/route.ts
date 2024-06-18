@@ -25,6 +25,13 @@ export const POST = async (request: NextRequest) => {
         card: action.data.card,
         list: action.data.list,
       })
+    case 'updateCard': {
+      await dispatch('update_homie_task_from_trello_task', {
+        board: action.data.board,
+        card: action.data.card,
+        list: action.data.list,
+      })
+    }
     default:
       return NextResponse.json({})
   }

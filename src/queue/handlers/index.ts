@@ -19,9 +19,10 @@ import { handleRefreshGitlabTokens } from '@/queue/handlers/handle-refresh-gitla
 import { handleReplySlackThread } from '@/queue/handlers/handle-reply-slack-thread'
 import { handleDispatchDebouncedJob } from '@/queue/handlers/handle-dispatch-debounced-job'
 import { handleImportGithubIssues } from '@/queue/handlers/handle-import-github-issues'
-import { handleUpdateTaskFromGithubIssue } from '@/queue/handlers/handle-update-task-from-github-issue'
 import { handleCreateHomieTaskFromTrelloTask } from '@/queue/handlers/handle-create-homie-task-from-trello-task'
 import { handleCreateHomieTaskFromGithubIssue } from '@/queue/handlers/handle-create-homie-task-from-github-issue'
+import { handleUpdateHomieTaskFromTrelloTask } from '@/queue/handlers/handle-update-homie-task-from-trello-task'
+import { handleUpdateHomieTaskFromGithubIssue } from '@/queue/handlers/handle-update-homie-task-from-github-issue'
 
 type HandlerFunc<TJob extends Job> = (job: TJob) => void | Promise<void>
 
@@ -32,11 +33,12 @@ type Handlers = {
 export const handlers: Handlers = {
   create_github_issue_from_slack: handleCreateGithubIssueFromSlack,
   create_homie_task_from_github_issue: handleCreateHomieTaskFromGithubIssue,
-  update_task_from_github_issue: handleUpdateTaskFromGithubIssue,
+  update_homie_task_from_github_issue: handleUpdateHomieTaskFromGithubIssue,
   ask_slack_select_github_repo_for_issue:
     handleAskSlackSelectGithubRepoForIssue,
   create_trello_task_from_slack: handleCreateTrelloTaskFromSlack,
   create_homie_task_from_trello_task: handleCreateHomieTaskFromTrelloTask,
+  update_homie_task_from_trello_task: handleUpdateHomieTaskFromTrelloTask,
   import_pull_requests: handleImportPullRequests,
   import_github_issues: handleImportGithubIssues,
   save_opened_pull_request: handleSaveOpenedPullRequest,
