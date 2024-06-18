@@ -24,18 +24,25 @@ export const POST = async (request: NextRequest) => {
         card: action.data.card,
         list: action.data.list,
       })
+
+      return NextResponse.json({})
     case 'updateCard': {
       await dispatch('update_homie_task_from_trello_task', {
         board: action.data.board,
         card: action.data.card,
         list: action.data.list,
+        updated_fields: Object.keys(action.data.old) as any, // untyped anyway
       })
+
+      return NextResponse.json({})
     }
     case 'deleteCard': {
       await dbClient
         .deleteFrom('homie.task')
         .where('ext_trello_card_id', '=', action.data.card.id)
         .executeTakeFirst()
+
+      return NextResponse.json({})
     }
     default:
       return NextResponse.json({})
