@@ -26,3 +26,9 @@ export interface TrelloWebhook {
   active: boolean
   consecutiveFailures: number
 }
+
+export interface TrelloMember {
+  id: string
+  username: string
+  fullName: string
+}

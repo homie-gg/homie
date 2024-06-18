@@ -214,7 +214,7 @@ export type UpdateHomieTaskFromTrelloTask = BullMQJob<
       id: string
       shortLink: string
       name: string
-      body: string
+      desc?: string
     }
   },
   void, // return type

@@ -56,6 +56,12 @@ declare module 'zapatos/schema' {
         */
         ext_slack_member_id: string | null;
         /**
+        * **homie.contributor.ext_trello_member_id**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        ext_trello_member_id: string | null;
+        /**
         * **homie.contributor.id**
         * - `int4` in database
         * - `NOT NULL`, default: `nextval('homie.contributor_id_seq'::regclass)`
@@ -105,6 +111,12 @@ declare module 'zapatos/schema' {
         * - Nullable, no default
         */
         ext_slack_member_id: string | null;
+        /**
+        * **homie.contributor.ext_trello_member_id**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        ext_trello_member_id: string | null;
         /**
         * **homie.contributor.id**
         * - `int4` in database
@@ -156,6 +168,12 @@ declare module 'zapatos/schema' {
         */
         ext_slack_member_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
         /**
+        * **homie.contributor.ext_trello_member_id**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        ext_trello_member_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        /**
         * **homie.contributor.id**
         * - `int4` in database
         * - `NOT NULL`, default: `nextval('homie.contributor_id_seq'::regclass)`
@@ -205,6 +223,12 @@ declare module 'zapatos/schema' {
         * - Nullable, no default
         */
         ext_slack_member_id?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
+        /**
+        * **homie.contributor.ext_trello_member_id**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        ext_trello_member_id?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
         /**
         * **homie.contributor.id**
         * - `int4` in database
@@ -256,6 +280,12 @@ declare module 'zapatos/schema' {
         */
         ext_slack_member_id?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
         /**
+        * **homie.contributor.ext_trello_member_id**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        ext_trello_member_id?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
+        /**
         * **homie.contributor.id**
         * - `int4` in database
         * - `NOT NULL`, default: `nextval('homie.contributor_id_seq'::regclass)`
@@ -280,7 +310,7 @@ declare module 'zapatos/schema' {
         */
         username?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
       }
-      export type UniqueIndex = 'contributor_ext_gh_user_id_key' | 'contributor_ext_gitlab_author_id_key' | 'contributor_pkey';
+      export type UniqueIndex = 'contributor_ext_gh_user_id_key' | 'contributor_ext_gitlab_author_id_key' | 'contributor_ext_trello_member_id_key' | 'contributor_pkey';
       export type Column = keyof Selectable;
       export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
       export type SQLExpression = Table | db.ColumnNames<Updatable | (keyof Updatable)[]> | db.ColumnValues<Updatable> | Whereable | Column | db.ParentColumn | db.GenericSQLExpression;
@@ -3686,12 +3716,6 @@ declare module 'zapatos/schema' {
         */
         ext_trello_new_task_list_id: string | null;
         /**
-        * **trello.workspace.ext_trello_webhook_id**
-        * - `text` in database
-        * - Nullable, no default
-        */
-        ext_trello_webhook_id: string | null;
-        /**
         * **trello.workspace.id**
         * - `int4` in database
         * - `NOT NULL`, default: `nextval('trello.workspace_id_seq'::regclass)`
@@ -3741,12 +3765,6 @@ declare module 'zapatos/schema' {
         * - Nullable, no default
         */
         ext_trello_new_task_list_id: string | null;
-        /**
-        * **trello.workspace.ext_trello_webhook_id**
-        * - `text` in database
-        * - Nullable, no default
-        */
-        ext_trello_webhook_id: string | null;
         /**
         * **trello.workspace.id**
         * - `int4` in database
@@ -3798,12 +3816,6 @@ declare module 'zapatos/schema' {
         */
         ext_trello_new_task_list_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
         /**
-        * **trello.workspace.ext_trello_webhook_id**
-        * - `text` in database
-        * - Nullable, no default
-        */
-        ext_trello_webhook_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
-        /**
         * **trello.workspace.id**
         * - `int4` in database
         * - `NOT NULL`, default: `nextval('trello.workspace_id_seq'::regclass)`
@@ -3854,12 +3866,6 @@ declare module 'zapatos/schema' {
         */
         ext_trello_new_task_list_id?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
         /**
-        * **trello.workspace.ext_trello_webhook_id**
-        * - `text` in database
-        * - Nullable, no default
-        */
-        ext_trello_webhook_id?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
-        /**
         * **trello.workspace.id**
         * - `int4` in database
         * - `NOT NULL`, default: `nextval('trello.workspace_id_seq'::regclass)`
@@ -3909,12 +3915,6 @@ declare module 'zapatos/schema' {
         * - Nullable, no default
         */
         ext_trello_new_task_list_id?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
-        /**
-        * **trello.workspace.ext_trello_webhook_id**
-        * - `text` in database
-        * - Nullable, no default
-        */
-        ext_trello_webhook_id?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
         /**
         * **trello.workspace.id**
         * - `int4` in database

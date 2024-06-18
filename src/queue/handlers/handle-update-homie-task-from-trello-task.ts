@@ -2,6 +2,7 @@ import { UpdateHomieTaskFromTrelloTask } from '@/queue/jobs'
 import { dbClient } from '@/database/client'
 import { classifyTask } from '@/lib/ai/clasify-task'
 import { taskStatus } from '@/lib/tasks'
+import { dispatch } from '@/queue/default-queue'
 
 export async function handleUpdateHomieTaskFromTrelloTask(
   job: UpdateHomieTaskFromTrelloTask,
@@ -39,12 +40,17 @@ export async function handleUpdateHomieTaskFromTrelloTask(
     .executeTakeFirst()
 
   if (!task) {
+    await dispatch('create_homie_task_from_trello_task', {
+      board,
+      card,
+      list,
+    })
     return
   }
 
   const { task_type_id, priority_level } = await classifyTask({
     title: card.name,
-    description: card.body,
+    description: card.desc ?? '',
   })
 
   const isDone = list.id === trelloWorkspace.ext_trello_done_task_list_id
@@ -53,7 +59,7 @@ export async function handleUpdateHomieTaskFromTrelloTask(
     .updateTable('homie.task')
     .set({
       name: card.name,
-      description: '',
+      description: card.desc,
       html_url: `https://trello.com/c/${card.shortLink}`,
       organization_id: organization.id,
       task_status_id: isDone ? taskStatus.done : taskStatus.open,

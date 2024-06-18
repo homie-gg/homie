@@ -19,11 +19,7 @@ export async function registerTrelloBoardWebhook(
   const trelloWorkspace = await dbClient
     .selectFrom('trello.workspace')
     .where('organization_id', '=', organization.id)
-    .select([
-      'ext_trello_board_id',
-      'trello_access_token',
-      'ext_trello_webhook_id',
-    ])
+    .select(['ext_trello_board_id', 'trello_access_token'])
     .executeTakeFirstOrThrow()
 
   if (!ext_trello_board_id) {

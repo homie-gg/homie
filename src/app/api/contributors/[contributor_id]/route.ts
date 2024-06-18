@@ -12,13 +12,15 @@ const contributor = z.object({
   username: z.string(),
   organization_id: z.number(),
   ext_slack_member_id: z.string().nullable(),
+  ext_trello_member_id: z.string().nullable(),
 })
 
 export const PATCH = createRoute(
   {
     routeParams: z.object({ contributor_id: z.string() }),
     body: z.object({
-      ext_slack_member_id: z.string(),
+      ext_slack_member_id: z.string().optional(),
+      ext_trello_member_id: z.string().optional(),
     }),
     response: z.object({ contributor }),
   },
@@ -37,6 +39,7 @@ export const PATCH = createRoute(
       .updateTable('homie.contributor')
       .set({
         ext_slack_member_id: request.body.ext_slack_member_id,
+        ext_trello_member_id: request.body.ext_trello_member_id,
       })
       .where('organization_id', '=', organization?.id)
       .where('id', '=', parseInt(request.routeParams.contributor_id))
