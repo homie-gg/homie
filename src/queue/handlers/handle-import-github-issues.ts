@@ -1,8 +1,7 @@
 import { dbClient } from '@/database/client'
 import { createGithubClient } from '@/lib/github/create-github-client'
 import { ImportGithubIssues } from '@/queue/jobs'
-import { createTaskFromGithubIssue } from '@/lib/github/create-task-from-github-issue'
-import { classifyTask } from '@/lib/ai/clasify-task'
+import { dispatch } from '@/queue/default-queue'
 
 export async function handleImportGithubIssues(job: ImportGithubIssues) {
   const { github_organization } = job.data
@@ -49,16 +48,19 @@ export async function handleImportGithubIssues(job: ImportGithubIssues) {
         continue
       }
 
-      const { task_type_id, priority_level } = await classifyTask({
-        title: issue.title,
-        description: issue.body ?? '',
-      })
+      if (issue.user === null || issue.user.name === null) {
+        continue
+      }
 
-      await createTaskFromGithubIssue({
+      if (!issue.user || !issue.user.name) {
+        continue
+      }
+
+      await dispatch('create_homie_task_from_github_issue', {
         issue,
-        task_type_id,
-        priority_level,
-        organization,
+        installation: {
+          id: github_organization.ext_gh_install_id,
+        },
         repository: repo,
       })
     }

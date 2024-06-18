@@ -2066,6 +2066,12 @@ declare module 'zapatos/schema' {
         */
         ext_gh_issue_number: number | null;
         /**
+        * **homie.task.ext_trello_card_id**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        ext_trello_card_id: string | null;
+        /**
         * **homie.task.github_repo_id**
         * - `int4` in database
         * - Nullable, no default
@@ -2163,6 +2169,12 @@ declare module 'zapatos/schema' {
         * - Nullable, no default
         */
         ext_gh_issue_number: number | null;
+        /**
+        * **homie.task.ext_trello_card_id**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        ext_trello_card_id: string | null;
         /**
         * **homie.task.github_repo_id**
         * - `int4` in database
@@ -2262,6 +2274,12 @@ declare module 'zapatos/schema' {
         */
         ext_gh_issue_number?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
         /**
+        * **homie.task.ext_trello_card_id**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        ext_trello_card_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        /**
         * **homie.task.github_repo_id**
         * - `int4` in database
         * - Nullable, no default
@@ -2359,6 +2377,12 @@ declare module 'zapatos/schema' {
         * - Nullable, no default
         */
         ext_gh_issue_number?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment;
+        /**
+        * **homie.task.ext_trello_card_id**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        ext_trello_card_id?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
         /**
         * **homie.task.github_repo_id**
         * - `int4` in database
@@ -2458,6 +2482,12 @@ declare module 'zapatos/schema' {
         */
         ext_gh_issue_number?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment>;
         /**
+        * **homie.task.ext_trello_card_id**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        ext_trello_card_id?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
+        /**
         * **homie.task.github_repo_id**
         * - `int4` in database
         * - Nullable, no default
@@ -2518,7 +2548,7 @@ declare module 'zapatos/schema' {
         */
         updated_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
       }
-      export type UniqueIndex = 'task_ext_gh_issue_id_key' | 'task_ext_gh_issue_number_key' | 'task_pkey';
+      export type UniqueIndex = 'task_ext_gh_issue_id_key' | 'task_ext_trello_card_id_key' | 'task_pkey';
       export type Column = keyof Selectable;
       export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
       export type SQLExpression = Table | db.ColumnNames<Updatable | (keyof Updatable)[]> | db.ColumnValues<Updatable> | Whereable | Column | db.ParentColumn | db.GenericSQLExpression;

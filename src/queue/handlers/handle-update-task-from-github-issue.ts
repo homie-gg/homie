@@ -34,7 +34,7 @@ export async function handleUpdateTaskFromGithubIssue(
     .executeTakeFirst()
 
   if (!task) {
-    await dispatch('create_task_from_github_issue', {
+    await dispatch('create_homie_task_from_github_issue', {
       issue,
       installation,
       repository,

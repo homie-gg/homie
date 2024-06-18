@@ -3,8 +3,8 @@ import { Job as BullMQJob, JobsOptions } from 'bullmq'
 import {
   PullRequest,
   InstallationLite,
-  Issue,
   Repository,
+  Issue,
 } from '@octokit/webhooks-types'
 
 export type AskSlackSelectGithubRepoForIssue = BullMQJob<
@@ -31,14 +31,37 @@ export type CreateGithubIssueFromSlack = BullMQJob<
   'create_github_issue_from_slack'
 >
 
-export type CreateTaskFromGithubIssue = BullMQJob<
+export type CreateHomieTaskFromGithubIssue = BullMQJob<
   {
-    issue: Issue
-    installation: InstallationLite | undefined
-    repository: Repository
+    issue: {
+      id: number
+      number: number
+      title: string
+      body?: string | null
+      user?: {
+        id: number
+        login?: string
+      } | null
+      html_url: string
+      assignees?:
+        | null
+        | {
+            login?: string | null
+            id: number
+          }[]
+    }
+    installation?: {
+      id: number
+    }
+    repository: {
+      name: string
+      full_name: string
+      html_url: string
+      id: number
+    }
   },
   void, // return type
-  'create_task_from_github_issue'
+  'create_homie_task_from_github_issue'
 >
 
 export type UpdateTaskFromGithubIssue = BullMQJob<
@@ -159,6 +182,24 @@ export type CreateTrelloTaskFromSlack = BullMQJob<
   },
   void, // return type
   'create_trello_task_from_slack'
+>
+
+export type CreateHomieTaskFromTrelloTask = BullMQJob<
+  {
+    board: {
+      id: string
+    }
+    list: {
+      id: string
+    }
+    card: {
+      id: string
+      shortLink: string
+      name: string
+    }
+  },
+  void, // return type
+  'create_homie_task_from_trello_task'
 >
 
 export type ImportGitlabProjects = BullMQJob<
@@ -282,7 +323,7 @@ export type DispatchDebouncedJob = BullMQJob<
 
 export type Job =
   | CreateGithubIssueFromSlack
-  | CreateTaskFromGithubIssue
+  | CreateHomieTaskFromGithubIssue
   | UpdateTaskFromGithubIssue
   | AskSlackSelectGithubRepoForIssue
   | ImportPullRequests
@@ -296,6 +337,7 @@ export type Job =
   | SendPullRequestSummaries
   | SendPullRequestSummariesToOrganization
   | CreateTrelloTaskFromSlack
+  | CreateHomieTaskFromTrelloTask
   | ImportGitlabProjects
   | ImportGitlabMergeRequests
   | SaveMergedMergeRequest
