@@ -1,4 +1,3 @@
-import { NextRequest } from 'next/server'
 import crypto from 'node:crypto'
 
 interface VerifyTrelloWebhookParams {

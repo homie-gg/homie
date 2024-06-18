@@ -20,7 +20,6 @@ export const POST = async (request: NextRequest) => {
 
   switch (action.type) {
     case 'createCard':
-      console.log('create: ', action.data)
       await dispatch('create_homie_task_from_trello_task', {
         board: action.data.board,
         card: action.data.card,
