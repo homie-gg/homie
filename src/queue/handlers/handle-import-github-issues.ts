@@ -52,7 +52,7 @@ export async function handleImportGithubIssues(job: ImportGithubIssues) {
         continue
       }
 
-      if (!issue.user || !issue.user.name) {
+      if (!issue.user || !issue.user.login) {
         continue
       }
 
