@@ -6,6 +6,8 @@ import { summarizeTask } from '@/lib/ai/summarize-task'
 import { http } from '@/lib/http/client/http'
 import { findOrgWithSlackTeamId } from '@/lib/organization/find-org-with-slack-team-id'
 import { getConversation } from '@/lib/slack/get-conversation'
+import { getIsOverPlanContributorLimit } from '@/lib/billing/get-is-over-plan-contributor-limit'
+import { getOverContributorLimitMessage } from '@/lib/billing/get-over-contributor-limit-message'
 
 export async function handleCreateGithubIssueFromSlack(
   job: CreateGithubIssueFromSlack,
@@ -37,6 +39,16 @@ export async function handleCreateGithubIssueFromSlack(
   }
 
   const slackClient = createSlackClient(organization.slack_access_token)
+
+  if (await getIsOverPlanContributorLimit({ organization })) {
+    await slackClient.post('chat.postMessage', {
+      channel: channel_id,
+      thread_ts: target_message_ts,
+      text: getOverContributorLimitMessage(),
+    })
+
+    return
+  }
 
   const messages = await getConversation({
     slackClient,

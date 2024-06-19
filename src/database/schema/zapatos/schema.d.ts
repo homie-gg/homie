@@ -841,6 +841,12 @@ declare module 'zapatos/schema' {
          */
         id: number
         /**
+         * **homie.organization.is_over_plan_contributor_limit**
+         * - `bool` in database
+         * - Nullable, default: `false`
+         */
+        is_over_plan_contributor_limit: boolean | null
+        /**
          * **homie.organization.is_persona_enabled**
          * - `bool` in database
          * - `NOT NULL`, default: `false`
@@ -932,6 +938,12 @@ declare module 'zapatos/schema' {
          * - `NOT NULL`, default: `nextval('homie.organization_id_seq'::regclass)`
          */
         id: number
+        /**
+         * **homie.organization.is_over_plan_contributor_limit**
+         * - `bool` in database
+         * - Nullable, default: `false`
+         */
+        is_over_plan_contributor_limit: boolean | null
         /**
          * **homie.organization.is_persona_enabled**
          * - `bool` in database
@@ -1066,6 +1078,20 @@ declare module 'zapatos/schema' {
           | db.SQLFragment<
               any,
               number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.organization.is_over_plan_contributor_limit**
+         * - `bool` in database
+         * - Nullable, default: `false`
+         */
+        is_over_plan_contributor_limit?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn
             >
         /**
          * **homie.organization.is_persona_enabled**
@@ -1257,6 +1283,17 @@ declare module 'zapatos/schema' {
          */
         id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment
         /**
+         * **homie.organization.is_over_plan_contributor_limit**
+         * - `bool` in database
+         * - Nullable, default: `false`
+         */
+        is_over_plan_contributor_limit?:
+          | boolean
+          | db.Parameter<boolean>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
          * **homie.organization.is_persona_enabled**
          * - `bool` in database
          * - `NOT NULL`, default: `false`
@@ -1436,6 +1473,25 @@ declare module 'zapatos/schema' {
           | db.SQLFragment<
               any,
               number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **homie.organization.is_over_plan_contributor_limit**
+         * - `bool` in database
+         * - Nullable, default: `false`
+         */
+        is_over_plan_contributor_limit?:
+          | boolean
+          | db.Parameter<boolean>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | boolean
+              | db.Parameter<boolean>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
             >
         /**
          * **homie.organization.is_persona_enabled**
@@ -1901,7 +1957,7 @@ declare module 'zapatos/schema' {
               | db.SQLFragment
             >
       }
-      export type UniqueIndex = 'plan_pkey'
+      export type UniqueIndex = 'plan_ext_stripe_price_id_key' | 'plan_pkey'
       export type Column = keyof Selectable
       export type OnlyCols<T extends readonly Column[]> = Pick<
         Selectable,
@@ -2927,6 +2983,12 @@ declare module 'zapatos/schema' {
          */
         plan_id: number
         /**
+         * **homie.subscription.quantity**
+         * - `int4` in database
+         * - `NOT NULL`, default: `1`
+         */
+        quantity: number
+        /**
          * **homie.subscription.stripe_status**
          * - `text` in database
          * - `NOT NULL`, no default
@@ -2988,6 +3050,12 @@ declare module 'zapatos/schema' {
          * - `NOT NULL`, no default
          */
         plan_id: number
+        /**
+         * **homie.subscription.quantity**
+         * - `int4` in database
+         * - `NOT NULL`, default: `1`
+         */
+        quantity: number
         /**
          * **homie.subscription.stripe_status**
          * - `text` in database
@@ -3113,6 +3181,20 @@ declare module 'zapatos/schema' {
               number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
             >
         /**
+         * **homie.subscription.quantity**
+         * - `int4` in database
+         * - `NOT NULL`, default: `1`
+         */
+        quantity?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
          * **homie.subscription.stripe_status**
          * - `text` in database
          * - `NOT NULL`, no default
@@ -3216,6 +3298,16 @@ declare module 'zapatos/schema' {
          * - `NOT NULL`, no default
          */
         plan_id: number | db.Parameter<number> | db.SQLFragment
+        /**
+         * **homie.subscription.quantity**
+         * - `int4` in database
+         * - `NOT NULL`, default: `1`
+         */
+        quantity?:
+          | number
+          | db.Parameter<number>
+          | db.DefaultType
+          | db.SQLFragment
         /**
          * **homie.subscription.stripe_status**
          * - `text` in database
@@ -3335,6 +3427,20 @@ declare module 'zapatos/schema' {
           | db.Parameter<number>
           | db.SQLFragment
           | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
+        /**
+         * **homie.subscription.quantity**
+         * - `int4` in database
+         * - `NOT NULL`, default: `1`
+         */
+        quantity?:
+          | number
+          | db.Parameter<number>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+            >
         /**
          * **homie.subscription.stripe_status**
          * - `text` in database

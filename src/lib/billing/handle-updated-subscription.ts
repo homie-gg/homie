@@ -39,6 +39,7 @@ export async function handleUpdatedSubscription(
   )
 
   const priceId = stripeSubscription.items.data[0].price.id
+  const quantity = stripeSubscription.items.data[0].quantity
 
   const plan = await dbClient
     .selectFrom('homie.plan')
@@ -71,6 +72,7 @@ export async function handleUpdatedSubscription(
       ends_at: stripeSubscription.cancel_at
         ? new Date(stripeSubscription.cancel_at * 1000)
         : null,
+      quantity,
     })
     .onConflict((oc) =>
       oc.column('organization_id').doUpdateSet({
@@ -83,6 +85,7 @@ export async function handleUpdatedSubscription(
           ? new Date(stripeSubscription.cancel_at * 1000)
           : null,
         plan_id: plan.id,
+        quantity,
       }),
     )
     .executeTakeFirst()

@@ -4,6 +4,7 @@ import { getPullRequestLogData } from '@/lib/github/get-pull-request-log-data'
 import { logger } from '@/lib/log/logger'
 import { SaveOpenedPullRequest } from '@/queue/jobs'
 import { parseISO } from 'date-fns'
+import { getIsOverPlanContributorLimit } from '@/lib/billing/get-is-over-plan-contributor-limit'
 
 export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
   const { pull_request, installation } = job.data
@@ -41,6 +42,17 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
       event: 'save_opened_pull_request.missing_organization',
       data: {
         pull_request: getPullRequestLogData(pull_request),
+      },
+    })
+    return
+  }
+
+  if (await getIsOverPlanContributorLimit({ organization })) {
+    logger.debug('org over plan limit', {
+      event: 'save_opened_pull_request.org_over_plan_limit',
+      data: {
+        pull_request: getPullRequestLogData(pull_request),
+        organization: getOrganizationLogData(organization),
       },
     })
     return
