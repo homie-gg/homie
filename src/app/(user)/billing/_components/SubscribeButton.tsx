@@ -41,6 +41,8 @@ export default function SubscribeButton(props: SubscribeButtonProps) {
 
       stripe.redirectToCheckout({ sessionId: ext_stripe_session_id })
     } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error)
       captureException(error)
     }
 

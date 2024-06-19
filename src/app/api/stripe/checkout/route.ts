@@ -44,6 +44,11 @@ export const POST = createRoute(
         {
           price: body.price_id,
           quantity: 1,
+          adjustable_quantity: {
+            enabled: true,
+            minimum: 1,
+            maximum: 1000,
+          },
         },
       ],
       cancel_url: body.cancel_url,

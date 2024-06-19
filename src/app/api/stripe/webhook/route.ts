@@ -46,8 +46,8 @@ export const POST = async (request: NextRequest) => {
     case 'customer.subscription.deleted':
       const subscription = event.data.object as Stripe.Subscription
       await handleUpdatedSubscription({
-        ext_stripe_subscription_id: subscription.id,
         ext_stripe_customer_id: subscription.customer as string,
+        ext_stripe_subscription_id: subscription.id,
       })
       break
     case 'checkout.session.completed':

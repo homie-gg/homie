@@ -1901,7 +1901,7 @@ declare module 'zapatos/schema' {
               | db.SQLFragment
             >
       }
-      export type UniqueIndex = 'plan_pkey'
+      export type UniqueIndex = 'plan_ext_stripe_price_id_key' | 'plan_pkey'
       export type Column = keyof Selectable
       export type OnlyCols<T extends readonly Column[]> = Pick<
         Selectable,
@@ -2927,6 +2927,12 @@ declare module 'zapatos/schema' {
          */
         plan_id: number
         /**
+         * **homie.subscription.quantity**
+         * - `int4` in database
+         * - `NOT NULL`, default: `1`
+         */
+        quantity: number
+        /**
          * **homie.subscription.stripe_status**
          * - `text` in database
          * - `NOT NULL`, no default
@@ -2988,6 +2994,12 @@ declare module 'zapatos/schema' {
          * - `NOT NULL`, no default
          */
         plan_id: number
+        /**
+         * **homie.subscription.quantity**
+         * - `int4` in database
+         * - `NOT NULL`, default: `1`
+         */
+        quantity: number
         /**
          * **homie.subscription.stripe_status**
          * - `text` in database
@@ -3113,6 +3125,20 @@ declare module 'zapatos/schema' {
               number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
             >
         /**
+         * **homie.subscription.quantity**
+         * - `int4` in database
+         * - `NOT NULL`, default: `1`
+         */
+        quantity?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
          * **homie.subscription.stripe_status**
          * - `text` in database
          * - `NOT NULL`, no default
@@ -3216,6 +3242,16 @@ declare module 'zapatos/schema' {
          * - `NOT NULL`, no default
          */
         plan_id: number | db.Parameter<number> | db.SQLFragment
+        /**
+         * **homie.subscription.quantity**
+         * - `int4` in database
+         * - `NOT NULL`, default: `1`
+         */
+        quantity?:
+          | number
+          | db.Parameter<number>
+          | db.DefaultType
+          | db.SQLFragment
         /**
          * **homie.subscription.stripe_status**
          * - `text` in database
@@ -3335,6 +3371,20 @@ declare module 'zapatos/schema' {
           | db.Parameter<number>
           | db.SQLFragment
           | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
+        /**
+         * **homie.subscription.quantity**
+         * - `int4` in database
+         * - `NOT NULL`, default: `1`
+         */
+        quantity?:
+          | number
+          | db.Parameter<number>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+            >
         /**
          * **homie.subscription.stripe_status**
          * - `text` in database
