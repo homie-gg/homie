@@ -59,7 +59,7 @@
     "@stripe/stripe-js": "^3.3.0",
     "@tanstack/react-table": "^8.15.0",
     "@tryfabric/mack": "^1.2.1",
-    "@types/mdx": "^2.0.13",
+    "asana": "^3.0.7",
     "bullmq": "^5.4.6",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",

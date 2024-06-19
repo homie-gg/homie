@@ -327,6 +327,12 @@ export type RefreshGitlabTokens = BullMQJob<
   'refresh_gitlab_tokens'
 >
 
+export type RefreshAsanaTokens = BullMQJob<
+  null,
+  void, // return type
+  'refresh_asana_tokens'
+>
+
 export type DispatchDebouncedJob = BullMQJob<
   {
     job: {
@@ -368,4 +374,5 @@ export type Job =
   | GenerateOpenMergeRequestSummary
   | SaveOpenedMergeRequest
   | RefreshGitlabTokens
+  | RefreshAsanaTokens
   | DispatchDebouncedJob
