@@ -4,6 +4,8 @@ import { findOrgWithSlackTeamId } from '@/lib/organization/find-org-with-slack-t
 import { getAnswer } from '@/lib/ai/chat/get-answer'
 import { getTextReplies } from '@/lib/slack/get-text-replies'
 import { formatAnswer } from '@/lib/slack/format-answer'
+import { getIsOverPlanContributorLimit } from '@/lib/billing/get-is-over-plan-contributor-limit'
+import { getOverContributorLimitMessage } from '@/lib/billing/get-over-contributor-limit-message'
 
 export async function handleReplySlackMention(job: ReplySlackMention) {
   const { channel_id, target_message_ts, text, team_id, thread_ts } = job.data
@@ -14,6 +16,16 @@ export async function handleReplySlackMention(job: ReplySlackMention) {
   }
 
   const slackClient = createSlackClient(organization.slack_access_token)
+
+  if (await getIsOverPlanContributorLimit({ organization })) {
+    await slackClient.post('chat.postMessage', {
+      channel: channel_id,
+      thread_ts: target_message_ts,
+      text: getOverContributorLimitMessage(),
+    })
+
+    return
+  }
 
   // Remove any unecessary info, eg. bot user ids
   const input = text

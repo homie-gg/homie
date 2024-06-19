@@ -6,6 +6,7 @@ import { parseISO } from 'date-fns'
 import { getMergeRequestLogData } from '@/lib/gitlab/get-merge-request-log-data'
 import { getProjectLogData } from '@/lib/gitlab/get-project-log-data'
 import { createGitlabClient } from '@/lib/gitlab/create-gitlab-client'
+import { getIsOverPlanContributorLimit } from '@/lib/billing/get-is-over-plan-contributor-limit'
 
 export async function handleSaveOpenedMergeRequest(
   job: SaveOpenedMergeRequest,
@@ -37,6 +38,18 @@ export async function handleSaveOpenedMergeRequest(
       },
     })
 
+    return
+  }
+
+  if (await getIsOverPlanContributorLimit({ organization })) {
+    logger.debug('org over plan limit', {
+      event: 'save_opened_merge_request.org_over_plan_limit',
+      data: {
+        project: getProjectLogData(project),
+        merge_request: getMergeRequestLogData(merge_request),
+        organization: getOrganizationLogData(organization),
+      },
+    })
     return
   }
 

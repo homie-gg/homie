@@ -1,4 +1,6 @@
 import { dbClient } from '@/database/client'
+import { getIsOverPlanContributorLimit } from '@/lib/billing/get-is-over-plan-contributor-limit'
+import { getOverContributorLimitMessage } from '@/lib/billing/get-over-contributor-limit-message'
 import { createGitlabClient } from '@/lib/gitlab/create-gitlab-client'
 import { getLinkedIssuesAndTasksInMergeRequest } from '@/lib/gitlab/get-linked-issues-and-tasks-in-merge-request'
 import { getMergeRequestLogData } from '@/lib/gitlab/get-merge-request-log-data'
@@ -34,6 +36,21 @@ export async function handleGenerateOpenMergeRequestSummary(
   }
 
   const gitlab = createGitlabClient(organization.gitlab_access_token)
+
+  if (await getIsOverPlanContributorLimit({ organization })) {
+    await gitlab.MergeRequests.edit(
+      project.ext_gitlab_project_id,
+      merge_request.iid,
+      {
+        description: merge_request.description?.replace(
+          summaryKey,
+          getOverContributorLimitMessage(),
+        ),
+      },
+    )
+
+    return
+  }
 
   const issue = await getLinkedIssuesAndTasksInMergeRequest({
     mergeRequest: merge_request,

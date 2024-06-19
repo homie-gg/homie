@@ -4,6 +4,7 @@ import { getOrganizationLogData } from '@/lib/organization/get-organization-log-
 import { getPullRequestLogData } from '@/lib/github/get-pull-request-log-data'
 import { logger } from '@/lib/log/logger'
 import { SaveMergedPullRequest } from '@/queue/jobs'
+import { getIsOverPlanContributorLimit } from '@/lib/billing/get-is-over-plan-contributor-limit'
 
 export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
   const { pull_request, installation } = job.data
@@ -47,6 +48,17 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
       event: 'save_merged_pull_request.missing_organization',
       data: {
         pull_request: getPullRequestLogData(pull_request),
+      },
+    })
+    return
+  }
+
+  if (await getIsOverPlanContributorLimit({ organization })) {
+    logger.debug('org over plan contributor limit', {
+      event: 'save_merged_merge_request.org_over_plan_limit',
+      data: {
+        pull_request: getPullRequestLogData(pull_request),
+        organization: getOrganizationLogData(organization),
       },
     })
     return

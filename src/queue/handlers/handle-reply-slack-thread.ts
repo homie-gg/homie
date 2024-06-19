@@ -4,6 +4,8 @@ import { findOrgWithSlackTeamId } from '@/lib/organization/find-org-with-slack-t
 import { getTextReplies } from '@/lib/slack/get-text-replies'
 import { getAnswer } from '@/lib/ai/chat/get-answer'
 import { formatAnswer } from '@/lib/slack/format-answer'
+import { getIsOverPlanContributorLimit } from '@/lib/billing/get-is-over-plan-contributor-limit'
+import { getOverContributorLimitMessage } from '@/lib/billing/get-over-contributor-limit-message'
 
 export async function handleReplySlackThread(job: ReplySlackThread) {
   const {
@@ -25,6 +27,17 @@ export async function handleReplySlackThread(job: ReplySlackThread) {
   }
 
   const slackClient = createSlackClient(organization.slack_access_token)
+
+  if (await getIsOverPlanContributorLimit({ organization })) {
+    await slackClient.post('chat.postMessage', {
+      channel: channel_id,
+      thread_ts: target_message_ts,
+      text: getOverContributorLimitMessage(),
+    })
+
+    return
+  }
+
   const threadMessages = await getTextReplies({
     channelID: channel_id,
     messageTS: thread_ts,

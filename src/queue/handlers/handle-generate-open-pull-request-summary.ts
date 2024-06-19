@@ -3,6 +3,8 @@ import { dbClient } from '@/database/client'
 import { createGithubClient } from '@/lib/github/create-github-client'
 import { GenerateOpenPullRequestSummary } from '@/queue/jobs'
 import { getLinkedIssuesAndTasksInPullRequest } from '@/lib/github/get-linked-issues-and-tasks-in-pull-request'
+import { getIsOverPlanContributorLimit } from '@/lib/billing/get-is-over-plan-contributor-limit'
+import { getOverContributorLimitMessage } from '@/lib/billing/get-over-contributor-limit-message'
 
 /**
  * homie will replace this string inside a PR body with a generated summary.
@@ -44,6 +46,19 @@ export async function handleGenerateOpenPullRequestSummary(
   })
 
   const owner = pull_request.base.repo.full_name.split('/')[0]
+
+  if (await getIsOverPlanContributorLimit({ organization })) {
+    await github.rest.pulls.update({
+      owner,
+      repo: pull_request.base.repo.name,
+      pull_number: pull_request.number,
+      body: pull_request.body?.replace(
+        summaryKey,
+        getOverContributorLimitMessage(),
+      ),
+    })
+    return
+  }
 
   const issue = await getLinkedIssuesAndTasksInPullRequest({
     pullRequest: pull_request,

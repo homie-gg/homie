@@ -1,4 +1,5 @@
 import { dbClient } from '@/database/client'
+import { getIsOverPlanContributorLimit } from '@/lib/billing/get-is-over-plan-contributor-limit'
 import { createGitlabClient } from '@/lib/gitlab/create-gitlab-client'
 import { getMergeRequestLogData } from '@/lib/gitlab/get-merge-request-log-data'
 import { saveMergedMergeRequest } from '@/lib/gitlab/save-merged-merge-request'
@@ -35,6 +36,17 @@ export async function handleSaveMergedMergeRequest(
       },
     })
 
+    return
+  }
+
+  if (await getIsOverPlanContributorLimit({ organization })) {
+    logger.debug('org over plan contributor limit', {
+      event: 'save_merged_merge_request.org_over_plan_limit',
+      data: {
+        merge_request: getMergeRequestLogData(merge_request),
+        organization: getOrganizationLogData(organization),
+      },
+    })
     return
   }
 
