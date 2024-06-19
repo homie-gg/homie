@@ -46,7 +46,7 @@ export const POST = createRoute(
           quantity: 1,
           adjustable_quantity: {
             enabled: true,
-            minimum: 1,
+            minimum: 4,
             maximum: 1000,
           },
         },
