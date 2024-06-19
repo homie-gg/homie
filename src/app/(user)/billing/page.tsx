@@ -56,8 +56,39 @@ async function Content() {
       <>
         <p className="mb-8">Pick a plan to unlock more features</p>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-3 gap-8">
           <Card>
+            <CardHeader>
+              <CardTitle className="flex item-center justify-between">
+                Free
+              </CardTitle>
+              <div>
+                <span className="text-3xl font-bold">$0</span>
+                <span className="text-muted-foreground">
+                  {' '}
+                  / contributor / month
+                </span>
+              </div>
+            </CardHeader>
+
+            <CardContent>
+              <div className="space-y-4 mb-4">
+                {plans
+                  .find((plan) => plan.title === 'Free')
+                  ?.benefitList.map((benefit: string) => (
+                    <span key={benefit} className="flex">
+                      <Check className="text-green-500" />{' '}
+                      <h3 className="ml-2">{benefit}</h3>
+                    </span>
+                  ))}
+              </div>
+              <Button disabled className="w-full" variant="outline">
+                Current Plan
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="flex flex-col">
             <CardHeader>
               <CardTitle className="flex item-center justify-between">
                 Team
@@ -65,12 +96,13 @@ async function Content() {
               <div>
                 <span className="text-3xl font-bold">$15</span>
                 <span className="text-muted-foreground">
+                  {' '}
                   / contributor / month
                 </span>
               </div>
             </CardHeader>
 
-            <CardContent>
+            <CardContent className="flex-1 flex flex-col justify-between">
               <div className="space-y-4 mb-4">
                 {plans
                   .find((plan) => plan.title === 'Team')
@@ -85,7 +117,7 @@ async function Content() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="flex flex-col">
             <CardHeader>
               <CardTitle className="flex item-center justify-between">
                 Enterprise
@@ -93,12 +125,13 @@ async function Content() {
               <div>
                 <span className="text-3xl font-bold">$30</span>
                 <span className="text-muted-foreground">
-                  /contributor / month
+                  {' '}
+                  / contributor / month
                 </span>
               </div>
             </CardHeader>
 
-            <CardContent>
+            <CardContent className="flex-1 flex flex-col justify-between">
               <div className="space-y-4 mb-4">
                 {plans
                   .find((plan) => plan.title === 'Enterprise')
@@ -115,6 +148,10 @@ async function Content() {
             </CardContent>
           </Card>
         </div>
+
+        <em className="mt-8 text-center block">
+          Features marked with an asterisk (*) are coming very soon.
+        </em>
       </>
     )
   }

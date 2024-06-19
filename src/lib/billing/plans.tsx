@@ -35,8 +35,7 @@ export const plans: Plan[] = [
       'Save hundreds of engineer-hours each month. Boost developer & manager well-being.',
     buttonText: 'Subscribe',
     benefitList: [
-      'Up to 10 contributors',
-      'Learn Slack conversations*',
+      'More than 3 Contributors',
       'More app integration*',
       'Sync to Notion*',
       'Custom reminders*',
