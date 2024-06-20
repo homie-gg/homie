@@ -31,7 +31,7 @@ export async function searchGeneralContext(
 
   const model = createOpenAIClient({
     temperature: 0,
-    model: 'gpt-4o',
+    model: 'gpt-3.5-turbo',
   })
 
   return model.invoke(input)
