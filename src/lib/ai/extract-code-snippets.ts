@@ -11,7 +11,7 @@ export async function extractCodeSnippets(params: ExtractCodeSnippetsParams) {
 
   const model = createOpenAIClient({
     temperature: 0,
-    modelName: 'gpt-4o',
+    modelName: 'gpt-3.5-turbo',
   })
 
   const promptTemplate = new PromptTemplate({
