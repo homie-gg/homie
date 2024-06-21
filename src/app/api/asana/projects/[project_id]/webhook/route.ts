@@ -2,19 +2,17 @@ import { dbClient } from '@/database/client'
 import { createRoute } from '@/lib/http/server/create-route'
 import {
   BadRequestException,
-  NotFoundException,
   UnauthorizedException,
 } from '@/lib/http/server/exceptions'
-import { auth } from '@clerk/nextjs'
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
-import crypto, { sign } from 'node:crypto'
+import crypto from 'node:crypto'
 import { AsanaWebhookEvent } from '@/lib/asana/types'
 
 export const POST = createRoute(
   {
     body: z.object({
-      events: z.array(z.any()),
+      events: z.array(z.any()).optional(),
     }),
     routeParams: z.object({
       project_id: z.string(),
@@ -75,6 +73,10 @@ export const POST = createRoute(
 
     if (!isValidRequest) {
       throw new UnauthorizedException()
+    }
+
+    if (!request.body.events) {
+      return NextResponse.json({})
     }
 
     await Promise.all(

@@ -2,8 +2,6 @@ import { dbClient } from '@/database/client'
 import { getUserOrganization } from '@/lib/auth/get-user-organization'
 import { redirect } from 'next/navigation'
 import InstallAsanaPage from '@/app/(user)/settings/asana/_components/InstallAsanaPage'
-import * as Asana from 'asana'
-import { createAsanaClient } from '@/lib/asana/create-asana-client'
 import AsanaProjectsList from '@/app/(user)/settings/asana/_components/AsanaProjectsList'
 
 export default async function AsanaSettingsContent() {

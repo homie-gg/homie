@@ -3,6 +3,7 @@ import { verifySlackRequest } from '@/lib/slack/verify-slack-request'
 import { SlackShortcut, ViewSubmitAction } from '@slack/bolt'
 import { dispatch } from '@/queue/default-queue'
 import { CreateGithubIssueSelectedRepoMetadata } from '@/queue/handlers/handle-ask-slack-select-github-repo-for-issue'
+import { CreateAsanaTaskSelectedRepoMetadata } from '@/queue/handlers/handle-ask-slack-select-asana-project-for-task'
 
 export const POST = async (request: NextRequest) => {
   const isValidRequest = verifySlackRequest({
@@ -70,6 +71,40 @@ export const POST = async (request: NextRequest) => {
       channel_id: shortcut.channel.id,
       target_message_ts: shortcut.message.ts,
       response_url: shortcut.response_url,
+    })
+  }
+
+  if (
+    shortcut.type === 'message_action' &&
+    shortcut.callback_id === 'asana_task_create:start'
+  ) {
+    await dispatch('ask_slack_select_asana_project_for_task', {
+      team_id: shortcut.team.id,
+      trigger_id: shortcut.trigger_id,
+      channel_id: shortcut.channel.id,
+      target_message_ts: shortcut.message.ts,
+      response_url: shortcut.response_url,
+    })
+  }
+
+  if (
+    shortcut.type === 'view_submission' &&
+    shortcut.view.callback_id === 'asana_task_create:selected_project'
+  ) {
+    const data: CreateAsanaTaskSelectedRepoMetadata = JSON.parse(
+      shortcut.view.private_metadata,
+    )
+
+    const project_id =
+      shortcut.view.state.values['select_project_block']['project_id']
+        .selected_option?.value ?? null
+
+    await dispatch('create_asana_task_from_slack', {
+      team_id: data.team_id,
+      target_message_ts: data.target_message_ts,
+      channel_id: data.channel_id,
+      response_url: data.response_url,
+      project_id,
     })
   }
 

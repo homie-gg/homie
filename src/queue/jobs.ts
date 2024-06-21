@@ -358,6 +358,30 @@ export type RefreshAsanaTokens = BullMQJob<
   'refresh_asana_tokens'
 >
 
+export type CreateAsanaTaskFromSlack = BullMQJob<
+  {
+    team_id: string
+    channel_id: string
+    target_message_ts: string
+    response_url: string
+    project_id: string | null
+  },
+  void, // return type
+  'create_asana_task_from_slack'
+>
+
+export type AskSlackSelectAsanaProjectForTask = BullMQJob<
+  {
+    team_id: string
+    trigger_id: string
+    channel_id: string
+    target_message_ts: string
+    response_url: string
+  },
+  void, // return type
+  'ask_slack_select_asana_project_for_task'
+>
+
 export type DispatchDebouncedJob = BullMQJob<
   {
     job: {
@@ -401,5 +425,7 @@ export type Job =
   | RefreshGitlabTokens
   | ImportAsanaProjects
   | ImportAsanaTasks
+  | AskSlackSelectAsanaProjectForTask
+  | CreateAsanaTaskFromSlack
   | RefreshAsanaTokens
   | DispatchDebouncedJob
