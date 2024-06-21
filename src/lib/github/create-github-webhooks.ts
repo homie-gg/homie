@@ -124,5 +124,7 @@ export const createGithubWebhooks = () => {
     }
   })
 
-  return app.webhooks
+  webhooks = app.webhooks
+
+  return webhooks
 }
