@@ -21,7 +21,7 @@ export async function handleRefreshAsanaTokens() {
       const data = new FormData()
       data.append('grant_type', 'refresh_token')
       data.append('client_id', process.env.ASANA_CLIENT_ID!)
-      data.append('client_secret', process.env.CLIENT_SECRET!)
+      data.append('client_secret', process.env.ASANA_CLIENT_SECRET!)
       data.append('refresh_token', asanaAppUser.asana_refresh_token)
 
       const { access_token, refresh_token } =

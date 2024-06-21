@@ -327,6 +327,31 @@ export type RefreshGitlabTokens = BullMQJob<
   'refresh_gitlab_tokens'
 >
 
+export type ImportAsanaProjects = BullMQJob<
+  {
+    organization: {
+      id: number
+      asana_access_token: string
+    }
+  },
+  void,
+  'import_asana_projects'
+>
+
+export type ImportAsanaTasks = BullMQJob<
+  {
+    organization: {
+      id: number
+      asana_access_token: string
+    }
+    project: {
+      ext_asana_project_id: string
+    }
+  },
+  void,
+  'import_asana_tasks'
+>
+
 export type RefreshAsanaTokens = BullMQJob<
   null,
   void, // return type
@@ -374,5 +399,7 @@ export type Job =
   | GenerateOpenMergeRequestSummary
   | SaveOpenedMergeRequest
   | RefreshGitlabTokens
+  | ImportAsanaProjects
+  | ImportAsanaTasks
   | RefreshAsanaTokens
   | DispatchDebouncedJob

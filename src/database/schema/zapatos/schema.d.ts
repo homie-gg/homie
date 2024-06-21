@@ -4762,22 +4762,345 @@ declare module 'zapatos/schema' {
       export type SQL = SQLExpression | SQLExpression[];
     }
   
+    /**
+     * **asana.project**
+     * - Table in database
+     */
+    export namespace project {
+      export type Table = 'asana.project';
+      export interface Selectable {
+        /**
+        * **asana.project.asana_webhook_secret**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        asana_webhook_secret: string | null;
+        /**
+        * **asana.project.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at: Date;
+        /**
+        * **asana.project.enabled**
+        * - `bool` in database
+        * - `NOT NULL`, default: `false`
+        */
+        enabled: boolean;
+        /**
+        * **asana.project.ext_asana_project_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_asana_project_id: string;
+        /**
+        * **asana.project.ext_asana_webhook_id**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        ext_asana_webhook_id: string | null;
+        /**
+        * **asana.project.has_completed_setup**
+        * - `bool` in database
+        * - `NOT NULL`, default: `false`
+        */
+        has_completed_setup: boolean;
+        /**
+        * **asana.project.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('asana.project_id_seq'::regclass)`
+        */
+        id: number;
+        /**
+        * **asana.project.name**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        name: string;
+        /**
+        * **asana.project.organization_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id: number;
+        /**
+        * **asana.project.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at: Date;
+      }
+      export interface JSONSelectable {
+        /**
+        * **asana.project.asana_webhook_secret**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        asana_webhook_secret: string | null;
+        /**
+        * **asana.project.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at: db.TimestampTzString;
+        /**
+        * **asana.project.enabled**
+        * - `bool` in database
+        * - `NOT NULL`, default: `false`
+        */
+        enabled: boolean;
+        /**
+        * **asana.project.ext_asana_project_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_asana_project_id: string;
+        /**
+        * **asana.project.ext_asana_webhook_id**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        ext_asana_webhook_id: string | null;
+        /**
+        * **asana.project.has_completed_setup**
+        * - `bool` in database
+        * - `NOT NULL`, default: `false`
+        */
+        has_completed_setup: boolean;
+        /**
+        * **asana.project.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('asana.project_id_seq'::regclass)`
+        */
+        id: number;
+        /**
+        * **asana.project.name**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        name: string;
+        /**
+        * **asana.project.organization_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id: number;
+        /**
+        * **asana.project.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at: db.TimestampTzString;
+      }
+      export interface Whereable {
+        /**
+        * **asana.project.asana_webhook_secret**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        asana_webhook_secret?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **asana.project.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **asana.project.enabled**
+        * - `bool` in database
+        * - `NOT NULL`, default: `false`
+        */
+        enabled?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **asana.project.ext_asana_project_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_asana_project_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **asana.project.ext_asana_webhook_id**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        ext_asana_webhook_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **asana.project.has_completed_setup**
+        * - `bool` in database
+        * - `NOT NULL`, default: `false`
+        */
+        has_completed_setup?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **asana.project.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('asana.project_id_seq'::regclass)`
+        */
+        id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **asana.project.name**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        name?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **asana.project.organization_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+        /**
+        * **asana.project.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+      }
+      export interface Insertable {
+        /**
+        * **asana.project.asana_webhook_secret**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        asana_webhook_secret?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
+        /**
+        * **asana.project.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+        /**
+        * **asana.project.enabled**
+        * - `bool` in database
+        * - `NOT NULL`, default: `false`
+        */
+        enabled?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
+        /**
+        * **asana.project.ext_asana_project_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_asana_project_id: string | db.Parameter<string> | db.SQLFragment;
+        /**
+        * **asana.project.ext_asana_webhook_id**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        ext_asana_webhook_id?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
+        /**
+        * **asana.project.has_completed_setup**
+        * - `bool` in database
+        * - `NOT NULL`, default: `false`
+        */
+        has_completed_setup?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
+        /**
+        * **asana.project.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('asana.project_id_seq'::regclass)`
+        */
+        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+        /**
+        * **asana.project.name**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        name: string | db.Parameter<string> | db.SQLFragment;
+        /**
+        * **asana.project.organization_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id: number | db.Parameter<number> | db.SQLFragment;
+        /**
+        * **asana.project.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+      }
+      export interface Updatable {
+        /**
+        * **asana.project.asana_webhook_secret**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        asana_webhook_secret?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
+        /**
+        * **asana.project.created_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+        /**
+        * **asana.project.enabled**
+        * - `bool` in database
+        * - `NOT NULL`, default: `false`
+        */
+        enabled?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
+        /**
+        * **asana.project.ext_asana_project_id**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        ext_asana_project_id?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+        /**
+        * **asana.project.ext_asana_webhook_id**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        ext_asana_webhook_id?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
+        /**
+        * **asana.project.has_completed_setup**
+        * - `bool` in database
+        * - `NOT NULL`, default: `false`
+        */
+        has_completed_setup?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
+        /**
+        * **asana.project.id**
+        * - `int4` in database
+        * - `NOT NULL`, default: `nextval('asana.project_id_seq'::regclass)`
+        */
+        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+        /**
+        * **asana.project.name**
+        * - `text` in database
+        * - `NOT NULL`, no default
+        */
+        name?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+        /**
+        * **asana.project.organization_id**
+        * - `int4` in database
+        * - `NOT NULL`, no default
+        */
+        organization_id?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+        /**
+        * **asana.project.updated_at**
+        * - `timestamptz` in database
+        * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+        */
+        updated_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+      }
+      export type UniqueIndex = 'project_ext_asana_project_id_key' | 'project_ext_asana_webhook_id_key' | 'project_pkey';
+      export type Column = keyof Selectable;
+      export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
+      export type SQLExpression = Table | db.ColumnNames<Updatable | (keyof Updatable)[]> | db.ColumnValues<Updatable> | Whereable | Column | db.ParentColumn | db.GenericSQLExpression;
+      export type SQL = SQLExpression | SQLExpression[];
+    }
+  
     /* --- aggregate types --- */
   
-    export type Table = app_user.Table;
-    export type Selectable = app_user.Selectable;
-    export type JSONSelectable = app_user.JSONSelectable;
-    export type Whereable = app_user.Whereable;
-    export type Insertable = app_user.Insertable;
-    export type Updatable = app_user.Updatable;
-    export type UniqueIndex = app_user.UniqueIndex;
-    export type Column = app_user.Column;
+    export type Table = app_user.Table | project.Table;
+    export type Selectable = app_user.Selectable | project.Selectable;
+    export type JSONSelectable = app_user.JSONSelectable | project.JSONSelectable;
+    export type Whereable = app_user.Whereable | project.Whereable;
+    export type Insertable = app_user.Insertable | project.Insertable;
+    export type Updatable = app_user.Updatable | project.Updatable;
+    export type UniqueIndex = app_user.UniqueIndex | project.UniqueIndex;
+    export type Column = app_user.Column | project.Column;
   
-    export type AllBaseTables = [app_user.Table];
+    export type AllBaseTables = [app_user.Table, project.Table];
     export type AllForeignTables = [];
     export type AllViews = [];
     export type AllMaterializedViews = [];
-    export type AllTablesAndViews = [app_user.Table];
+    export type AllTablesAndViews = [app_user.Table, project.Table];
   }
 
 
@@ -4820,6 +5143,7 @@ declare module 'zapatos/schema' {
     "gitlab.app_user": gitlab.app_user.Selectable;
     "gitlab.project": gitlab.project.Selectable;
     "asana.app_user": asana.app_user.Selectable;
+    "asana.project": asana.project.Selectable;
   }[T];
 
   export type JSONSelectableForTable<T extends Table> = {
@@ -4839,6 +5163,7 @@ declare module 'zapatos/schema' {
     "gitlab.app_user": gitlab.app_user.JSONSelectable;
     "gitlab.project": gitlab.project.JSONSelectable;
     "asana.app_user": asana.app_user.JSONSelectable;
+    "asana.project": asana.project.JSONSelectable;
   }[T];
 
   export type WhereableForTable<T extends Table> = {
@@ -4858,6 +5183,7 @@ declare module 'zapatos/schema' {
     "gitlab.app_user": gitlab.app_user.Whereable;
     "gitlab.project": gitlab.project.Whereable;
     "asana.app_user": asana.app_user.Whereable;
+    "asana.project": asana.project.Whereable;
   }[T];
 
   export type InsertableForTable<T extends Table> = {
@@ -4877,6 +5203,7 @@ declare module 'zapatos/schema' {
     "gitlab.app_user": gitlab.app_user.Insertable;
     "gitlab.project": gitlab.project.Insertable;
     "asana.app_user": asana.app_user.Insertable;
+    "asana.project": asana.project.Insertable;
   }[T];
 
   export type UpdatableForTable<T extends Table> = {
@@ -4896,6 +5223,7 @@ declare module 'zapatos/schema' {
     "gitlab.app_user": gitlab.app_user.Updatable;
     "gitlab.project": gitlab.project.Updatable;
     "asana.app_user": asana.app_user.Updatable;
+    "asana.project": asana.project.Updatable;
   }[T];
 
   export type UniqueIndexForTable<T extends Table> = {
@@ -4915,6 +5243,7 @@ declare module 'zapatos/schema' {
     "gitlab.app_user": gitlab.app_user.UniqueIndex;
     "gitlab.project": gitlab.project.UniqueIndex;
     "asana.app_user": asana.app_user.UniqueIndex;
+    "asana.project": asana.project.UniqueIndex;
   }[T];
 
   export type ColumnForTable<T extends Table> = {
@@ -4934,6 +5263,7 @@ declare module 'zapatos/schema' {
     "gitlab.app_user": gitlab.app_user.Column;
     "gitlab.project": gitlab.project.Column;
     "asana.app_user": asana.app_user.Column;
+    "asana.project": asana.project.Column;
   }[T];
 
   export type SQLForTable<T extends Table> = {
@@ -4953,6 +5283,7 @@ declare module 'zapatos/schema' {
     "gitlab.app_user": gitlab.app_user.SQL;
     "gitlab.project": gitlab.project.SQL;
     "asana.app_user": asana.app_user.SQL;
+    "asana.project": asana.project.SQL;
   }[T];
 
 }

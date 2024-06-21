@@ -3,6 +3,8 @@ import { getUserOrganization } from '@/lib/auth/get-user-organization'
 import { redirect } from 'next/navigation'
 import InstallAsanaPage from '@/app/(user)/settings/asana/_components/InstallAsanaPage'
 import * as Asana from 'asana'
+import { createAsanaClient } from '@/lib/asana/create-asana-client'
+import AsanaProjectsList from '@/app/(user)/settings/asana/_components/AsanaProjectsList'
 
 export default async function AsanaSettingsContent() {
   const organization = await getUserOrganization()
@@ -21,13 +23,10 @@ export default async function AsanaSettingsContent() {
     return <InstallAsanaPage />
   }
 
-  let client = Asana.ApiClient.instance
-  let token = client.authentications['token']
-  token.accessToken = asanaAppUser.asana_access_token
-
-  new Asana.ProjectsApi().getProjects().then((result: any) => {
-    console.log('got projects', result.data)
-  })
-
-  return <div>Installed!</div>
+  return (
+    <AsanaProjectsList
+      organization={organization}
+      asanaAppUser={asanaAppUser}
+    />
+  )
 }

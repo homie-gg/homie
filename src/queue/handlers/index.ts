@@ -24,6 +24,7 @@ import { handleCreateHomieTaskFromGithubIssue } from '@/queue/handlers/handle-cr
 import { handleUpdateHomieTaskFromTrelloTask } from '@/queue/handlers/handle-update-homie-task-from-trello-task'
 import { handleUpdateHomieTaskFromGithubIssue } from '@/queue/handlers/handle-update-homie-task-from-github-issue'
 import { handleRefreshAsanaTokens } from '@/queue/handlers/handle-refresh-asana-tokens'
+import { handleImportAsanaProjects } from '@/queue/handlers/handle-import-asana-projects'
 
 type HandlerFunc<TJob extends Job> = (job: TJob) => void | Promise<void>
 
@@ -57,6 +58,7 @@ export const handlers: Handlers = {
   generate_open_merge_request_summary: handleGenerateOpenMergeRequestSummary,
   save_opened_merge_request: handleSaveOpenedMergeRequest,
   refresh_gitlab_tokens: handleRefreshGitlabTokens,
+  import_asana_projects: handleImportAsanaProjects,
   refresh_asana_tokens: handleRefreshAsanaTokens,
   dispatch_debounced_job: handleDispatchDebouncedJob,
 }

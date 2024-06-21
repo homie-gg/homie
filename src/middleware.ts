@@ -12,6 +12,7 @@ const middleware = authMiddleware({
     '/api/stripe/webhook',
     '/api/gitlab/webhook',
     '/api/trello/webhook',
+    '/api/asana/projects/:project_id/webhook',
     '/api/demo/sample_response',
   ],
   // Routes that can always be accessed, and have

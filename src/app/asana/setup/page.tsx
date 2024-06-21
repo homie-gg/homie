@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { http } from '@/lib/http/client/http'
 import { dbClient } from '@/database/client'
 import { AsanaOAuthTokenResponse } from '@/lib/asana/types'
+import { dispatch } from '@/queue/default-queue'
 
 type AsanaPageProps = PageProps<
   {},
@@ -49,6 +50,13 @@ export default async function AsanaSetupPage(props: AsanaPageProps) {
       }),
     )
     .executeTakeFirstOrThrow()
+
+  await dispatch('import_asana_projects', {
+    organization: {
+      id: organization.id,
+      asana_access_token: access_token,
+    },
+  })
 
   return redirect('/settings/asana')
 }
