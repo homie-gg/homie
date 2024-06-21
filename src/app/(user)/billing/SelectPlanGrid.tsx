@@ -8,7 +8,6 @@ import { Button } from '@/lib/ui/Button'
 import { useState } from 'react'
 import { Plan } from '@/database/types'
 import { Switch } from '@/lib/ui/Switch'
-import { Label } from '@/lib/ui/Label'
 
 interface SelectPlanGridProps {
   teamMonthlyPlan: Plan
