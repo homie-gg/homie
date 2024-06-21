@@ -8,7 +8,7 @@ interface findLinkedTrelloTaskParams {
   trelloAccessToken: string
 }
 
-export async function getLinkedTrelloTask(
+export async function findLinkedTrelloTask(
   params: findLinkedTrelloTaskParams,
 ): Promise<string | null> {
   const { body, trelloAccessToken } = params
