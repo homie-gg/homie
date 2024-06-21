@@ -64,6 +64,8 @@ export async function getLinkedIssuesAndTasksInPullRequest(
       asanaAccessToken: organization.asana_access_token,
     })
 
+    console.log('TAASK ', asanaTask)
+
     if (asanaTask) {
       result += `\n${asanaTask}`
     }

@@ -28,12 +28,18 @@ export async function handleGenerateOpenPullRequestSummary(
       'trello.workspace.organization_id',
       'homie.organization.id',
     )
+    .leftJoin(
+      'asana.app_user',
+      'asana.app_user.organization_id',
+      'homie.organization.id',
+    )
     .where('ext_gh_install_id', '=', installation?.id!)
     .select([
       'homie.organization.id',
       'github.organization.ext_gh_install_id',
       'has_unlimited_usage',
       'trello_access_token',
+      'asana_access_token',
     ])
     .executeTakeFirst()
 
@@ -64,6 +70,7 @@ export async function handleGenerateOpenPullRequestSummary(
     pullRequest: pull_request,
     organization,
   })
+  console.log('ISSUE: ', issue)
 
   // Create Github User if doesn't exits
   await dbClient
@@ -102,6 +109,8 @@ export async function handleGenerateOpenPullRequestSummary(
   const bodyWithSummary = pull_request.body
     ?.replace(summaryKey, summary)
     .replace(summaryKey, 'summary key') // avoid infinite loop of summaries by replacing the key if it exists
+
+  console.log('result: ', bodyWithSummary);
 
   await github.rest.pulls.update({
     owner,
