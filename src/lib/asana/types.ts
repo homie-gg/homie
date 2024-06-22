@@ -132,3 +132,10 @@ interface AsanaWebhook {
 export interface AsanaListWebhooksResponse {
   data: AsanaWebhook[]
 }
+
+export interface AsanaGetTaskResponse {
+  data: {
+    name: string
+    notes: string
+  }
+}

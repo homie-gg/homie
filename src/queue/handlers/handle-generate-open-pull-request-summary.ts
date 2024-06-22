@@ -17,6 +17,7 @@ export async function handleGenerateOpenPullRequestSummary(
   job: GenerateOpenPullRequestSummary,
 ) {
   const { pull_request, installation } = job.data
+  console.log('GENREATE PR');
 
   const organization = await dbClient
     .selectFrom('homie.organization')
