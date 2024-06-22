@@ -7,7 +7,7 @@ interface SummarizeDiffParams {
   diff: string
 }
 
-export const chatGPTCharLimit = 4000
+export const chatGPTCharLimit = 384000 // gpt-4o 128k tokens x 3
 
 const commonLockFiles = [
   'package-lock.json',

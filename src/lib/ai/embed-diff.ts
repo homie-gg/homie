@@ -1,6 +1,6 @@
 import { extractCodeSnippets, prompt } from '@/lib/ai/extract-code-snippets'
 import { v4 as uuid } from 'uuid'
-import { chunkDiff } from '@/lib/ai/summarize-diff'
+import { chatGPTCharLimit, chunkDiff } from '@/lib/ai/summarize-diff'
 import { getPineconeClient } from '@/lib/pinecone/pinecone-client'
 import { PineconeRecord } from '@pinecone-database/pinecone'
 import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
@@ -19,7 +19,7 @@ interface EmbedDiffParams {
 export async function embedDiff(params: EmbedDiffParams) {
   const { diff, summary, title, url, contributor, metadata, mergedAt } = params
 
-  const chunks = chunkDiff(diff, 4000 - prompt.length)
+  const chunks = chunkDiff(diff, chatGPTCharLimit - prompt.length / 3)
 
   for (const chunk of chunks) {
     const snippets = await extractCodeSnippets({
