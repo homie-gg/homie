@@ -1,4 +1,5 @@
 import { summarizeDiff } from '@/lib/ai/summarize-diff'
+import { logger } from '@/lib/log/logger'
 import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
 import { PromptTemplate } from '@langchain/core/prompts'
 
@@ -8,15 +9,35 @@ interface SummarizeCodeChangeParams {
   issue: string | null
   body: string | null
   length: 'short' | 'long'
+  logData?: Record<string, any>
 }
 
-export async function summarizeCodeChangeParams(
-  params: SummarizeCodeChangeParams,
-) {
-  const { body, issue, diff, title, length } = params
+export async function summarizeCodeChange(params: SummarizeCodeChangeParams) {
+  const { body, issue, diff, title, length, logData } = params
 
-  const diffSummary = diff ? await summarizeDiff({ diff }) : null
+  logger.debug('Summarize Code Change - Start', {
+    ...logData,
+    event: 'summarize_code_change:start',
+    body,
+    issue,
+    diff,
+    title,
+    length,
+  })
+
+  const diffSummary = diff ? await summarizeDiff({ diff, logData }) : null
   if (diffSummary && !issue && !body) {
+    logger.debug('Summarize Code Change - Diff Summary Only', {
+      ...logData,
+      event: 'summarize_code_change:diff_only',
+      body,
+      issue,
+      diff,
+      title,
+      length,
+      result: diffSummary,
+    })
+
     return diffSummary
   }
 
@@ -33,7 +54,22 @@ export async function summarizeCodeChangeParams(
     modelName: 'gpt-4o',
   })
 
-  return await model.invoke(input)
+  const result = await model.invoke(input)
+
+  logger.debug('Summarize Code Change - Result', {
+    ...logData,
+    event: 'summarize_code_change:result',
+    ai_call: true,
+    body,
+    issue,
+    diff,
+    title,
+    length,
+    result,
+    input,
+  })
+
+  return result
 }
 
 interface GetInputParams {
@@ -59,13 +95,15 @@ function getInput(params: GetInputParams) {
     inputVariables: ['title', 'diff', 'issue', 'body', 'rules'],
   })
 
-  return promptTemplate.format({
+  const input = promptTemplate.format({
     title,
     diff: diffSummary,
     issue,
     body,
     rules,
   })
+
+  return input
 }
 
 function getTemplate(params: GetInputParams) {
