@@ -20,7 +20,7 @@ export async function summarizeConversation(
 
   const model = createOpenAIClient({
     temperature: 0,
-    modelName: 'gpt-3.5-turbo',
+    modelName: 'gpt-4o',
   })
 
   return model.invoke(input)

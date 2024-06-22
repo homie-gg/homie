@@ -30,7 +30,7 @@ export async function summarizeCodeChangeParams(
 
   const model = createOpenAIClient({
     temperature: 0,
-    modelName: 'gpt-3.5-turbo',
+    modelName: 'gpt-4o',
   })
 
   return await model.invoke(input)
