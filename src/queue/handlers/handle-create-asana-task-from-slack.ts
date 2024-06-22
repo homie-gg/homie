@@ -9,7 +9,7 @@ import { getConversation } from '@/lib/slack/get-conversation'
 import { getIsOverPlanContributorLimit } from '@/lib/billing/get-is-over-plan-contributor-limit'
 import { getOverContributorLimitMessage } from '@/lib/billing/get-over-contributor-limit-message'
 import { createAsanaClient } from '@/lib/asana/create-asana-client'
-import marked from 'marked'
+import { marked } from 'marked'
 
 export async function handleCreateAsanaTaskFromSlack(
   job: CreateAsanaTaskFromSlack,

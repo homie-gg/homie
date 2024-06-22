@@ -111,3 +111,24 @@ export type AsanaWebhookEvent =
         resource_type: 'task'
       }
     }
+
+export interface AsanaGetWorkspaceResponse {
+  data: {
+    workspace: {
+      gid: string
+      name: string
+    }
+  }
+}
+
+interface AsanaWebhook {
+  gid: string
+  resource: {
+    resource_type: string
+    gid: string
+  }
+}
+
+export interface AsanaListWebhooksResponse {
+  data: AsanaWebhook[]
+}
