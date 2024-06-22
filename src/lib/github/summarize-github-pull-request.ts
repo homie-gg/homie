@@ -29,7 +29,7 @@ export async function summarizeGithubPullRequest(
 ) {
   const { pullRequest, github, repo, owner, issue, length: type } = params
 
-  logger.debug('Generate PR Summary - Got Summary', {
+  logger.debug('Summarize PR - Start', {
     event: 'summarize_pr:start',
     pull_request: getPullRequestLogData(pullRequest),
     issue,
@@ -45,9 +45,19 @@ export async function summarizeGithubPullRequest(
       owner,
     })
     .then((res) => res.data as unknown as string) // diff is a string
-    .catch(() => null) // ignore fails. eg. too many files
+    .catch((error) => {
+      logger.debug('Summarize PR - Failed to Fetch Diff', {
+        event: 'summarize_pr:failed_fetch_diff',
+        pull_request: getPullRequestLogData(pullRequest),
+        issue,
+        diff,
+        error,
+      })
 
-  logger.debug('Generate PR Summary - Got Diff', {
+      return null
+    }) // ignore fails. eg. too many files
+
+  logger.debug('Summarize PR - Got Diff', {
     event: 'summarize_pr:got_diff',
     pull_request: getPullRequestLogData(pullRequest),
     issue,
