@@ -2,9 +2,11 @@ import { PromptTemplate } from '@langchain/core/prompts'
 import { Document } from '@langchain/core/documents'
 import { loadSummarizationChain } from 'langchain/chains'
 import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
+import { logger } from '@/lib/log/logger'
 
 interface SummarizeDiffParams {
   diff: string
+  logData?: Record<string, any>
 }
 
 export const chatGPTCharLimit = 384000 // gpt-4o 128k tokens x 3
@@ -18,7 +20,13 @@ const commonLockFiles = [
 export async function summarizeDiff(
   params: SummarizeDiffParams,
 ): Promise<string> {
-  const { diff } = params
+  const { diff, logData } = params
+
+  logger.debug('Summarize Diff - Start', {
+    ...logData,
+    event: 'summarize_diff:start',
+    diff,
+  })
 
   const documents = chunkDiff(diff).map(
     (file) => new Document({ pageContent: file }),
@@ -38,6 +46,16 @@ export async function summarizeDiff(
 
   const result = await summarizeChain.invoke({
     input_documents: documents,
+  })
+
+  logger.debug('Summarize Diff - Result', {
+    ...logData,
+    event: 'summarize_diff:result',
+    ai_call: true,
+    diff,
+    documents,
+    map_prompt: mapPrompt,
+    combine_prompt: combinePrompt,
   })
 
   return result.text

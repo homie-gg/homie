@@ -1,4 +1,4 @@
-import { summarizeCodeChangeParams } from '@/lib/ai/summarize-code-change'
+import { summarizeCodeChange } from '@/lib/ai/summarize-code-change'
 import { Gitlab } from '@gitbeaker/core'
 
 interface SummarizeGitlabMergeRequestParams {
@@ -39,7 +39,7 @@ export async function summarizeGitlabMergeRequest(
     return acc
   }, '')
 
-  const summary = await summarizeCodeChangeParams({
+  const summary = await summarizeCodeChange({
     title: mergeRequest.title,
     diff: diffString,
     issue,

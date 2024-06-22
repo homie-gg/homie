@@ -134,13 +134,15 @@ export async function saveMergedPullRequest(
 
   const { summary, diff } = await summarizeGithubPullRequest({
     pullRequest: {
+      id: pullRequest.id,
       body: pullRequest.body,
       repo_id: pullRequest.base.repo.id,
-      pull_number: pullRequest.number,
+      number: pullRequest.number,
       title: pullRequest.title,
       merged_at: pullRequest.merged_at,
       base: pullRequest.base,
       html_url: pullRequest.html_url,
+      created_at: pullRequest.created_at,
     },
     repo: pullRequest.base.repo.name,
     owner,

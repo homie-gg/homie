@@ -9,9 +9,9 @@ type PullRequestData = {
     id: number
     login: string
   } | null
-  base: {
+  base?: {
     ref: string
-    repo: {
+    repo?: {
       name: string
       html_url: string
       id: number
@@ -33,12 +33,12 @@ export const getPullRequestLogData = (pullRequest: PullRequestData) => ({
     login: pullRequest.user?.login,
   },
   base: {
-    ref: pullRequest.base.ref,
+    ref: pullRequest.base?.ref,
     repo: {
-      id: pullRequest.base.repo.id,
-      name: pullRequest.base.repo.name,
-      full_name: pullRequest.base.repo.full_name,
-      html_url: pullRequest.base.repo.html_url,
+      id: pullRequest.base?.repo?.id,
+      name: pullRequest.base?.repo?.name,
+      full_name: pullRequest.base?.repo?.full_name,
+      html_url: pullRequest.base?.repo?.html_url,
     },
   },
 })
