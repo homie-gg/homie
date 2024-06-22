@@ -1,6 +1,6 @@
 import { getLinkedTaskUrls } from '@/lib/tasks/get-linked-task-urls'
 import { createTrelloClient } from '@/lib/trello/create-trello-client'
-import { getTrelloShortIdFromCardUrl } from '@/lib/trello/get-short-id-from-card-url'
+import { getTrelloShortIdFromCardUrl } from '@/lib/trello/get-trello-short-id-from-card-url'
 import { TrelloCard } from '@/lib/trello/types'
 
 interface findLinkedTrelloTaskParams {
