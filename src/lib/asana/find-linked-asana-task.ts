@@ -1,5 +1,5 @@
 import { createAsanaClient } from '@/lib/asana/create-asana-client'
-import { getAsanaTaskIdFromUrl } from '@/lib/asana/get-asana-task-if-from-url'
+import { getAsanaTaskIdFromUrl } from '@/lib/asana/get-asana-task-id-from-url'
 import { AsanaGetTaskResponse } from '@/lib/asana/types'
 import { getLinkedTaskUrls } from '@/lib/tasks/get-linked-task-urls'
 
