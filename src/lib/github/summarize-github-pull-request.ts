@@ -50,7 +50,6 @@ export async function summarizeGithubPullRequest(
         event: 'summarize_pr:failed_fetch_diff',
         pull_request: getPullRequestLogData(pullRequest),
         issue,
-        diff,
         error,
       })
 
