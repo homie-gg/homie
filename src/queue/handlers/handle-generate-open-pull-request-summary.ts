@@ -5,6 +5,8 @@ import { GenerateOpenPullRequestSummary } from '@/queue/jobs'
 import { getLinkedIssuesAndTasksInPullRequest } from '@/lib/github/get-linked-issues-and-tasks-in-pull-request'
 import { getIsOverPlanContributorLimit } from '@/lib/billing/get-is-over-plan-contributor-limit'
 import { getOverContributorLimitMessage } from '@/lib/billing/get-over-contributor-limit-message'
+import { logger } from '@/lib/log/logger'
+import { getPullRequestLogData } from '@/lib/github/get-pull-request-log-data'
 
 /**
  * homie will replace this string inside a PR body with a generated summary.
@@ -43,7 +45,16 @@ export async function handleGenerateOpenPullRequestSummary(
     ])
     .executeTakeFirst()
 
+  logger.debug('Generate PR Summary - Start', {
+    event: 'generate_pr_summary:start',
+    pull_request: getPullRequestLogData(pull_request),
+  })
+
   if (!organization) {
+    logger.debug('Generate PR Summary - Missing Org', {
+      event: 'generate_pr_summary:missing_org',
+      pull_request: getPullRequestLogData(pull_request),
+    })
     return
   }
 
@@ -54,6 +65,10 @@ export async function handleGenerateOpenPullRequestSummary(
   const owner = pull_request.base.repo.full_name.split('/')[0]
 
   if (await getIsOverPlanContributorLimit({ organization })) {
+    logger.debug('Generate PR Summary - Over Plan Contributor Limit', {
+      event: 'generate_pr_summary:over_plan_contributor_limit',
+      pull_request: getPullRequestLogData(pull_request),
+    })
     await github.rest.pulls.update({
       owner,
       repo: pull_request.base.repo.name,
@@ -71,6 +86,12 @@ export async function handleGenerateOpenPullRequestSummary(
     organization,
   })
   console.log('ISSUE: ', issue)
+
+  logger.debug('Generate PR Summary - Got Issue', {
+    event: 'generate_pr_summary:got_issue',
+    pull_request: getPullRequestLogData(pull_request),
+    issue,
+  })
 
   // Create Github User if doesn't exits
   await dbClient
@@ -91,9 +112,11 @@ export async function handleGenerateOpenPullRequestSummary(
 
   const { summary } = await summarizeGithubPullRequest({
     pullRequest: {
+      id: pull_request.id,
+      number: pull_request.number,
+      created_at: pull_request.created_at,
       body: pull_request.body,
       repo_id: pull_request.base.repo.id,
-      pull_number: pull_request.number,
       title: pull_request.title,
       merged_at: pull_request.merged_at!,
       base: pull_request.base,
@@ -104,6 +127,13 @@ export async function handleGenerateOpenPullRequestSummary(
     github,
     issue,
     length: 'short',
+  })
+
+  logger.debug('Generate PR Summary - Got Summary', {
+    event: 'generate_pr_summary:got_summary',
+    pull_request: getPullRequestLogData(pull_request),
+    issue,
+    summary,
   })
 
   const bodyWithSummary = pull_request.body
