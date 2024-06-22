@@ -2,7 +2,9 @@ interface GetShortIdFromCardUrlParams {
   url: string
 }
 
-export function getShortIdFromCardUrl(params: GetShortIdFromCardUrlParams) {
+export function getTrelloShortIdFromCardUrl(
+  params: GetShortIdFromCardUrlParams,
+) {
   const { url } = params
   if (!url.includes('https://trello.com/c')) {
     return null
