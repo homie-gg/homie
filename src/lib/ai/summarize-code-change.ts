@@ -26,20 +26,6 @@ export async function summarizeCodeChange(params: SummarizeCodeChangeParams) {
   })
 
   const diffSummary = diff ? await summarizeDiff({ diff, logData }) : null
-  if (diffSummary && !issue && !body) {
-    logger.debug('Summarize Code Change - Diff Summary Only', {
-      ...logData,
-      event: 'summarize_code_change:diff_only',
-      body,
-      issue,
-      diff,
-      title,
-      length,
-      result: diffSummary,
-    })
-
-    return diffSummary
-  }
 
   const input = await getInput({
     title,
