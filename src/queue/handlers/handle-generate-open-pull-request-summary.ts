@@ -115,7 +115,7 @@ export async function handleGenerateOpenPullRequestSummary(
       id: pull_request.id,
       number: pull_request.number,
       created_at: pull_request.created_at,
-      body: pull_request.body,
+      body: pull_request.body?.replaceAll(summaryKey, '') ?? '',
       repo_id: pull_request.base.repo.id,
       title: pull_request.title,
       merged_at: pull_request.merged_at!,

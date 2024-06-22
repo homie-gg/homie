@@ -1,4 +1,5 @@
 import { summarizeCodeChange } from '@/lib/ai/summarize-code-change'
+import { summaryKey } from '@/queue/handlers/handle-generate-open-pull-request-summary'
 import { Gitlab } from '@gitbeaker/core'
 
 interface SummarizeGitlabMergeRequestParams {
@@ -43,7 +44,7 @@ export async function summarizeGitlabMergeRequest(
     title: mergeRequest.title,
     diff: diffString,
     issue,
-    body: mergeRequest.description,
+    body: mergeRequest.description?.replaceAll(summaryKey, '') ?? '',
     length: length,
   })
 
