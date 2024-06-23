@@ -1,7 +1,9 @@
 import { dbClient } from '@/database/client'
+import { createAsanaClient } from '@/lib/asana/create-asana-client'
 import { createGithubClient } from '@/lib/github/create-github-client'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
+import { assignContributorToTask } from '@/lib/tasks/assign-contributor-to-task'
 import { createTrelloClient } from '@/lib/trello/create-trello-client'
 import { DynamicStructuredTool } from '@langchain/core/tools'
 import { z } from 'zod'
@@ -12,6 +14,7 @@ interface GetAssignTaskToContributorTool {
     ext_gh_install_id: number | null
     trello_access_token: string | null
     ext_trello_done_task_list_id: string | null
+    asana_access_token: string | null
   }
   answerId: string
 }
@@ -47,7 +50,12 @@ export function getAssignTaskToContributorTool(
             ext_slack_member_id.replace('@', ''),
           )
           .where('organization_id', '=', organization.id)
-          .select(['id', 'username', 'ext_trello_member_id'])
+          .select([
+            'id',
+            'username',
+            'ext_trello_member_id',
+            'ext_asana_user_id',
+          ])
           .executeTakeFirst()
 
         if (!contributor) {
@@ -74,6 +82,7 @@ export function getAssignTaskToContributorTool(
             'homie.task.html_url as task_html_url',
             'homie.task.ext_gh_issue_number as task_ext_gh_issue_number',
             'homie.task.ext_trello_card_id as task_ext_trello_card_id',
+            'homie.task.ext_asana_task_id as task_ext_asana_task_id',
             'github.repo.name as github_repo_name',
             'github.repo.owner as github_repo_owner',
           ])
@@ -113,6 +122,13 @@ export function getAssignTaskToContributorTool(
             contributor,
             task,
           })
+
+          await assignContributorToTask({
+            task_id: task.task_id,
+            contributor_id: contributor.id,
+          })
+
+          return 'Successfully assigned task to contributor.'
         }
 
         if (
@@ -138,20 +154,45 @@ export function getAssignTaskToContributorTool(
             contributor,
             task,
           })
-        }
 
-        await dbClient
-          .insertInto('homie.contributor_task')
-          .values({
+          await assignContributorToTask({
             task_id: task.task_id,
             contributor_id: contributor.id,
           })
-          .onConflict((oc) => {
-            return oc.columns(['contributor_id', 'task_id']).doNothing()
-          })
-          .executeTakeFirstOrThrow()
 
-        return 'Successfully assigned'
+          return 'Successfully assigned task to contributor.'
+        }
+
+        if (
+          task.task_ext_asana_task_id &&
+          contributor.ext_asana_user_id &&
+          organization.asana_access_token
+        ) {
+          const asana = createAsanaClient(organization.asana_access_token)
+
+          await asana.put(`/tasks/${task.task_ext_asana_task_id}`, {
+            data: {
+              assignee: contributor.ext_asana_user_id,
+            },
+          })
+
+          logger.debug('Assigned Asana task', {
+            event: 'get_answer:assign_task_to_contributor:assigned_asana_task',
+            answer_id: answerId,
+            organization: getOrganizationLogData(organization),
+            contributor,
+            task,
+          })
+
+          await assignContributorToTask({
+            task_id: task.task_id,
+            contributor_id: contributor.id,
+          })
+
+          return 'Successfully assigned task to contributor.'
+        }
+
+        return 'Failed - no task integration'
       } catch (error) {
         logger.debug('Failed to assign task', {
           event: 'get_answer:assign_task_to_contributor:failed',
