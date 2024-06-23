@@ -24,6 +24,11 @@ export const POST = async (request: NextRequest) => {
       'trello.workspace.organization_id',
       'homie.organization.id',
     )
+    .leftJoin(
+      'asana.app_user',
+      'asana.app_user.organization_id',
+      'homie.organization.id',
+    )
     .leftJoin('homie.plan', 'homie.plan.id', 'homie.subscription.plan_id')
     .where('gitlab.app_user.gitlab_webhook_secret', '=', webhook_secret)
     .select([
@@ -32,6 +37,7 @@ export const POST = async (request: NextRequest) => {
       'gitlab_access_token',
       'has_unlimited_usage',
       'trello_access_token',
+      'asana_access_token',
     ])
     .executeTakeFirst()
 

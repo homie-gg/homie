@@ -150,11 +150,9 @@ export interface AsanaGetTaskResponse {
      */
     due_on: string | null
     assignee: {
-      assignee: {
-        gid: string
-        name: string
-        resource_type: 'user'
-      }
+      gid: string
+      name: string
+      resource_type: 'user'
     } | null
   }
 }

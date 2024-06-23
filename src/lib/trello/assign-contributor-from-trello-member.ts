@@ -37,7 +37,7 @@ export async function assignContributorFromTrelloMember(
   const task = await dbClient
     .selectFrom('homie.task')
     .where('ext_trello_card_id', '=', card.id)
-    .select(['id', 'description', 'due_date', 'task_type_id', 'priority_level'])
+    .select(['id'])
     .executeTakeFirst()
 
   if (!task) {

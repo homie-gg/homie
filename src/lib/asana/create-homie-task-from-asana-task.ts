@@ -19,7 +19,7 @@ export async function createHomieTaskFromAsanaTask(
     title: asanaTask.name,
     description: asanaTask.notes,
   })
-  await dbClient
+  const homieTask = await dbClient
     .insertInto('homie.task')
     .values({
       name: asanaTask.name,
@@ -45,7 +45,29 @@ export async function createHomieTaskFromAsanaTask(
     .returning(['id'])
     .executeTakeFirstOrThrow()
 
-  if (asanaTask.assignee) {
-    // TODO create assignee
+  if (!asanaTask.assignee) {
+    return
   }
+
+  const contributor = await dbClient
+    .selectFrom('homie.contributor')
+    .where('ext_asana_user_id', '=', asanaTask.assignee.gid)
+    .select(['id'])
+    .executeTakeFirst()
+
+  if (!contributor) {
+    return
+  }
+
+  // Create assignment
+  await dbClient
+    .insertInto('homie.contributor_task')
+    .values({
+      task_id: homieTask.id,
+      contributor_id: contributor.id,
+    })
+    .onConflict((oc) => {
+      return oc.columns(['contributor_id', 'task_id']).doNothing()
+    })
+    .executeTakeFirst()
 }

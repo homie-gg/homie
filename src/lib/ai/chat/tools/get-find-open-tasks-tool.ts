@@ -18,13 +18,25 @@ export function getFindOpenTasksTool(params: GetFindOpenTasksToolParams) {
     func: async () => {
       const tasks = await dbClient
         .selectFrom('homie.task')
+        .leftJoin(
+          'homie.contributor_task',
+          'homie.contributor_task.task_id',
+          'homie.task.id',
+        )
+        .groupBy('homie.task.id')
         .where('organization_id', '=', organization.id)
-        .where('task_status_id', '=', taskStatus.open)
+        .where('task_status_id', '=', taskStatus.open) // available
+        .where('homie.contributor_task.contributor_id', 'is', null) // unassigned
         .orderBy('priority_level', 'asc') // most important first
         .orderBy('due_date', 'asc') // If any are due get those next
         .orderBy('created_at', 'desc') // oldest first
         .limit(8)
-        .select(['name', 'description', 'html_url', 'id'])
+        .select([
+          'homie.task.name',
+          'homie.task.description',
+          'homie.task.html_url',
+          'homie.task.id',
+        ])
         .execute()
 
       if (tasks.length === 0) {

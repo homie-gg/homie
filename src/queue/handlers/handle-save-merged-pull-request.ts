@@ -34,12 +34,18 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
       'trello.workspace.organization_id',
       'homie.organization.id',
     )
+    .leftJoin(
+      'asana.app_user',
+      'asana.app_user.organization_id',
+      'homie.organization.id',
+    )
     .where('ext_gh_install_id', '=', installation?.id!)
     .select([
       'homie.organization.id',
       'github.organization.ext_gh_install_id',
       'has_unlimited_usage',
       'trello_access_token',
+      'asana_access_token',
     ])
     .executeTakeFirst()
 

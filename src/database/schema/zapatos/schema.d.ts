@@ -38,6 +38,12 @@ declare module 'zapatos/schema' {
         */
         created_at: Date;
         /**
+        * **homie.contributor.ext_asana_user_id**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        ext_asana_user_id: string | null;
+        /**
         * **homie.contributor.ext_gh_user_id**
         * - `int4` in database
         * - Nullable, no default
@@ -93,6 +99,12 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
         */
         created_at: db.TimestampTzString;
+        /**
+        * **homie.contributor.ext_asana_user_id**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        ext_asana_user_id: string | null;
         /**
         * **homie.contributor.ext_gh_user_id**
         * - `int4` in database
@@ -150,6 +162,12 @@ declare module 'zapatos/schema' {
         */
         created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
         /**
+        * **homie.contributor.ext_asana_user_id**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        ext_asana_user_id?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+        /**
         * **homie.contributor.ext_gh_user_id**
         * - `int4` in database
         * - Nullable, no default
@@ -205,6 +223,12 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
         */
         created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+        /**
+        * **homie.contributor.ext_asana_user_id**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        ext_asana_user_id?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
         /**
         * **homie.contributor.ext_gh_user_id**
         * - `int4` in database
@@ -262,6 +286,12 @@ declare module 'zapatos/schema' {
         */
         created_at?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
         /**
+        * **homie.contributor.ext_asana_user_id**
+        * - `text` in database
+        * - Nullable, no default
+        */
+        ext_asana_user_id?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
+        /**
         * **homie.contributor.ext_gh_user_id**
         * - `int4` in database
         * - Nullable, no default
@@ -310,7 +340,7 @@ declare module 'zapatos/schema' {
         */
         username?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
       }
-      export type UniqueIndex = 'contributor_ext_gh_user_id_key' | 'contributor_ext_gitlab_author_id_key' | 'contributor_ext_trello_member_id_key' | 'contributor_pkey';
+      export type UniqueIndex = 'contributor_ext_asana_user_id_key' | 'contributor_ext_gh_user_id_key' | 'contributor_ext_gitlab_author_id_key' | 'contributor_ext_trello_member_id_key' | 'contributor_pkey';
       export type Column = keyof Selectable;
       export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
       export type SQLExpression = Table | db.ColumnNames<Updatable | (keyof Updatable)[]> | db.ColumnValues<Updatable> | Whereable | Column | db.ParentColumn | db.GenericSQLExpression;
@@ -2156,12 +2186,6 @@ declare module 'zapatos/schema' {
         */
         id: number;
         /**
-        * **homie.task.is_assigned**
-        * - `bool` in database
-        * - `NOT NULL`, default: `false`
-        */
-        is_assigned: boolean;
-        /**
         * **homie.task.name**
         * - `text` in database
         * - `NOT NULL`, no default
@@ -2265,12 +2289,6 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, default: `nextval('homie.task_id_seq'::regclass)`
         */
         id: number;
-        /**
-        * **homie.task.is_assigned**
-        * - `bool` in database
-        * - `NOT NULL`, default: `false`
-        */
-        is_assigned: boolean;
         /**
         * **homie.task.name**
         * - `text` in database
@@ -2376,12 +2394,6 @@ declare module 'zapatos/schema' {
         */
         id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
         /**
-        * **homie.task.is_assigned**
-        * - `bool` in database
-        * - `NOT NULL`, default: `false`
-        */
-        is_assigned?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
-        /**
         * **homie.task.name**
         * - `text` in database
         * - `NOT NULL`, no default
@@ -2486,12 +2498,6 @@ declare module 'zapatos/schema' {
         */
         id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
         /**
-        * **homie.task.is_assigned**
-        * - `bool` in database
-        * - `NOT NULL`, default: `false`
-        */
-        is_assigned?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
-        /**
         * **homie.task.name**
         * - `text` in database
         * - `NOT NULL`, no default
@@ -2595,12 +2601,6 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, default: `nextval('homie.task_id_seq'::regclass)`
         */
         id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
-        /**
-        * **homie.task.is_assigned**
-        * - `bool` in database
-        * - `NOT NULL`, default: `false`
-        */
-        is_assigned?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
         /**
         * **homie.task.name**
         * - `text` in database

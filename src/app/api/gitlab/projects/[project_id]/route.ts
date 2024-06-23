@@ -41,12 +41,18 @@ export const PATCH = createRoute(
         'trello.workspace.organization_id',
         'homie.organization.id',
       )
+      .leftJoin(
+        'asana.app_user',
+        'asana.app_user.organization_id',
+        'homie.organization.id',
+      )
       .where('ext_clerk_user_id', '=', userId)
       .select([
         'homie.organization.id',
         'gitlab.app_user.gitlab_access_token',
         'gitlab.app_user.gitlab_webhook_secret',
         'trello.workspace.trello_access_token',
+        'asana_access_token',
       ])
       .executeTakeFirst()
 

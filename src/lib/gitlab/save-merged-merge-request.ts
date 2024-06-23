@@ -32,6 +32,7 @@ interface SaveMergedMergeRequestParams {
     id: number
     gitlab_access_token: string
     trello_access_token: string | null
+    asana_access_token: string | null
   }
 }
 

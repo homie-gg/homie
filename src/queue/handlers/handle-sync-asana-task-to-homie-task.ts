@@ -88,7 +88,36 @@ export async function handleSyncAsanaTaskToHomieTask(
     .where('homie.task.id', '=', homieTask.id)
     .executeTakeFirstOrThrow()
 
-  // TODO sync assignee
+  // If no assignee, we'll remove any assignments (if they exist)
+  if (!asanaTask.assignee) {
+    await dbClient
+      .deleteFrom('homie.contributor_task')
+      .where('homie.contributor_task.task_id', '=', homieTask.id)
+      .execute()
+    return
+  }
+
+  const contributor = await dbClient
+    .selectFrom('homie.contributor')
+    .where('ext_asana_user_id', '=', asanaTask.assignee.gid)
+    .select(['id'])
+    .executeTakeFirst()
+
+  if (!contributor) {
+    return
+  }
+
+  // Create assignment
+  await dbClient
+    .insertInto('homie.contributor_task')
+    .values({
+      task_id: homieTask.id,
+      contributor_id: contributor.id,
+    })
+    .onConflict((oc) => {
+      return oc.columns(['contributor_id', 'task_id']).doNothing()
+    })
+    .executeTakeFirst()
 }
 
 async function tryGetTask(extAsanaTaskId: string, asana: AsanaClient) {

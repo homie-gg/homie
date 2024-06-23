@@ -37,6 +37,7 @@ interface SaveMergedPullRequestParams {
     id: number
     ext_gh_install_id: number
     trello_access_token: string | null
+    asana_access_token: string | null
   }
 }
 
