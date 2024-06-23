@@ -14,6 +14,7 @@ import {
 } from '@/lib/ui/Table'
 import { auth } from '@clerk/nextjs'
 import { getTrelloBoardMembers } from '@/lib/trello/get-trello-members'
+import { getAsanaUsers } from '@/lib/asana/get-asana-users'
 
 interface ContributorsPageProps {}
 
@@ -38,12 +39,18 @@ export default async function ContributorsPage(props: ContributorsPageProps) {
       'trello.workspace.organization_id',
       'homie.organization.id',
     )
+    .leftJoin(
+      'asana.app_user',
+      'asana.app_user.organization_id',
+      'homie.organization.id',
+    )
     .where('ext_clerk_user_id', '=', userId)
     .select([
       'slack_access_token',
       'homie.organization.id',
       'trello_access_token',
       'ext_trello_board_id',
+      'asana_access_token',
     ])
     .executeTakeFirst()
 
@@ -64,6 +71,12 @@ export default async function ContributorsPage(props: ContributorsPageProps) {
         })
       : null
 
+  const asanaUsers = organization.asana_access_token
+    ? await getAsanaUsers({
+        asanaAccessToken: organization.asana_access_token,
+      })
+    : null
+
   if (!ok) {
     return <FetchUsersFailedAlert />
   }
@@ -71,7 +84,13 @@ export default async function ContributorsPage(props: ContributorsPageProps) {
   const contributors = await dbClient
     .selectFrom('homie.contributor')
     .where('organization_id', '=', organization.id)
-    .select(['username', 'id', 'ext_slack_member_id', 'ext_trello_member_id'])
+    .select([
+      'username',
+      'id',
+      'ext_slack_member_id',
+      'ext_trello_member_id',
+      'ext_asana_user_id',
+    ])
     .execute()
 
   const availableSlackMembers = slackMembers.filter(
@@ -99,6 +118,7 @@ export default async function ContributorsPage(props: ContributorsPageProps) {
             <TableHead>GitHub User</TableHead>
             <TableHead>Slack User</TableHead>
             {trelloMembers && <TableHead>Trello Member</TableHead>}
+            {asanaUsers && <TableHead>Asana User</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -108,6 +128,7 @@ export default async function ContributorsPage(props: ContributorsPageProps) {
               contributor={contributor}
               slackMembers={availableSlackMembers}
               trelloMembers={trelloMembers}
+              asanaUsers={asanaUsers}
             />
           ))}
         </TableBody>

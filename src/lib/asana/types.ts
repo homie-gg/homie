@@ -156,3 +156,12 @@ export interface AsanaGetTaskResponse {
     } | null
   }
 }
+
+export interface AsanaUser {
+  gid: string
+  name: string
+}
+
+export interface GetAsanaUsersResponse {
+  data: AsanaUser[]
+}
