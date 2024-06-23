@@ -1,6 +1,8 @@
 import { Message } from '@/lib/ai/chat/types'
 import { embedSlackConversation } from '@/lib/ai/embed-slack-conversation'
 import { summarizeConversation } from '@/lib/ai/summarize-conversation'
+import { logger } from '@/lib/log/logger'
+import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { createSlackClient } from '@/lib/slack/create-slack-client'
 import { getConversation } from '@/lib/slack/get-conversation'
 import { getMessageLink } from '@/lib/slack/get-message-link'
@@ -15,12 +17,14 @@ interface getRememberConversationToolParams {
   }
   channelID: string
   messages: Message[]
+  answerId: string
 }
 
 export function getRememberConversationTool(
   params: getRememberConversationToolParams,
 ) {
-  const { targetMessageTS, organization, messages, channelID } = params
+  const { targetMessageTS, organization, messages, channelID, answerId } =
+    params
   return new DynamicStructuredTool({
     name: 'remember_conversation',
     description: 'Remember or bookmark a conversation',
@@ -28,36 +32,64 @@ export function getRememberConversationTool(
       todaysDate: z.coerce.date().describe('The date today'),
     }),
     func: async ({ todaysDate }) => {
-      const slackClient = createSlackClient(organization.slack_access_token)
-
-      const conversation =
-        messages.length > 1
-          ? messages
-          : await getConversation({
-              slackClient,
-              messageTS: targetMessageTS,
-              channelID,
-            })
-
-      const slackMessageUrl = await getMessageLink({
-        channelID,
-        messageTS: messages[0].ts,
-        slackClient,
+      logger.debug('Call - Remember Conversation', {
+        event: 'get_answer:remember_conversation:call',
+        answer_id: answerId,
+        organization: getOrganizationLogData(organization),
+        todays_date: todaysDate,
       })
 
-      const summary = await summarizeConversation({ messages: conversation })
+      try {
+        const slackClient = createSlackClient(organization.slack_access_token)
 
-      await embedSlackConversation({
-        metadata: {
-          type: 'conversation',
-          organization_id: organization.id,
-        },
-        messageUrl: slackMessageUrl,
-        summary,
-        savedAt: todaysDate,
-      })
+        const conversation =
+          messages.length > 1
+            ? messages
+            : await getConversation({
+                slackClient,
+                messageTS: targetMessageTS,
+                channelID,
+              })
 
-      return 'Done, saved successfully.'
+        const slackMessageUrl = await getMessageLink({
+          channelID,
+          messageTS: messages[0].ts,
+          slackClient,
+        })
+
+        const summary = await summarizeConversation({ messages: conversation })
+
+        await embedSlackConversation({
+          metadata: {
+            type: 'conversation',
+            organization_id: organization.id,
+          },
+          messageUrl: slackMessageUrl,
+          summary,
+          savedAt: todaysDate,
+        })
+
+        logger.debug('Finished remembering conversation', {
+          event: 'get_answer:remember_conversation:done',
+          answer_id: answerId,
+          organization: getOrganizationLogData(organization),
+          todays_date: todaysDate,
+          conversation,
+          summary,
+        })
+
+        return 'Done, saved successfully.'
+      } catch (error) {
+        logger.debug('Failed to remember conversation', {
+          event: 'get_answer:remember_conversation:failed',
+          answer_id: answerId,
+          organization: getOrganizationLogData(organization),
+          todays_date: todaysDate,
+          error,
+        })
+
+        return 'FAILED'
+      }
     },
   })
 }

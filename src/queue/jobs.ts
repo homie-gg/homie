@@ -247,6 +247,7 @@ export type ImportGitlabMergeRequests = BullMQJob<
       id: number
       gitlab_access_token: string
       trello_access_token: string | null
+      asana_access_token: string | null
     }
   },
   void, // return type
@@ -270,6 +271,7 @@ export type SaveMergedMergeRequest = BullMQJob<
       has_unlimited_usage: boolean | null
       gitlab_access_token: string
       trello_access_token: string | null
+      asana_access_token: string | null
     }
   },
   void, // return type
@@ -293,6 +295,7 @@ export type GenerateOpenMergeRequestSummary = BullMQJob<
       has_unlimited_usage: boolean | null
       gitlab_access_token: string
       trello_access_token: string | null
+      asana_access_token: string | null
     }
   },
   void, // return type
@@ -325,6 +328,71 @@ export type RefreshGitlabTokens = BullMQJob<
   null,
   void, // return type
   'refresh_gitlab_tokens'
+>
+
+export type ImportAsanaProjects = BullMQJob<
+  {
+    organization: {
+      id: number
+      asana_access_token: string
+    }
+  },
+  void,
+  'import_asana_projects'
+>
+
+export type ImportAsanaTasks = BullMQJob<
+  {
+    organization: {
+      id: number
+      asana_access_token: string
+    }
+    project: {
+      id: number
+      ext_asana_project_id: string
+    }
+  },
+  void,
+  'import_asana_tasks'
+>
+
+export type RefreshAsanaTokens = BullMQJob<
+  null,
+  void, // return type
+  'refresh_asana_tokens'
+>
+
+export type CreateAsanaTaskFromSlack = BullMQJob<
+  {
+    team_id: string
+    channel_id: string
+    target_message_ts: string
+    response_url: string
+    project_id: string | null
+  },
+  void, // return type
+  'create_asana_task_from_slack'
+>
+
+export type SyncAsanaTaskToHomieTask = BullMQJob<
+  {
+    ext_asana_task_id: string
+    project_id: number
+  },
+  void,
+  'sync_asana_task_to_homie_task'
+>
+
+export type AskSlackSelectAsanaProjectForTask = BullMQJob<
+  {
+    team_id: string
+    trigger_id: string
+    channel_id: string
+    target_message_ts: string
+    response_url: string
+  },
+  void, // return type
+  'ask_slack_select_asana_project_for_task'
 >
 
 export type DispatchDebouncedJob = BullMQJob<
@@ -368,4 +436,10 @@ export type Job =
   | GenerateOpenMergeRequestSummary
   | SaveOpenedMergeRequest
   | RefreshGitlabTokens
+  | ImportAsanaProjects
+  | ImportAsanaTasks
+  | AskSlackSelectAsanaProjectForTask
+  | CreateAsanaTaskFromSlack
+  | RefreshAsanaTokens
+  | SyncAsanaTaskToHomieTask
   | DispatchDebouncedJob

@@ -12,6 +12,11 @@ interface DebouncedDispatchParams<TJob extends Job, Name extends TJob['name']> {
   debounce: {
     key: string
     id: string
+    /**
+     * How long to wait before the job is executed. If another job is
+     * dispatched before the delay expies, then this job will be
+     * skipped.
+     */
     delaySecs: number
   }
 }
@@ -27,7 +32,7 @@ export async function debouncedDispatch<
   await redis
     .multi()
     .set(debounce.key, debounce.id)
-    .expire(debounce.key, debounce.delaySecs + 5)
+    .expire(debounce.key, debounce.delaySecs + 5) // +5 max secs before key is set (arbitrary)
     .exec()
 
   await dispatch(

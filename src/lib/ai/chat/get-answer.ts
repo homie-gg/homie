@@ -17,7 +17,6 @@ import { convertToOpenAIFunction } from '@langchain/core/utils/function_calling'
 import { getSearchGeneralContextTool } from '@/lib/ai/chat/tools/get-search-context-tool'
 import { rephraseWithPersona } from '@/lib/ai/rephrase-with-persona'
 import { getListPullRequestsTool } from '@/lib/ai/chat/tools/get-list-pull-requests-tool'
-import { getTodaysDateTool } from '@/lib/ai/chat/tools/get-todays-date-tool'
 import { getRememberConversationTool } from '@/lib/ai/chat/tools/get-remember-conversation-tool'
 import { Message } from '@/lib/ai/chat/types'
 import { getFindOpenTasksTool } from '@/lib/ai/chat/tools/get-find-open-tasks-tool'
@@ -26,6 +25,9 @@ import { getFindWhatContributorIsWorkingOnTool } from '@/lib/ai/chat/tools/get-f
 import { getAssignTaskToContributorTool } from '@/lib/ai/chat/tools/get-assign-task-to-contributor-tool'
 import { getMarkTaskAsDoneTool } from '@/lib/ai/chat/tools/get-mark-task-as-done-tool'
 import { getFindTaskTool } from '@/lib/ai/chat/tools/get-find-task-tool'
+import { v4 as uuid } from 'uuid'
+import { logger } from '@/lib/log/logger'
+import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 
 interface GetAnswerParams {
   organization: {
@@ -38,6 +40,7 @@ interface GetAnswerParams {
     slack_access_token: string
     ext_gh_install_id: number | null
     trello_access_token: string | null
+    asana_access_token: string | null
     ext_trello_done_task_list_id: string | null
   }
   messages: Message[]
@@ -53,37 +56,53 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
     return 'Message was provided.'
   }
 
+  const answerId = uuid()
+
+  logger.debug('Get Answer - Start', {
+    event: 'get_answer:start',
+    answer_id: answerId,
+    organization: getOrganizationLogData(organization),
+  })
+
   const tools = [
     getSearchGeneralContextTool({
       organization,
+      answerId,
     }),
     getListPullRequestsTool({
       organization,
+      answerId,
     }),
-    getTodaysDateTool(),
     getRememberConversationTool({
       targetMessageTS: currentMessage.ts,
       organization,
       messages,
       channelID: channelID,
+      answerId,
     }),
     getFindOpenTasksTool({
       organization,
+      answerId,
     }),
     getFindCompletedTasksTool({
       organization,
+      answerId,
     }),
     getFindWhatContributorIsWorkingOnTool({
       organization,
+      answerId,
     }),
     getAssignTaskToContributorTool({
       organization,
+      answerId,
     }),
     getMarkTaskAsDoneTool({
       organization,
+      answerId,
     }),
     getFindTaskTool({
       organization,
+      answerId,
     }),
   ]
 
@@ -105,6 +124,7 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
 
   const prompt = ChatPromptTemplate.fromMessages([
     ['system', 'You are helpful project manager.'],
+    ['system', 'Always include URL links if available.'],
     new MessagesPlaceholder('chat_history'),
     ['user', '{input}'],
     new MessagesPlaceholder('agent_scratchpad'),

@@ -1,6 +1,7 @@
+import { findLinkedAsanaTask } from '@/lib/asana/find-linked-asana-task'
 import { createGithubClient } from '@/lib/github/create-github-client'
 import { findLinkedGithubIssue } from '@/lib/github/find-linked-github-issue'
-import { getLinkedTrelloTask } from '@/lib/trello/find-linked-trello-task'
+import { findLinkedTrelloTask } from '@/lib/trello/find-linked-trello-task'
 
 interface GetLinkedIssuesAndTasksInPullRequestParams {
   pullRequest: {
@@ -16,6 +17,7 @@ interface GetLinkedIssuesAndTasksInPullRequestParams {
     id: number
     ext_gh_install_id: number
     trello_access_token: string | null
+    asana_access_token: string | null
   }
 }
 
@@ -46,13 +48,24 @@ export async function getLinkedIssuesAndTasksInPullRequest(
   }
 
   if (organization.trello_access_token) {
-    const trelloTask = await getLinkedTrelloTask({
+    const trelloTask = await findLinkedTrelloTask({
       body: pullRequest.body,
       trelloAccessToken: organization.trello_access_token,
     })
 
     if (trelloTask) {
       result += `\n${trelloTask}`
+    }
+  }
+
+  if (organization.asana_access_token) {
+    const asanaTask = await findLinkedAsanaTask({
+      body: pullRequest.body,
+      asanaAccessToken: organization.asana_access_token,
+    })
+
+    if (asanaTask) {
+      result += `\n${asanaTask}`
     }
   }
 

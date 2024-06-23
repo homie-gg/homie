@@ -27,6 +27,7 @@ export function createRoute<
         ? FormData
         : z.infer<TBody>
       : null
+    headers: NextRequest['headers']
     cookies: NextRequest['cookies']
     nextUrl: NextRequest['nextUrl']
     query: TQuery extends z.AnyZodObject ? z.infer<TQuery> : null
@@ -59,34 +60,51 @@ export function createRoute<
         params,
       )) as any
 
-      const response = await handleRequest({
-        body,
-        cookies: request.cookies,
-        nextUrl: request.nextUrl,
-        query,
-        routeParams,
-      })
-
-      const jsonBody = config.response as z.AnyZodObject | undefined
-      if (!jsonBody) {
-        return response as unknown as Promise<
-          NextResponse<Record<PropertyKey, never>>
-        >
-      }
-
       try {
-        jsonBody.parse(await response.clone().json()) // Clone to avoid already read response error
-        return response as unknown as NextResponse<TResponse>
-      } catch (error: unknown) {
-        if (error instanceof ZodError) {
-          throw new InternalServerErrorException({
-            type: 'unknown_response',
-            message: createZodErrorMessage(error),
-            errors: error.format(),
-          })
+        const response = await handleRequest({
+          body,
+          cookies: request.cookies,
+          nextUrl: request.nextUrl,
+          query,
+          routeParams,
+          headers: request.headers,
+        })
+
+        const jsonBody = config.response as z.AnyZodObject | undefined
+        if (!jsonBody) {
+          return response as unknown as Promise<
+            NextResponse<Record<PropertyKey, never>>
+          >
         }
 
-        return response
+        try {
+          jsonBody.parse(await response.clone().json()) // Clone to avoid already read response error
+          return response as unknown as NextResponse<TResponse>
+        } catch (error: unknown) {
+          if (error instanceof ZodError) {
+            throw new InternalServerErrorException({
+              type: 'unknown_response',
+              message: createZodErrorMessage(error),
+              errors: error.format(),
+            })
+          }
+
+          return response
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          return NextResponse.json(
+            {
+              type: 'server_error',
+              message: 'Unknown server error',
+              stack_trace: error.stack?.split('\n'),
+              data: 'data' in error ? error.data : null,
+            },
+            { status: 500 },
+          )
+        }
+
+        throw error
       }
     })
   }

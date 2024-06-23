@@ -20,6 +20,13 @@ import { getDefaultQueue } from '@/queue/default-queue'
     },
   })
 
+  await queue.add('refresh_asana_tokens', null, {
+    repeat: {
+      // refresh every 20 mins as Asana has a 1 hour expiry
+      pattern: '*/20 * * * *',
+    },
+  })
+
   // eslint-disable-next-line no-console
   console.log('Scheduled jobs added.')
   process.exit()

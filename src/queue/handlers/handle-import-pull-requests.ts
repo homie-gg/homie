@@ -28,11 +28,17 @@ export async function handleImportPullRequests(job: ImportPullRequests) {
       'trello.workspace.organization_id',
       'homie.organization.id',
     )
+    .leftJoin(
+      'asana.app_user',
+      'asana.app_user.organization_id',
+      'homie.organization.id',
+    )
     .where('ext_gh_install_id', '=', github_organization.ext_gh_install_id)
     .select([
       'homie.organization.id',
       'github.organization.ext_gh_install_id',
       'trello_access_token',
+      'asana_access_token',
     ])
     .executeTakeFirst()
 

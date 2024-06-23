@@ -1,6 +1,6 @@
 import { getLinkedTaskUrls } from '@/lib/tasks/get-linked-task-urls'
 import { createTrelloClient } from '@/lib/trello/create-trello-client'
-import { getShortIdFromCardUrl } from '@/lib/trello/get-short-id-from-card-url'
+import { getTrelloShortIdFromCardUrl } from '@/lib/trello/get-trello-short-id-from-card-url'
 
 interface CloseLinkedTrelloTasksParams {
   pullRequestBody: string | null
@@ -28,7 +28,7 @@ export async function closeLinkedTrelloTasks(
   const taskUrls = getLinkedTaskUrls({ pullRequestBody: pullRequestBody })
 
   for (const url of taskUrls) {
-    const shortId = getShortIdFromCardUrl({ url })
+    const shortId = getTrelloShortIdFromCardUrl({ url })
     if (!shortId) {
       continue
     }

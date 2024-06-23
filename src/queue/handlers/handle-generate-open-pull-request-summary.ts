@@ -17,7 +17,6 @@ export async function handleGenerateOpenPullRequestSummary(
   job: GenerateOpenPullRequestSummary,
 ) {
   const { pull_request, installation } = job.data
-
   const organization = await dbClient
     .selectFrom('homie.organization')
     .innerJoin(
@@ -30,12 +29,18 @@ export async function handleGenerateOpenPullRequestSummary(
       'trello.workspace.organization_id',
       'homie.organization.id',
     )
+    .leftJoin(
+      'asana.app_user',
+      'asana.app_user.organization_id',
+      'homie.organization.id',
+    )
     .where('ext_gh_install_id', '=', installation?.id!)
     .select([
       'homie.organization.id',
       'github.organization.ext_gh_install_id',
       'has_unlimited_usage',
       'trello_access_token',
+      'asana_access_token',
     ])
     .executeTakeFirst()
 
@@ -78,6 +83,11 @@ export async function handleGenerateOpenPullRequestSummary(
   const issue = await getLinkedIssuesAndTasksInPullRequest({
     pullRequest: pull_request,
     organization,
+  })
+  logger.debug('Generate PR Summary - Got Issue', {
+    event: 'generate_pr_summary:got_issue',
+    pull_request: getPullRequestLogData(pull_request),
+    issue,
   })
 
   logger.debug('Generate PR Summary - Got Issue', {

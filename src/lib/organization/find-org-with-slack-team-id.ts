@@ -18,6 +18,11 @@ export const findOrgWithSlackTeamId = async (teamId: string) => {
       'trello.workspace.organization_id',
       'homie.organization.id',
     )
+    .leftJoin(
+      'asana.app_user',
+      'asana.app_user.organization_id',
+      'homie.organization.id',
+    )
     .select([
       'homie.organization.id',
       'ext_gh_install_id',
@@ -31,6 +36,7 @@ export const findOrgWithSlackTeamId = async (teamId: string) => {
       'persona_emoji_level',
       'persona_g_level',
       'persona_positivity_level',
+      'asana_access_token',
     ])
     .where('ext_slack_team_id', '=', teamId)
     .executeTakeFirst()

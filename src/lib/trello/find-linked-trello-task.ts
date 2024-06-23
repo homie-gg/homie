@@ -1,6 +1,6 @@
 import { getLinkedTaskUrls } from '@/lib/tasks/get-linked-task-urls'
 import { createTrelloClient } from '@/lib/trello/create-trello-client'
-import { getShortIdFromCardUrl } from '@/lib/trello/get-short-id-from-card-url'
+import { getTrelloShortIdFromCardUrl } from '@/lib/trello/get-trello-short-id-from-card-url'
 import { TrelloCard } from '@/lib/trello/types'
 
 interface findLinkedTrelloTaskParams {
@@ -8,7 +8,7 @@ interface findLinkedTrelloTaskParams {
   trelloAccessToken: string
 }
 
-export async function getLinkedTrelloTask(
+export async function findLinkedTrelloTask(
   params: findLinkedTrelloTaskParams,
 ): Promise<string | null> {
   const { body, trelloAccessToken } = params
@@ -26,7 +26,7 @@ export async function getLinkedTrelloTask(
   const trelloClient = createTrelloClient(trelloAccessToken)
 
   for (const taskUrl of taskUrls) {
-    const shortId = getShortIdFromCardUrl({ url: taskUrl })
+    const shortId = getTrelloShortIdFromCardUrl({ url: taskUrl })
 
     const card = await trelloClient.get<TrelloCard>(`/cards/${shortId}`)
 

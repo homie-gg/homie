@@ -23,6 +23,12 @@ import { handleCreateHomieTaskFromTrelloTask } from '@/queue/handlers/handle-cre
 import { handleCreateHomieTaskFromGithubIssue } from '@/queue/handlers/handle-create-homie-task-from-github-issue'
 import { handleUpdateHomieTaskFromTrelloTask } from '@/queue/handlers/handle-update-homie-task-from-trello-task'
 import { handleUpdateHomieTaskFromGithubIssue } from '@/queue/handlers/handle-update-homie-task-from-github-issue'
+import { handleRefreshAsanaTokens } from '@/queue/handlers/handle-refresh-asana-tokens'
+import { handleImportAsanaProjects } from '@/queue/handlers/handle-import-asana-projects'
+import { handleCreateAsanaTaskFromSlack } from '@/queue/handlers/handle-create-asana-task-from-slack'
+import { handleAskSlackSelectAsanaProjectForTask } from '@/queue/handlers/handle-ask-slack-select-asana-project-for-task'
+import { handleSyncAsanaTaskToHomieTask } from '@/queue/handlers/handle-sync-asana-task-to-homie-task'
+import { handleImportAsanaTasks } from '@/queue/handlers/handle-import-asana-tasks'
 
 type HandlerFunc<TJob extends Job> = (job: TJob) => void | Promise<void>
 
@@ -56,5 +62,12 @@ export const handlers: Handlers = {
   generate_open_merge_request_summary: handleGenerateOpenMergeRequestSummary,
   save_opened_merge_request: handleSaveOpenedMergeRequest,
   refresh_gitlab_tokens: handleRefreshGitlabTokens,
+  import_asana_projects: handleImportAsanaProjects,
+  refresh_asana_tokens: handleRefreshAsanaTokens,
   dispatch_debounced_job: handleDispatchDebouncedJob,
+  import_asana_tasks: handleImportAsanaTasks,
+  ask_slack_select_asana_project_for_task:
+    handleAskSlackSelectAsanaProjectForTask,
+  create_asana_task_from_slack: handleCreateAsanaTaskFromSlack,
+  sync_asana_task_to_homie_task: handleSyncAsanaTaskToHomieTask,
 }
