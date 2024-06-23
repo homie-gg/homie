@@ -8,6 +8,15 @@ import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import crypto from 'node:crypto'
 import { AsanaWebhookEvent } from '@/lib/asana/types'
+import { debouncedDispatch } from '@/queue/debounced-dispatch'
+import { generateUuid } from '@/lib/crypto/generate-uuid'
+
+/**
+ * How long to wait before fetching latest task status. Asana sends
+ * batched webhooks and order is not guaranteed. Debounce, and
+ * fetch latest task status instead.
+ */
+const taskUpdateDebounceSecs = 5
 
 export const POST = createRoute(
   {
@@ -85,24 +94,40 @@ export const POST = createRoute(
           event.action === 'added' &&
           event.resource.resource_type === 'task'
         ) {
-          console.log('ADDED TASK!')
+          await debouncedDispatch({
+            job: {
+              name: 'sync_asana_task_to_homie_task',
+              data: {
+                ext_asana_task_id: event.resource.gid,
+                project_id: project.id,
+              },
+            },
+            debounce: {
+              key: `sync_asana_task_to_homie_task:${event.resource.gid}`,
+              id: generateUuid(),
+              delaySecs: taskUpdateDebounceSecs,
+            },
+          })
         }
 
         if (
           event.action === 'changed' &&
-          event.resource.resource_type === 'task' &&
-          event.change.field === 'assignee' &&
-          'user' in event
+          event.resource.resource_type === 'task'
         ) {
-          console.log('REMOVED ASSIGNMENT: ', event.user.gid)
-        }
-
-        if (
-          event.action === 'changed' &&
-          event.resource.resource_type === 'task' &&
-          (event.change.field === 'name' || event.change.field === 'html_notes')
-        ) {
-          console.log('EDITED TASK')
+          await debouncedDispatch({
+            job: {
+              name: 'sync_asana_task_to_homie_task',
+              data: {
+                ext_asana_task_id: event.resource.gid,
+                project_id: project.id,
+              },
+            },
+            debounce: {
+              key: `sync_asana_task_to_homie_task:${event.resource.gid}`,
+              id: generateUuid(),
+              delaySecs: taskUpdateDebounceSecs,
+            },
+          })
         }
 
         if (
@@ -112,14 +137,40 @@ export const POST = createRoute(
           event.parent.resource_type === 'task' &&
           'user' in event
         ) {
-          console.log('ASSIGNED:', event.user.gid)
+          await debouncedDispatch({
+            job: {
+              name: 'sync_asana_task_to_homie_task',
+              data: {
+                ext_asana_task_id: event.parent.gid,
+                project_id: project.id,
+              },
+            },
+            debounce: {
+              key: `sync_asana_task_to_homie_task:${event.resource.gid}`,
+              id: generateUuid(),
+              delaySecs: taskUpdateDebounceSecs,
+            },
+          })
         }
 
         if (
           event.action === 'deleted' &&
           event.resource.resource_type === 'task'
         ) {
-          console.log('DELETED: ', event.resource.gid)
+          await debouncedDispatch({
+            job: {
+              name: 'sync_asana_task_to_homie_task',
+              data: {
+                ext_asana_task_id: event.resource.gid,
+                project_id: project.id,
+              },
+            },
+            debounce: {
+              key: `sync_asana_task_to_homie_task:${event.resource.gid}`,
+              id: generateUuid(),
+              delaySecs: taskUpdateDebounceSecs,
+            },
+          })
         }
       }),
     )

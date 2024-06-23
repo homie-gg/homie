@@ -17,6 +17,8 @@ function createOptions(
   return options
 }
 
+export type AsanaClient = ReturnType<typeof createAsanaClient>
+
 export const createAsanaClient = (accessToken: string) => ({
   get: async <TData>(url: string, options?: RequestInit): Promise<TData> =>
     http.get<TData>(asanaApi(url), createOptions(accessToken, options)),

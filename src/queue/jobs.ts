@@ -370,6 +370,15 @@ export type CreateAsanaTaskFromSlack = BullMQJob<
   'create_asana_task_from_slack'
 >
 
+export type SyncAsanaTaskToHomieTask = BullMQJob<
+  {
+    ext_asana_task_id: string
+    project_id: number
+  },
+  void,
+  'sync_asana_task_to_homie_task'
+>
+
 export type AskSlackSelectAsanaProjectForTask = BullMQJob<
   {
     team_id: string
@@ -428,4 +437,5 @@ export type Job =
   | AskSlackSelectAsanaProjectForTask
   | CreateAsanaTaskFromSlack
   | RefreshAsanaTokens
+  | SyncAsanaTaskToHomieTask
   | DispatchDebouncedJob

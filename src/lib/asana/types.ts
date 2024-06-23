@@ -135,7 +135,26 @@ export interface AsanaListWebhooksResponse {
 
 export interface AsanaGetTaskResponse {
   data: {
+    gid: string
     name: string
     notes: string
+    permalink_url: string
+    completed: boolean
+    /**
+     * Due date in ISO format. This is only returned if a time is set, otherwise
+     * only due_on is set for a day.
+     */
+    due_at: string | null
+    /**
+     * Due date without time.
+     */
+    due_on: string | null
+    assignee: {
+      assignee: {
+        gid: string
+        name: string
+        resource_type: 'user'
+      }
+    } | null
   }
 }

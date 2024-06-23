@@ -27,6 +27,7 @@ import { handleRefreshAsanaTokens } from '@/queue/handlers/handle-refresh-asana-
 import { handleImportAsanaProjects } from '@/queue/handlers/handle-import-asana-projects'
 import { handleCreateAsanaTaskFromSlack } from '@/queue/handlers/handle-create-asana-task-from-slack'
 import { handleAskSlackSelectAsanaProjectForTask } from '@/queue/handlers/handle-ask-slack-select-asana-project-for-task'
+import { handleSyncAsanaTaskToHomieTask } from '@/queue/handlers/handle-sync-asana-task-to-homie-task'
 
 type HandlerFunc<TJob extends Job> = (job: TJob) => void | Promise<void>
 
@@ -69,4 +70,5 @@ export const handlers: Handlers = {
   ask_slack_select_asana_project_for_task:
     handleAskSlackSelectAsanaProjectForTask,
   create_asana_task_from_slack: handleCreateAsanaTaskFromSlack,
+  sync_asana_task_to_homie_task: handleSyncAsanaTaskToHomieTask,
 }

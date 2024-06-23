@@ -17,8 +17,6 @@ export async function handleGenerateOpenPullRequestSummary(
   job: GenerateOpenPullRequestSummary,
 ) {
   const { pull_request, installation } = job.data
-  console.log('GENREATE PR');
-
   const organization = await dbClient
     .selectFrom('homie.organization')
     .innerJoin(
@@ -86,8 +84,6 @@ export async function handleGenerateOpenPullRequestSummary(
     pullRequest: pull_request,
     organization,
   })
-  console.log('ISSUE: ', issue)
-
   logger.debug('Generate PR Summary - Got Issue', {
     event: 'generate_pr_summary:got_issue',
     pull_request: getPullRequestLogData(pull_request),
@@ -140,8 +136,6 @@ export async function handleGenerateOpenPullRequestSummary(
   const bodyWithSummary = pull_request.body
     ?.replace(summaryKey, summary)
     .replace(summaryKey, 'summary key') // avoid infinite loop of summaries by replacing the key if it exists
-
-  console.log('result: ', bodyWithSummary);
 
   await github.rest.pulls.update({
     owner,
