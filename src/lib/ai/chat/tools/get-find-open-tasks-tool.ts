@@ -29,7 +29,7 @@ export function getFindOpenTasksTool(params: GetFindOpenTasksToolParams) {
         .where('homie.contributor_task.contributor_id', 'is', null) // unassigned
         .orderBy('priority_level', 'asc') // most important first
         .orderBy('due_date', 'asc') // If any are due get those next
-        .orderBy('created_at', 'desc') // oldest first
+        .orderBy('homie.task.created_at', 'desc') // oldest first
         .limit(8)
         .select([
           'homie.task.name',
@@ -43,7 +43,12 @@ export function getFindOpenTasksTool(params: GetFindOpenTasksToolParams) {
         return 'No available tasks'
       }
 
-      return JSON.stringify(tasks)
+      return [
+        'Open tasks:',
+        ...tasks.map(
+          (task) => `- [${task.name}](#${task.html_url}): ${task.description}`,
+        ),
+      ].join('\n')
     },
   })
 }

@@ -16,10 +16,7 @@ export function getFindTaskTool(params: GetFindTaskTool) {
     description: 'Finds a given task.',
     schema: z.object({
       name: z.string().describe('Name of the task').optional(),
-      task_id: z
-        .number()
-        .describe('Task ID for the task to mark as done.')
-        .optional(),
+      task_id: z.number().describe('Task ID for the task to find.').optional(),
     }),
     func: async (params) => {
       const { task_id, name } = params
@@ -34,7 +31,7 @@ export function getFindTaskTool(params: GetFindTaskTool) {
         return 'Could not find task.'
       }
 
-      return JSON.stringify(task)
+      return `Task:\n[${task.name}](#${task.html_url}): ${task.description}`
     },
   })
 }
