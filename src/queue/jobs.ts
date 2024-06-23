@@ -348,6 +348,7 @@ export type ImportAsanaTasks = BullMQJob<
       asana_access_token: string
     }
     project: {
+      id: number
       ext_asana_project_id: string
     }
   },
