@@ -1,8 +1,8 @@
 import { PromptTemplate } from '@langchain/core/prompts'
 import { Document } from '@langchain/core/documents'
 import { loadSummarizationChain } from 'langchain/chains'
-import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
 import { logger } from '@/lib/log/logger'
+import { createOpenAIChatClient } from '@/lib/open-ai/create-open-ai-chat-client'
 
 interface SummarizeDiffParams {
   diff: string
@@ -32,7 +32,7 @@ export async function summarizeDiff(
     (file) => new Document({ pageContent: file }),
   )
 
-  const model = createOpenAIClient({
+  const model = createOpenAIChatClient({
     temperature: 0,
     modelName: 'gpt-4o',
   })

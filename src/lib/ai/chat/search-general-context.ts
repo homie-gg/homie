@@ -1,4 +1,5 @@
 import { getGeneralContext } from '@/lib/ai/chat/get-general-context'
+import { createOpenAIChatClient } from '@/lib/open-ai/create-open-ai-chat-client'
 import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
 import { PromptTemplate } from '@langchain/core/prompts'
 
@@ -29,12 +30,12 @@ export async function searchGeneralContext(
     context,
   })
 
-  const model = createOpenAIClient({
+  const model = createOpenAIChatClient({
     temperature: 0,
     model: 'gpt-4o',
   })
 
-  return model.invoke(input)
+  return (await model.invoke(input)).content as string
 }
 
 const prompt = `Answer the question based on the context below. You should follow ALL the following rules when generating and answer:
