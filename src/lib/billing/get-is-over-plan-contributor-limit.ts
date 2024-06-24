@@ -34,6 +34,7 @@ export async function getIsOverPlanContributorLimit(
       'homie.organization.id',
       'has_unlimited_usage',
       'homie.subscription.quantity as subscription_quantity',
+      'homie.subscription.stripe_status as subscription_stripe_status',
       'homie.plan.name as plan',
     ])
     .executeTakeFirst()
@@ -61,7 +62,10 @@ export async function getIsOverPlanContributorLimit(
 
   const numContributors = contributors.length
 
-  if (!organizationWithBilling?.subscription_quantity) {
+  if (
+    organizationWithBilling?.subscription_stripe_status !== 'active' ||
+    !organizationWithBilling?.subscription_quantity
+  ) {
     const isOverLimit = numContributors > freePlanContributorLimit
 
     if (isOverLimit) {
