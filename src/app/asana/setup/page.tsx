@@ -25,7 +25,7 @@ export default async function AsanaSetupPage(props: AsanaPageProps) {
 
   const data = new FormData()
   data.append('grant_type', 'authorization_code')
-  data.append('client_id', process.env.ASANA_CLIENT_ID!)
+  data.append('client_id', process.env.NEXT_PUBLIC_ASANA_CLIENT_ID!)
   data.append('client_secret', process.env.ASANA_CLIENT_SECRET!)
   data.append('redirect_uri', `${process.env.NEXT_PUBLIC_APP_URL}/asana/setup`)
   data.append('code', searchParams.code)
