@@ -28,16 +28,6 @@ export async function handleReplySlackThread(job: ReplySlackThread) {
 
   const slackClient = createSlackClient(organization.slack_access_token)
 
-  if (await getIsOverPlanContributorLimit({ organization })) {
-    await slackClient.post('chat.postMessage', {
-      channel: channel_id,
-      thread_ts: target_message_ts,
-      text: getOverContributorLimitMessage(),
-    })
-
-    return
-  }
-
   const threadMessages = await getTextReplies({
     channelID: channel_id,
     messageTS: thread_ts,
@@ -50,6 +40,16 @@ export async function handleReplySlackThread(job: ReplySlackThread) {
 
   const isBotThread = mentions.length > 0
   if (!isBotThread) {
+    return
+  }
+
+  if (await getIsOverPlanContributorLimit({ organization })) {
+    await slackClient.post('chat.postMessage', {
+      channel: channel_id,
+      thread_ts: target_message_ts,
+      text: getOverContributorLimitMessage(),
+    })
+
     return
   }
 
