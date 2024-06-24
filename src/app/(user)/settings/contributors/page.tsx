@@ -15,6 +15,7 @@ import {
 import { auth } from '@clerk/nextjs'
 import { getTrelloBoardMembers } from '@/lib/trello/get-trello-members'
 import { getAsanaUsers } from '@/lib/asana/get-asana-users'
+import { getSlackDisplayName } from '@/lib/slack/get-slack-display-name'
 
 interface ContributorsPageProps {}
 
@@ -93,12 +94,17 @@ export default async function ContributorsPage(props: ContributorsPageProps) {
     ])
     .execute()
 
-  const availableSlackMembers = slackMembers.filter(
-    (slackMember) =>
-      slackMember.is_bot === false &&
-      slackMember.id !== 'USLACKBOT' &&
-      (!!slackMember.profile?.display_name || !!slackMember.profile?.real_name), // has name
-  )
+  const availableSlackMembers = slackMembers
+    .filter(
+      (slackMember) =>
+        slackMember.is_bot === false &&
+        slackMember.id !== 'USLACKBOT' &&
+        (!!slackMember.profile?.display_name ||
+          !!slackMember.profile?.real_name), // has name
+    )
+    .sort((a, b) =>
+      getSlackDisplayName(a).localeCompare(getSlackDisplayName(b)),
+    )
 
   return (
     <div className="space-y-6">

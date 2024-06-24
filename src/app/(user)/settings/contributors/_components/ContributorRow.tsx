@@ -2,6 +2,7 @@
 
 import { AsanaUser } from '@/lib/asana/types'
 import { http } from '@/lib/http/client/http'
+import { getSlackDisplayName } from '@/lib/slack/get-slack-display-name'
 import { TrelloMember } from '@/lib/trello/types'
 import {
   Select,
@@ -164,16 +165,4 @@ export default function ContributorRow(props: ContributorRowProps) {
       )}
     </TableRow>
   )
-}
-
-function getSlackDisplayName(slackMember: SlackMember) {
-  if (slackMember.profile?.display_name) {
-    return slackMember.profile.display_name
-  }
-
-  if (slackMember.profile?.real_name) {
-    return slackMember.profile.real_name
-  }
-
-  return 'Unknown'
 }
