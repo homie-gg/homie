@@ -23,6 +23,9 @@ cd /app
 # Run db migrations
 npm run db:migrate
 
+# Seed db dependencies (statuses, types, etc.)
+npm run db:seed
+
 # Set billing plans
 npm run billing:create-plans
 
