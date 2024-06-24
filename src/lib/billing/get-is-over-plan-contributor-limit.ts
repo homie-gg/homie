@@ -29,7 +29,6 @@ export async function getIsOverPlanContributorLimit(
     )
     .leftJoin('homie.plan', 'homie.plan.id', 'homie.subscription.plan_id')
     .where('homie.organization.id', '=', organization.id)
-    .where('homie.subscription.stripe_status', '=', 'active')
     .select([
       'homie.organization.id',
       'has_unlimited_usage',
