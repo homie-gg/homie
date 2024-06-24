@@ -1,7 +1,8 @@
 import { getGeneralContext } from '@/lib/ai/chat/get-general-context'
 import { createOpenAIChatClient } from '@/lib/open-ai/create-open-ai-chat-client'
-import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
-import { PromptTemplate } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { RunnableSequence } from '@langchain/core/runnables'
 
 interface SearchGeneralContextParams {
   question: string
@@ -20,22 +21,20 @@ export async function searchGeneralContext(
     question,
   })
 
-  const promptTemplate = new PromptTemplate({
-    template: prompt,
-    inputVariables: ['question', 'context'],
-  })
-
-  const input = await promptTemplate.format({
-    question,
-    context,
-  })
-
   const model = createOpenAIChatClient({
     temperature: 0,
     model: 'gpt-4o',
   })
 
-  return (await model.invoke(input)).content as string
+  const chatPrompt = ChatPromptTemplate.fromTemplate(prompt)
+
+  const parser = new StringOutputParser()
+  const chain = RunnableSequence.from([chatPrompt, model, parser])
+
+  return chain.invoke({
+    question,
+    context,
+  })
 }
 
 const prompt = `Answer the question based on the context below. You should follow ALL the following rules when generating and answer:
