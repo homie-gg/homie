@@ -2,8 +2,10 @@ import { mockCreateGithubApp } from '@/__utils__/mock-create-github-app'
 import { mockCreateGithubClient } from '@/__utils__/mock-create-github-client'
 import { mockCreateOpenAIClient } from '@/__utils__/mock-create-open-ai-client'
 import { mockCreateOpenAIEmbedder } from '@/__utils__/mock-create-open-ai-embedder'
+import { mockExtractCodeSnippets } from '@/__utils__/mock-extract-code-snippets'
 import { mockGetPineconeClient } from '@/__utils__/mock-get-pinecone-client'
 import { mockLoadSummarizationChain } from '@/__utils__/mock-load-summarization-chain'
+import { mockSummarizeCodeChange } from '@/__utils__/mock-summarize-code-change'
 import { POST } from '@/app/api/github/webhook/route'
 import { dbClient } from '@/database/client'
 
@@ -69,30 +71,12 @@ it('should create and embed a pr', async () => {
     },
   })
 
-  const openAIInvoke = jest.fn()
+  mockSummarizeCodeChange.mockResolvedValueOnce('test PR summary')
 
-  mockCreateOpenAIClient.mockReturnValue({
-    invoke: openAIInvoke,
-  })
-
-  openAIInvoke.mockResolvedValueOnce({
-    text: 'this is the summarized diff',
-  })
-
-  mockLoadSummarizationChain.mockReturnValueOnce({
-    invoke: openAIInvoke,
-  })
-
-  openAIInvoke.mockResolvedValueOnce('this is the pr summary')
-
-  openAIInvoke.mockResolvedValueOnce(`
-  - snippet one
-  - snippet 2
-  `)
-
-  mockCreateOpenAIClient.mockReturnValueOnce({
-    invoke: openAIInvoke,
-  })
+  mockExtractCodeSnippets.mockResolvedValueOnce([
+    'some code snippet',
+    'second code snippet',
+  ])
 
   const mockEmbed = jest.fn()
 
@@ -156,12 +140,12 @@ it('should create and embed a pr', async () => {
 
   expect(repo.name).toBe('test_closed_repo')
 
-  expect(openAIInvoke).toHaveBeenCalledTimes(3)
-
-  // Did call to summarize diff
-  expect(
-    openAIInvoke.mock.calls[0][0].input_documents[0].pageContent,
-  ).toContain('+++ some pr diff')
+  expect(mockSummarizeCodeChange).toHaveBeenCalledTimes(1)
+  const mockSummarizeCodeChangeData = mockSummarizeCodeChange.mock.calls[0][0]
+  expect(mockSummarizeCodeChangeData.title).toBe('My test closed PR')
+  expect(mockSummarizeCodeChangeData.diff).toBe('+++ some pr diff')
+  expect(mockSummarizeCodeChangeData.issue).toBe('\nissue for closed pr')
+  expect(mockSummarizeCodeChangeData.body).toBe('closes #889')
 
   const pullRequest = await dbClient
     .selectFrom('homie.pull_request')
@@ -169,15 +153,6 @@ it('should create and embed a pr', async () => {
     .selectAll()
     .executeTakeFirstOrThrow()
   expect(pullRequest.title).toBe('My test closed PR')
-
-  // Assert summarize diff
-  expect(openAIInvoke.mock.calls[1][0]).toContain('this is the summarized diff')
-
-  // assert extract code snippets
-  expect(openAIInvoke.mock.calls[2][0]).toContain(
-    'Given the following SUMMARY, extract out relevant snippets of code from the DIFF',
-  )
-  expect(openAIInvoke.mock.calls[2][0]).toContain('+++ some pr diff')
 
   expect(mockUpsert.mock.calls[0][0][0]['metadata']['type']).toBe('pr_summary')
   expect(mockUpsert.mock.calls[0][0][0]['metadata']['text']).toContain(
@@ -191,4 +166,7 @@ it('should create and embed a pr', async () => {
   )
 
   expect(mockUpsert.mock.calls[1][0][0]['metadata']['type']).toBe('pr_diff')
+  expect(mockUpsert.mock.calls[1][0][0]['metadata']['text']).toContain(
+    'some code snippet',
+  )
 })

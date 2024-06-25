@@ -1,4 +1,7 @@
-import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
+import { createOpenAIChatClient } from '@/lib/open-ai/create-open-ai-chat-client'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { RunnableSequence } from '@langchain/core/runnables'
 
 interface RephraseWithPersonaParams {
   gLevel: number
@@ -19,10 +22,15 @@ export function rephraseWithPersona(params: RephraseWithPersonaParams) {
 TEXT:
 ${text}
 `
-  const model = createOpenAIClient({
+
+  const chatPrompt = ChatPromptTemplate.fromTemplate(prompt)
+
+  const parser = new StringOutputParser()
+  const model = createOpenAIChatClient({
     temperature: 0,
     modelName: 'gpt-4o',
   })
+  const chain = RunnableSequence.from([chatPrompt, model, parser])
 
-  return model.invoke(prompt)
+  return chain.invoke({})
 }

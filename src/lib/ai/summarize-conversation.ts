@@ -1,5 +1,7 @@
-import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
-import { PromptTemplate } from '@langchain/core/prompts'
+import { createOpenAIChatClient } from '@/lib/open-ai/create-open-ai-chat-client'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { RunnableSequence } from '@langchain/core/runnables'
 
 interface SummarizeConversationParams {
   messages: Array<{ text: string }>
@@ -9,21 +11,16 @@ export async function summarizeConversation(
   params: SummarizeConversationParams,
 ) {
   const { messages } = params
-  const promptTemplate = new PromptTemplate({
-    template: prompt,
-    inputVariables: ['context'],
-  })
 
-  const input = await promptTemplate.format({
-    context: JSON.stringify(messages),
-  })
-
-  const model = createOpenAIClient({
+  const model = createOpenAIChatClient({
     temperature: 0,
     modelName: 'gpt-4o',
   })
+  const chatPrompt = ChatPromptTemplate.fromTemplate(prompt)
+  const parser = new StringOutputParser()
+  const chain = RunnableSequence.from([chatPrompt, model, parser])
 
-  return model.invoke(input)
+  return chain.invoke({ context: JSON.stringify(messages) })
 }
 
 const prompt = `Summarize the following conversation in the CONTEXT> You should follow ALL of the following rules when generating an answer:

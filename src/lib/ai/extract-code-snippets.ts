@@ -1,5 +1,7 @@
-import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
-import { PromptTemplate } from '@langchain/core/prompts'
+import { createOpenAIChatClient } from '@/lib/open-ai/create-open-ai-chat-client'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { RunnableSequence } from '@langchain/core/runnables'
 
 interface ExtractCodeSnippetsParams {
   diff: string
@@ -9,19 +11,21 @@ interface ExtractCodeSnippetsParams {
 export async function extractCodeSnippets(params: ExtractCodeSnippetsParams) {
   const { diff, summary } = params
 
-  const model = createOpenAIClient({
+  const model = createOpenAIChatClient({
     temperature: 0,
     modelName: 'gpt-4o',
   })
 
-  const promptTemplate = new PromptTemplate({
-    template: prompt,
-    inputVariables: ['summary', 'diff'],
-  })
+  const chatPrompt = ChatPromptTemplate.fromTemplate(prompt)
+  const parser = new StringOutputParser()
+  const chain = RunnableSequence.from([chatPrompt, model, parser])
 
-  const input = await promptTemplate.format({ diff, summary })
-
-  return (await model.invoke(input)).split(/^-/gm)
+  return (
+    await chain.invoke({
+      diff,
+      summary,
+    })
+  ).split(/^-/gm)
 }
 
 export const prompt = `Given the following SUMMARY, extract out relevant snippets of code from the DIFF. You MUST 

@@ -1,7 +1,9 @@
 import { summarizeDiff } from '@/lib/ai/summarize-diff'
 import { logger } from '@/lib/log/logger'
-import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
-import { PromptTemplate } from '@langchain/core/prompts'
+import { createOpenAIChatClient } from '@/lib/open-ai/create-open-ai-chat-client'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { RunnableSequence } from '@langchain/core/runnables'
 
 interface SummarizeCodeChangeParams {
   title: string
@@ -27,7 +29,7 @@ export async function summarizeCodeChange(params: SummarizeCodeChangeParams) {
 
   const diffSummary = diff ? await summarizeDiff({ diff, logData }) : null
 
-  const input = await getInput({
+  const template = getTemplate({
     title,
     diffSummary,
     issue,
@@ -35,12 +37,31 @@ export async function summarizeCodeChange(params: SummarizeCodeChangeParams) {
     length,
   })
 
-  const model = createOpenAIClient({
+  const rules = getRules({
+    title,
+    diffSummary,
+    issue,
+    body,
+    length,
+  })
+
+  const chatPrompt = ChatPromptTemplate.fromTemplate(template)
+
+  const model = createOpenAIChatClient({
     temperature: 0,
     modelName: 'gpt-4o',
   })
 
-  const result = await model.invoke(input)
+  const parser = new StringOutputParser()
+  const chain = RunnableSequence.from([chatPrompt, model, parser])
+
+  const result = await chain.invoke({
+    diff: diffSummary ?? '',
+    issue: issue ?? '',
+    title,
+    body: body ?? '',
+    rules,
+  })
 
   logger.debug('Summarize Code Change - Result', {
     ...logData,
@@ -52,7 +73,6 @@ export async function summarizeCodeChange(params: SummarizeCodeChangeParams) {
     title,
     length,
     result,
-    input,
   })
 
   return result
@@ -64,32 +84,6 @@ interface GetInputParams {
   issue: string | null
   body: string | null
   length: 'short' | 'long'
-}
-
-/**
- * Get the appropriate prompt input based on the available data.
- */
-function getInput(params: GetInputParams) {
-  const { title, diffSummary, issue, body } = params
-
-  const template = getTemplate(params)
-
-  const rules = getRules(params)
-
-  const promptTemplate = new PromptTemplate({
-    template,
-    inputVariables: ['title', 'diff', 'issue', 'body', 'rules'],
-  })
-
-  const input = promptTemplate.format({
-    title,
-    diff: diffSummary,
-    issue,
-    body,
-    rules,
-  })
-
-  return input
 }
 
 function getTemplate(params: GetInputParams) {
