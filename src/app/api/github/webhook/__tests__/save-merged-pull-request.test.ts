@@ -2,6 +2,7 @@ import { mockCreateGithubApp } from '@/__utils__/mock-create-github-app'
 import { mockCreateGithubClient } from '@/__utils__/mock-create-github-client'
 import { mockCreateOpenAIClient } from '@/__utils__/mock-create-open-ai-client'
 import { mockCreateOpenAIEmbedder } from '@/__utils__/mock-create-open-ai-embedder'
+import { mockExtractCodeSnippets } from '@/__utils__/mock-extract-code-snippets'
 import { mockGetPineconeClient } from '@/__utils__/mock-get-pinecone-client'
 import { mockLoadSummarizationChain } from '@/__utils__/mock-load-summarization-chain'
 import { mockSummarizeCodeChange } from '@/__utils__/mock-summarize-code-change'
@@ -71,6 +72,11 @@ it('should create and embed a pr', async () => {
   })
 
   mockSummarizeCodeChange.mockResolvedValueOnce('test PR summary')
+
+  mockExtractCodeSnippets.mockResolvedValueOnce([
+    'some code snippet',
+    'second code snippet',
+  ])
 
   const mockEmbed = jest.fn()
 
@@ -160,4 +166,7 @@ it('should create and embed a pr', async () => {
   )
 
   expect(mockUpsert.mock.calls[1][0][0]['metadata']['type']).toBe('pr_diff')
+  expect(mockUpsert.mock.calls[1][0][0]['metadata']['text']).toContain(
+    'some code snippet',
+  )
 })
