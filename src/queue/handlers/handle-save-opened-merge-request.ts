@@ -2,7 +2,6 @@ import { dbClient } from '@/database/client'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { logger } from '@/lib/log/logger'
 import { SaveOpenedMergeRequest } from '@/queue/jobs'
-import { parseISO } from 'date-fns'
 import { getMergeRequestLogData } from '@/lib/gitlab/get-merge-request-log-data'
 import { getProjectLogData } from '@/lib/gitlab/get-project-log-data'
 import { createGitlabClient } from '@/lib/gitlab/create-gitlab-client'
@@ -14,7 +13,7 @@ export async function handleSaveOpenedMergeRequest(
   const { organization, merge_request } = job.data
 
   logger.debug('Start save opened PR', {
-    event: 'save_opened_pull_request.start',
+    event: 'save_opened_merge_request.start',
     data: {
       organization: getOrganizationLogData(organization),
       merge_request: getMergeRequestLogData(merge_request),
@@ -59,7 +58,7 @@ export async function handleSaveOpenedMergeRequest(
 
   const mergeRequestData = await gitlab.MergeRequests.show(
     project.ext_gitlab_project_id,
-    merge_request.iid,
+    merge_request.id,
   )
   if (!mergeRequestData) {
     logger.debug('missing gitlab merge request data', {
@@ -107,7 +106,6 @@ export async function handleSaveOpenedMergeRequest(
   await dbClient
     .insertInto('homie.pull_request')
     .values({
-      created_at: parseISO(merge_request.created_at),
       ext_gitlab_merge_request_id: merge_request.id,
       ext_gitlab_merge_request_iid: merge_request.iid,
       number: merge_request.iid,
@@ -117,13 +115,9 @@ export async function handleSaveOpenedMergeRequest(
       html_url: mergeRequestData.web_url,
       gitlab_project_id: project.id,
       body: merge_request.description ?? '',
-      merged_at: merge_request.merged_at
-        ? parseISO(merge_request.merged_at)
-        : null,
     })
     .onConflict((oc) =>
       oc.column('ext_gitlab_merge_request_id').doUpdateSet({
-        created_at: parseISO(merge_request.created_at),
         organization_id: organization.id,
         contributor_id: contributor.id,
         title: merge_request.title,
@@ -131,9 +125,6 @@ export async function handleSaveOpenedMergeRequest(
         number: merge_request.iid,
         gitlab_project_id: project.id,
         body: merge_request.description ?? '',
-        merged_at: merge_request.merged_at
-          ? parseISO(merge_request.merged_at)
-          : null,
       }),
     )
     .returningAll()
