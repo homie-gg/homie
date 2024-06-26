@@ -189,11 +189,9 @@ export type CreateHomieTaskFromTrelloTask = BullMQJob<
     board: {
       id: string
     }
-    list: {
-      id: string
-    }
     card: {
       id: string
+      idList?: string
       shortLink: string
       name: string
     }
@@ -207,17 +205,14 @@ export type UpdateHomieTaskFromTrelloTask = BullMQJob<
     board: {
       id: string
     }
-    list: {
-      id: string
-    }
     card: {
       id: string
+      idList?: string
       shortLink: string
       name: string
       desc?: string
       due?: string
       closed?: boolean
-      idList?: string
     }
     updated_fields: Array<'name' | 'desc' | 'due'>
   },
