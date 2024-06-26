@@ -29,7 +29,6 @@ export const POST = async (request: NextRequest) => {
       await dispatch('create_homie_task_from_trello_task', {
         board: action.data.board,
         card: action.data.card,
-        list: action.data.list,
       })
 
       break
@@ -37,7 +36,6 @@ export const POST = async (request: NextRequest) => {
       await dispatch('update_homie_task_from_trello_task', {
         board: action.data.board,
         card: action.data.card,
-        list: action.data.list,
         updated_fields: Object.keys(action.data.old) as any, // untyped anyway
       })
 

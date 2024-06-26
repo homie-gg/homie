@@ -8,7 +8,7 @@ import { taskStatus } from '@/lib/tasks'
 export async function handleUpdateHomieTaskFromTrelloTask(
   job: UpdateHomieTaskFromTrelloTask,
 ) {
-  const { board, card, list, updated_fields } = job.data
+  const { board, card, updated_fields } = job.data
 
   const trelloWorkspace = await dbClient
     .selectFrom('trello.workspace')
@@ -44,7 +44,6 @@ export async function handleUpdateHomieTaskFromTrelloTask(
     await dispatch('create_homie_task_from_trello_task', {
       board,
       card,
-      list,
     })
     return
   }

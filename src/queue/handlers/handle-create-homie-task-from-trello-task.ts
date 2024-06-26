@@ -6,7 +6,7 @@ import { taskStatus } from '@/lib/tasks'
 export async function handleCreateHomieTaskFromTrelloTask(
   job: CreateHomieTaskFromTrelloTask,
 ) {
-  const { board, card, list } = job.data
+  const { board, card } = job.data
 
   const trelloWorkspace = await dbClient
     .selectFrom('trello.workspace')
@@ -37,7 +37,9 @@ export async function handleCreateHomieTaskFromTrelloTask(
     description: '',
   })
 
-  const isDone = list.id === trelloWorkspace.ext_trello_done_task_list_id
+  const isDone = card.idList
+    ? card.idList === trelloWorkspace.ext_trello_done_task_list_id
+    : false
 
   await dbClient
     .insertInto('homie.task')
