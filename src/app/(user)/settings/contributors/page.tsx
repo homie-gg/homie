@@ -66,16 +66,20 @@ export default async function ContributorsPage(props: ContributorsPageProps) {
 
   const trelloMembers =
     organization.ext_trello_board_id && organization.trello_access_token
-      ? await getTrelloBoardMembers({
-          boardId: organization.ext_trello_board_id,
-          accessToken: organization.trello_access_token,
-        })
+      ? (
+          await getTrelloBoardMembers({
+            boardId: organization.ext_trello_board_id,
+            accessToken: organization.trello_access_token,
+          })
+        ).sort((a, b) => a.fullName.localeCompare(b.fullName))
       : null
 
   const asanaUsers = organization.asana_access_token
-    ? await getAsanaUsers({
-        asanaAccessToken: organization.asana_access_token,
-      })
+    ? (
+        await getAsanaUsers({
+          asanaAccessToken: organization.asana_access_token,
+        })
+      ).sort((a, b) => a.name.localeCompare(b.name))
     : null
 
   if (!ok) {
