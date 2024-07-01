@@ -1,10 +1,10 @@
 import { dbClient } from '@/database/client'
 import { createGithubClient } from '@/lib/github/create-github-client'
-import { saveMergedPullRequest } from '@/lib/github/save-merged-pull-request'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { getPullRequestLogData } from '@/lib/github/get-pull-request-log-data'
 import { logger } from '@/lib/log/logger'
 import { ImportPullRequests } from '@/queue/jobs'
+import { dispatch } from '@/queue/default-queue'
 
 export async function handleImportPullRequests(job: ImportPullRequests) {
   logger.debug('Start pull request import', {
@@ -90,8 +90,8 @@ export async function handleImportPullRequests(job: ImportPullRequests) {
         continue
       }
 
-      await saveMergedPullRequest({
-        pullRequest: {
+      await dispatch('save_merged_pull_request', {
+        pull_request: {
           user: {
             id: pullRequest.user.id,
             login: pullRequest.user.login,
@@ -108,7 +108,9 @@ export async function handleImportPullRequests(job: ImportPullRequests) {
             ref: pullRequest.base.ref,
           },
         },
-        organization,
+        installation: {
+          id: github_organization.ext_gh_install_id,
+        },
       })
     }
   }
