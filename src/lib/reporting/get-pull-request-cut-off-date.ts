@@ -1,4 +1,4 @@
-import { subDays } from 'date-fns'
+import { subHours } from 'date-fns'
 
 interface GetPullRequestCutoffDateParams {
   organization: {
@@ -15,8 +15,8 @@ export function getPullRequestCutoffDate(
   const { send_pull_request_summaries_interval } = organization
 
   if (send_pull_request_summaries_interval === 'daily') {
-    return subDays(new Date(), 1)
+    return subHours(new Date(), 24)
   }
 
-  return subDays(new Date(), 7)
+  return subHours(new Date(), 168) // 24 * 7 (Days)
 }
