@@ -58,7 +58,7 @@ export async function handleSaveOpenedMergeRequest(
 
   const mergeRequestData = await gitlab.MergeRequests.show(
     project.ext_gitlab_project_id,
-    merge_request.id,
+    merge_request.iid,
   )
   if (!mergeRequestData) {
     logger.debug('missing gitlab merge request data', {
