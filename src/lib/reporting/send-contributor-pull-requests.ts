@@ -56,7 +56,7 @@ export async function sendContributorPullRequests(
   const repos = [...githubRepos, ...gitlabProjects]
 
   for (const repo of repos) {
-    let pullRequestsQuery = dbClient
+    const pullRequestsQuery = dbClient
       .selectFrom('homie.pull_request')
       .where('contributor_id', '=', contributor.id)
       .where('merged_at', 'is not', null)
@@ -65,19 +65,11 @@ export async function sendContributorPullRequests(
       .orderBy('merged_at')
 
     if ('github_repo_id' in repo) {
-      pullRequestsQuery = pullRequestsQuery.where(
-        'github_repo_id',
-        '=',
-        repo.github_repo_id,
-      )
+      pullRequestsQuery.where('github_repo_id', '=', repo.github_repo_id)
     }
 
     if ('gitlab_project_id' in repo) {
-      pullRequestsQuery = pullRequestsQuery.where(
-        'gitlab_project_id',
-        '=',
-        repo.gitlab_project_id,
-      )
+      pullRequestsQuery.where('gitlab_project_id', '=', repo.gitlab_project_id)
     }
 
     const pullRequests = await pullRequestsQuery.execute()
