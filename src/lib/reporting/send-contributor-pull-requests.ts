@@ -53,7 +53,7 @@ export async function sendContributorPullRequests(
       .where('contributor_id', '=', contributor.id)
       .where('github_repo_id', '=', repo.id)
       .where('merged_at', 'is not', null)
-      .where('created_at', '>', cutOffDate)
+      .where('merged_at', '>', cutOffDate)
       .select(['homie.pull_request.html_url', 'homie.pull_request.title'])
       .orderBy('merged_at')
       .execute()
