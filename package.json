@@ -22,7 +22,8 @@
     "queue:dashboard": "dotenv -e .env.local tsx queue-dashboard.ts",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "cli": "dotenv -e .env.local tsx src/cli.ts"
   },
   "dependencies": {
     "@axiomhq/js": "^1.0.0-rc.3",
