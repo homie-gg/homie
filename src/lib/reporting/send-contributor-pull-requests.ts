@@ -41,22 +41,46 @@ export async function sendContributorPullRequests(
     },
   ]
 
-  const repos = await dbClient
+  const githubRepos = await dbClient
     .selectFrom('github.repo')
-    .select(['name', 'id', 'html_url'])
+    .select(['name', 'id as github_repo_id', 'html_url as url'])
     .where('github.repo.organization_id', '=', organization.id)
     .execute()
 
+  const gitlabProjects = await dbClient
+    .selectFrom('gitlab.project')
+    .select(['name', 'id as gitlab_project_id', 'web_url as url'])
+    .where('gitlab.project.organization_id', '=', organization.id)
+    .execute()
+
+  const repos = [...githubRepos, ...gitlabProjects]
+
   for (const repo of repos) {
-    const pullRequests = await dbClient
+    let pullRequestsQuery = dbClient
       .selectFrom('homie.pull_request')
       .where('contributor_id', '=', contributor.id)
-      .where('github_repo_id', '=', repo.id)
       .where('merged_at', 'is not', null)
       .where('merged_at', '>', cutOffDate)
       .select(['homie.pull_request.html_url', 'homie.pull_request.title'])
       .orderBy('merged_at')
-      .execute()
+
+    if ('github_repo_id' in repo) {
+      pullRequestsQuery = pullRequestsQuery.where(
+        'github_repo_id',
+        '=',
+        repo.github_repo_id,
+      )
+    }
+
+    if ('gitlab_project_id' in repo) {
+      pullRequestsQuery = pullRequestsQuery.where(
+        'gitlab_project_id',
+        '=',
+        repo.gitlab_project_id,
+      )
+    }
+
+    const pullRequests = await pullRequestsQuery.execute()
 
     if (pullRequests.length === 0) {
       continue
@@ -76,7 +100,7 @@ export async function sendContributorPullRequests(
           elements: [
             {
               type: 'link',
-              url: repo.html_url,
+              url: repo.url,
               text: repo.name,
               style: {
                 bold: true,
