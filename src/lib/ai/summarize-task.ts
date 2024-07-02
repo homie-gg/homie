@@ -27,7 +27,7 @@ export async function summarizeTask(
 
   const model = createOpenAIChatClient({
     temperature: 0,
-    modelName: 'gpt-4o',
+    modelName: 'gpt-4o-2024-05-13',
   })
 
   const chatPrompt = ChatPromptTemplate.fromTemplate(prompt)

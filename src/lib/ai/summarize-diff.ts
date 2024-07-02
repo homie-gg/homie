@@ -9,7 +9,7 @@ interface SummarizeDiffParams {
   logData?: Record<string, any>
 }
 
-export const chatGPTCharLimit = 384000 // gpt-4o 128k tokens x 3
+export const chatGPTCharLimit = 384000 // gpt-4o-2024-05-13 128k tokens x 3
 
 const commonLockFiles = [
   'package-lock.json',
@@ -34,7 +34,7 @@ export async function summarizeDiff(
 
   const model = createOpenAIChatClient({
     temperature: 0,
-    modelName: 'gpt-4o',
+    modelName: 'gpt-4o-2024-05-13',
   })
 
   const summarizeChain = loadSummarizationChain(model, {

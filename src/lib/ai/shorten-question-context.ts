@@ -68,7 +68,7 @@ async function summarize(params: ShortenQuestionContextParams) {
     question,
   })
 
-  const model = new OpenAI({ temperature: 0, modelName: 'gpt-4o' })
+  const model = new OpenAI({ temperature: 0, modelName: 'gpt-4o-2024-05-13' })
 
   return model.invoke(input)
 }

@@ -23,7 +23,7 @@ export async function searchGeneralContext(
 
   const model = createOpenAIChatClient({
     temperature: 0,
-    model: 'gpt-4o',
+    model: 'gpt-4o-2024-05-13',
   })
 
   const chatPrompt = ChatPromptTemplate.fromTemplate(prompt)

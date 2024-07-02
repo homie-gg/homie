@@ -28,7 +28,7 @@ ${text}
   const parser = new StringOutputParser()
   const model = createOpenAIChatClient({
     temperature: 0,
-    modelName: 'gpt-4o',
+    modelName: 'gpt-4o-2024-05-13',
   })
   const chain = RunnableSequence.from([chatPrompt, model, parser])
 
