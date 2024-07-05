@@ -58,6 +58,20 @@ export const POST = async (request: NextRequest) => {
 
   const shouldGenerateSummary = mergeRequest.description?.includes(summaryKey)
 
+  if (mergeRequest.action === 'reopen') {
+    await dispatch('reopen_merge_request', {
+      merge_request: mergeRequest,
+      organization,
+    })
+  }
+
+  if (mergeRequest.action === 'close') {
+    await dispatch('close_merge_request', {
+      merge_request: mergeRequest,
+      organization,
+    })
+  }
+
   if (mergeRequest.action === 'merge' && isToDefaultBranch) {
     await dispatch('save_merged_merge_request', {
       merge_request: mergeRequest,

@@ -10,7 +10,7 @@ import { reopenTaskFromGithubIssue } from '@/lib/github/reopen-task-from-github-
 
 let webhooks: ReturnType<typeof createGithubApp>['webhooks'] | null = null
 
-export const createGithubWebhooks = () => {
+export const getGithubWebhooks = () => {
   if (webhooks) {
     return webhooks
   }
@@ -61,39 +61,25 @@ export const createGithubWebhooks = () => {
     await reopenTaskFromGithubIssue(params.payload)
   })
 
+  app.webhooks.on('pull_request.reopened', async (params) => {
+    const {
+      payload: { pull_request, installation },
+    } = params
+
+    await dispatch('reopen_pull_request', {
+      pull_request,
+      installation,
+    })
+  })
+
   app.webhooks.on('pull_request.closed', async (params) => {
     const {
       payload: { pull_request, installation },
     } = params
 
-    if (!pull_request.merged_at) {
-      return
-    }
-
-    await dispatch('save_merged_pull_request', {
+    await dispatch('close_pull_request', {
       pull_request,
       installation,
-    })
-
-    const organization = await dbClient
-      .selectFrom('homie.organization')
-      .innerJoin(
-        'github.organization',
-        'github.organization.organization_id',
-        'homie.organization.id',
-      )
-
-      .where('ext_gh_install_id', '=', installation?.id!)
-      .select(['homie.organization.id'])
-      .executeTakeFirst()
-
-    if (!organization) {
-      return
-    }
-
-    await dispatch('close_linked_tasks', {
-      pullRequestBody: pull_request.body ?? '',
-      organization,
     })
   })
 
