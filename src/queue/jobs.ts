@@ -164,18 +164,6 @@ export type ReplySlackMention = BullMQJob<
   'reply_slack_mention'
 >
 
-export type ReplySlackThread = BullMQJob<
-  {
-    team_id: string
-    channel_id: string
-    thread_ts: string
-    target_message_ts: string
-    ext_slack_user_id: string
-  },
-  void, // return type
-  'reply_slack_thread'
->
-
 export type SendPullRequestSummaries = BullMQJob<
   null,
   void, // return type
@@ -444,7 +432,6 @@ export type Job =
   | CloseLinkedTasks
   | GenerateOpenPullRequestSummary
   | ReplySlackMention
-  | ReplySlackThread
   | SendPullRequestSummaries
   | SendPullRequestSummariesToOrganization
   | CreateTrelloTaskFromSlack

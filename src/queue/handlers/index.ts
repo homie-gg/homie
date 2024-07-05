@@ -16,7 +16,6 @@ import { handleSaveMergedMergeRequest } from '@/queue/handlers/handle-save-merge
 import { handleGenerateOpenMergeRequestSummary } from '@/queue/handlers/handle-generate-open-merge-request-summary'
 import { handleSaveOpenedMergeRequest } from '@/queue/handlers/handle-save-opened-merge-request'
 import { handleRefreshGitlabTokens } from '@/queue/handlers/handle-refresh-gitlab-tokens'
-import { handleReplySlackThread } from '@/queue/handlers/handle-reply-slack-thread'
 import { handleDispatchDebouncedJob } from '@/queue/handlers/handle-dispatch-debounced-job'
 import { handleImportGithubIssues } from '@/queue/handlers/handle-import-github-issues'
 import { handleCreateHomieTaskFromTrelloTask } from '@/queue/handlers/handle-create-homie-task-from-trello-task'
@@ -52,7 +51,6 @@ export const handlers: Handlers = {
   close_linked_tasks: handleCloseLinkedTasks,
   generate_open_pull_request_summary: handleGenerateOpenPullRequestSummary,
   reply_slack_mention: handleReplySlackMention,
-  reply_slack_thread: handleReplySlackThread,
   send_pull_request_summaries: handleSendPullRequestSummaries,
   send_pull_request_summaries_to_organization:
     handleSendPullRequestSummariesToOrganization,
