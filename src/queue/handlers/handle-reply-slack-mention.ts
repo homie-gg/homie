@@ -62,16 +62,6 @@ export async function handleReplySlackMention(job: ReplySlackMention) {
     slackClient,
   })
 
-  const mentions = threadMessages.filter((message) =>
-    message.text.includes(`<@${organization.ext_slack_bot_user_id}>`),
-  )
-
-  // If the bot has already been mentioned, then the thread reply handler
-  // will send a reply instead of this.
-  if (mentions.length > 1) {
-    return
-  }
-
   const answer = await getAnswer({
     messages: threadMessages
       .filter((t) => t.user)
