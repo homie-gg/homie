@@ -28,6 +28,10 @@ import { handleCreateAsanaTaskFromSlack } from '@/queue/handlers/handle-create-a
 import { handleAskSlackSelectAsanaProjectForTask } from '@/queue/handlers/handle-ask-slack-select-asana-project-for-task'
 import { handleSyncAsanaTaskToHomieTask } from '@/queue/handlers/handle-sync-asana-task-to-homie-task'
 import { handleImportAsanaTasks } from '@/queue/handlers/handle-import-asana-tasks'
+import { handleClosePullRequest } from '@/queue/handlers/handle-closed-pull-request'
+import { handleCloseMergeRequest } from '@/queue/handlers/handle-close-merge-request'
+import { handleReopenMergeRequest } from '@/queue/handlers/handle-reopen-merge-request'
+import { handleReopenPullRequest } from '@/queue/handlers/handle-reopen-pull-request'
 
 type HandlerFunc<TJob extends Job> = (job: TJob) => void | Promise<void>
 
@@ -47,6 +51,8 @@ export const handlers: Handlers = {
   import_pull_requests: handleImportPullRequests,
   import_github_issues: handleImportGithubIssues,
   save_opened_pull_request: handleSaveOpenedPullRequest,
+  close_pull_request: handleClosePullRequest,
+  reopen_pull_request: handleReopenPullRequest,
   save_merged_pull_request: handleSaveMergedPullRequest,
   close_linked_tasks: handleCloseLinkedTasks,
   generate_open_pull_request_summary: handleGenerateOpenPullRequestSummary,
@@ -56,6 +62,8 @@ export const handlers: Handlers = {
     handleSendPullRequestSummariesToOrganization,
   import_gitlab_projects: handleImportGitlabProjects,
   import_gitlab_merge_requests: handleImportGitlabMergeRequests,
+  reopen_merge_request: handleReopenMergeRequest,
+  close_merge_request: handleCloseMergeRequest,
   save_merged_merge_request: handleSaveMergedMergeRequest,
   generate_open_merge_request_summary: handleGenerateOpenMergeRequestSummary,
   save_opened_merge_request: handleSaveOpenedMergeRequest,

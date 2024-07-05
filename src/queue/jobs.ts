@@ -99,6 +99,72 @@ export type SaveOpenedPullRequest = BullMQJob<
   'save_opened_pull_request'
 >
 
+export type ClosePullRequest = BullMQJob<
+  {
+    pull_request: {
+      user: {
+        id: number
+        login: string
+      }
+      merged_at: string | null
+      body: string | null
+      id: number
+      title: string
+      number: number
+      created_at: string
+      base: {
+        repo: {
+          id: number
+          name: string
+          full_name: string
+          html_url: string
+          default_branch: string
+        }
+        ref: string
+      }
+      html_url: string
+    }
+    installation?: {
+      id: number
+    }
+  },
+  void, // return type
+  'close_pull_request'
+>
+
+export type ReopenPullRequest = BullMQJob<
+  {
+    pull_request: {
+      user: {
+        id: number
+        login: string
+      }
+      merged_at: string | null
+      body: string | null
+      id: number
+      title: string
+      number: number
+      created_at: string
+      base: {
+        repo: {
+          id: number
+          name: string
+          full_name: string
+          html_url: string
+          default_branch: string
+        }
+        ref: string
+      }
+      html_url: string
+    }
+    installation?: {
+      id: number
+    }
+  },
+  void, // return type
+  'reopen_pull_request'
+>
+
 export type SaveMergedPullRequest = BullMQJob<
   {
     pull_request: {
@@ -260,6 +326,54 @@ export type ImportGitlabMergeRequests = BullMQJob<
   },
   void, // return type
   'import_gitlab_merge_requests'
+>
+
+export type ReopenMergeRequest = BullMQJob<
+  {
+    merge_request: {
+      created_at: string
+      id: number
+      iid: number
+      title: string
+      target_project_id: number
+      author_id: number
+      description: string | null
+      merged_at?: string
+    }
+    organization: {
+      id: number
+      has_unlimited_usage: boolean | null
+      gitlab_access_token: string
+      trello_access_token: string | null
+      asana_access_token: string | null
+    }
+  },
+  void, // return type
+  'reopen_merge_request'
+>
+
+export type CloseMergeRequest = BullMQJob<
+  {
+    merge_request: {
+      created_at: string
+      id: number
+      iid: number
+      title: string
+      target_project_id: number
+      author_id: number
+      description: string | null
+      merged_at?: string
+    }
+    organization: {
+      id: number
+      has_unlimited_usage: boolean | null
+      gitlab_access_token: string
+      trello_access_token: string | null
+      asana_access_token: string | null
+    }
+  },
+  void, // return type
+  'close_merge_request'
 >
 
 export type SaveMergedMergeRequest = BullMQJob<
@@ -429,6 +543,8 @@ export type Job =
   | ImportGithubIssues
   | SaveOpenedPullRequest
   | SaveMergedPullRequest
+  | ClosePullRequest
+  | ReopenPullRequest
   | CloseLinkedTasks
   | GenerateOpenPullRequestSummary
   | ReplySlackMention
@@ -439,6 +555,8 @@ export type Job =
   | UpdateHomieTaskFromTrelloTask
   | ImportGitlabProjects
   | ImportGitlabMergeRequests
+  | ReopenMergeRequest
+  | CloseMergeRequest
   | SaveMergedMergeRequest
   | GenerateOpenMergeRequestSummary
   | SaveOpenedMergeRequest

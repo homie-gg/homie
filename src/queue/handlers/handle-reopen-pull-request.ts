@@ -1,19 +1,16 @@
 import { dbClient } from '@/database/client'
-import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
-import { getPullRequestLogData } from '@/lib/github/get-pull-request-log-data'
+import { ReopenPullRequest } from '@/queue/jobs'
 import { logger } from '@/lib/log/logger'
-import { SaveOpenedPullRequest } from '@/queue/jobs'
-import { parseISO } from 'date-fns'
+import { getPullRequestLogData } from '@/lib/github/get-pull-request-log-data'
 import { getIsOverPlanContributorLimit } from '@/lib/billing/get-is-over-plan-contributor-limit'
+import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
+import { parseISO } from 'date-fns'
 
-export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
+export async function handleReopenPullRequest(job: ReopenPullRequest) {
   const { pull_request, installation } = job.data
 
-  logger.debug('Start save opened PR', {
-    event: 'save_opened_pull_request:start',
-    data: {
-      pull_request: getPullRequestLogData(pull_request),
-    },
+  logger.debug('Handle reopen pull request', {
+    event: 'handle_reopen_pull_request:start',
   })
 
   const organization = await dbClient
@@ -23,23 +20,14 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
       'github.organization.organization_id',
       'homie.organization.id',
     )
-    .leftJoin(
-      'homie.subscription',
-      'homie.subscription.organization_id',
-      'homie.organization.id',
-    )
-    .leftJoin('homie.plan', 'homie.plan.id', 'homie.subscription.plan_id')
+
     .where('ext_gh_install_id', '=', installation?.id!)
-    .select([
-      'homie.organization.id',
-      'github.organization.ext_gh_install_id',
-      'has_unlimited_usage',
-    ])
+    .select(['homie.organization.id'])
     .executeTakeFirst()
 
   if (!organization) {
     logger.debug('Missing organization', {
-      event: 'save_opened_pull_request.missing_organization',
+      event: 'handle_reopen_pull_request:start',
       data: {
         pull_request: getPullRequestLogData(pull_request),
       },
@@ -49,7 +37,7 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
 
   if (await getIsOverPlanContributorLimit({ organization })) {
     logger.debug('org over plan limit', {
-      event: 'save_opened_pull_request:org_over_plan_limit',
+      event: 'handle_reopen_pull_request:org_over_plan_limit',
       data: {
         pull_request: getPullRequestLogData(pull_request),
         organization: getOrganizationLogData(organization),
@@ -58,6 +46,31 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
     return
   }
 
+  const pullRequest = await dbClient
+    .selectFrom('homie.pull_request')
+    .where('ext_gh_pull_request_id', '=', pull_request.id)
+    .select(['id'])
+    .executeTakeFirst()
+
+  if (pullRequest) {
+    await dbClient
+      .updateTable('homie.pull_request')
+      .where('id', '=', pullRequest.id)
+      .set({
+        closed_at: null,
+      })
+      .executeTakeFirstOrThrow()
+
+    logger.debug('Reopened existing pr', {
+      event: 'handle_reopen_pull_request:reopened_existing_pr',
+      data: {
+        pull_request: getPullRequestLogData(pull_request),
+      },
+    })
+    return
+  }
+
+  // Save any re-opened PRs we're not tracking
   // Create Github User if doesn't exits
   const contributor = await dbClient
     .insertInto('homie.contributor')
@@ -113,8 +126,8 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
     .returningAll()
     .executeTakeFirstOrThrow()
 
-  logger.debug('Finished saving opened PR', {
-    event: 'save_opened_pull_request:complete',
+  logger.debug('Saved untracked reopened PR', {
+    event: 'handle_reopen_pull_request:save_untracked_pr',
     data: {
       pull_request: getPullRequestLogData(pull_request),
       organization: getOrganizationLogData(organization),

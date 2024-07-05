@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '@/lib/log/logger'
-import { createGithubWebhooks } from '@/lib/github/create-github-webhooks'
+import { getGithubWebhooks } from '@/lib/github/create-github-webhooks'
 
 export const POST = async (request: NextRequest) => {
   logger.debug('Received Github webhook', {
@@ -8,7 +8,7 @@ export const POST = async (request: NextRequest) => {
     data: JSON.stringify(await request.clone().json()),
   })
 
-  const githubWebhooks = createGithubWebhooks()
+  const githubWebhooks = getGithubWebhooks()
 
   await githubWebhooks.verifyAndReceive({
     id: request.headers.get('x-request-id')!,
