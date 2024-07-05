@@ -71,34 +71,6 @@ async function handleEvent(params: HandleEventParams) {
         },
       })
     }
-    case 'message': {
-      // Only care about messages in threads
-      if (!('thread_ts' in event) || !event.thread_ts) {
-        return
-      }
-
-      if (!event.user) {
-        return
-      }
-
-      await debouncedDispatch({
-        job: {
-          name: 'reply_slack_thread',
-          data: {
-            team_id,
-            channel_id: event.channel,
-            thread_ts: event.thread_ts,
-            target_message_ts: event.ts,
-            ext_slack_user_id: event.user,
-          },
-        },
-        debounce: {
-          key: `reply_slack:${event.thread_ts}`,
-          id: generateUuid(),
-          delaySecs: threadReplyDebounceSecs,
-        },
-      })
-    }
     default:
       return
   }
