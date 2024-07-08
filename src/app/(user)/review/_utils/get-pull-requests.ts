@@ -32,9 +32,11 @@ export async function getPullRequests(
       .where('homie.pull_request.organization_id', '=', organization.id)
       // Only send PRs merged to default branch
       .where((eb) =>
-        eb('was_merged_to_default_branch', '=', true)
+        eb.or([
+          eb('was_merged_to_default_branch', '=', true),
           // Assume no target_branch (legacy) to be default branch, which were the only PRs saved.
-          .or('target_branch', 'is', null),
+          eb('target_branch', 'is', null),
+        ]),
       )
       .innerJoin(
         'homie.contributor',

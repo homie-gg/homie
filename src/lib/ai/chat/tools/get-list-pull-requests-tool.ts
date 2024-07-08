@@ -75,12 +75,14 @@ export function getListPullRequestsTool(params: getListPullRequestsToolParams) {
         }
 
         // If no target branch was given, search for PRs
-        // merged to default branch
+        // merged to default
         if (!targetBranch) {
           query = query.where((eb) =>
-            eb('was_merged_to_default_branch', '=', true)
+            eb.or([
+              eb('was_merged_to_default_branch', '=', true),
               // Assume no target_branch (legacy) to be default branch, which were the only PRs saved.
-              .or('target_branch', 'is', null),
+              eb('target_branch', 'is', null),
+            ]),
           )
         }
 
