@@ -36,6 +36,9 @@ export async function handleImportGitlabMergeRequests(
         description: mergeRequest.description,
       },
       organization,
+      project: {
+        default_branch: projectInfo.default_branch,
+      },
     })
   }
 }

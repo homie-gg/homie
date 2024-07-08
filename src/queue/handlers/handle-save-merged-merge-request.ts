@@ -10,7 +10,11 @@ import { SaveMergedMergeRequest } from '@/queue/jobs'
 export async function handleSaveMergedMergeRequest(
   job: SaveMergedMergeRequest,
 ) {
-  const { merge_request, organization } = job.data
+  const {
+    merge_request,
+    organization,
+    project: { default_branch: defaultBranch },
+  } = job.data
 
   logger.debug('Start save merged MR', {
     event: 'save_merged_merge_request.start',
@@ -61,5 +65,6 @@ export async function handleSaveMergedMergeRequest(
     mergeRequest: mergeRequestInfo,
     organization,
     project,
+    defaultBranch,
   })
 }

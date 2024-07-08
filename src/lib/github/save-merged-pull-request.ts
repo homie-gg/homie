@@ -22,6 +22,9 @@ interface SaveMergedPullRequestParams {
       id: number
       login: string
     }
+    head: {
+      ref: string
+    }
     base: {
       ref: string
       repo: {
@@ -60,23 +63,6 @@ export async function saveMergedPullRequest(
   if (!pullRequest.merged_at) {
     logger.debug('Missing merged_at - abort', {
       event: 'save_pull_request.missing_merged_at',
-      data: {
-        organization: getOrganizationLogData(organization),
-        pull_request: getPullRequestLogData(pullRequest),
-      },
-    })
-    return
-  }
-
-  /**
-   * Wether the PR was to default. e.g., 'main'
-   */
-  const isDefaultBranchPR =
-    pullRequest.base.ref === pullRequest.base.repo.default_branch
-
-  if (!isDefaultBranchPR) {
-    logger.debug('Was not merge to default branch - abort', {
-      event: 'save_pull_request.not_merged_to_default',
       data: {
         organization: getOrganizationLogData(organization),
         pull_request: getPullRequestLogData(pullRequest),
@@ -152,6 +138,9 @@ export async function saveMergedPullRequest(
     length: 'long',
   })
 
+  const wasMergedToDefaultBranch =
+    pullRequest.base.ref === pullRequest.base.repo.default_branch
+
   const embed_metadata = {
     type: 'pr_summary',
     title: pullRequest.title,
@@ -161,6 +150,9 @@ export async function saveMergedPullRequest(
     contributor_id: contributor.id,
     repo_id: repo.id,
     merged_at: pullRequest.merged_at,
+    target_branch: pullRequest.base.ref,
+    source_branch: pullRequest.head.ref,
+    was_merged_to_default_branch: wasMergedToDefaultBranch,
   }
 
   const pullRequestRecord = await dbClient
@@ -178,6 +170,9 @@ export async function saveMergedPullRequest(
       number: pullRequest.number,
       embed_value: summary,
       embed_metadata,
+      source_branch: pullRequest.head.ref,
+      target_branch: pullRequest.base.ref,
+      was_merged_to_default_branch: wasMergedToDefaultBranch,
     })
     .onConflict((oc) =>
       oc.column('ext_gh_pull_request_id').doUpdateSet({
@@ -192,6 +187,9 @@ export async function saveMergedPullRequest(
         number: pullRequest.number,
         embed_value: summary,
         embed_metadata,
+        source_branch: pullRequest.head.ref,
+        target_branch: pullRequest.base.ref,
+        was_merged_to_default_branch: wasMergedToDefaultBranch,
       }),
     )
     .returningAll()

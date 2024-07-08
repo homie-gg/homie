@@ -103,6 +103,9 @@ export async function handleImportPullRequests(job: ImportPullRequests) {
           html_url: pullRequest.html_url,
           number: pullRequest.number,
           created_at: pullRequest.created_at,
+          head: {
+            ref: pullRequest.head.ref,
+          },
           base: {
             repo: pullRequest.base.repo,
             ref: pullRequest.base.ref,

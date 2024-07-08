@@ -102,6 +102,9 @@ it('should create and embed a pr', async () => {
         title: 'My test closed PR',
         html_url: 'github.com/test_closed_pr',
         body: 'closes #889',
+        head: {
+          ref: 'test_closed_branch',
+        },
         base: {
           ref: 'test_closed_branch',
           repo: {

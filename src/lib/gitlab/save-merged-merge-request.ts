@@ -23,6 +23,8 @@ interface SaveMergedMergeRequestParams {
       id: number
       username: string
     }
+    target_branch: string
+    source_branch: string
   }
   project: {
     id: number
@@ -34,12 +36,13 @@ interface SaveMergedMergeRequestParams {
     trello_access_token: string | null
     asana_access_token: string | null
   }
+  defaultBranch: string
 }
 
 export async function saveMergedMergeRequest(
   params: SaveMergedMergeRequestParams,
 ) {
-  const { organization, mergeRequest, project } = params
+  const { organization, mergeRequest, project, defaultBranch } = params
 
   logger.debug('Start Save merge request', {
     event: 'save_merge_request.start',
@@ -81,6 +84,8 @@ export async function saveMergedMergeRequest(
     project,
   })
 
+  const wasMergedToDefaultBranch = mergeRequest.target_branch === defaultBranch
+
   const embed_metadata = {
     type: 'mr_summary',
     title: mergeRequest.title,
@@ -90,6 +95,7 @@ export async function saveMergedMergeRequest(
     contributor_id: contributor.id,
     project: project.id,
     merged_at: mergeRequest.merged_at,
+    was_merged_to_default_branch: wasMergedToDefaultBranch,
   }
 
   const pullRequestRecord = await dbClient
@@ -108,6 +114,9 @@ export async function saveMergedMergeRequest(
       merged_at: mergeRequest.merged_at
         ? parseISO(mergeRequest.merged_at)
         : null,
+      target_branch: mergeRequest.target_branch,
+      source_branch: mergeRequest.source_branch,
+      was_merged_to_default_branch: wasMergedToDefaultBranch,
     })
     .onConflict((oc) =>
       oc.column('ext_gitlab_merge_request_id').doUpdateSet({
@@ -122,6 +131,9 @@ export async function saveMergedMergeRequest(
         merged_at: mergeRequest.merged_at
           ? parseISO(mergeRequest.merged_at)
           : null,
+        target_branch: mergeRequest.target_branch,
+        source_branch: mergeRequest.source_branch,
+        was_merged_to_default_branch: wasMergedToDefaultBranch,
       }),
     )
     .returningAll()

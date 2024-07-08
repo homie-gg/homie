@@ -112,6 +112,9 @@ export type ClosePullRequest = BullMQJob<
       title: string
       number: number
       created_at: string
+      head: {
+        ref: string
+      }
       base: {
         repo: {
           id: number
@@ -145,6 +148,9 @@ export type ReopenPullRequest = BullMQJob<
       title: string
       number: number
       created_at: string
+      head: {
+        ref: string
+      }
       base: {
         repo: {
           id: number
@@ -178,6 +184,9 @@ export type SaveMergedPullRequest = BullMQJob<
       title: string
       number: number
       created_at: string
+      head: {
+        ref: string
+      }
       base: {
         repo: {
           id: number
@@ -364,6 +373,9 @@ export type CloseMergeRequest = BullMQJob<
       description: string | null
       merged_at?: string
     }
+    project: {
+      default_branch: string
+    }
     organization: {
       id: number
       has_unlimited_usage: boolean | null
@@ -387,6 +399,9 @@ export type SaveMergedMergeRequest = BullMQJob<
       author_id: number
       description: string | null
       merged_at?: string
+    }
+    project: {
+      default_branch: string
     }
     organization: {
       id: number
