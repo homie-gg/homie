@@ -74,6 +74,16 @@ export function getListPullRequestsTool(params: getListPullRequestsToolParams) {
           query = query.where('target_branch', 'ilike', `%${targetBranch}%`)
         }
 
+        // If no target branch was given, search for PRs
+        // merged to default branch
+        if (!targetBranch) {
+          query = query.where((eb) =>
+            eb('was_merged_to_default_branch', '=', true)
+              // Assume no target_branch (legacy) to be default branch, which were the only PRs saved.
+              .or('target_branch', 'is', null),
+          )
+        }
+
         const pullRequests = await query.execute()
 
         logger.debug('Found PRs', {
