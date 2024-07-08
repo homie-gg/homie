@@ -78,11 +78,9 @@ export function getListPullRequestsTool(params: getListPullRequestsToolParams) {
         // merged to default
         if (!targetBranch) {
           query = query.where((eb) =>
-            eb.or([
-              eb('was_merged_to_default_branch', '=', true),
+            eb('homie.pull_request.was_merged_to_default_branch', '=', true)
               // Assume no target_branch (legacy) to be default branch, which were the only PRs saved.
-              eb('target_branch', 'is', null),
-            ]),
+              .or('homie.pull_request.target_branch', 'is', null),
           )
         }
 
