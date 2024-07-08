@@ -26,8 +26,12 @@ export function getListPullRequestsTool(params: getListPullRequestsToolParams) {
         .date()
         .describe('The upper bound date of pull requests')
         .optional(),
+      targetBranch: z
+        .string()
+        .describe('Target branch that the PR was merged to')
+        .optional(),
     }),
-    func: async ({ startDate, endDate }) => {
+    func: async ({ startDate, endDate, targetBranch }) => {
       logger.debug('Call - List Pull Requests', {
         event: 'get_answer:list_pull_requests:call',
         answer_id: answerId,
@@ -37,7 +41,7 @@ export function getListPullRequestsTool(params: getListPullRequestsToolParams) {
       })
 
       try {
-        const query = dbClient
+        let query = dbClient
           .selectFrom('homie.pull_request')
           .where('homie.pull_request.organization_id', '=', organization.id)
           .innerJoin(
@@ -55,11 +59,29 @@ export function getListPullRequestsTool(params: getListPullRequestsToolParams) {
           ])
 
         if (startDate) {
-          query.where('created_at', '>', startOfDay(new Date(startDate)))
+          query = query.where(
+            'created_at',
+            '>',
+            startOfDay(new Date(startDate)),
+          )
         }
 
         if (endDate) {
-          query.where('created_at', '<', endOfDay(new Date(endDate)))
+          query = query.where('created_at', '<', endOfDay(new Date(endDate)))
+        }
+
+        if (targetBranch) {
+          query = query.where('target_branch', 'ilike', `%${targetBranch}%`)
+        }
+
+        // If no target branch was given, search for PRs
+        // merged to default branch
+        if (!targetBranch) {
+          query = query.where((eb) =>
+            eb('was_merged_to_default_branch', '=', true)
+              // Assume no target_branch (legacy) to be default branch, which were the only PRs saved.
+              .or('target_branch', 'is', null),
+          )
         }
 
         const pullRequests = await query.execute()
