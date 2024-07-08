@@ -139,6 +139,10 @@ export async function saveMergedMergeRequest(
     .returningAll()
     .executeTakeFirstOrThrow()
 
+  if (!wasMergedToDefaultBranch) {
+    return
+  }
+
   await embedCodeChange({
     label: 'Merge Request',
     title: pullRequestRecord.title,

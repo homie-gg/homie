@@ -195,6 +195,10 @@ export async function saveMergedPullRequest(
     .returningAll()
     .executeTakeFirstOrThrow()
 
+  if (!wasMergedToDefaultBranch) {
+    return
+  }
+
   await embedCodeChange({
     label: 'Pull Request',
     title: pullRequest.title,
