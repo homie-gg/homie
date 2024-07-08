@@ -9,7 +9,7 @@ import DataTableSortableHeader from '@/lib/ui/DataTableSortableHeader'
 
 export const columns: ColumnDef<PullRequest>[] = [
   {
-    accessorKey: 'user_username',
+    accessorKey: 'user_usernaaaaame',
     header: ({ column }: { column: Column<PullRequest> }) => (
       <DataTableSortableHeader column={column}>
         Contributor
