@@ -141,6 +141,8 @@ export async function handleCloseMergeRequest(job: CloseMergeRequest) {
       closed_at: new Date(),
       gitlab_project_id: project.id,
       body: merge_request.description ?? '',
+      source_branch: mergeRequestInfo.source_branch,
+      target_branch: mergeRequestInfo.target_branch,
     })
     .onConflict((oc) =>
       oc.column('ext_gitlab_merge_request_id').doUpdateSet({
@@ -151,6 +153,8 @@ export async function handleCloseMergeRequest(job: CloseMergeRequest) {
         number: merge_request.iid,
         gitlab_project_id: project.id,
         body: merge_request.description ?? '',
+        source_branch: mergeRequestInfo.source_branch,
+        target_branch: mergeRequestInfo.target_branch,
       }),
     )
     .returningAll()

@@ -1,7 +1,6 @@
 import { dispatch } from '@/queue/default-queue'
 import { summaryKey } from '@/queue/handlers/handle-generate-open-pull-request-summary'
 import { createGithubApp } from '@/lib/github/create-github-app'
-import { dbClient } from '@/database/client'
 import { assignContributorFromGithubIssue } from '@/lib/github/assign-contributor-from-github-issue'
 import { unassignContributorFromGithubIssue } from '@/lib/github/unassign-contributor-from-github-issue'
 import { closeTaskFromGithubIssue } from '@/lib/github/close-task-from-github-issue'

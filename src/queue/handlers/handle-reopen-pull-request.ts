@@ -122,6 +122,8 @@ export async function handleReopenPullRequest(job: ReopenPullRequest) {
       github_repo_id: repo.id,
       body: pull_request.body ?? '',
       number: pull_request.number,
+      target_branch: pull_request.base.ref,
+      source_branch: pull_request.head.ref,
     })
     .returningAll()
     .executeTakeFirstOrThrow()

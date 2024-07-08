@@ -115,6 +115,8 @@ export async function handleSaveOpenedMergeRequest(
       html_url: mergeRequestData.web_url,
       gitlab_project_id: project.id,
       body: merge_request.description ?? '',
+      source_branch: mergeRequestData.source_branch,
+      target_branch: mergeRequestData.target_branch,
     })
     .onConflict((oc) =>
       oc.column('ext_gitlab_merge_request_id').doUpdateSet({
@@ -125,6 +127,8 @@ export async function handleSaveOpenedMergeRequest(
         number: merge_request.iid,
         gitlab_project_id: project.id,
         body: merge_request.description ?? '',
+        source_branch: mergeRequestData.source_branch,
+        target_branch: mergeRequestData.target_branch,
       }),
     )
     .returningAll()

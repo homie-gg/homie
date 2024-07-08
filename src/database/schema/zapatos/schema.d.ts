@@ -2079,6 +2079,18 @@ declare module 'zapatos/schema' {
          */
         organization_id: number
         /**
+         * **homie.pull_request.source_branch**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        source_branch: string | null
+        /**
+         * **homie.pull_request.target_branch**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        target_branch: string | null
+        /**
          * **homie.pull_request.title**
          * - `text` in database
          * - `NOT NULL`, no default
@@ -2090,6 +2102,12 @@ declare module 'zapatos/schema' {
          * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
          */
         updated_at: Date
+        /**
+         * **homie.pull_request.was_merged_to_default_branch**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        was_merged_to_default_branch: boolean
       }
       export interface JSONSelectable {
         /**
@@ -2189,6 +2207,18 @@ declare module 'zapatos/schema' {
          */
         organization_id: number
         /**
+         * **homie.pull_request.source_branch**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        source_branch: string | null
+        /**
+         * **homie.pull_request.target_branch**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        target_branch: string | null
+        /**
          * **homie.pull_request.title**
          * - `text` in database
          * - `NOT NULL`, no default
@@ -2200,6 +2230,12 @@ declare module 'zapatos/schema' {
          * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
          */
         updated_at: db.TimestampTzString
+        /**
+         * **homie.pull_request.was_merged_to_default_branch**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        was_merged_to_default_branch: boolean
       }
       export interface Whereable {
         /**
@@ -2439,6 +2475,34 @@ declare module 'zapatos/schema' {
               number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
             >
         /**
+         * **homie.pull_request.source_branch**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        source_branch?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.pull_request.target_branch**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        target_branch?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
          * **homie.pull_request.title**
          * - `text` in database
          * - `NOT NULL`, no default
@@ -2468,6 +2532,20 @@ declare module 'zapatos/schema' {
               | db.Parameter<db.TimestampTzString | Date>
               | db.SQLFragment
               | db.ParentColumn
+            >
+        /**
+         * **homie.pull_request.was_merged_to_default_branch**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        was_merged_to_default_branch?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn
             >
       }
       export interface Insertable {
@@ -2617,6 +2695,28 @@ declare module 'zapatos/schema' {
          */
         organization_id: number | db.Parameter<number> | db.SQLFragment
         /**
+         * **homie.pull_request.source_branch**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        source_branch?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **homie.pull_request.target_branch**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        target_branch?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
          * **homie.pull_request.title**
          * - `text` in database
          * - `NOT NULL`, no default
@@ -2630,6 +2730,16 @@ declare module 'zapatos/schema' {
         updated_at?:
           | (db.TimestampTzString | Date)
           | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **homie.pull_request.was_merged_to_default_branch**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        was_merged_to_default_branch?:
+          | boolean
+          | db.Parameter<boolean>
           | db.DefaultType
           | db.SQLFragment
       }
@@ -2887,6 +2997,44 @@ declare module 'zapatos/schema' {
           | db.SQLFragment
           | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
         /**
+         * **homie.pull_request.source_branch**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        source_branch?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | string
+              | db.Parameter<string>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **homie.pull_request.target_branch**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        target_branch?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | string
+              | db.Parameter<string>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
          * **homie.pull_request.title**
          * - `text` in database
          * - `NOT NULL`, no default
@@ -2912,6 +3060,20 @@ declare module 'zapatos/schema' {
               | db.Parameter<db.TimestampTzString | Date>
               | db.DefaultType
               | db.SQLFragment
+            >
+        /**
+         * **homie.pull_request.was_merged_to_default_branch**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        was_merged_to_default_branch?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment
             >
       }
       export type UniqueIndex =

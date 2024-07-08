@@ -125,6 +125,8 @@ export async function handleClosePullRequest(job: ClosePullRequest) {
         body: pull_request.body ?? '',
         number: pull_request.number,
         closed_at: new Date(),
+        target_branch: pull_request.base.ref,
+        source_branch: pull_request.head.ref,
       })
       .returningAll()
       .executeTakeFirstOrThrow()

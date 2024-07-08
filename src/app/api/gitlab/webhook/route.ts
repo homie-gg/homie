@@ -53,9 +53,6 @@ export const POST = async (request: NextRequest) => {
 
   const mergeRequest = event.object_attributes
 
-  const isToDefaultBranch =
-    mergeRequest.target_branch === event.project.default_branch
-
   const shouldGenerateSummary = mergeRequest.description?.includes(summaryKey)
 
   if (mergeRequest.action === 'reopen') {
@@ -69,13 +66,19 @@ export const POST = async (request: NextRequest) => {
     await dispatch('close_merge_request', {
       merge_request: mergeRequest,
       organization,
+      project: {
+        default_branch: event.project.default_branch,
+      },
     })
   }
 
-  if (mergeRequest.action === 'merge' && isToDefaultBranch) {
+  if (mergeRequest.action === 'merge') {
     await dispatch('save_merged_merge_request', {
       merge_request: mergeRequest,
       organization,
+      project: {
+        default_branch: event.project.default_branch,
+      },
     })
 
     await dispatch('close_linked_tasks', {
@@ -91,7 +94,7 @@ export const POST = async (request: NextRequest) => {
     })
   }
 
-  if (mergeRequest.action === 'open' && isToDefaultBranch) {
+  if (mergeRequest.action === 'open') {
     await dispatch('save_opened_merge_request', {
       merge_request: mergeRequest,
       organization,

@@ -61,6 +61,12 @@ export async function sendContributorPullRequests(
       .where('contributor_id', '=', contributor.id)
       .where('merged_at', 'is not', null)
       .where('merged_at', '>', cutOffDate)
+      // Only send PRs merged to default branch
+      .where((eb) =>
+        eb('was_merged_to_default_branch', '=', true)
+          // Assume no target_branch (legacy) to be default branch, which were the only PRs saved.
+          .or('target_branch', 'is', null),
+      )
       .select(['homie.pull_request.html_url', 'homie.pull_request.title'])
       .orderBy('merged_at')
 

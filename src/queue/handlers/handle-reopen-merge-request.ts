@@ -140,6 +140,8 @@ export async function handleReopenMergeRequest(job: ReopenMergeRequest) {
       html_url: mergeRequestInfo.web_url,
       gitlab_project_id: project.id,
       body: merge_request.description ?? '',
+      source_branch: mergeRequestInfo.source_branch,
+      target_branch: mergeRequestInfo.target_branch,
     })
     .onConflict((oc) =>
       oc.column('ext_gitlab_merge_request_id').doUpdateSet({
@@ -150,6 +152,8 @@ export async function handleReopenMergeRequest(job: ReopenMergeRequest) {
         number: merge_request.iid,
         gitlab_project_id: project.id,
         body: merge_request.description ?? '',
+        source_branch: mergeRequestInfo.source_branch,
+        target_branch: mergeRequestInfo.target_branch,
       }),
     )
     .returningAll()
