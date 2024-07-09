@@ -109,8 +109,8 @@ export function getAssignTaskToContributorTool(
           })
           await github.rest.issues.addAssignees({
             assignees: [contributor.username],
-            owner: task.github_repo_name,
-            repo: task.github_repo_owner,
+            owner: task.github_repo_owner,
+            repo: task.github_repo_name,
             issue_number: task.task_ext_gh_issue_number,
           })
 
