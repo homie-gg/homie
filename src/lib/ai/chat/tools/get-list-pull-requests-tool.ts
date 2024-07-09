@@ -51,6 +51,7 @@ export function getListPullRequestsTool(params: getListPullRequestsToolParams) {
           )
           .orderBy('homie.pull_request.created_at desc')
           .select([
+            'homie.pull_request.id',
             'title',
             'body',
             'homie.contributor.username',
@@ -102,7 +103,7 @@ export function getListPullRequestsTool(params: getListPullRequestsToolParams) {
         return pullRequests
           .map(
             (pullRequest) =>
-              `Title: ${pullRequest.title} | Description: ${pullRequest.body} | Contributor: ${pullRequest.username} | ${pullRequest.merged_at ? `Merged at ${pullRequest.merged_at}` : 'Not merged'} | URL: ${pullRequest.html_url}`,
+              `ID: ${pullRequest.id} | Title: ${pullRequest.title} | Description: ${pullRequest.body} | Contributor: ${pullRequest.username} | ${pullRequest.merged_at ? `Merged at ${pullRequest.merged_at}` : 'Not merged'} | URL: ${pullRequest.html_url}`,
           )
           .join('\n')
       } catch (error) {
