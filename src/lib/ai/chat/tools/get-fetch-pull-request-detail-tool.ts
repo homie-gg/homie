@@ -56,7 +56,7 @@ export function getFetchPullRequestDetailTool(
 
         const organization = await dbClient
           .selectFrom('homie.organization')
-          .where('id', '=', pullRequest.organization_id)
+          .where('homie.organization.id', '=', pullRequest.organization_id)
           .leftJoin(
             'gitlab.app_user',
             'gitlab.app_user.organization_id',
