@@ -60,14 +60,18 @@ export function getListPullRequestsTool(params: getListPullRequestsToolParams) {
 
         if (startDate) {
           query = query.where(
-            'created_at',
+            'homie.pull_request.created_at',
             '>',
             startOfDay(new Date(startDate)),
           )
         }
 
         if (endDate) {
-          query = query.where('created_at', '<', endOfDay(new Date(endDate)))
+          query = query.where(
+            'homie.pull_request.created_at',
+            '<',
+            endOfDay(new Date(endDate)),
+          )
         }
 
         if (targetBranch) {
