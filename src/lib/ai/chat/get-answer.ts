@@ -29,6 +29,7 @@ import { v4 as uuid } from 'uuid'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { getTodaysDateTool } from '@/lib/ai/chat/tools/get-todays-date-tool'
+import { getFetchPullRequestDetailTool } from '@/lib/ai/chat/tools/get-fetch-pull-request-detail-tool'
 
 interface GetAnswerParams {
   organization: {
@@ -103,6 +104,10 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       answerId,
     }),
     getFindTaskTool({
+      organization,
+      answerId,
+    }),
+    getFetchPullRequestDetailTool({
       organization,
       answerId,
     }),
