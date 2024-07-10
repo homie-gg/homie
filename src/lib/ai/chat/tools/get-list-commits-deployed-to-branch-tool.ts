@@ -4,8 +4,8 @@ import { listMergeRequestCommits } from '@/lib/gitlab/list-merge-request-commits
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { DynamicStructuredTool } from '@langchain/core/tools'
-import { endOfDay, startOfDay } from 'date-fns'
 import { z } from 'zod'
+import { parseISO, formatDistance } from 'date-fns'
 
 interface getListCommitsDeployedToBranchToolParams {
   organization: {
@@ -64,17 +64,11 @@ export function getListCommitsDeployedToBranchTool(
             'github_repo_id',
             'gitlab_project_id',
             'ext_gitlab_merge_request_iid',
+            'html_url',
           ])
-          .where(
-            'homie.pull_request.created_at',
-            '>',
-            startOfDay(new Date(startDate)),
-          )
-          .where(
-            'homie.pull_request.created_at',
-            '<',
-            endOfDay(new Date(endDate)),
-          )
+          .where('homie.pull_request.merged_at', 'is not', null)
+          .where('homie.pull_request.merged_at', '>', startDate)
+          .where('homie.pull_request.merged_at', '<', endDate)
           .where('target_branch', 'ilike', `%${branch}%`)
           .execute()
 
@@ -98,7 +92,15 @@ export function getListCommitsDeployedToBranchTool(
           ])
           .executeTakeFirstOrThrow()
 
-        const commits: Array<{ author: string; message: string }> = []
+        const items: Record<
+          string,
+          Array<{
+            author?: string
+            message: string
+            created_at?: string
+            url: string
+          }>
+        > = {}
 
         for (const pullRequest of pullRequests) {
           // GitHub
@@ -124,7 +126,13 @@ export function getListCommitsDeployedToBranchTool(
               pullRequestNumber: pullRequest.number,
             })
 
-            commits.push(...commits)
+            items[repo.name] = [
+              ...(items[repo.name] ?? []),
+              ...commits.map((commit) => ({
+                ...commit,
+                url: pullRequest.html_url,
+              })),
+            ]
           }
 
           // Gitlab
@@ -136,7 +144,7 @@ export function getListCommitsDeployedToBranchTool(
             const project = await dbClient
               .selectFrom('gitlab.project')
               .where('id', '=', pullRequest.gitlab_project_id)
-              .select(['ext_gitlab_project_id'])
+              .select(['ext_gitlab_project_id', 'name'])
               .executeTakeFirstOrThrow()
 
             const commits = await listMergeRequestCommits({
@@ -145,11 +153,17 @@ export function getListCommitsDeployedToBranchTool(
               mergeRequestIid: pullRequest.ext_gitlab_merge_request_iid,
             })
 
-            commits.push(...commits)
+            items[project.name] = [
+              ...(items[project.name] ?? []),
+              ...commits.map((commit) => ({
+                ...commit,
+                url: pullRequest.html_url,
+              })),
+            ]
           }
         }
 
-        if (commits.length === 0) {
+        if (Object.keys(items).length === 0) {
           logger.debug('No commits found', {
             event: 'get_answer:list_commits_deployed:no_commits_found',
             answer_id: answerId,
@@ -162,9 +176,12 @@ export function getListCommitsDeployedToBranchTool(
           return `Nothing has been deployed ${branch} from ${startDate} to ${endDate}`
         }
 
-        const result = commits
-          .map((commit) => `- ${commit.message} by ${commit.author}`)
-          .join('\n')
+        const result = Object.entries(items)
+          .map(
+            ([repo, commits]) =>
+              `## ${repo}\n${commits.map((commit) => `- ${commit.message} by ${commit.author} ${commit.created_at ? `${formatDistance(parseISO(commit.created_at), new Date(), { addSuffix: true })}` : ''} [Pull Request](${commit.url})`).join('\n')}`,
+          )
+          .join('\n\n')
 
         logger.debug('Found commits', {
           event: 'get_answer:list_commits_deployed:found_commits',
