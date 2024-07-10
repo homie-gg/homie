@@ -19,6 +19,8 @@ export function getFetchPullRequestDetailTool(
   params: getFetchPullRequestDetailToolParams,
 ) {
   const { organization, answerId } = params
+
+  const { id: orgId } = organization
   return new DynamicStructuredTool({
     name: 'fetch_pull_request_details',
     description: 'Fetches details for a specific pull request',
@@ -39,6 +41,7 @@ export function getFetchPullRequestDetailTool(
         const pullRequest = await dbClient
           .selectFrom('homie.pull_request')
           .where('id', '=', pull_request_id)
+          .where('organization_id', '=', orgId)
           .select([
             'ext_gh_pull_request_id',
             'number',
@@ -68,6 +71,7 @@ export function getFetchPullRequestDetailTool(
             'homie.organization.id',
           )
           .select([
+            'id',
             'gitlab_access_token',
             'github.organization.ext_gh_install_id',
           ])
