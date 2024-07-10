@@ -30,6 +30,7 @@ import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { getTodaysDateTool } from '@/lib/ai/chat/tools/get-todays-date-tool'
 import { getFetchPullRequestDetailTool } from '@/lib/ai/chat/tools/get-fetch-pull-request-detail-tool'
+import { getListCommitsDeployedToBranchTool } from '@/lib/ai/chat/tools/get-list-commits-deployed-to-branch-tool'
 
 interface GetAnswerParams {
   organization: {
@@ -108,6 +109,10 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       answerId,
     }),
     getFetchPullRequestDetailTool({
+      organization,
+      answerId,
+    }),
+    getListCommitsDeployedToBranchTool({
       organization,
       answerId,
     }),
