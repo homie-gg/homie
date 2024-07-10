@@ -71,7 +71,7 @@ export function getFetchPullRequestDetailTool(
             'homie.organization.id',
           )
           .select([
-            'id',
+            'homie.organization.id',
             'gitlab_access_token',
             'github.organization.ext_gh_install_id',
           ])
@@ -121,6 +121,7 @@ export function getFetchPullRequestDetailTool(
           })
         }
 
+        // Gitlab
         if (
           pullRequest.ext_gitlab_merge_request_id &&
           pullRequest.ext_gitlab_merge_request_iid &&
@@ -160,7 +161,7 @@ export function getFetchPullRequestDetailTool(
           error,
         })
 
-        return 'FAILED'
+        return 'FAILED. Try again later.'
       }
     },
   })
