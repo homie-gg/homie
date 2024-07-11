@@ -188,7 +188,7 @@ export function getListCommitsDeployedToBranchTool(
         const result = Object.entries(items)
           .map(
             ([repo, commits]) =>
-              `## ${repo}\n${commits.map((commit) => `- ${commit.message} by ${commit.author} ${formatDistance(commit.merged_at, new Date(), { addSuffix: true })} [PR](${commit.url})`).join('\n')}`,
+              `## ${repo}\n${commits.map((commit) => `- ${commit.message} by ${commit.author} ${formatDistance(commit.merged_at, new Date(), { addSuffix: true })} via [PR](${commit.url})`).join('\n')}`,
           )
           .join('\n\n')
 
