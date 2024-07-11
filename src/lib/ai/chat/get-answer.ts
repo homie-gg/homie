@@ -67,6 +67,8 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
     organization: getOrganizationLogData(organization),
   })
 
+  let toolAnswer: string | null = null
+
   const tools = [
     getSearchGeneralContextTool({
       organization,
@@ -115,6 +117,9 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
     getListCommitsDeployedToBranchTool({
       organization,
       answerId,
+      onAnswer: (result) => {
+        toolAnswer = result
+      },
     }),
   ]
 
@@ -163,7 +168,8 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
     chat_history: chatHistory,
   })
 
-  const answer = result.output
+  // If a tool outputs an exact answer, use that instead of the LLM output.
+  const answer = toolAnswer ?? result.output
 
   if (organization.is_persona_enabled) {
     return rephraseWithPersona({

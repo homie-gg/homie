@@ -5,19 +5,20 @@ import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { DynamicStructuredTool } from '@langchain/core/tools'
 import { z } from 'zod'
-import { parseISO, formatDistance } from 'date-fns'
+import { formatDistance } from 'date-fns'
 
 interface getListCommitsDeployedToBranchToolParams {
   organization: {
     id: number
   }
   answerId: string
+  onAnswer: (answer: string) => void
 }
 
 export function getListCommitsDeployedToBranchTool(
   params: getListCommitsDeployedToBranchToolParams,
 ) {
-  const { organization, answerId } = params
+  const { organization, answerId, onAnswer } = params
 
   const { id: orgId } = organization
   return new DynamicStructuredTool({
@@ -65,6 +66,7 @@ export function getListCommitsDeployedToBranchTool(
             'gitlab_project_id',
             'ext_gitlab_merge_request_iid',
             'html_url',
+            'merged_at',
           ])
           .where('homie.pull_request.merged_at', 'is not', null)
           .where('homie.pull_request.merged_at', '>', startDate)
@@ -97,12 +99,17 @@ export function getListCommitsDeployedToBranchTool(
           Array<{
             author?: string
             message: string
-            created_at?: string
+            merged_at: Date
             url: string
           }>
         > = {}
 
         for (const pullRequest of pullRequests) {
+          const mergedAt = pullRequest.merged_at
+          if (!mergedAt) {
+            continue
+          }
+
           // GitHub
           if (
             pullRequest.ext_gh_pull_request_id &&
@@ -131,6 +138,7 @@ export function getListCommitsDeployedToBranchTool(
               ...commits.map((commit) => ({
                 ...commit,
                 url: pullRequest.html_url,
+                merged_at: mergedAt,
               })),
             ]
           }
@@ -158,6 +166,7 @@ export function getListCommitsDeployedToBranchTool(
               ...commits.map((commit) => ({
                 ...commit,
                 url: pullRequest.html_url,
+                merged_at: mergedAt,
               })),
             ]
           }
@@ -179,7 +188,7 @@ export function getListCommitsDeployedToBranchTool(
         const result = Object.entries(items)
           .map(
             ([repo, commits]) =>
-              `## ${repo}\n${commits.map((commit) => `- ${commit.message} by ${commit.author} ${commit.created_at ? `${formatDistance(parseISO(commit.created_at), new Date(), { addSuffix: true })}` : ''} [Pull Request](${commit.url})`).join('\n')}`,
+              `## ${repo}\n${commits.map((commit) => `- ${commit.message} by ${commit.author} ${formatDistance(commit.merged_at, new Date(), { addSuffix: true })} [PR](${commit.url})`).join('\n')}`,
           )
           .join('\n\n')
 
@@ -193,6 +202,7 @@ export function getListCommitsDeployedToBranchTool(
           result,
         })
 
+        onAnswer(result)
         return result
       } catch (error) {
         logger.debug('Failed to fetch commits for branch', {
