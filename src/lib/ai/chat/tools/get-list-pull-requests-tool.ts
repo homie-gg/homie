@@ -30,8 +30,12 @@ export function getListPullRequestsTool(params: getListPullRequestsToolParams) {
         .string()
         .describe('Target branch that the PR was merged to')
         .optional(),
+      extSlackMemberId: z
+        .string()
+        .describe("Slack ID for the target user starting with a '@'.")
+        .optional(),
     }),
-    func: async ({ startDate, endDate, targetBranch }) => {
+    func: async ({ startDate, endDate, targetBranch, extSlackMemberId }) => {
       logger.debug('Call - List Pull Requests', {
         event: 'get_answer:list_pull_requests:call',
         answer_id: answerId,
@@ -72,6 +76,14 @@ export function getListPullRequestsTool(params: getListPullRequestsToolParams) {
             'homie.pull_request.created_at',
             '<',
             endOfDay(new Date(endDate)),
+          )
+        }
+
+        if (extSlackMemberId) {
+          query = query.where(
+            'ext_slack_member_id',
+            '=',
+            extSlackMemberId.replace('@', ''),
           )
         }
 
