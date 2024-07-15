@@ -42,6 +42,8 @@ export function getListPullRequestsTool(params: getListPullRequestsToolParams) {
         organization: getOrganizationLogData(organization),
         start_date: startDate,
         end_date: endDate,
+        target_branch: targetBranch,
+        ext_slack_member_id: extSlackMemberId,
       })
 
       try {

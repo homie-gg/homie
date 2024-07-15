@@ -139,8 +139,11 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
     }
   })
 
+  const currentDate = new Date().toISOString()
+
   const prompt = ChatPromptTemplate.fromMessages([
     ['system', 'You are helpful project manager.'],
+    ['system', `The current date is ${currentDate}`],
     ['system', 'Always include URL links if available.'],
     new MessagesPlaceholder('chat_history'),
     ['user', '{input}'],
