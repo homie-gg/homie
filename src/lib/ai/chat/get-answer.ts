@@ -171,6 +171,16 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
   // If a tool outputs an exact answer, use that instead of the LLM output.
   const answer = toolAnswer ?? result.output
 
+  logger.debug('Get Answer - Result', {
+    event: 'get_answer:result',
+    answer_id: answerId,
+    organization: getOrganizationLogData(organization),
+    prompt,
+    input: currentMessage.text,
+    history: chatHistory,
+    is_tool_answer: Boolean(toolAnswer),
+  })
+
   if (organization.is_persona_enabled) {
     return rephraseWithPersona({
       affectionLevel: organization.persona_affection_level,
