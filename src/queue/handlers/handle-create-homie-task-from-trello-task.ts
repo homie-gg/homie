@@ -2,6 +2,7 @@ import { CreateHomieTaskFromTrelloTask } from '@/queue/jobs'
 import { dbClient } from '@/database/client'
 import { classifyTask } from '@/lib/ai/clasify-task'
 import { taskStatus } from '@/lib/tasks'
+import { embedTask } from '@/lib/ai/embed-task'
 
 export async function handleCreateHomieTaskFromTrelloTask(
   job: CreateHomieTaskFromTrelloTask,
@@ -41,7 +42,7 @@ export async function handleCreateHomieTaskFromTrelloTask(
     ? card.idList === trelloWorkspace.ext_trello_done_task_list_id
     : false
 
-  await dbClient
+  const task = await dbClient
     .insertInto('homie.task')
     .values({
       name: card.name,
@@ -64,6 +65,19 @@ export async function handleCreateHomieTaskFromTrelloTask(
         task_type_id,
       }),
     )
-    .returning(['id'])
+    .returning([
+      'id',
+      'name',
+      'description',
+      'task_status_id',
+      'task_type_id',
+      'html_url',
+      'due_date',
+      'completed_at',
+      'priority_level',
+      'organization_id',
+    ])
     .executeTakeFirstOrThrow()
+
+  await embedTask({ task })
 }

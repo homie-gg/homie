@@ -4,6 +4,7 @@ import { classifyTask } from '@/lib/ai/clasify-task'
 import { dispatch } from '@/queue/default-queue'
 import { parseISO } from 'date-fns'
 import { taskStatus } from '@/lib/tasks'
+import { embedTask } from '@/lib/ai/embed-task'
 
 export async function handleUpdateHomieTaskFromTrelloTask(
   job: UpdateHomieTaskFromTrelloTask,
@@ -54,7 +55,7 @@ export async function handleUpdateHomieTaskFromTrelloTask(
     updated_fields,
   })
 
-  await dbClient
+  const updatedTask = await dbClient
     .updateTable('homie.task')
     .set({
       name: card.name,
@@ -69,7 +70,22 @@ export async function handleUpdateHomieTaskFromTrelloTask(
       task_type_id,
     })
     .where('homie.task.id', '=', task.id)
+    .returning([
+      'id',
+      'name',
+      'description',
+      'task_status_id',
+      'task_type_id',
+      'html_url',
+      'due_date',
+      'completed_at',
+      'priority_level',
+      'organization_id',
+    ])
+
     .executeTakeFirstOrThrow()
+
+  await embedTask({ task: updatedTask })
 }
 
 interface GetTaskStatusParams {
