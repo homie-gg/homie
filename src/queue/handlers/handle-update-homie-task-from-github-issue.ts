@@ -2,6 +2,7 @@ import { UpdateHomieTaskFromGithubIssue } from '@/queue/jobs'
 import { dbClient } from '@/database/client'
 import { classifyTask } from '@/lib/ai/clasify-task'
 import { dispatch } from '@/queue/default-queue'
+import { embedTask } from '@/lib/ai/embed-task'
 
 export async function handleUpdateHomieTaskFromGithubIssue(
   job: UpdateHomieTaskFromGithubIssue,
@@ -47,7 +48,7 @@ export async function handleUpdateHomieTaskFromGithubIssue(
     description: issue.body ?? '',
   })
 
-  await dbClient
+  const updatedTask = await dbClient
     .updateTable('homie.task')
     .where('id', '=', task.id)
     .set({
@@ -56,5 +57,19 @@ export async function handleUpdateHomieTaskFromGithubIssue(
       priority_level,
       task_type_id,
     })
+    .returning([
+      'id',
+      'name',
+      'description',
+      'task_status_id',
+      'task_type_id',
+      'html_url',
+      'due_date',
+      'completed_at',
+      'priority_level',
+      'organization_id',
+    ])
     .executeTakeFirstOrThrow()
+
+  await embedTask({ task: updatedTask })
 }

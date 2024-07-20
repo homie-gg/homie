@@ -1,5 +1,6 @@
 import { dbClient } from '@/database/client'
 import { classifyTask } from '@/lib/ai/clasify-task'
+import { embedTask } from '@/lib/ai/embed-task'
 import { AsanaGetTaskResponse } from '@/lib/asana/types'
 import { taskStatus } from '@/lib/tasks'
 
@@ -42,8 +43,21 @@ export async function createHomieTaskFromAsanaTask(
         task_type_id,
       }),
     )
-    .returning(['id'])
+    .returning([
+      'id',
+      'name',
+      'description',
+      'task_status_id',
+      'task_type_id',
+      'html_url',
+      'due_date',
+      'completed_at',
+      'priority_level',
+      'organization_id',
+    ])
     .executeTakeFirstOrThrow()
+
+  await embedTask({ task: homieTask })
 
   if (!asanaTask.assignee) {
     return

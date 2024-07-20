@@ -6,6 +6,7 @@ import { AsanaGetTaskResponse } from '@/lib/asana/types'
 import { classifyTask } from '@/lib/ai/clasify-task'
 import { taskStatus } from '@/lib/tasks'
 import { createHomieTaskFromAsanaTask } from '@/lib/asana/create-homie-task-from-asana-task'
+import { embedTask } from '@/lib/ai/embed-task'
 
 export async function handleSyncAsanaTaskToHomieTask(
   job: SyncAsanaTaskToHomieTask,
@@ -66,7 +67,7 @@ export async function handleSyncAsanaTaskToHomieTask(
       })
     : null
 
-  await dbClient
+  const updatedTask = await dbClient
     .updateTable('homie.task')
     .set({
       name: asanaTask.name,
@@ -86,7 +87,21 @@ export async function handleSyncAsanaTaskToHomieTask(
         : homieTask.task_type_id,
     })
     .where('homie.task.id', '=', homieTask.id)
+    .returning([
+      'id',
+      'name',
+      'description',
+      'task_status_id',
+      'task_type_id',
+      'html_url',
+      'due_date',
+      'completed_at',
+      'priority_level',
+      'organization_id',
+    ])
     .executeTakeFirstOrThrow()
+
+  await embedTask({ task: updatedTask })
 
   // If no assignee, we'll remove any assignments (if they exist)
   if (!asanaTask.assignee) {

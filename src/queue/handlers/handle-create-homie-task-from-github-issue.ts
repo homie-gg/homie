@@ -2,6 +2,7 @@ import { CreateHomieTaskFromGithubIssue } from '@/queue/jobs'
 import { dbClient } from '@/database/client'
 import { classifyTask } from '@/lib/ai/clasify-task'
 import { taskStatus } from '@/lib/tasks'
+import { embedTask } from '@/lib/ai/embed-task'
 
 export async function handleCreateHomieTaskFromGithubIssue(
   job: CreateHomieTaskFromGithubIssue,
@@ -82,8 +83,21 @@ export async function handleCreateHomieTaskFromGithubIssue(
           github_repo_id: githubRepo.id,
         }),
       )
-      .returning(['id'])
+      .returning([
+        'id',
+        'name',
+        'description',
+        'task_status_id',
+        'task_type_id',
+        'html_url',
+        'due_date',
+        'completed_at',
+        'priority_level',
+        'organization_id',
+      ])
       .executeTakeFirstOrThrow()
+
+    await embedTask({ task })
 
     // Save person who made issue
     if (issue.user) {
