@@ -31,6 +31,7 @@ import { getOrganizationLogData } from '@/lib/organization/get-organization-log-
 import { getTodaysDateTool } from '@/lib/ai/chat/tools/get-todays-date-tool'
 import { getFetchPullRequestDetailTool } from '@/lib/ai/chat/tools/get-fetch-pull-request-detail-tool'
 import { getListCommitsDeployedToBranchTool } from '@/lib/ai/chat/tools/get-list-commits-deployed-to-branch-tool'
+import { getSearchForTasksTool } from '@/lib/ai/chat/tools/get-search-for-tasks-tool'
 
 interface GetAnswerParams {
   organization: {
@@ -120,6 +121,10 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       onAnswer: (result) => {
         toolAnswer = result
       },
+    }),
+    getSearchForTasksTool({
+      organization,
+      answerId,
     }),
   ]
 

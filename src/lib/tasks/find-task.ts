@@ -69,14 +69,13 @@ export async function findTask(
     }
 
     const topResult = reranked.results[0]
-    const task_id = matches[topResult.index].metadata?.task_id
+    const taskId = matches[topResult.index].metadata?.task_id
 
-    if (!task_id) {
+    if (!taskId) {
       return null
     }
 
-    const id =
-      typeof task_id === 'number' ? task_id : parseInt(task_id.toString())
+    const id = typeof taskId === 'number' ? taskId : parseInt(taskId.toString())
 
     return dbClient
       .selectFrom('homie.task')
