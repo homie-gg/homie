@@ -35,9 +35,13 @@ export function getSearchForTasksTool(params: getSearchForTasksToolParams) {
         .boolean()
         .default(false)
         .describe('Whether to only include done tasks'),
+      type: z
+        .enum(['feature', 'bug_fix', 'maintenance', 'planning'])
+        .describe('What kind of task to search for')
+        .optional(),
     }),
     func: async (params) => {
-      const { searchTerm, includeCompletedTasks } = params
+      const { searchTerm, includeCompletedTasks, type } = params
 
       logger.debug('Call - Search for tasks', {
         event: 'get_answer:search_tasks:call',
@@ -67,6 +71,12 @@ export function getSearchForTasksTool(params: getSearchForTasksToolParams) {
         if (!includeCompletedTasks) {
           pineconeSearchFilters['task_status'] = {
             $eq: 'open',
+          }
+        }
+
+        if (type) {
+          pineconeSearchFilters['task_type'] = {
+            $eq: type,
           }
         }
 
@@ -100,7 +110,6 @@ export function getSearchForTasksTool(params: getSearchForTasksToolParams) {
 
         return rankedDocuments
       } catch (error) {
-        console.log(error)
         return 'FAILED'
       }
     },
