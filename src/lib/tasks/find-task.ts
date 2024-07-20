@@ -75,13 +75,12 @@ export async function findTask(
       return null
     }
 
-    if (typeof task_id !== 'string') {
-      return null
-    }
+    const id =
+      typeof task_id === 'number' ? task_id : parseInt(task_id.toString())
 
     return dbClient
       .selectFrom('homie.task')
-      .where('homie.task.id', '=', parseInt(task_id))
+      .where('homie.task.id', '=', id)
       .where('homie.task.organization_id', '=', organization_id)
       .select(['id', 'name', 'html_url', 'description'])
       .executeTakeFirst()
