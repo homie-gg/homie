@@ -28,6 +28,7 @@ export const findOrgWithSlackTeamId = async (teamId: string) => {
       'ext_gh_install_id',
       'trello_access_token',
       'ext_trello_done_task_list_id',
+      'ext_trello_new_task_list_id',
       'slack_access_token',
       'ext_slack_bot_user_id',
       'has_unlimited_usage',
