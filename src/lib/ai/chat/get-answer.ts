@@ -33,6 +33,8 @@ import { getFetchPullRequestDetailTool } from '@/lib/ai/chat/tools/get-fetch-pul
 import { getListCommitsDeployedToBranchTool } from '@/lib/ai/chat/tools/get-list-commits-deployed-to-branch-tool'
 import { getSearchForTasksTool } from '@/lib/ai/chat/tools/get-search-for-tasks-tool'
 import { getCreateTaskTool } from '@/lib/ai/chat/tools/get-create-task-tool'
+import { getListGithubReposTool } from '@/lib/ai/chat/tools/get-list-github-repos-tool'
+import { getListAsanaProjectsTool } from '@/lib/ai/chat/tools/get-list-asana-projects-tool'
 
 interface GetAnswerParams {
   organization: {
@@ -133,6 +135,14 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       answerId,
       targetMessageTS: currentMessage.ts,
       channelID,
+    }),
+    getListGithubReposTool({
+      organization,
+      answerId,
+    }),
+    getListAsanaProjectsTool({
+      organization,
+      answerId,
     }),
   ]
 
