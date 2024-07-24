@@ -64,8 +64,8 @@ export function getCreateTaskTool(params: GetCreateTaskToolParams) {
         githubRepoID,
       } = data
 
-      logger.debug('Call - create tasks', {
-        event: 'get_answer:create_tasks:call',
+      logger.debug('Call - create task', {
+        event: 'get_answer:create_task:call',
         answer_id: answerId,
         organization: getOrganizationLogData(organization),
         channel_id: channelID,
@@ -89,7 +89,7 @@ export function getCreateTaskTool(params: GetCreateTaskToolParams) {
         const description = `**Slack Message:**\n\n[${originalMessage}](${slackMessageUrl})\n\n**Requirements:**\n\n${requirements}`
 
         logger.debug('Got task description', {
-          event: 'get_answer:create_tasks:task_description',
+          event: 'get_answer:create_task:task_description',
           answer_id: answerId,
           organization: getOrganizationLogData(organization),
           channel_id: channelID,
@@ -128,7 +128,7 @@ export function getCreateTaskTool(params: GetCreateTaskToolParams) {
           })
 
           logger.debug('Trello task created', {
-            event: 'get_answer:create_tasks:trello_task_created',
+            event: 'get_answer:create_task:trello_task_created',
             answer_id: answerId,
             organization: getOrganizationLogData(organization),
             channel_id: channelID,
@@ -141,11 +141,13 @@ export function getCreateTaskTool(params: GetCreateTaskToolParams) {
             description,
             url: card.shortUrl,
           })
+
+          return 'Success!'
         }
 
         if (app === 'trello') {
           logger.debug('Trello not set up', {
-            event: 'get_answer:create_tasks:trello_not_setup',
+            event: 'get_answer:create_task:trello_not_setup',
             answer_id: answerId,
             organization: getOrganizationLogData(organization),
             channel_id: channelID,
@@ -178,7 +180,7 @@ export function getCreateTaskTool(params: GetCreateTaskToolParams) {
 
           if (!githubRepo) {
             logger.debug('Missing github repo', {
-              event: 'get_answer:create_tasks:missing_github_repo',
+              event: 'get_answer:create_task:missing_github_repo',
               answer_id: answerId,
               organization: getOrganizationLogData(organization),
               channel_id: channelID,
@@ -211,7 +213,7 @@ export function getCreateTaskTool(params: GetCreateTaskToolParams) {
           })
 
           logger.debug('Created GitHub issue', {
-            event: 'get_answer:create_tasks:created_github_issue',
+            event: 'get_answer:create_task:created_github_issue',
             answer_id: answerId,
             organization: getOrganizationLogData(organization),
             channel_id: channelID,
@@ -223,11 +225,13 @@ export function getCreateTaskTool(params: GetCreateTaskToolParams) {
             originalMessage,
             url: githubIssue.data?.html_url ?? '#',
           })
+
+          return 'Success!'
         }
 
         if (app === 'github' && !githubRepoID) {
           logger.debug('Missing github repo id', {
-            event: 'get_answer:create_tasks:missing_github_repo_id',
+            event: 'get_answer:create_task:missing_github_repo_id',
             answer_id: answerId,
             organization: getOrganizationLogData(organization),
             channel_id: channelID,
@@ -244,7 +248,7 @@ export function getCreateTaskTool(params: GetCreateTaskToolParams) {
 
         if (app === 'github') {
           logger.debug('GitHub not setup properly', {
-            event: 'get_answer:create_tasks:github_not_setup',
+            event: 'get_answer:create_task:github_not_setup',
             answer_id: answerId,
             organization: getOrganizationLogData(organization),
             channel_id: channelID,
@@ -268,6 +272,7 @@ export function getCreateTaskTool(params: GetCreateTaskToolParams) {
             .selectFrom('asana.project')
             .where('id', '=', asanaProjectID)
             .where('organization_id', '=', organization.id)
+            .where('enabled', '=', true)
             .select(['ext_asana_project_id'])
             .executeTakeFirst()
 
@@ -299,7 +304,7 @@ export function getCreateTaskTool(params: GetCreateTaskToolParams) {
           })
 
           logger.debug('Created Asana task', {
-            event: 'get_answer:create_tasks:created_asana_task',
+            event: 'get_answer:create_task:created_asana_task',
             answer_id: answerId,
             organization: getOrganizationLogData(organization),
             channel_id: channelID,
@@ -311,11 +316,13 @@ export function getCreateTaskTool(params: GetCreateTaskToolParams) {
             originalMessage,
             url: task.permalink_url,
           })
+
+          return 'Success!'
         }
 
         if (app === 'asana' && !asanaProjectID) {
           logger.debug('Missing asana project id', {
-            event: 'get_answer:create_tasks:missing_asana_project_id',
+            event: 'get_answer:create_task:missing_asana_project_id',
             answer_id: answerId,
             organization: getOrganizationLogData(organization),
             channel_id: channelID,
@@ -327,7 +334,14 @@ export function getCreateTaskTool(params: GetCreateTaskToolParams) {
             originalMessage,
           })
 
-          return 'Failed. Asana project ID is missing. Try listing Asana projects to pick one.'
+          return `Failed. Asana project ID is missing. Try listing Asana projects to pick one to create task: ${JSON.stringify(
+            {
+              title,
+              requirements,
+              originalMessage,
+              description,
+            },
+          )}`
         }
 
         if (app === 'asana') {

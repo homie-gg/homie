@@ -35,6 +35,7 @@ import { getSearchForTasksTool } from '@/lib/ai/chat/tools/get-search-for-tasks-
 import { getCreateTaskTool } from '@/lib/ai/chat/tools/get-create-task-tool'
 import { getListGithubReposTool } from '@/lib/ai/chat/tools/get-list-github-repos-tool'
 import { getListAsanaProjectsTool } from '@/lib/ai/chat/tools/get-list-asana-projects-tool'
+import { dbClient } from '@/database/client'
 
 interface GetAnswerParams {
   organization: {
@@ -168,6 +169,7 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
     ['system', 'You are helpful project manager.'],
     ['system', `The current date is ${currentDate}`],
     ['system', 'Always include URL links if available.'],
+
     new MessagesPlaceholder('chat_history'),
     ['user', '{input}'],
     new MessagesPlaceholder('agent_scratchpad'),

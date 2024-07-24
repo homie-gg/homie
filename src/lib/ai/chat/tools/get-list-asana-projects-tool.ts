@@ -27,6 +27,7 @@ export function getListAsanaProjectsTool(params: GetListAsanaProjectsTool) {
           .selectFrom('asana.project')
           .where('organization_id', '=', organization.id)
           .select(['name', 'id'])
+          .where('enabled', '=', true)
           .execute()
 
         logger.debug('Got projects', {
