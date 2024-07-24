@@ -7,6 +7,7 @@ import { DynamicStructuredTool } from '@langchain/core/tools'
 import { CohereClient } from 'cohere-ai'
 import { parseISO } from 'date-fns'
 import { z } from 'zod'
+import * as Sentry from '@sentry/nextjs'
 
 interface GetSearchForTasksToolParams {
   organization: {
@@ -150,13 +151,14 @@ export function getSearchForTasksTool(params: GetSearchForTasksToolParams) {
 
         return JSON.stringify(rankedDocuments)
       } catch (error) {
+        Sentry.captureException(error)
+
         logger.debug('Failed to search for tasks', {
-          event: 'get_answer:search_tasks:failed',
+          event: 'get_answer:search_tasks:task',
           answer_id: answerId,
           organization: getOrganizationLogData(organization),
           search_term: searchTerm,
           error: error instanceof Error ? error.message : error,
-          stack_trace: error instanceof Error ? error.stack : null,
         })
 
         return 'FAILED'
