@@ -143,8 +143,12 @@ export function getSearchForTasksTool(params: GetSearchForTasksToolParams) {
 
             // Otherwise, return created at descending (newest first)
 
-            const aCreatedAt = parseISO(aTask.created_at).valueOf()
-            const bCreatedAt = parseISO(bTask.created_at).valueOf()
+            const aCreatedAt = aTask.created_at
+              ? parseISO(aTask.created_at).valueOf()
+              : 0
+            const bCreatedAt = bTask.created_at
+              ? parseISO(bTask.created_at).valueOf()
+              : 0
 
             return bCreatedAt - aCreatedAt
           })
