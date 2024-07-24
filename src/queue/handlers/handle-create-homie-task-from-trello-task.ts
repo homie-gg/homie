@@ -76,6 +76,7 @@ export async function handleCreateHomieTaskFromTrelloTask(
       'completed_at',
       'priority_level',
       'organization_id',
+      'created_at',
     ])
     .executeTakeFirstOrThrow()
 

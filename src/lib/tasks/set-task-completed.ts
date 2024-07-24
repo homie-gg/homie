@@ -27,6 +27,7 @@ export async function setTaskCompleted(params: SetTaskCompletedParams) {
       'completed_at',
       'priority_level',
       'organization_id',
+      'created_at',
     ])
     .executeTakeFirstOrThrow()
 
