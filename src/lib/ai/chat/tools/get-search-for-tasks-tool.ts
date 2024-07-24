@@ -1,9 +1,11 @@
+import { TaskMetadata } from '@/lib/ai/embed-task'
 import { logger } from '@/lib/log/logger'
 import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { getPineconeClient } from '@/lib/pinecone/pinecone-client'
 import { DynamicStructuredTool } from '@langchain/core/tools'
 import { CohereClient } from 'cohere-ai'
+import { parseISO } from 'date-fns'
 import { z } from 'zod'
 
 interface GetSearchForTasksToolParams {
@@ -104,11 +106,49 @@ export function getSearchForTasksTool(params: GetSearchForTasksToolParams) {
 
         const rankedDocuments = reranked.results
           .filter((result) => result.relevanceScore > searchRelevanceThreshold)
-          .map((result) => matches[result.index].metadata?.text as string)
-          .filter((text) => !!text) // remove empty text
-          .join('\n')
+          .map(
+            (result) =>
+              matches[result.index].metadata as unknown as TaskMetadata,
+          )
+          .sort((aTask, bTask) => {
+            // Always return higher priority first
+            if (aTask.priority_level < bTask.priority_level) {
+              return -1
+            }
 
-        return rankedDocuments
+            if (aTask.priority_level > bTask.priority_level) {
+              return 1
+            }
+
+            const aDueDate = aTask.due_date
+              ? parseISO(aTask.due_date).valueOf()
+              : null
+            const bDueDate = bTask.due_date
+              ? parseISO(bTask.due_date).valueOf()
+              : null
+
+            // If there is a due date, return those due soonest (smallest values) first
+            if (aDueDate && bDueDate) {
+              return aDueDate - bDueDate
+            }
+
+            if (aDueDate && !bDueDate) {
+              return -1
+            }
+
+            if (!aDueDate && bDueDate) {
+              return 1
+            }
+
+            // Otherwise, return created at descending (newest first)
+
+            const aCreatedAt = parseISO(aTask.created_at).valueOf()
+            const bCreatedAt = parseISO(bTask.created_at).valueOf()
+
+            return bCreatedAt - aCreatedAt
+          })
+
+        return JSON.stringify(rankedDocuments)
       } catch (error) {
         return 'FAILED'
       }

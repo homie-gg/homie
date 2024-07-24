@@ -1,5 +1,5 @@
 import { getPineconeClient } from '@/lib/pinecone/pinecone-client'
-import { PineconeRecord } from '@pinecone-database/pinecone'
+import { PineconeRecord, RecordMetadata } from '@pinecone-database/pinecone'
 import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
 import { dbClient } from '@/database/client'
 import { getPriorityLabel } from '@/lib/tasks/task-priority'
@@ -16,7 +16,21 @@ interface EmbedTaskParams {
     due_date: Date | null
     completed_at: Date | null
     priority_level: number
+    created_at: Date
   }
+}
+
+export interface TaskMetadata extends RecordMetadata {
+  type: 'task'
+  organization_id: number
+  task_id: number
+  task_status: string
+  task_type: string
+  text: string
+  priority_level: number
+  due_date: string
+  created_at: string
+  completed_at: string
 }
 
 export async function embedTask(params: EmbedTaskParams) {
@@ -59,18 +73,23 @@ export async function embedTask(params: EmbedTaskParams) {
 
   const embedding = await embedder.embedQuery(text)
 
+  const metadata: TaskMetadata = {
+    type: 'task',
+    organization_id: task.organization_id,
+    task_id: task.id,
+    task_status: status.name,
+    task_type: type.name,
+    text,
+    priority_level: task.priority_level,
+    created_at: task.created_at.toISOString(),
+    due_date: task.due_date?.toISOString() ?? '',
+    completed_at: task.completed_at?.toISOString() ?? '',
+  }
+
   const record: PineconeRecord = {
     id: `task_${task.id}`,
     values: embedding,
-    metadata: {
-      type: 'task',
-      organization_id: task.organization_id,
-      task_id: task.id,
-      task_status: status.name,
-      task_type: type.name,
-      text,
-      priority_level: task.priority_level,
-    },
+    metadata,
   }
 
   const index = getPineconeClient().Index(process.env.PINECONE_INDEX_MAIN!)

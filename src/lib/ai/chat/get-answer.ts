@@ -19,7 +19,6 @@ import { rephraseWithPersona } from '@/lib/ai/rephrase-with-persona'
 import { getListPullRequestsTool } from '@/lib/ai/chat/tools/get-list-pull-requests-tool'
 import { getRememberConversationTool } from '@/lib/ai/chat/tools/get-remember-conversation-tool'
 import { Message } from '@/lib/ai/chat/types'
-import { getFindOpenTasksTool } from '@/lib/ai/chat/tools/get-find-open-tasks-tool'
 import { getFindCompletedTasksTool } from '@/lib/ai/chat/tools/get-find-completed-tasks-tool'
 import { getFindWhatContributorIsWorkingOnTool } from '@/lib/ai/chat/tools/get-find-what-contributor-is-working-on-tool'
 import { getAssignTaskToContributorTool } from '@/lib/ai/chat/tools/get-assign-task-to-contributor-tool'
@@ -35,7 +34,6 @@ import { getSearchForTasksTool } from '@/lib/ai/chat/tools/get-search-for-tasks-
 import { getCreateTaskTool } from '@/lib/ai/chat/tools/get-create-task-tool'
 import { getListGithubReposTool } from '@/lib/ai/chat/tools/get-list-github-repos-tool'
 import { getListAsanaProjectsTool } from '@/lib/ai/chat/tools/get-list-asana-projects-tool'
-import { dbClient } from '@/database/client'
 
 interface GetAnswerParams {
   organization: {
@@ -89,10 +87,6 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       organization,
       messages,
       channelID: channelID,
-      answerId,
-    }),
-    getFindOpenTasksTool({
-      organization,
       answerId,
     }),
     getTodaysDateTool({ answerId, organization }),
