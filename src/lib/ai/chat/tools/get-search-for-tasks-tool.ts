@@ -150,6 +150,14 @@ export function getSearchForTasksTool(params: GetSearchForTasksToolParams) {
 
         return JSON.stringify(rankedDocuments)
       } catch (error) {
+        logger.debug('Failed to search for tasks', {
+          event: 'get_answer:search_tasks:task',
+          answer_id: answerId,
+          organization: getOrganizationLogData(organization),
+          search_term: searchTerm,
+          error: error instanceof Error ? error.message : error,
+        })
+
         return 'FAILED'
       }
     },
