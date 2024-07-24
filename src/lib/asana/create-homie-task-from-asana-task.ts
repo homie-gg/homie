@@ -54,6 +54,7 @@ export async function createHomieTaskFromAsanaTask(
       'completed_at',
       'priority_level',
       'organization_id',
+      'created_at'
     ])
     .executeTakeFirstOrThrow()
 

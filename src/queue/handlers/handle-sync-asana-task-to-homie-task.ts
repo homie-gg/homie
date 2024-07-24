@@ -98,6 +98,7 @@ export async function handleSyncAsanaTaskToHomieTask(
       'completed_at',
       'priority_level',
       'organization_id',
+      'created_at'
     ])
     .executeTakeFirstOrThrow()
 
