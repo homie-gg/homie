@@ -156,7 +156,7 @@ export function getSearchForTasksTool(params: GetSearchForTasksToolParams) {
           organization: getOrganizationLogData(organization),
           search_term: searchTerm,
           error: error instanceof Error ? error.message : error,
-          stack_trace: error instanceof Error ? error.stack?.split('\n') : null,
+          stack_trace: error instanceof Error ? error.stack : null,
         })
 
         return 'FAILED'
