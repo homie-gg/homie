@@ -68,7 +68,7 @@ export async function reopenTaskFromGithubIssue(
       'completed_at',
       'priority_level',
       'organization_id',
-      'created_at'
+      'created_at',
     ])
     .executeTakeFirstOrThrow()
 

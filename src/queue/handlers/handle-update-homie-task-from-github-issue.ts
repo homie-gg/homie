@@ -68,7 +68,7 @@ export async function handleUpdateHomieTaskFromGithubIssue(
       'completed_at',
       'priority_level',
       'created_at',
-      'organization_id'
+      'organization_id',
     ])
     .executeTakeFirstOrThrow()
 

@@ -60,7 +60,7 @@ export async function closeTaskFromGithubIssue(
       'completed_at',
       'priority_level',
       'organization_id',
-      'created_at'
+      'created_at',
     ])
     .executeTakeFirstOrThrow()
 
