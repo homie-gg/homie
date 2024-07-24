@@ -154,11 +154,12 @@ export function getSearchForTasksTool(params: GetSearchForTasksToolParams) {
         Sentry.captureException(error)
 
         logger.debug('Failed to search for tasks', {
-          event: 'get_answer:search_tasks:task',
+          event: 'get_answer:search_tasks:failed',
           answer_id: answerId,
           organization: getOrganizationLogData(organization),
           search_term: searchTerm,
           error: error instanceof Error ? error.message : error,
+          stack_trace: error instanceof Error ? error.stack?.split('\n') : null,
         })
 
         return 'FAILED'
