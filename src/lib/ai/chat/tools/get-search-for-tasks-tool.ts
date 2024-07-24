@@ -6,7 +6,7 @@ import { DynamicStructuredTool } from '@langchain/core/tools'
 import { CohereClient } from 'cohere-ai'
 import { z } from 'zod'
 
-interface getSearchForTasksToolParams {
+interface GetSearchForTasksToolParams {
   organization: {
     id: number
     ext_gh_install_id: number | null
@@ -23,7 +23,7 @@ const numResults = 30
  */
 const searchRelevanceThreshold = 0.4
 
-export function getSearchForTasksTool(params: getSearchForTasksToolParams) {
+export function getSearchForTasksTool(params: GetSearchForTasksToolParams) {
   const { organization, answerId } = params
 
   return new DynamicStructuredTool({

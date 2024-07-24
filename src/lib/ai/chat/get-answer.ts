@@ -32,6 +32,10 @@ import { getTodaysDateTool } from '@/lib/ai/chat/tools/get-todays-date-tool'
 import { getFetchPullRequestDetailTool } from '@/lib/ai/chat/tools/get-fetch-pull-request-detail-tool'
 import { getListCommitsDeployedToBranchTool } from '@/lib/ai/chat/tools/get-list-commits-deployed-to-branch-tool'
 import { getSearchForTasksTool } from '@/lib/ai/chat/tools/get-search-for-tasks-tool'
+import { getCreateTaskTool } from '@/lib/ai/chat/tools/get-create-task-tool'
+import { getListGithubReposTool } from '@/lib/ai/chat/tools/get-list-github-repos-tool'
+import { getListAsanaProjectsTool } from '@/lib/ai/chat/tools/get-list-asana-projects-tool'
+import { dbClient } from '@/database/client'
 
 interface GetAnswerParams {
   organization: {
@@ -45,6 +49,7 @@ interface GetAnswerParams {
     ext_gh_install_id: number | null
     trello_access_token: string | null
     asana_access_token: string | null
+    ext_trello_new_task_list_id: string | null
     ext_trello_done_task_list_id: string | null
   }
   messages: Message[]
@@ -126,6 +131,20 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       organization,
       answerId,
     }),
+    getCreateTaskTool({
+      organization,
+      answerId,
+      targetMessageTS: currentMessage.ts,
+      channelID,
+    }),
+    getListGithubReposTool({
+      organization,
+      answerId,
+    }),
+    getListAsanaProjectsTool({
+      organization,
+      answerId,
+    }),
   ]
 
   const model = createOpenAIChatClient({ model: 'gpt-4o-2024-05-13' })
@@ -150,6 +169,7 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
     ['system', 'You are helpful project manager.'],
     ['system', `The current date is ${currentDate}`],
     ['system', 'Always include URL links if available.'],
+
     new MessagesPlaceholder('chat_history'),
     ['user', '{input}'],
     new MessagesPlaceholder('agent_scratchpad'),
