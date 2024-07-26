@@ -24,3 +24,9 @@ export type SlackAccessTokenResponse = {
     channel_id: string
   }
 }
+
+export interface SlackMessage {
+  message: string
+  channelID: string
+  ts: string
+}

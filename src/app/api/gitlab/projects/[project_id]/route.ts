@@ -36,6 +36,11 @@ export const PATCH = createRoute(
         'gitlab.app_user.organization_id',
         'homie.organization.id',
       )
+      .innerJoin(
+        'slack.workspace',
+        'slack.workspace.organization_id',
+        'homie.organization.id',
+      )
       .leftJoin(
         'trello.workspace',
         'trello.workspace.organization_id',
@@ -54,6 +59,7 @@ export const PATCH = createRoute(
         'trello.workspace.trello_access_token',
         'asana_access_token',
         'homie.organization.has_unlimited_usage',
+        'slack_access_token',
       ])
       .executeTakeFirst()
 

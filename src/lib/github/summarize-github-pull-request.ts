@@ -22,17 +22,20 @@ interface SummarizeGithubPullRequestParams {
   github: GithubClient
   issue: string | null
   length: 'short' | 'long'
+  conversation: string | null
 }
 
 export async function summarizeGithubPullRequest(
   params: SummarizeGithubPullRequestParams,
 ) {
-  const { pullRequest, github, repo, owner, issue, length: type } = params
+  const { pullRequest, github, repo, owner, issue, length, conversation } =
+    params
 
   logger.debug('Summarize PR - Start', {
     event: 'summarize_pr:start',
     pull_request: getPullRequestLogData(pullRequest),
     issue,
+    conversation,
   })
 
   const diff = await github.rest.pulls
@@ -61,6 +64,7 @@ export async function summarizeGithubPullRequest(
     pull_request: getPullRequestLogData(pullRequest),
     issue,
     diff,
+    conversation,
   })
 
   const summary = await summarizeCodeChange({
@@ -68,7 +72,8 @@ export async function summarizeGithubPullRequest(
     diff,
     issue,
     body: pullRequest.body,
-    length: type,
+    conversation,
+    length,
     logData: {
       pull_request: getPullRequestLogData(pullRequest),
       issue,

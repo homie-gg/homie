@@ -7,6 +7,7 @@ import { getIsOverPlanContributorLimit } from '@/lib/billing/get-is-over-plan-co
 import { getOverContributorLimitMessage } from '@/lib/billing/get-over-contributor-limit-message'
 import { logger } from '@/lib/log/logger'
 import { getPullRequestLogData } from '@/lib/github/get-pull-request-log-data'
+import { getReferencedSlackMessages } from '@/lib/slack/get-referenced-slack-messages'
 
 /**
  * homie will replace this string inside a PR body with a generated summary.
@@ -22,6 +23,11 @@ export async function handleGenerateOpenPullRequestSummary(
     .innerJoin(
       'github.organization',
       'github.organization.organization_id',
+      'homie.organization.id',
+    )
+    .innerJoin(
+      'slack.workspace',
+      'slack.workspace.organization_id',
       'homie.organization.id',
     )
     .leftJoin(
@@ -41,6 +47,7 @@ export async function handleGenerateOpenPullRequestSummary(
       'has_unlimited_usage',
       'trello_access_token',
       'asana_access_token',
+      'slack_access_token',
     ])
     .executeTakeFirst()
 
@@ -79,6 +86,11 @@ export async function handleGenerateOpenPullRequestSummary(
     })
     return
   }
+
+  const conversation = await getReferencedSlackMessages({
+    pullRequestBody: pull_request.body,
+    organization,
+  })
 
   const issue = await getLinkedIssuesAndTasksInPullRequest({
     pullRequest: pull_request,
@@ -130,6 +142,7 @@ export async function handleGenerateOpenPullRequestSummary(
     github,
     issue,
     length: 'short',
+    conversation: conversation,
   })
 
   logger.debug('Generate PR Summary - Got Summary', {

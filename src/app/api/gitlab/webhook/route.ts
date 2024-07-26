@@ -14,6 +14,11 @@ export const POST = async (request: NextRequest) => {
       'gitlab.app_user.organization_id',
       'homie.organization.id',
     )
+    .innerJoin(
+      'slack.workspace',
+      'slack.workspace.organization_id',
+      'homie.organization.id',
+    )
     .leftJoin(
       'homie.subscription',
       'homie.subscription.organization_id',
@@ -38,6 +43,7 @@ export const POST = async (request: NextRequest) => {
       'has_unlimited_usage',
       'trello_access_token',
       'asana_access_token',
+      'slack_access_token',
     ])
     .executeTakeFirst()
 

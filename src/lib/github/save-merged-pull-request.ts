@@ -8,6 +8,7 @@ import { logger } from '@/lib/log/logger'
 import { parseISO } from 'date-fns'
 import { getLinkedIssuesAndTasksInPullRequest } from '@/lib/github/get-linked-issues-and-tasks-in-pull-request'
 import { embedCodeChange } from '@/lib/ai/embed-code-change'
+import { getReferencedSlackMessages } from '@/lib/slack/get-referenced-slack-messages'
 
 interface SaveMergedPullRequestParams {
   pullRequest: {
@@ -41,6 +42,7 @@ interface SaveMergedPullRequestParams {
     ext_gh_install_id: number
     trello_access_token: string | null
     asana_access_token: string | null
+    slack_access_token: string
   }
 }
 
@@ -119,6 +121,11 @@ export async function saveMergedPullRequest(
     organization,
   })
 
+  const conversation = await getReferencedSlackMessages({
+    pullRequestBody: pullRequest.body,
+    organization,
+  })
+
   const { summary, diff } = await summarizeGithubPullRequest({
     pullRequest: {
       id: pullRequest.id,
@@ -136,6 +143,7 @@ export async function saveMergedPullRequest(
     github,
     issue,
     length: 'long',
+    conversation,
   })
 
   const wasMergedToDefaultBranch =

@@ -330,6 +330,7 @@ export type ImportGitlabMergeRequests = BullMQJob<
       gitlab_access_token: string
       trello_access_token: string | null
       asana_access_token: string | null
+      slack_access_token: string
       has_unlimited_usage: boolean | null
     }
   },
@@ -409,6 +410,7 @@ export type SaveMergedMergeRequest = BullMQJob<
       gitlab_access_token: string
       trello_access_token: string | null
       asana_access_token: string | null
+      slack_access_token: string
     }
   },
   void, // return type
@@ -433,6 +435,7 @@ export type GenerateOpenMergeRequestSummary = BullMQJob<
       gitlab_access_token: string
       trello_access_token: string | null
       asana_access_token: string | null
+      slack_access_token: string
     }
   },
   void, // return type
