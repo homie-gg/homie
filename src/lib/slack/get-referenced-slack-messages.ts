@@ -1,5 +1,6 @@
 import { createSlackClient } from '@/lib/slack/create-slack-client'
 import { getSlackMessageConversation } from '@/lib/slack/get-slack-message-text'
+import { getSlackThreadMessages } from '@/lib/slack/get-slack-thread-messages'
 import { SlackMessage } from '@/lib/slack/types'
 
 interface GetReferencedSlackMessagesParams {
@@ -45,9 +46,38 @@ export async function getReferencedSlackMessages(
     // Reference: https://stackoverflow.com/questions/46355373/get-a-messages-ts-value-from-archives-link
 
     const channelID = urlParts[2]
-    const ts = urlParts[3] // e.g. p1234567898000159
+
+    const tsPart = urlParts[3]
+    const tsString = tsPart.includes('?') ? tsPart.split('?')[0] : tsPart
+    const ts = tsString // e.g. p1234567898000159
       .replaceAll(/[a-z]/g, '') // Remove any characters. e.g. 'p'
       .replace(/(.{10})/, '$1.') // Insert '.' af:ter 10th digit. e.g. 1234567898.000159
+
+    const queryParams = tsPart.includes('?')
+      ? new URLSearchParams(tsPart.split('?')[1])
+      : new URLSearchParams()
+
+    const threadTS = queryParams.get('thread_ts')
+
+    if (threadTS) {
+      const threadMessages = await getSlackThreadMessages({
+        channelID,
+        messageTS: threadTS,
+        slackClient,
+      })
+
+      const message = threadMessages
+        .filter((threadMessage) => !!threadMessage.text)
+        .map((threadMessage) => threadMessage.text)
+        .join('\n')
+
+      results.push({
+        channelID,
+        ts,
+        message,
+      })
+      continue
+    }
 
     const message = await getSlackMessageConversation({
       slackClient,
@@ -71,5 +101,5 @@ export async function getReferencedSlackMessages(
   }
 
   // Merge all slack referenced URLs into a single message context
-  return results.join('\n')
+  return results.map((message) => message.message).join('\n')
 }

@@ -1,5 +1,4 @@
 import { SlackClient } from '@/lib/slack/create-slack-client'
-import { getSlackThreadMessages } from '@/lib/slack/get-slack-thread-messages'
 import { ConversationsHistoryResponse } from '@slack/web-api/dist/response'
 
 interface getSlackMessageConversationParams {
@@ -35,17 +34,5 @@ export async function getSlackMessageConversation(
     return null
   }
 
-  // If message is not a part of a thread, just return the text only
-  if (!slackMessage.thread_ts) {
-    return slackMessage.text
-  }
-
-  // If we're in a thread, we'll return the entire thread
-  const threadMessages = await getSlackThreadMessages({
-    channelID,
-    messageTS,
-    slackClient,
-  })
-
-  return threadMessages.join('\n')
+  return slackMessage.text
 }
