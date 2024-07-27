@@ -88,7 +88,11 @@ export const POST = async (request: NextRequest) => {
     })
 
     await dispatch('close_linked_tasks', {
-      pullRequestBody: mergeRequest.description,
+      pull_request: {
+        body: mergeRequest.description,
+        title: mergeRequest.title,
+        html_url: mergeRequest.url,
+      },
       organization,
     })
   }

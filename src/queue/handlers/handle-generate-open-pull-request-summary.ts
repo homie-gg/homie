@@ -142,7 +142,7 @@ export async function handleGenerateOpenPullRequestSummary(
     github,
     issue,
     length: 'short',
-    conversation: conversation,
+    conversation,
   })
 
   logger.debug('Generate PR Summary - Got Summary', {

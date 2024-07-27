@@ -209,7 +209,11 @@ export type SaveMergedPullRequest = BullMQJob<
 
 export type CloseLinkedTasks = BullMQJob<
   {
-    pullRequestBody: string
+    pull_request: {
+      title: string
+      body: string
+      html_url: string
+    }
     organization: {
       id: number
     }
