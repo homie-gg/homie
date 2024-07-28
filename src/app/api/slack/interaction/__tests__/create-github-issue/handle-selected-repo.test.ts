@@ -104,9 +104,11 @@ it('should ask to select repo', async () => {
     messages: [
       {
         text: 'some slack message',
+        ts: '12345.6789',
       },
       {
         text: 'some reply',
+        ts: '12345.6789',
       },
     ],
   })
