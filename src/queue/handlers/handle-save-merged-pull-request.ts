@@ -23,7 +23,7 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
       'github.organization.organization_id',
       'homie.organization.id',
     )
-    .innerJoin(
+    .leftJoin(
       'slack.workspace',
       'slack.workspace.organization_id',
       'homie.organization.id',

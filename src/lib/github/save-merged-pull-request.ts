@@ -42,7 +42,7 @@ interface SaveMergedPullRequestParams {
     ext_gh_install_id: number
     trello_access_token: string | null
     asana_access_token: string | null
-    slack_access_token: string
+    slack_access_token: string | null
   }
 }
 
@@ -121,10 +121,15 @@ export async function saveMergedPullRequest(
     organization,
   })
 
-  const conversation = await getReferencedSlackMessages({
-    pullRequestBody: pullRequest.body,
-    organization,
-  })
+  const conversation = organization.slack_access_token
+    ? await getReferencedSlackMessages({
+        pullRequestBody: pullRequest.body,
+        organization: {
+          id: organization.id,
+          slack_access_token: organization.slack_access_token,
+        },
+      })
+    : null
 
   const { summary, diff } = await summarizeGithubPullRequest({
     pullRequest: {
