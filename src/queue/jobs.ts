@@ -539,15 +539,19 @@ export type AskSlackSelectAsanaProjectForTask = BullMQJob<
   'ask_slack_select_asana_project_for_task'
 >
 
-export type CheckDuplicateTask = BullMQJob<{
-  task: {
-    id: string
-    name: string
-    description: string
-    ext_gh_issue_id: number | null
-    ext_gh_issue_number: number | null
-  }
-}>
+export type CheckForDuplicateTask = BullMQJob<
+  {
+    task: {
+      id: number
+      name: string
+      description: string
+      ext_gh_issue_id: string | null
+      ext_gh_issue_number: number | null
+    }
+  },
+  void, // return type
+  'check_for_duplicate_task'
+>
 
 export type DispatchDebouncedJob = BullMQJob<
   {
@@ -599,4 +603,5 @@ export type Job =
   | CreateAsanaTaskFromSlack
   | RefreshAsanaTokens
   | SyncAsanaTaskToHomieTask
+  | CheckForDuplicateTask
   | DispatchDebouncedJob

@@ -3,6 +3,7 @@ import { dbClient } from '@/database/client'
 import { classifyTask } from '@/lib/ai/clasify-task'
 import { taskStatus } from '@/lib/tasks'
 import { embedTask } from '@/lib/ai/embed-task'
+import { dispatch } from '@/queue/default-queue'
 
 export async function handleCreateHomieTaskFromGithubIssue(
   job: CreateHomieTaskFromGithubIssue,
@@ -101,6 +102,10 @@ export async function handleCreateHomieTaskFromGithubIssue(
       .executeTakeFirstOrThrow()
 
     await embedTask({ task })
+
+    await dispatch('check_for_duplicate_task', {
+      task,
+    })
 
     // Save person who made issue
     if (issue.user) {

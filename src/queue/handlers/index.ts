@@ -32,6 +32,7 @@ import { handleClosePullRequest } from '@/queue/handlers/handle-closed-pull-requ
 import { handleCloseMergeRequest } from '@/queue/handlers/handle-close-merge-request'
 import { handleReopenMergeRequest } from '@/queue/handlers/handle-reopen-merge-request'
 import { handleReopenPullRequest } from '@/queue/handlers/handle-reopen-pull-request'
+import { handleCheckForDuplicateTask } from '@/queue/handlers/handle-check-for-duplicate-task'
 
 type HandlerFunc<TJob extends Job> = (job: TJob) => void | Promise<void>
 
@@ -75,5 +76,6 @@ export const handlers: Handlers = {
   ask_slack_select_asana_project_for_task:
     handleAskSlackSelectAsanaProjectForTask,
   create_asana_task_from_slack: handleCreateAsanaTaskFromSlack,
+  check_for_duplicate_task: handleCheckForDuplicateTask,
   sync_asana_task_to_homie_task: handleSyncAsanaTaskToHomieTask,
 }
