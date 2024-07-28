@@ -131,43 +131,43 @@ it('should create and embed a pr', async () => {
     .select(['username'])
     .executeTakeFirstOrThrow()
 
-  // expect(contributor?.username).toBe('closed_pr_author')
+  expect(contributor?.username).toBe('closed_pr_author')
 
-  // const repo = await dbClient
-  //   .selectFrom('github.repo')
-  //   .where('ext_gh_repo_id', '=', 129919)
-  //   .select(['name'])
-  //   .executeTakeFirstOrThrow()
+  const repo = await dbClient
+    .selectFrom('github.repo')
+    .where('ext_gh_repo_id', '=', 129919)
+    .select(['name'])
+    .executeTakeFirstOrThrow()
 
-  // expect(repo.name).toBe('test_closed_repo')
+  expect(repo.name).toBe('test_closed_repo')
 
-  // expect(mockSummarizeCodeChange).toHaveBeenCalledTimes(1)
-  // const mockSummarizeCodeChangeData = mockSummarizeCodeChange.mock.calls[0][0]
-  // expect(mockSummarizeCodeChangeData.title).toBe('My test closed PR')
-  // expect(mockSummarizeCodeChangeData.diff).toBe('+++ some pr diff')
-  // expect(mockSummarizeCodeChangeData.issue).toBe('\nissue for closed pr')
-  // expect(mockSummarizeCodeChangeData.body).toBe('closes #889')
+  expect(mockSummarizeCodeChange).toHaveBeenCalledTimes(1)
+  const mockSummarizeCodeChangeData = mockSummarizeCodeChange.mock.calls[0][0]
+  expect(mockSummarizeCodeChangeData.title).toBe('My test closed PR')
+  expect(mockSummarizeCodeChangeData.diff).toBe('+++ some pr diff')
+  expect(mockSummarizeCodeChangeData.issue).toBe('\nissue for closed pr')
+  expect(mockSummarizeCodeChangeData.body).toBe('closes #889')
 
-  // const pullRequest = await dbClient
-  //   .selectFrom('homie.pull_request')
-  //   .where('ext_gh_pull_request_id', '=', 8282)
-  //   .selectAll()
-  //   .executeTakeFirstOrThrow()
-  // expect(pullRequest.title).toBe('My test closed PR')
+  const pullRequest = await dbClient
+    .selectFrom('homie.pull_request')
+    .where('ext_gh_pull_request_id', '=', 8282)
+    .selectAll()
+    .executeTakeFirstOrThrow()
+  expect(pullRequest.title).toBe('My test closed PR')
 
-  // expect(mockUpsert.mock.calls[0][0][0]['metadata']['type']).toBe('pr_summary')
-  // expect(mockUpsert.mock.calls[0][0][0]['metadata']['text']).toContain(
-  //   'My test closed PR',
-  // )
-  // expect(mockUpsert.mock.calls[0][0][0]['metadata']['text']).toContain(
-  //   'github.com/test_closed_pr',
-  // )
-  // expect(mockUpsert.mock.calls[0][0][0]['metadata']['text']).toContain(
-  //   'closed_pr_author',
-  // )
+  expect(mockUpsert.mock.calls[0][0][0]['metadata']['type']).toBe('pr_summary')
+  expect(mockUpsert.mock.calls[0][0][0]['metadata']['text']).toContain(
+    'My test closed PR',
+  )
+  expect(mockUpsert.mock.calls[0][0][0]['metadata']['text']).toContain(
+    'github.com/test_closed_pr',
+  )
+  expect(mockUpsert.mock.calls[0][0][0]['metadata']['text']).toContain(
+    'closed_pr_author',
+  )
 
-  // expect(mockUpsert.mock.calls[1][0][0]['metadata']['type']).toBe('pr_diff')
-  // expect(mockUpsert.mock.calls[1][0][0]['metadata']['text']).toContain(
-  //   'some code snippet',
-  // )
+  expect(mockUpsert.mock.calls[1][0][0]['metadata']['type']).toBe('pr_diff')
+  expect(mockUpsert.mock.calls[1][0][0]['metadata']['text']).toContain(
+    'some code snippet',
+  )
 })
