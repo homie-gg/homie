@@ -8,6 +8,7 @@ import { summarizeGitlabMergeRequest } from '@/lib/gitlab/summarize-gitlab-merge
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { logger } from '@/lib/log/logger'
 import { parseISO } from 'date-fns'
+import { getReferencedSlackMessages } from '@/lib/slack/get-referenced-slack-messages'
 
 interface SaveMergedMergeRequestParams {
   mergeRequest: {
@@ -35,6 +36,7 @@ interface SaveMergedMergeRequestParams {
     gitlab_access_token: string
     trello_access_token: string | null
     asana_access_token: string | null
+    slack_access_token: string | null
   }
   defaultBranch: string
 }
@@ -76,12 +78,23 @@ export async function saveMergedMergeRequest(
 
   const gitlab = createGitlabClient(organization.gitlab_access_token)
 
+  const conversation = organization.slack_access_token
+    ? await getReferencedSlackMessages({
+        pullRequestBody: mergeRequest.description,
+        organization: {
+          id: organization.id,
+          slack_access_token: organization.slack_access_token,
+        },
+      })
+    : null
+
   const { summary, diff } = await summarizeGitlabMergeRequest({
     mergeRequest,
     length: 'long',
     issue,
     gitlab,
     project,
+    conversation,
   })
 
   const wasMergedToDefaultBranch = mergeRequest.target_branch === defaultBranch

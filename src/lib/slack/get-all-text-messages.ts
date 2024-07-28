@@ -1,5 +1,5 @@
 import { SlackClient } from '@/lib/slack/create-slack-client'
-import { getTextReplies } from '@/lib/slack/get-text-replies'
+import { getSlackThreadMessages } from '@/lib/slack/get-slack-thread-messages'
 import { TextMessageEvent } from '@/lib/slack/types'
 import { MessageEvent } from '@slack/bolt'
 
@@ -22,7 +22,7 @@ export async function getAllTextMessages(
     }
 
     if ('reply_count' in message) {
-      const textReplies = await getTextReplies({
+      const textReplies = await getSlackThreadMessages({
         channelID: channelID,
         messageTS: message.ts,
         slackClient,

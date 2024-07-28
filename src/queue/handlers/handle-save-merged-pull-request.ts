@@ -24,6 +24,11 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
       'homie.organization.id',
     )
     .leftJoin(
+      'slack.workspace',
+      'slack.workspace.organization_id',
+      'homie.organization.id',
+    )
+    .leftJoin(
       'homie.subscription',
       'homie.subscription.organization_id',
       'homie.organization.id',
@@ -46,6 +51,7 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
       'has_unlimited_usage',
       'trello_access_token',
       'asana_access_token',
+      'slack_access_token',
     ])
     .executeTakeFirst()
 

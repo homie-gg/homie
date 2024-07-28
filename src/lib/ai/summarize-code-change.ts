@@ -9,13 +9,14 @@ interface SummarizeCodeChangeParams {
   title: string
   diff: string | null
   issue: string | null
+  conversation: string | null
   body: string | null
   length: 'short' | 'long'
   logData?: Record<string, any>
 }
 
 export async function summarizeCodeChange(params: SummarizeCodeChangeParams) {
-  const { body, issue, diff, title, length, logData } = params
+  const { body, issue, diff, title, length, logData, conversation } = params
 
   logger.debug('Summarize Code Change - Start', {
     ...logData,
@@ -25,17 +26,10 @@ export async function summarizeCodeChange(params: SummarizeCodeChangeParams) {
     diff,
     title,
     length,
+    conversation,
   })
 
   const diffSummary = diff ? await summarizeDiff({ diff, logData }) : null
-
-  const template = getTemplate({
-    title,
-    diffSummary,
-    issue,
-    body,
-    length,
-  })
 
   const rules = getRules({
     title,
@@ -43,6 +37,7 @@ export async function summarizeCodeChange(params: SummarizeCodeChangeParams) {
     issue,
     body,
     length,
+    conversation,
   })
 
   const chatPrompt = ChatPromptTemplate.fromTemplate(template)
@@ -56,11 +51,12 @@ export async function summarizeCodeChange(params: SummarizeCodeChangeParams) {
   const chain = RunnableSequence.from([chatPrompt, model, parser])
 
   const result = await chain.invoke({
-    diff: diffSummary ?? '',
-    issue: issue ?? '',
+    diff: diffSummary ?? 'NONE',
+    issue: issue ?? 'NONE',
     title,
-    body: body ?? '',
+    body: body ?? 'NONE',
     rules,
+    conversation: conversation ?? 'NONE',
   })
 
   logger.debug('Summarize Code Change - Result', {
@@ -73,6 +69,7 @@ export async function summarizeCodeChange(params: SummarizeCodeChangeParams) {
     title,
     length,
     result,
+    conversation,
   })
 
   return result
@@ -82,29 +79,9 @@ interface GetInputParams {
   title: string
   diffSummary: string | null
   issue: string | null
+  conversation: string | null
   body: string | null
   length: 'short' | 'long'
-}
-
-function getTemplate(params: GetInputParams) {
-  const { diffSummary, issue, body } = params
-  if (diffSummary && issue && !body) {
-    return prompts.diffAndIssue
-  }
-
-  if (!diffSummary && issue && !body) {
-    return prompts.issueOnly
-  }
-
-  if (!diffSummary && issue && body) {
-    return prompts.issueAndBody
-  }
-
-  if (!diffSummary && !issue && body) {
-    return prompts.bodyOnly
-  }
-
-  return prompts.allVariables
 }
 
 /**
@@ -136,85 +113,14 @@ function getRules(params: GetInputParams): string {
   return ''
 }
 
-const prompts = {
-  diffAndIssue: `Write a Pull Request summary. You MUST follow the following rules when generating the summary:
-- The TITLE is the pull request title.
-- The CHANGES will be a summary of all the changes.
-- The ISSUE will contain the description of the issue that this pull request aims to solve.
-- The summary should only be based on the CHANGES, and ISSUE. Do not generate the summary without a clear reference to CHANGES, or ISSUE.
-- Do not infer any initiatives, or features other than what has already been mentioned in the CHANGES, or ISSUE.
-- Do not include a conclusion.
-- Use bullet points to present the summary
-- The summary should be a single list with no headings, or sub-lists
-{rules}
-  
-TITLE: 
-{title}
-
-CHANGES:
-{diff}
-  
-ISSUE:
-{issue}`,
-  issueOnly: `Create a Pull Request summary from the information below. You MUST follow the following rules when generating the summary:
-- The TITLE is the pull request title.
-- The ISSUE will contain the description of an issue that this pull request aims to solve.
-- The summary should only be based on the ISSUE only. Do not generate the summary without a clear reference to the ISSUE.
-- Do not infer any initiatives, or features other than what has already been mentioned in the ISSUE.
-- Do not include a conclusion.
-- Use bullet points to present the summary
-- The summary should be a single list with no headings, or sub-lists
-{rules}
-
-TITLE: 
-{title}
-
-ISSUE: 
-{issue}
-  `,
-  issueAndBody: `Create a Pull Request summary from the information below. You MUST follow the following rules when generating the summary:
-- The TITLE is the pull request title.
-- The ISSUE will contain the description of a issue that this pull request aims to solve.
-- The BODY will contain a description of what this pull request attempts to achieve.
-- The summary should only be based on the ISSUE, and BODY. Do not generate the summary without a clear reference to the ISSUE, OR BODY.
-- Do not infer any initiatives, or features other than what has already been mentioned in the ISSUE, or BODY.
-- Do not include a conclusion.
-- Use bullet points to present the summary
-- The summary should be a single list with no headings, or sub-lists
-{rules}
-
-TITLE: 
-{title}
-  
-ISSUE:
-{issue}
-  
-BODY:
-{body}
-`,
-  bodyOnly: `Create a Pull Request summary from the information below. You MUST follow the following rules when generating the summary:
-- The TITLE is the pull request title.
-- The BODY will contain a description of what this pull request attempts to achieve.
-- The summary should only be based on the BODY only. Do not generate the summary without a clear reference to the BODY.
-- Do not infer any initiatives, or features other than what has already been mentioned in the ISSUE, or BODY.
-- Do not include a conclusion.
-- Use bullet points to present the summary
-- The summary should be a single list with no headings, or sub-lists
-{rules}
-
-TITLE: 
-{title}
-
-BODY: 
-{body}
-`,
-  allVariables: `Create a Pull Request summary from the information below. You MUST follow the following rules when generating the summary:
+const template = `Create a Pull Request summary from the information below. You MUST follow the following rules when generating the summary:
 - The TITLE is the pull request title.
 - The CHANGES will be a summary of all the changes.
 - The ISSUE will contain the description of a issue that this pull request aims to solve.
 - The BODY will contain a description of what this pull request attempts to achieve.
-- The summary should only be based on the CHANGES, ISSUE, and BODY. Do not generate the summary without a clear reference to the CHANGES, ISSUE, OR BODY.
-- Do not infer any initiatives, or features other than what has already been mentioned in the CHANGES, ISSUE, or BODY.
+- The CONVERSATION will background information to why this Pull Request is required.
+- The summary should only be based on the CHANGES, ISSUE, BODY, and CONVERSATION. Do not generate the summary without a clear reference to the CHANGES, ISSUE, BODY, or CONVERSATION.
+- Do not infer any initiatives, or features other than what has already been mentioned in the CHANGES, ISSUE, BODY, or CONVERSATION.
 - Use bullet points to present the summary
 - The summary should be a single list with no headings, or sub-lists
 {rules}
@@ -230,5 +136,7 @@ ISSUE:
   
 BODY:
 {body}
-`,
-}
+
+CONVERSATION:
+{conversation}
+`

@@ -15,6 +15,11 @@ export const POST = async (request: NextRequest) => {
       'homie.organization.id',
     )
     .leftJoin(
+      'slack.workspace',
+      'slack.workspace.organization_id',
+      'homie.organization.id',
+    )
+    .leftJoin(
       'homie.subscription',
       'homie.subscription.organization_id',
       'homie.organization.id',
@@ -38,6 +43,7 @@ export const POST = async (request: NextRequest) => {
       'has_unlimited_usage',
       'trello_access_token',
       'asana_access_token',
+      'slack_access_token',
     ])
     .executeTakeFirst()
 
@@ -82,7 +88,11 @@ export const POST = async (request: NextRequest) => {
     })
 
     await dispatch('close_linked_tasks', {
-      pullRequestBody: mergeRequest.description,
+      pull_request: {
+        body: mergeRequest.description,
+        title: mergeRequest.title,
+        html_url: mergeRequest.url,
+      },
       organization,
     })
   }

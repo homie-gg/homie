@@ -1,7 +1,8 @@
 import { SlackClient } from '@/lib/slack/create-slack-client'
 import { Conversation } from '@/lib/slack/types'
+import { ConversationsRepliesResponse } from '@slack/web-api/dist/response'
 
-interface GetTextRepliesParams {
+interface GetSlackThreadMessages {
   channelID: string
   messageTS: string
   slackClient: SlackClient
@@ -13,17 +14,25 @@ type TextMessageEvent = {
   ts: string
 }
 
-export async function getTextReplies(
-  params: GetTextRepliesParams,
+export async function getSlackThreadMessages(
+  params: GetSlackThreadMessages,
 ): Promise<TextMessageEvent[]> {
   const { channelID, messageTS, slackClient } = params
-  const replies: Conversation = await slackClient.get(
+  const replies = await slackClient.get<ConversationsRepliesResponse>(
     `conversations.replies?channel=${channelID}&ts=${messageTS}`,
   )
 
   const textMessages: TextMessageEvent[] = []
 
+  if (!replies.messages) {
+    return []
+  }
+
   for (const message of replies.messages) {
+    if (!message.ts) {
+      continue
+    }
+
     if ('text' in message && !!message.text) {
       textMessages.push({
         text: message.text,

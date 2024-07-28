@@ -7,6 +7,7 @@ import { getMergeRequestLogData } from '@/lib/gitlab/get-merge-request-log-data'
 import { summarizeGitlabMergeRequest } from '@/lib/gitlab/summarize-gitlab-merge-request'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
+import { getReferencedSlackMessages } from '@/lib/slack/get-referenced-slack-messages'
 import { summaryKey } from '@/queue/handlers/handle-generate-open-pull-request-summary'
 import { GenerateOpenMergeRequestSummary } from '@/queue/jobs'
 
@@ -57,12 +58,23 @@ export async function handleGenerateOpenMergeRequestSummary(
     organization,
   })
 
+  const conversation = organization.slack_access_token
+    ? await getReferencedSlackMessages({
+        pullRequestBody: merge_request.description,
+        organization: {
+          id: organization.id,
+          slack_access_token: organization.slack_access_token,
+        },
+      })
+    : null
+
   const { summary } = await summarizeGitlabMergeRequest({
     mergeRequest: merge_request,
     length: 'short',
     issue,
     gitlab,
     project,
+    conversation,
   })
 
   const bodyWithSummary = merge_request.description

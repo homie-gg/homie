@@ -15,12 +15,13 @@ interface SummarizeGitlabMergeRequestParams {
   }
   length: 'short' | 'long'
   issue: string | null
+  conversation: string | null
 }
 
 export async function summarizeGitlabMergeRequest(
   params: SummarizeGitlabMergeRequestParams,
 ) {
-  const { gitlab, project, mergeRequest, length, issue } = params
+  const { gitlab, project, mergeRequest, length, issue, conversation } = params
 
   const diffs = await gitlab.MergeRequests.allDiffs(
     project.ext_gitlab_project_id,
@@ -46,6 +47,7 @@ export async function summarizeGitlabMergeRequest(
     issue,
     body: mergeRequest.description?.replaceAll(summaryKey, '') ?? '',
     length: length,
+    conversation,
   })
 
   return {

@@ -21,7 +21,6 @@ export async function handleClosePullRequest(job: ClosePullRequest) {
       'github.organization.organization_id',
       'homie.organization.id',
     )
-
     .where('ext_gh_install_id', '=', installation?.id!)
     .select(['homie.organization.id'])
     .executeTakeFirst()
@@ -148,7 +147,11 @@ export async function handleClosePullRequest(job: ClosePullRequest) {
   })
 
   await dispatch('close_linked_tasks', {
-    pullRequestBody: pull_request.body ?? '',
+    pull_request: {
+      body: pull_request.body ?? '',
+      title: pull_request.title,
+      html_url: pull_request.html_url,
+    },
     organization,
   })
 }

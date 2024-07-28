@@ -2,12 +2,19 @@ import { dbClient } from '@/database/client'
 import { CloseLinkedTasks } from '@/queue/jobs'
 import { closeLinkedTrelloTasks } from '@/lib/trello/close-linked-trello-tasks'
 import { closeLinkedAsanaTasks } from '@/lib/asana/close-linked-asana-tasks'
+import { getSlackLinks } from '@/lib/slack/get-slack-links'
+import { sendSlackPRMergedMessage } from '@/lib/slack/send-slack-pr-merged-message'
 
 export async function handleCloseLinkedTasks(job: CloseLinkedTasks) {
-  const { pullRequestBody, organization } = job.data
+  const { pull_request, organization } = job.data
 
   const organizationWithBilling = await dbClient
     .selectFrom('homie.organization')
+    .leftJoin(
+      'slack.workspace',
+      'slack.workspace.organization_id',
+      'homie.organization.id',
+    )
     .leftJoin(
       'homie.subscription',
       'homie.subscription.organization_id',
@@ -20,14 +27,18 @@ export async function handleCloseLinkedTasks(job: CloseLinkedTasks) {
       'homie.organization.id',
     )
     .where('homie.organization.id', '=', organization.id)
-    .select(['homie.organization.id', 'has_unlimited_usage'])
+    .select([
+      'homie.organization.id',
+      'has_unlimited_usage',
+      'slack_access_token',
+    ])
     .executeTakeFirst()
 
   if (!organizationWithBilling) {
     return
   }
 
-  if (!pullRequestBody) {
+  if (!pull_request.body) {
     return
   }
 
@@ -39,7 +50,7 @@ export async function handleCloseLinkedTasks(job: CloseLinkedTasks) {
 
   if (trelloWorkspace) {
     await closeLinkedTrelloTasks({
-      pullRequestBody,
+      pullRequestBody: pull_request.body,
       trelloWorkspace,
     })
   }
@@ -52,8 +63,31 @@ export async function handleCloseLinkedTasks(job: CloseLinkedTasks) {
 
   if (asanaAppUser) {
     await closeLinkedAsanaTasks({
-      pullRequestBody,
+      pullRequestBody: pull_request.body,
       asanaAppUser,
     })
   }
+
+  const slackAccessToken = organizationWithBilling.slack_access_token
+
+  if (!slackAccessToken) {
+    return
+  }
+
+  const slackLinks = getSlackLinks({ pullRequestBody: pull_request.body })
+
+  await Promise.all(
+    slackLinks.map((slackLink) =>
+      sendSlackPRMergedMessage({
+        slackLink,
+        pullRequest: {
+          title: pull_request.title,
+          htmlUrl: pull_request.html_url,
+        },
+        organization: {
+          slack_access_token: slackAccessToken,
+        },
+      }),
+    ),
+  )
 }
