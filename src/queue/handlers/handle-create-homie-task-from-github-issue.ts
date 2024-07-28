@@ -95,6 +95,8 @@ export async function handleCreateHomieTaskFromGithubIssue(
         'priority_level',
         'organization_id',
         'created_at',
+        'ext_gh_issue_id',
+        'ext_gh_issue_number',
       ])
       .executeTakeFirstOrThrow()
 

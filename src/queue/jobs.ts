@@ -539,6 +539,16 @@ export type AskSlackSelectAsanaProjectForTask = BullMQJob<
   'ask_slack_select_asana_project_for_task'
 >
 
+export type CheckDuplicateTask = BullMQJob<{
+  task: {
+    id: string
+    name: string
+    description: string
+    ext_gh_issue_id: number | null
+    ext_gh_issue_number: number | null
+  }
+}>
+
 export type DispatchDebouncedJob = BullMQJob<
   {
     job: {
