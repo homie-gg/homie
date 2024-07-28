@@ -199,6 +199,7 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
     organization: getOrganizationLogData(organization),
     input: currentMessage.text,
     is_tool_answer: Boolean(toolAnswer),
+    answer,
   })
 
   if (organization.is_persona_enabled) {
