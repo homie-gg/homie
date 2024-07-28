@@ -197,10 +197,9 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
     event: 'get_answer:result',
     answer_id: answerId,
     organization: getOrganizationLogData(organization),
-    prompt,
     input: currentMessage.text,
-    history: chatHistory,
     is_tool_answer: Boolean(toolAnswer),
+    answer,
   })
 
   if (organization.is_persona_enabled) {

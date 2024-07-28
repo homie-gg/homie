@@ -91,8 +91,23 @@ export function getSearchForTasksTool(params: GetSearchForTasksToolParams) {
         })
 
         if (matches.length === 0) {
+          logger.debug('No matches', {
+            event: 'get_answer:search_tasks:no_matches',
+            answer_id: answerId,
+            organization: getOrganizationLogData(organization),
+            search_term: searchTerm,
+          })
+
           return 'No tasks found'
         }
+
+        logger.debug('Got matches', {
+          event: 'get_answer:search_tasks:found_matches',
+          answer_id: answerId,
+          organization: getOrganizationLogData(organization),
+          search_term: searchTerm,
+          matches,
+        })
 
         const cohere = new CohereClient({
           token: process.env.COHERE_API_KEY,
@@ -152,6 +167,20 @@ export function getSearchForTasksTool(params: GetSearchForTasksToolParams) {
 
             return bCreatedAt - aCreatedAt
           })
+
+        logger.debug('Ranked and filtered results', {
+          event: 'get_answer:search_tasks:ranked_results',
+          answer_id: answerId,
+          organization: getOrganizationLogData(organization),
+          search_term: searchTerm,
+          matches,
+          reranked_raw: reranked.results.map(
+            (result) =>
+              matches[result.index].metadata as unknown as TaskMetadata,
+          ),
+          search_relevance_threshold: searchRelevanceThreshold,
+          result: rankedDocuments,
+        })
 
         return JSON.stringify(rankedDocuments)
       } catch (error) {
