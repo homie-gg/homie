@@ -14,7 +14,7 @@ export const POST = async (request: NextRequest) => {
       'gitlab.app_user.organization_id',
       'homie.organization.id',
     )
-    .innerJoin(
+    .leftJoin(
       'slack.workspace',
       'slack.workspace.organization_id',
       'homie.organization.id',

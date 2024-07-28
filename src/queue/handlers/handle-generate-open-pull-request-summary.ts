@@ -25,7 +25,7 @@ export async function handleGenerateOpenPullRequestSummary(
       'github.organization.organization_id',
       'homie.organization.id',
     )
-    .innerJoin(
+    .leftJoin(
       'slack.workspace',
       'slack.workspace.organization_id',
       'homie.organization.id',
@@ -87,10 +87,15 @@ export async function handleGenerateOpenPullRequestSummary(
     return
   }
 
-  const conversation = await getReferencedSlackMessages({
-    pullRequestBody: pull_request.body,
-    organization,
-  })
+  const conversation = organization.slack_access_token
+    ? await getReferencedSlackMessages({
+        pullRequestBody: pull_request.body,
+        organization: {
+          id: organization.id,
+          slack_access_token: organization.slack_access_token,
+        },
+      })
+    : null
 
   const issue = await getLinkedIssuesAndTasksInPullRequest({
     pullRequest: pull_request,

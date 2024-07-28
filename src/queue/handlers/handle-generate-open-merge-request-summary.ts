@@ -58,10 +58,15 @@ export async function handleGenerateOpenMergeRequestSummary(
     organization,
   })
 
-  const conversation = await getReferencedSlackMessages({
-    pullRequestBody: merge_request.description,
-    organization,
-  })
+  const conversation = organization.slack_access_token
+    ? await getReferencedSlackMessages({
+        pullRequestBody: merge_request.description,
+        organization: {
+          id: organization.id,
+          slack_access_token: organization.slack_access_token,
+        },
+      })
+    : null
 
   const { summary } = await summarizeGitlabMergeRequest({
     mergeRequest: merge_request,

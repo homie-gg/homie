@@ -36,7 +36,7 @@ interface SaveMergedMergeRequestParams {
     gitlab_access_token: string
     trello_access_token: string | null
     asana_access_token: string | null
-    slack_access_token: string
+    slack_access_token: string | null
   }
   defaultBranch: string
 }
@@ -78,10 +78,15 @@ export async function saveMergedMergeRequest(
 
   const gitlab = createGitlabClient(organization.gitlab_access_token)
 
-  const conversation = await getReferencedSlackMessages({
-    pullRequestBody: mergeRequest.description,
-    organization,
-  })
+  const conversation = organization.slack_access_token
+    ? await getReferencedSlackMessages({
+        pullRequestBody: mergeRequest.description,
+        organization: {
+          id: organization.id,
+          slack_access_token: organization.slack_access_token,
+        },
+      })
+    : null
 
   const { summary, diff } = await summarizeGitlabMergeRequest({
     mergeRequest,

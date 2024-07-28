@@ -10,7 +10,7 @@ export async function handleCloseLinkedTasks(job: CloseLinkedTasks) {
 
   const organizationWithBilling = await dbClient
     .selectFrom('homie.organization')
-    .innerJoin(
+    .leftJoin(
       'slack.workspace',
       'slack.workspace.organization_id',
       'homie.organization.id',
@@ -68,6 +68,12 @@ export async function handleCloseLinkedTasks(job: CloseLinkedTasks) {
     })
   }
 
+  const slackAccessToken = organizationWithBilling.slack_access_token
+
+  if (!slackAccessToken) {
+    return
+  }
+
   const slackLinks = getSlackLinks({ pullRequestBody: pull_request.body })
 
   await Promise.all(
@@ -78,7 +84,9 @@ export async function handleCloseLinkedTasks(job: CloseLinkedTasks) {
           title: pull_request.title,
           htmlUrl: pull_request.html_url,
         },
-        organization: organizationWithBilling,
+        organization: {
+          slack_access_token: slackAccessToken,
+        },
       }),
     ),
   )
