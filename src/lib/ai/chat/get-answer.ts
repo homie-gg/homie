@@ -34,6 +34,7 @@ import { getSearchForTasksTool } from '@/lib/ai/chat/tools/get-search-for-tasks-
 import { getCreateTaskTool } from '@/lib/ai/chat/tools/get-create-task-tool'
 import { getListGithubReposTool } from '@/lib/ai/chat/tools/get-list-github-repos-tool'
 import { getListAsanaProjectsTool } from '@/lib/ai/chat/tools/get-list-asana-projects-tool'
+import { getSearchPullRequestsTool } from '@/lib/ai/chat/tools/get-search-pull-requests-tool'
 
 interface GetAnswerParams {
   organization: {
@@ -136,6 +137,10 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       answerId,
     }),
     getListAsanaProjectsTool({
+      organization,
+      answerId,
+    }),
+    getSearchPullRequestsTool({
       organization,
       answerId,
     }),
