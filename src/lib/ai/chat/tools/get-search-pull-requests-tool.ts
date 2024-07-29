@@ -102,9 +102,9 @@ export function getSearchPullRequestsTool(
           ),
         })
 
-        const rankedDocuments = reranked.results.filter(
-          (result) => result.relevanceScore > searchRelevanceThreshold,
-        )
+        const rankedDocuments = reranked.results
+          .filter((result) => result.relevanceScore > searchRelevanceThreshold)
+          .map((result) => matches[result.index].metadata) // return metadata as results
 
         logger.debug('Ranked and filtered results', {
           event: 'get_answer:search_pull_requests:ranked_results',

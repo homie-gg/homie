@@ -52,6 +52,9 @@ export async function embedDiff(params: EmbedDiffParams) {
         metadata: {
           ...metadata,
           text,
+          code_snippet: snippet,
+          pull_request_title: title,
+          pull_request_url: url,
         },
       }
 

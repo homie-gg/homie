@@ -44,6 +44,7 @@ export async function embedCodeChange(params: EmbedCodeChangeParams) {
       metadata: {
         ...metadata,
         text,
+        code_change: point,
       },
     }
 
