@@ -54,7 +54,12 @@ export function getFetchPullRequestDetailTool(
           .executeTakeFirst()
 
         if (!pullRequest) {
-          return ' Could not find Pull Request with that ID'
+          logger.debug('Missing PR with id', {
+            event: 'get_answer:fetch_pr_details:missing_pr',
+            answer_id: answerId,
+            pull_request_id,
+          })
+          return 'Could not find Pull Request with that ID'
         }
 
         const organization = await dbClient
