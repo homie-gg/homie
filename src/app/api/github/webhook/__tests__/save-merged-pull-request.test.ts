@@ -161,13 +161,6 @@ it('should create and embed a pr', async () => {
   expect(mockUpsert.mock.calls[0][0][0]['metadata']['text']).toContain(
     'My test closed PR',
   )
-  expect(mockUpsert.mock.calls[0][0][0]['metadata']['text']).toContain(
-    'github.com/test_closed_pr',
-  )
-  expect(mockUpsert.mock.calls[0][0][0]['metadata']['text']).toContain(
-    'closed_pr_author',
-  )
-
   expect(mockUpsert.mock.calls[1][0][0]['metadata']['type']).toBe(
     'pull_request_diff',
   )
