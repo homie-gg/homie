@@ -2,7 +2,6 @@ import { getPineconeClient } from '@/lib/pinecone/pinecone-client'
 import { PineconeRecord, RecordMetadata } from '@pinecone-database/pinecone'
 import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
 import { dbClient } from '@/database/client'
-import { getPriorityLabel } from '@/lib/tasks/task-priority'
 
 interface EmbedTaskParams {
   task: {
@@ -52,24 +51,7 @@ export async function embedTask(params: EmbedTaskParams) {
     .select(['name'])
     .executeTakeFirstOrThrow()
 
-  const attributes = [
-    `Task: ${task.name}`,
-    `Description: ${task.description}`,
-    `Status: ${status.name}`,
-    `Type: ${type.name}`,
-    `URL: ${task.html_url}`,
-    `Priority: ${getPriorityLabel(task.priority_level)}`,
-  ]
-
-  if (task.due_date) {
-    attributes.push(`Due Date: ${task.due_date}`)
-  }
-
-  if (task.completed_at) {
-    attributes.push(`Completed on: ${task.completed_at}`)
-  }
-
-  const text = attributes.join(', ')
+  const text = `${task.name}\n${task.description}`
 
   const embedding = await embedder.embedQuery(text)
 
