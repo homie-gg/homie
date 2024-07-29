@@ -5,19 +5,22 @@ import { getPineconeClient } from '@/lib/pinecone/pinecone-client'
 import { PineconeRecord } from '@pinecone-database/pinecone'
 import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
 
-interface EmbedDiffParams {
+interface EmbedPullRequestDiffParams {
   diff: string
   summary: string
-  title: string
-  url: string
-  contributor: string
-  organization_id: number
-  metadata: Record<string, any>
-  mergedAt: Date | null
+  pullRequest: {
+    id: number
+    title: string
+    body: string
+    html_url: string
+    contributor_id: number
+    organization_id: number
+    merged_at: Date | null
+  }
 }
 
-export async function embedDiff(params: EmbedDiffParams) {
-  const { diff, summary, title, url, contributor, metadata, mergedAt } = params
+export async function embedPullRequestDiff(params: EmbedPullRequestDiffParams) {
+  const { diff, summary, pullRequest } = params
 
   const chunks = chunkDiff(diff, chatGPTCharLimit - prompt.length / 3)
 
@@ -32,29 +35,23 @@ export async function embedDiff(params: EmbedDiffParams) {
     })
 
     for (const snippet of snippets) {
-      const attributes = [
-        `Pull Request ${title}`,
-        `URL: ${url}`,
-        `Contributed by ${contributor}`,
-        `Changed: ${snippet}`,
-      ]
-
-      if (mergedAt) {
-        attributes.push(`Merged at ${mergedAt.toISOString()}.`)
-      }
-
-      const text = attributes.join('. ')
+      const text = `${pullRequest.title}\n${snippet}`
       const embedding = await embedder.embedQuery(text)
 
       const record: PineconeRecord = {
         id: uuid(),
         values: embedding,
         metadata: {
-          ...metadata,
+          type: 'pull_request_diff',
           text,
           code_snippet: snippet,
-          pull_request_title: title,
-          pull_request_url: url,
+          pull_request_title: pullRequest.title,
+          pull_request_description: pullRequest.body,
+          pull_request_url: pullRequest.html_url,
+          pull_request_summary: summary,
+          contributor_id: pullRequest.contributor_id,
+          organization_id: pullRequest.organization_id,
+          merged_at: pullRequest.merged_at?.toISOString() ?? '',
         },
       }
 

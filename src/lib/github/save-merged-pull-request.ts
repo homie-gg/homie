@@ -1,4 +1,3 @@
-import { embedGithubDiff } from '@/lib/github/embed-github-diff'
 import { summarizeGithubPullRequest } from '@/lib/github/summarize-github-pull-request'
 import { dbClient } from '@/database/client'
 import { createGithubClient } from '@/lib/github/create-github-client'
@@ -7,8 +6,9 @@ import { getPullRequestLogData } from '@/lib/github/get-pull-request-log-data'
 import { logger } from '@/lib/log/logger'
 import { parseISO } from 'date-fns'
 import { getLinkedIssuesAndTasksInPullRequest } from '@/lib/github/get-linked-issues-and-tasks-in-pull-request'
-import { embedCodeChange } from '@/lib/ai/embed-code-change'
 import { getReferencedSlackMessages } from '@/lib/slack/get-referenced-slack-messages'
+import { embedPullRequestChanges } from '@/lib/ai/embed-pull-request-changes'
+import { embedPullRequestDiff } from '@/lib/ai/embed-pull-request-diff'
 
 interface SaveMergedPullRequestParams {
   pullRequest: {
@@ -156,6 +156,7 @@ export async function saveMergedPullRequest(
 
   const embedMetadata = {
     type: 'pr_summary',
+    pull_request_id: pullRequest.id,
     pull_request_title: pullRequest.title,
     pull_request_url: pullRequest.html_url,
     ext_gh_pull_request_id: pullRequest.id,
@@ -212,23 +213,17 @@ export async function saveMergedPullRequest(
     return
   }
 
-  await embedCodeChange({
-    label: 'Pull Request',
-    title: pullRequest.title,
-    url: pullRequest.html_url,
+  await embedPullRequestChanges({
+    pullRequest: pullRequestRecord,
     summary,
-    metadata: embedMetadata,
-    contributor: pullRequest.user.login,
-    mergedAt: pullRequestRecord.merged_at,
+    wasMergedToDefaultBranch,
   })
 
   if (diff) {
-    await embedGithubDiff({
-      pullRequest: pullRequestRecord,
+    await embedPullRequestDiff({
       diff,
       summary,
-      contributor: pullRequest.user.login,
-      organization_id: organization.id,
+      pullRequest: pullRequestRecord,
     })
   }
 }
