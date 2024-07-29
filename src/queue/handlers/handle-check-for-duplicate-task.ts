@@ -9,7 +9,7 @@ import { CohereClient } from 'cohere-ai'
  * Cohere relevance score. If a task relevance score is above this, then it is
  * considered to potentially be a duplicate.
  */
-const duplicateTaskRelevanceScoreThreshold = 0.8
+const duplicateTaskRelevanceScoreThreshold = 0.7
 
 export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
   const { task } = job.data
@@ -30,7 +30,7 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
       $eq: 'task',
     },
     task_id: {
-      $ne: task.id,
+      $ne: task.id, // Don't match THIS task (or it will be a duplicate)
     },
   }
 
