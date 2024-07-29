@@ -14,7 +14,6 @@ import { OpenAIFunctionsAgentOutputParser } from 'langchain/agents/openai/output
 
 import { createOpenAIChatClient } from '@/lib/open-ai/create-open-ai-chat-client'
 import { convertToOpenAIFunction } from '@langchain/core/utils/function_calling'
-import { getSearchGeneralContextTool } from '@/lib/ai/chat/tools/get-search-context-tool'
 import { rephraseWithPersona } from '@/lib/ai/rephrase-with-persona'
 import { getListPullRequestsTool } from '@/lib/ai/chat/tools/get-list-pull-requests-tool'
 import { getRememberConversationTool } from '@/lib/ai/chat/tools/get-remember-conversation-tool'
@@ -35,6 +34,7 @@ import { getCreateTaskTool } from '@/lib/ai/chat/tools/get-create-task-tool'
 import { getListGithubReposTool } from '@/lib/ai/chat/tools/get-list-github-repos-tool'
 import { getListAsanaProjectsTool } from '@/lib/ai/chat/tools/get-list-asana-projects-tool'
 import { getSearchPullRequestsTool } from '@/lib/ai/chat/tools/get-search-pull-requests-tool'
+import { getSearchGeneralContextTool } from '@/lib/ai/chat/tools/get-search-general-context-tool'
 
 interface GetAnswerParams {
   organization: {
