@@ -104,6 +104,7 @@ export async function handleCreateHomieTaskFromGithubIssue(
     await embedTask({ task })
 
     await dispatch('check_for_duplicate_task', {
+      organization,
       task,
     })
 
