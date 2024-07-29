@@ -20,7 +20,7 @@ export async function embedGitlabDiff(params: EmbedGitlabDiff) {
   const { diff, summary, pullRequest, organization_id, contributor } = params
 
   const metadata = {
-    type: 'mr_diff',
+    type: 'pr_diff',
     organization_id,
     pull_request_id: pullRequest.id,
     ext_gitlab_merge_request_id: pullRequest.ext_gitlab_merge_request_id,
