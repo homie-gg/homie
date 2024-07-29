@@ -51,6 +51,8 @@ export function getSearchForTasksTool(params: GetSearchForTasksToolParams) {
         answer_id: answerId,
         organization: getOrganizationLogData(organization),
         search_term: searchTerm,
+        include_completed_tasks: includeCompletedTasks,
+        type,
       })
 
       try {
@@ -96,6 +98,9 @@ export function getSearchForTasksTool(params: GetSearchForTasksToolParams) {
             answer_id: answerId,
             organization: getOrganizationLogData(organization),
             search_term: searchTerm,
+            include_completed_tasks: includeCompletedTasks,
+            type,
+            filters: pineconeSearchFilters,
           })
 
           return 'No tasks found'
@@ -107,6 +112,9 @@ export function getSearchForTasksTool(params: GetSearchForTasksToolParams) {
           organization: getOrganizationLogData(organization),
           search_term: searchTerm,
           matches,
+          include_completed_tasks: includeCompletedTasks,
+          type,
+          filters: pineconeSearchFilters,
         })
 
         const cohere = new CohereClient({
@@ -180,6 +188,9 @@ export function getSearchForTasksTool(params: GetSearchForTasksToolParams) {
           ),
           search_relevance_threshold: searchRelevanceThreshold,
           result: rankedDocuments,
+          include_completed_tasks: includeCompletedTasks,
+          type,
+          filters: pineconeSearchFilters,
         })
 
         return JSON.stringify(rankedDocuments)
@@ -193,6 +204,8 @@ export function getSearchForTasksTool(params: GetSearchForTasksToolParams) {
           search_term: searchTerm,
           error: error instanceof Error ? error.message : error,
           stack_trace: error instanceof Error ? error.stack?.split('\n') : null,
+          include_completed_tasks: includeCompletedTasks,
+          type,
         })
 
         return 'FAILED'
