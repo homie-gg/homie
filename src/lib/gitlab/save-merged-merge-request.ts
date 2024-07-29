@@ -1,7 +1,5 @@
 import { dbClient } from '@/database/client'
-import { embedCodeChange } from '@/lib/ai/embed-code-change'
 import { createGitlabClient } from '@/lib/gitlab/create-gitlab-client'
-import { embedGitlabDiff } from '@/lib/gitlab/embed-gitlab-diff'
 import { getLinkedIssuesAndTasksInMergeRequest } from '@/lib/gitlab/get-linked-issues-and-tasks-in-merge-request'
 import { getMergeRequestLogData } from '@/lib/gitlab/get-merge-request-log-data'
 import { summarizeGitlabMergeRequest } from '@/lib/gitlab/summarize-gitlab-merge-request'
@@ -9,6 +7,8 @@ import { getOrganizationLogData } from '@/lib/organization/get-organization-log-
 import { logger } from '@/lib/log/logger'
 import { parseISO } from 'date-fns'
 import { getReferencedSlackMessages } from '@/lib/slack/get-referenced-slack-messages'
+import { embedPullRequestChanges } from '@/lib/ai/embed-pull-request-changes'
+import { embedPullRequestDiff } from '@/lib/ai/embed-pull-request-diff'
 
 interface SaveMergedMergeRequestParams {
   mergeRequest: {
@@ -99,18 +99,6 @@ export async function saveMergedMergeRequest(
 
   const wasMergedToDefaultBranch = mergeRequest.target_branch === defaultBranch
 
-  const embedMetadata = {
-    type: 'pr_summary',
-    pull_request_title: mergeRequest.title,
-    pull_request_url: mergeRequest.web_url,
-    ext_gitlab_merge_request_id: mergeRequest.id,
-    organization_id: organization.id,
-    contributor_id: contributor.id,
-    project: project.id,
-    merged_at: mergeRequest.merged_at,
-    was_merged_to_default_branch: wasMergedToDefaultBranch,
-  }
-
   const pullRequestRecord = await dbClient
     .insertInto('homie.pull_request')
     .values({
@@ -156,23 +144,17 @@ export async function saveMergedMergeRequest(
     return
   }
 
-  await embedCodeChange({
-    label: 'Merge Request',
-    title: pullRequestRecord.title,
-    url: pullRequestRecord.html_url,
+  await embedPullRequestChanges({
+    pullRequest: pullRequestRecord,
     summary,
-    metadata: embedMetadata,
-    contributor: mergeRequest.author.username,
-    mergedAt: pullRequestRecord.merged_at,
+    wasMergedToDefaultBranch,
   })
 
   if (diff) {
-    await embedGitlabDiff({
-      pullRequest: pullRequestRecord,
+    await embedPullRequestDiff({
       diff,
       summary,
-      contributor: mergeRequest.author.username,
-      organization_id: organization.id,
+      pullRequest: pullRequestRecord,
     })
   }
 }

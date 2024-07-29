@@ -60,7 +60,7 @@ export function getSearchPullRequestsTool(
             $eq: organization.id,
           },
           type: {
-            $in: ['pr_summary', 'pr_diff', 'mr_summary', 'mr_diff'],
+            $in: ['pull_request_change', 'pull_request_diff'],
           },
         }
 
