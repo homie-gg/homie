@@ -155,7 +155,7 @@ it('should create and embed a pr', async () => {
     .executeTakeFirstOrThrow()
   expect(pullRequest.title).toBe('My test closed PR')
 
-  expect(mockUpsert.mock.calls[0][0][0]['metadata']['type']).toBe('pr_summary')
+  expect(mockUpsert.mock.calls[0][0][0]['metadata']['type']).toBe('pull_request_change')
   expect(mockUpsert.mock.calls[0][0][0]['metadata']['text']).toContain(
     'My test closed PR',
   )
@@ -166,7 +166,7 @@ it('should create and embed a pr', async () => {
     'closed_pr_author',
   )
 
-  expect(mockUpsert.mock.calls[1][0][0]['metadata']['type']).toBe('pr_diff')
+  expect(mockUpsert.mock.calls[1][0][0]['metadata']['type']).toBe('pull_request_diff')
   expect(mockUpsert.mock.calls[1][0][0]['metadata']['text']).toContain(
     'some code snippet',
   )
