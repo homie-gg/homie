@@ -547,6 +547,7 @@ export type CheckForDuplicateTask = BullMQJob<
       description: string
       ext_gh_issue_id: string | null
       ext_gh_issue_number: number | null
+      organization_id: number
     }
   },
   void, // return type
