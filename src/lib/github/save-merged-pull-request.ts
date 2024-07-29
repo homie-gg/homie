@@ -154,10 +154,10 @@ export async function saveMergedPullRequest(
   const wasMergedToDefaultBranch =
     pullRequest.base.ref === pullRequest.base.repo.default_branch
 
-  const embed_metadata = {
+  const embedMetadata = {
     type: 'pr_summary',
-    title: pullRequest.title,
-    url: pullRequest.html_url,
+    pull_request_title: pullRequest.title,
+    pull_request_url: pullRequest.html_url,
     ext_gh_pull_request_id: pullRequest.id,
     organization_id: organization.id,
     contributor_id: contributor.id,
@@ -182,7 +182,7 @@ export async function saveMergedPullRequest(
       merged_at: parseISO(pullRequest.merged_at),
       number: pullRequest.number,
       embed_value: summary,
-      embed_metadata,
+      embed_metadata: embedMetadata,
       source_branch: pullRequest.head.ref,
       target_branch: pullRequest.base.ref,
       was_merged_to_default_branch: wasMergedToDefaultBranch,
@@ -199,7 +199,7 @@ export async function saveMergedPullRequest(
         merged_at: parseISO(pullRequest.merged_at!),
         number: pullRequest.number,
         embed_value: summary,
-        embed_metadata,
+        embed_metadata: embedMetadata,
         source_branch: pullRequest.head.ref,
         target_branch: pullRequest.base.ref,
         was_merged_to_default_branch: wasMergedToDefaultBranch,
@@ -217,7 +217,7 @@ export async function saveMergedPullRequest(
     title: pullRequest.title,
     url: pullRequest.html_url,
     summary,
-    metadata: embed_metadata,
+    metadata: embedMetadata,
     contributor: pullRequest.user.login,
     mergedAt: pullRequestRecord.merged_at,
   })

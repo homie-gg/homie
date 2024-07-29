@@ -99,10 +99,10 @@ export async function saveMergedMergeRequest(
 
   const wasMergedToDefaultBranch = mergeRequest.target_branch === defaultBranch
 
-  const embed_metadata = {
+  const embedMetadata = {
     type: 'pr_summary',
-    title: mergeRequest.title,
-    url: mergeRequest.web_url,
+    pull_request_title: mergeRequest.title,
+    pull_request_url: mergeRequest.web_url,
     ext_gitlab_merge_request_id: mergeRequest.id,
     organization_id: organization.id,
     contributor_id: contributor.id,
@@ -161,7 +161,7 @@ export async function saveMergedMergeRequest(
     title: pullRequestRecord.title,
     url: pullRequestRecord.html_url,
     summary,
-    metadata: embed_metadata,
+    metadata: embedMetadata,
     contributor: mergeRequest.author.username,
     mergedAt: pullRequestRecord.merged_at,
   })
