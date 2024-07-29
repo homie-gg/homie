@@ -16,7 +16,8 @@ export function getSearchGeneralContextTool(
   const { organization, answerId } = params
   return new DynamicTool({
     name: 'search_general_context',
-    description: 'Search the general context for potential answers.',
+    description:
+      'Search the general context for potential answers as a fallback if other search did not return results.',
     func: async (question: string) => {
       logger.debug('Call: Search General Context', {
         event: 'get_answer:search_general_context:call',
