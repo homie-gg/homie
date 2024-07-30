@@ -1,5 +1,5 @@
 import { RunnableSequence } from '@langchain/core/runnables'
-import { AgentExecutor, createOpenAIToolsAgent } from 'langchain/agents'
+import { AgentExecutor } from 'langchain/agents'
 import {
   ChatPromptTemplate,
   MessagesPlaceholder,
@@ -10,7 +10,7 @@ import {
   SystemMessage,
 } from '@langchain/core/messages'
 import { formatToOpenAIFunctionMessages } from 'langchain/agents/format_scratchpad'
-import { OpenAIFunctionsAgentOutputParser } from 'langchain/agents/openai/output_parser'
+import { OpenAIFunctionsAgentOutputParser, OpenAIToolsAgentOutputParser } from 'langchain/agents/openai/output_parser'
 
 import { createOpenAIChatClient } from '@/lib/open-ai/create-open-ai-chat-client'
 import { convertToOpenAITool } from '@langchain/core/utils/function_calling'
@@ -176,18 +176,23 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
     new MessagesPlaceholder('agent_scratchpad'),
   ])
 
-  const agent = await createOpenAIToolsAgent({
-    llm: model,
-    tools,
+  const agent = RunnableSequence.from([
+    {
+      input: (i) => i.input,
+      agent_scratchpad: (i) => formatToOpenAIFunctionMessages(i.steps),
+      chat_history: (i) => i.chat_history,
+    },
     prompt,
-  })
+    modelWithFunctions,
+    new OpenAIToolsAgentOutputParser(),
+  ])
 
-  const agentExecutor = new AgentExecutor({
+  const executor = AgentExecutor.fromAgentAndTools({
     agent,
     tools,
   })
 
-  const result = await agentExecutor.invoke({
+  const result = await executor.invoke({
     input: currentMessage.text,
     chat_history: chatHistory,
   })
