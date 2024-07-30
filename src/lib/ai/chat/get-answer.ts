@@ -149,6 +149,7 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
   const model = createOpenAIChatClient({ model: 'gpt-4o-2024-05-13' })
   const modelWithFunctions = model.bind({
     functions: tools.map((tool) => convertToOpenAIFunction(tool)),
+    tool_choice: 'required',
   })
 
   const chatHistory: BaseMessage[] = messages.map((message) => {
