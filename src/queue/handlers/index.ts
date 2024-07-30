@@ -32,7 +32,6 @@ import { handleClosePullRequest } from '@/queue/handlers/handle-closed-pull-requ
 import { handleCloseMergeRequest } from '@/queue/handlers/handle-close-merge-request'
 import { handleReopenMergeRequest } from '@/queue/handlers/handle-reopen-merge-request'
 import { handleReopenPullRequest } from '@/queue/handlers/handle-reopen-pull-request'
-import { handleMigrateOrganizationsToNamespace } from '@/queue/handlers/handle-migrate-organizations-to-namespace'
 import { handleMigrateOrganizationEmbeddings } from '@/queue/handlers/handle-migrate-organization-embeddings'
 
 type HandlerFunc<TJob extends Job> = (job: TJob) => void | Promise<void>
@@ -78,6 +77,5 @@ export const handlers: Handlers = {
     handleAskSlackSelectAsanaProjectForTask,
   create_asana_task_from_slack: handleCreateAsanaTaskFromSlack,
   sync_asana_task_to_homie_task: handleSyncAsanaTaskToHomieTask,
-  migrate_organizations_to_namespace: handleMigrateOrganizationsToNamespace,
   migrate_organization_embeddings: handleMigrateOrganizationEmbeddings,
 }

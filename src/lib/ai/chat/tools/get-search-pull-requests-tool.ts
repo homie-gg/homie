@@ -2,11 +2,11 @@ import { TaskMetadata } from '@/lib/ai/embed-task'
 import { logger } from '@/lib/log/logger'
 import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
-import { getPineconeClient } from '@/lib/pinecone/pinecone-client'
 import { DynamicStructuredTool } from '@langchain/core/tools'
 import { CohereClient } from 'cohere-ai'
 import { z } from 'zod'
 import * as Sentry from '@sentry/nextjs'
+import { getOrganizationVectorDB } from '@/lib/ai/get-organization-vector-db'
 
 interface GetSearchPullRequestsToolParams {
   organization: {
@@ -51,9 +51,6 @@ export function getSearchPullRequestsTool(
           modelName: 'text-embedding-3-large',
         })
         const embeddings = await embedder.embedQuery(searchTerm)
-        const index = getPineconeClient().Index(
-          process.env.PINECONE_INDEX_MAIN!,
-        )
 
         const pineconeSearchFilters: Record<string, any> = {
           organization_id: {
@@ -64,7 +61,8 @@ export function getSearchPullRequestsTool(
           },
         }
 
-        const { matches } = await index.query({
+        const vectorDB = getOrganizationVectorDB(organization.id)
+        const { matches } = await vectorDB.query({
           vector: embeddings,
           topK: numResults,
           includeMetadata: true,

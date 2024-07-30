@@ -1,19 +1,21 @@
 import { PineconeRecord } from '@pinecone-database/pinecone'
-import { getPineconeClient } from '@/lib/pinecone/pinecone-client'
 import { v4 as uuid } from 'uuid'
 import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
+import { getOrganizationVectorDB } from '@/lib/ai/get-organization-vector-db'
 
 interface EmbedSlackConversationParams {
   messageUrl: string
   summary: string
-  metadata: Record<string, any>
   savedAt: Date
+  organization: {
+    id: number
+  }
 }
 
 export async function embedSlackConversation(
   params: EmbedSlackConversationParams,
 ) {
-  const { summary, metadata, messageUrl, savedAt } = params
+  const { summary, messageUrl, savedAt, organization } = params
 
   const attributes = [
     'Conversation: ',
@@ -34,12 +36,13 @@ export async function embedSlackConversation(
     id: uuid(),
     values: embedding,
     metadata: {
-      ...metadata,
+      type: 'conversation',
+      organization_id: organization.id,
       text,
     },
   }
 
-  const index = getPineconeClient().Index(process.env.PINECONE_INDEX_MAIN!)
+  const vectorDB = getOrganizationVectorDB(organization.id)
 
-  await index.upsert([record])
+  await vectorDB.upsert([record])
 }
