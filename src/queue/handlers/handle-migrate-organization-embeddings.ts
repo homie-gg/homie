@@ -70,6 +70,7 @@ export async function handleMigrateOrganizationEmbeddings(
     vector: randomSearchVector,
     topK: 10000,
     includeMetadata: true,
+    includeValues: true,
     filter: {
       type: {
         $eq: 'pull_request_diff',
@@ -108,6 +109,7 @@ export async function handleMigrateOrganizationEmbeddings(
     vector: randomSearchVector,
     topK: 10000,
     includeMetadata: true,
+    includeValues: true,
     filter: {
       type: {
         $eq: 'pull_request_change',
@@ -148,6 +150,7 @@ export async function handleMigrateOrganizationEmbeddings(
     vector: randomSearchVector,
     topK: 10000,
     includeMetadata: true,
+    includeValues: true,
     filter: {
       type: {
         $eq: 'conversation',
