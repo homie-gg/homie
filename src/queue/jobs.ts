@@ -566,6 +566,12 @@ export type MigrateOrganizationEmbeddings = BullMQJob<
   'migrate_organization_embeddings'
 >
 
+export type MigrateTaskEmbeddings = BullMQJob<
+  {},
+  void, // return type
+  'migrate_task_embeddings'
+>
+
 export type Job =
   | CreateGithubIssueFromSlack
   | CreateHomieTaskFromGithubIssue
@@ -601,3 +607,4 @@ export type Job =
   | SyncAsanaTaskToHomieTask
   | DispatchDebouncedJob
   | MigrateOrganizationEmbeddings
+  | MigrateTaskEmbeddings
