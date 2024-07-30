@@ -10,10 +10,10 @@ import {
   SystemMessage,
 } from '@langchain/core/messages'
 import { formatToOpenAIFunctionMessages } from 'langchain/agents/format_scratchpad'
-import { OpenAIFunctionsAgentOutputParser, OpenAIToolsAgentOutputParser } from 'langchain/agents/openai/output_parser'
+import { OpenAIFunctionsAgentOutputParser } from 'langchain/agents/openai/output_parser'
 
 import { createOpenAIChatClient } from '@/lib/open-ai/create-open-ai-chat-client'
-import { convertToOpenAITool } from '@langchain/core/utils/function_calling'
+import { convertToOpenAIFunction } from '@langchain/core/utils/function_calling'
 import { rephraseWithPersona } from '@/lib/ai/rephrase-with-persona'
 import { getListPullRequestsTool } from '@/lib/ai/chat/tools/get-list-pull-requests-tool'
 import { getRememberConversationTool } from '@/lib/ai/chat/tools/get-remember-conversation-tool'
@@ -148,9 +148,7 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
 
   const model = createOpenAIChatClient({ model: 'gpt-4o-2024-05-13' })
   const modelWithFunctions = model.bind({
-    tools: tools.map((tool) => convertToOpenAITool(tool)),
-    // Require a tool choice to add more context, and avoid generic answers.
-    tool_choice: 'required',
+    functions: tools.map((tool) => convertToOpenAIFunction(tool)),
   })
 
   const chatHistory: BaseMessage[] = messages.map((message) => {
@@ -168,9 +166,12 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
 
   const prompt = ChatPromptTemplate.fromMessages([
     ['system', 'You are helpful project manager.'],
+    [
+      'system',
+      'You MUST call a function or tool to get your answer. If one is not found call search_general_context',
+    ],
     ['system', `The current date is ${currentDate}`],
     ['system', 'Always include URL links if available.'],
-
     new MessagesPlaceholder('chat_history'),
     ['user', '{input}'],
     new MessagesPlaceholder('agent_scratchpad'),
@@ -184,7 +185,7 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
     },
     prompt,
     modelWithFunctions,
-    new OpenAIToolsAgentOutputParser(),
+    new OpenAIFunctionsAgentOutputParser(),
   ])
 
   const executor = AgentExecutor.fromAgentAndTools({
