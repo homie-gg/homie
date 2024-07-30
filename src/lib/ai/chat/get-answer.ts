@@ -13,7 +13,7 @@ import { formatToOpenAIFunctionMessages } from 'langchain/agents/format_scratchp
 import { OpenAIFunctionsAgentOutputParser } from 'langchain/agents/openai/output_parser'
 
 import { createOpenAIChatClient } from '@/lib/open-ai/create-open-ai-chat-client'
-import { convertToOpenAIFunction } from '@langchain/core/utils/function_calling'
+import { convertToOpenAITool } from '@langchain/core/utils/function_calling'
 import { rephraseWithPersona } from '@/lib/ai/rephrase-with-persona'
 import { getListPullRequestsTool } from '@/lib/ai/chat/tools/get-list-pull-requests-tool'
 import { getRememberConversationTool } from '@/lib/ai/chat/tools/get-remember-conversation-tool'
@@ -148,7 +148,7 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
 
   const model = createOpenAIChatClient({ model: 'gpt-4o-2024-05-13' })
   const modelWithFunctions = model.bind({
-    functions: tools.map((tool) => convertToOpenAIFunction(tool)),
+    tools: tools.map((tool) => convertToOpenAITool(tool)),
     // Require a tool choice to add more context, and avoid generic answers.
     tool_choice: 'required',
   })
