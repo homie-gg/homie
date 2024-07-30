@@ -3,7 +3,7 @@ import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { DynamicTool } from '@langchain/core/tools'
 
-interface getSearchGeneralContextToolParams {
+interface GetSearchGeneralContextToolParams {
   organization: {
     id: number
   }
@@ -11,7 +11,7 @@ interface getSearchGeneralContextToolParams {
 }
 
 export function getSearchGeneralContextTool(
-  params: getSearchGeneralContextToolParams,
+  params: GetSearchGeneralContextToolParams,
 ) {
   const { organization, answerId } = params
   return new DynamicTool({
