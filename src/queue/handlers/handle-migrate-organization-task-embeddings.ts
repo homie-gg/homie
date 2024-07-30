@@ -1,7 +1,7 @@
 import { dbClient } from '@/database/client'
 import { embedTask } from '@/lib/ai/embed-task'
 
-export async function handleMigrateTaskEmbeddings(job: MigrateTaskEmbeddings) {
+export async function handleMigrateTaskEmbeddings() {
   const organizations = await dbClient
     .selectFrom('homie.organization')
     .select(['id'])
