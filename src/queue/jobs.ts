@@ -556,6 +556,22 @@ export type DispatchDebouncedJob = BullMQJob<
   'dispatch_debounced_job'
 >
 
+export type MigrateOrganizationsToNamespace = BullMQJob<
+  {},
+  void, // return type
+  'migrate_organizations_to_namespace'
+>
+
+export type MigrateOrganizationEmbeddings = BullMQJob<
+  {
+    organization: {
+      id: number
+    }
+  },
+  void, // return type
+  'migrate_organization_embeddings'
+>
+
 export type Job =
   | CreateGithubIssueFromSlack
   | CreateHomieTaskFromGithubIssue
@@ -590,3 +606,5 @@ export type Job =
   | RefreshAsanaTokens
   | SyncAsanaTaskToHomieTask
   | DispatchDebouncedJob
+  | MigrateOrganizationsToNamespace
+  | MigrateOrganizationEmbeddings
