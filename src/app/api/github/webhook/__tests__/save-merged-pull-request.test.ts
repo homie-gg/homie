@@ -87,7 +87,9 @@ it('should create and embed a pr', async () => {
   const mockUpsert = jest.fn()
   mockGetPineconeClient.mockReturnValue({
     Index: () => ({
-      upsert: mockUpsert,
+      namespace: () => ({
+        upsert: mockUpsert,
+      }),
     }),
   })
 
