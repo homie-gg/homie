@@ -5,11 +5,7 @@ import { handleGenerateOpenPullRequestSummary } from '@/queue/handlers/handle-ge
 import { handleImportPullRequests } from '@/queue/handlers/handle-import-pull-requests'
 import { handleSaveMergedPullRequest } from '@/queue/handlers/handle-save-merged-pull-request'
 import { handleSaveOpenedPullRequest } from '@/queue/handlers/handle-save-opened-pull-request'
-import {
-  Job,
-  MigrateOrganizationEmbeddings,
-  MigrateOrganizationsToNamespace,
-} from '@/queue/jobs'
+import { Job, MigrateOrganizationEmbeddings } from '@/queue/jobs'
 import { handleSendPullRequestSummaries } from '@/queue/handlers/handle-send-pull-request-summaries'
 import { handleSendPullRequestSummariesToOrganization } from '@/queue/handlers/handle-send-pull-request-summaries-to-organization'
 import { handleCreateTrelloTaskFromSlack } from '@/queue/handlers/handle-create-trello-task-from-slack'
@@ -37,6 +33,7 @@ import { handleCloseMergeRequest } from '@/queue/handlers/handle-close-merge-req
 import { handleReopenMergeRequest } from '@/queue/handlers/handle-reopen-merge-request'
 import { handleReopenPullRequest } from '@/queue/handlers/handle-reopen-pull-request'
 import { handleMigrateOrganizationsToNamespace } from '@/queue/handlers/handle-migrate-organizations-to-namespace'
+import { handleMigrateOrganizationEmbeddings } from '@/queue/handlers/handle-migrate-organization-embeddings'
 
 type HandlerFunc<TJob extends Job> = (job: TJob) => void | Promise<void>
 
@@ -82,9 +79,5 @@ export const handlers: Handlers = {
   create_asana_task_from_slack: handleCreateAsanaTaskFromSlack,
   sync_asana_task_to_homie_task: handleSyncAsanaTaskToHomieTask,
   migrate_organizations_to_namespace: handleMigrateOrganizationsToNamespace,
-  migrate_organization_embeddings: function (
-    job: MigrateOrganizationEmbeddings,
-  ): void | Promise<void> {
-    throw new Error('Function not implemented.')
-  },
+  migrate_organization_embeddings: handleMigrateOrganizationEmbeddings,
 }
