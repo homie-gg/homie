@@ -60,13 +60,10 @@ export function getRememberConversationTool(
         const summary = await summarizeConversation({ messages: conversation })
 
         await embedSlackConversation({
-          metadata: {
-            type: 'conversation',
-            organization_id: organization.id,
-          },
           messageUrl: slackMessageUrl,
           summary,
           savedAt: todaysDate,
+          organization,
         })
 
         logger.debug('Finished remembering conversation', {
