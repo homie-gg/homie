@@ -59,7 +59,7 @@ export async function handleMigrateOrganizationEmbeddings(
 
   const randomSearchVector = await embedder.embedQuery('any string')
 
-  console.log(`Migration organization ${organization.id} embeddings`, {
+  logger.debug(`Migration organization ${organization.id} embeddings`, {
     event: 'migrate_org_embeddings:start',
     organization_id: organization.id,
   })
@@ -80,28 +80,23 @@ export async function handleMigrateOrganizationEmbeddings(
     },
   })
 
-  console.log('Got pull_request_diff(s)', {
+  logger.debug('Got pull_request_diff(s)', {
     event: 'migrate_org_embeddings:got_pr_diff',
     organization_id: organization.id,
     num_pull_request_diffs: pullRequestDiffs.matches.length,
   })
 
   for (const pullRequestDiff of pullRequestDiffs.matches) {
-    const text = pullRequestDiff.metadata?.text ?? ''
-    if (!text || typeof text !== 'string') {
-      continue
-    }
-
     namespaceIndex.upsert([
       {
         id: pullRequestDiff.id,
-        values: await embedder.embedQuery(text),
+        values: pullRequestDiff.values,
         metadata: pullRequestDiff.metadata,
       },
     ])
   }
 
-  console.log('Finished migrating PR diffs', {
+  logger.debug('Finished migrating PR diffs', {
     event: 'migrate_org_embeddings:finish_pr_diffs',
     organization_id: organization.id,
     num_pull_request_diffs: pullRequestDiffs.matches.length,
@@ -123,7 +118,7 @@ export async function handleMigrateOrganizationEmbeddings(
     },
   })
 
-  console.log('Got pr changes', {
+  logger.debug('Got pr changes', {
     event: 'migrate_org_embeddings:got_pr_changes',
     organization_id: organization.id,
     num_pull_request_diffs: pullRequestDiffs.matches.length,
@@ -131,20 +126,16 @@ export async function handleMigrateOrganizationEmbeddings(
   })
 
   for (const pullRequestChange of pullRequestChanges.matches) {
-    const text = pullRequestChange.metadata?.text ?? ''
-    if (!text || typeof text !== 'string') {
-      continue
-    }
     namespaceIndex.upsert([
       {
         id: pullRequestChange.id,
-        values: await embedder.embedQuery(text),
+        values: pullRequestChange.values,
         metadata: pullRequestChange.metadata,
       },
     ])
   }
 
-  console.log('Finished PR changes', {
+  logger.debug('Finished PR changes', {
     event: 'migrate_org_embeddings:finished_pr_changes',
     organization_id: organization.id,
     num_pull_request_diffs: pullRequestDiffs.matches.length,
@@ -167,7 +158,7 @@ export async function handleMigrateOrganizationEmbeddings(
     },
   })
 
-  console.log('Got conversations', {
+  logger.debug('Got conversations', {
     event: 'migrate_org_embeddings:got_conversations',
     organization_id: organization.id,
     num_pull_request_diffs: pullRequestDiffs.matches.length,
@@ -176,21 +167,16 @@ export async function handleMigrateOrganizationEmbeddings(
   })
 
   for (const conversation of conversations.matches) {
-    const text = conversation.metadata?.text ?? ''
-    if (!text || typeof text !== 'string') {
-      continue
-    }
-
     namespaceIndex.upsert([
       {
         id: conversation.id,
-        values: await embedder.embedQuery(text),
+        values: conversation.values,
         metadata: conversation.metadata,
       },
     ])
   }
 
-  console.log('Finished conversations', {
+  logger.debug('Finished conversations', {
     event: 'migrate_org_embeddings:finished_conversations',
     organization_id: organization.id,
     num_pull_request_diffs: pullRequestDiffs.matches.length,
@@ -214,7 +200,7 @@ export async function handleMigrateOrganizationEmbeddings(
     },
   })
 
-  console.log('Got PR summaries', {
+  logger.debug('Got PR summaries', {
     event: 'migrate_org_embeddings:got_pr_summaries',
     organization_id: organization.id,
     num_pull_request_diffs: pullRequestDiffs.matches.length,
@@ -272,7 +258,7 @@ export async function handleMigrateOrganizationEmbeddings(
     ])
   }
 
-  console.log('Finished PR summaries', {
+  logger.debug('Finished PR summaries', {
     event: 'migrate_org_embeddings:finished_pr_summaries',
     organization_id: organization.id,
     num_pull_request_diffs: pullRequestDiffs.matches.length,
@@ -295,7 +281,7 @@ export async function handleMigrateOrganizationEmbeddings(
     },
   })
 
-  console.log('Got MR summaries', {
+  logger.debug('Got MR summaries', {
     event: 'migrate_org_embeddings:got_mr_summaries',
     organization_id: organization.id,
     num_pull_request_diffs: pullRequestDiffs.matches.length,
@@ -354,7 +340,7 @@ export async function handleMigrateOrganizationEmbeddings(
     ])
   }
 
-  console.log('Finished MR summaries', {
+  logger.debug('Finished MR summaries', {
     event: 'migrate_org_embeddings:finished_mr_summaries',
     organization_id: organization.id,
     num_pull_request_diffs: pullRequestDiffs.matches.length,
@@ -379,7 +365,7 @@ export async function handleMigrateOrganizationEmbeddings(
     },
   })
 
-  console.log('Got Diffs', {
+  logger.debug('Got Diffs', {
     event: 'migrate_org_embeddings:got_diffs',
     organization_id: organization.id,
     num_pull_request_diffs: pullRequestDiffs.matches.length,
@@ -438,7 +424,7 @@ export async function handleMigrateOrganizationEmbeddings(
     ])
   }
 
-  console.log('Finished Diffs', {
+  logger.debug('Finished Diffs', {
     event: 'migrate_org_embeddings:got_diffs',
     organization_id: organization.id,
     num_pull_request_diffs: pullRequestDiffs.matches.length,
