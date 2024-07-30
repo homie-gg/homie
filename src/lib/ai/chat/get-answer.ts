@@ -166,9 +166,9 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
 
   const prompt = ChatPromptTemplate.fromMessages([
     ['system', 'You are helpful project manager.'],
+    ['system', 'You MUST call a function or tool to get your answer.'],
     ['system', `The current date is ${currentDate}`],
     ['system', 'Always include URL links if available.'],
-
     new MessagesPlaceholder('chat_history'),
     ['user', '{input}'],
     new MessagesPlaceholder('agent_scratchpad'),
