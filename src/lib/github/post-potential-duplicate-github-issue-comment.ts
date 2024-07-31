@@ -20,12 +20,12 @@ interface PostPotentialDuplicateGithubIssueCommentParams {
 export async function postPotentialDuplicateGithubIssueComment(
   params: PostPotentialDuplicateGithubIssueCommentParams,
 ) {
-  const { targetTask: task, organization, duplicateTask } = params
+  const { targetTask, organization, duplicateTask } = params
 
   const githubRepository = await dbClient
     .selectFrom('github.repo')
     .where('organization_id', '=', organization.id)
-    .where('github.repo.id', '=', task.github_repo_id)
+    .where('github.repo.id', '=', targetTask.github_repo_id)
     .select(['name', 'owner'])
     .executeTakeFirstOrThrow()
 
@@ -37,7 +37,7 @@ export async function postPotentialDuplicateGithubIssueComment(
     installationId: organization.ext_gh_install_id,
     repo: githubRepository.name,
     owner: githubRepository.owner,
-    issueNumber: task.ext_gh_issue_number,
+    issueNumber: targetTask.ext_gh_issue_number,
     body: `${getGreeting()}, this issue might be a duplicate of: [${duplicateTask.name}](${duplicateTask.html_url}).`,
   })
 }
