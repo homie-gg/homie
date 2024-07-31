@@ -69,8 +69,15 @@ export async function handleUpdateHomieTaskFromGithubIssue(
       'priority_level',
       'created_at',
       'organization_id',
+      'github_repo_id',
+      'ext_gh_issue_number',
     ])
     .executeTakeFirstOrThrow()
+
+  await dispatch('check_for_duplicate_task', {
+    organization,
+    task: updatedTask,
+  })
 
   await embedTask({ task: updatedTask })
 }

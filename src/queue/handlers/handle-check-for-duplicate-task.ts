@@ -1,7 +1,10 @@
 import { dbClient } from '@/database/client'
+import { checkIfTasksAreIdentical } from '@/lib/ai/check-if-tasks-are-identical'
 import { TaskMetadata } from '@/lib/ai/embed-task'
+import { getOrganizationVectorDB } from '@/lib/ai/get-organization-vector-db'
+import { postPotentialDuplicateGithubIssueComment } from '@/lib/github/post-potential-duplicate-github-issue-comment'
 import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
-import { getPineconeClient } from '@/lib/pinecone/pinecone-client'
+import { taskStatus } from '@/lib/tasks'
 import { CheckForDuplicateTask } from '@/queue/jobs'
 import { CohereClient } from 'cohere-ai'
 
@@ -9,10 +12,10 @@ import { CohereClient } from 'cohere-ai'
  * Cohere relevance score. If a task relevance score is above this, then it is
  * considered to potentially be a duplicate.
  */
-const duplicateTaskRelevanceScoreThreshold = 0.7
+const duplicateTaskRelevanceScoreThreshold = 0.5
 
 export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
-  const { task } = job.data
+  const { task, organization } = job.data
 
   const searchTerm = `${task.name}\n${task.description}`
 
@@ -34,11 +37,11 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
     },
   }
 
-  const index = getPineconeClient().Index(process.env.PINECONE_INDEX_MAIN!)
+  const vectorDB = getOrganizationVectorDB(organization.id)
 
-  const { matches } = await index.query({
+  const { matches } = await vectorDB.query({
     vector: embeddings,
-    topK: 10,
+    topK: 50,
     includeMetadata: true,
     filter: pineconeSearchFilters,
   })
@@ -74,13 +77,42 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
     .selectFrom('homie.task')
     .where('organization_id', '=', task.organization_id)
     .where('homie.task.id', '=', duplicateTaskId)
+    .where('task_status_id', '=', taskStatus.open)
+    .select(['name', 'description', 'html_url'])
     .executeTakeFirst()
 
   if (!duplicateTask) {
     return
   }
 
-  // send github comment
+  const isDuplicate = checkIfTasksAreIdentical({
+    taskA: task,
+    taskB: duplicateTask,
+  })
+
+  if (!isDuplicate) {
+    return
+  }
+
+  // Github Issue
+  if (
+    task.ext_gh_issue_number &&
+    task.github_repo_id &&
+    organization.ext_gh_install_id
+  ) {
+    await postPotentialDuplicateGithubIssueComment({
+      targetTask: {
+        ext_gh_issue_number: task.ext_gh_issue_number,
+        github_repo_id: task.github_repo_id,
+      },
+      organization: {
+        id: organization.id,
+        ext_gh_install_id: organization.ext_gh_install_id,
+      },
+      duplicateTask,
+    })
+  }
+
   // send asana comment
   // send trello comment
 
