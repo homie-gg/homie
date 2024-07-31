@@ -1,4 +1,5 @@
 import { dbClient } from '@/database/client'
+import { getGreeting } from '@/lib/ai/get-greeting'
 import { postGithubIssueComment } from '@/lib/github/post-github-issue-comment'
 
 interface PostPotentialDuplicateGithubIssueCommentParams {
@@ -16,8 +17,6 @@ interface PostPotentialDuplicateGithubIssueCommentParams {
   }
 }
 
-const greetings = ['Hmm', 'One sec', 'Oops', 'Yo', 'Woah', 'Hi homie']
-
 export async function postPotentialDuplicateGithubIssueComment(
   params: PostPotentialDuplicateGithubIssueCommentParams,
 ) {
@@ -34,13 +33,11 @@ export async function postPotentialDuplicateGithubIssueComment(
     throw new Error('Missing Github repository owner')
   }
 
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)]
-
   await postGithubIssueComment({
     installationId: organization.ext_gh_install_id,
     repo: githubRepository.name,
     owner: githubRepository.owner,
     issueNumber: task.ext_gh_issue_number,
-    body: `${greeting}, this issue might be a duplicate of: [${duplicateTask.name}](${duplicateTask.html_url}).`,
+    body: `${getGreeting()}, this issue might be a duplicate of: [${duplicateTask.name}](${duplicateTask.html_url}).`,
   })
 }
