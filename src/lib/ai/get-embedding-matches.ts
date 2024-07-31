@@ -1,4 +1,4 @@
-import { getPineconeClient } from '@/lib/pinecone/pinecone-client'
+import { getOrganizationVectorDB } from '@/lib/ai/get-organization-vector-db'
 
 interface GetEmbeddingMatchesParams {
   embeddings: number[]
@@ -9,10 +9,10 @@ interface GetEmbeddingMatchesParams {
 export async function getEmbeddingMatches(params: GetEmbeddingMatchesParams) {
   const { embeddings, numTopResults, organizationId } = params
 
-  const index = getPineconeClient().Index(process.env.PINECONE_INDEX_MAIN!)
+  const vectorDB = getOrganizationVectorDB(organizationId)
 
   try {
-    const result = await index.query({
+    const result = await vectorDB.query({
       vector: embeddings,
       topK: numTopResults,
       includeMetadata: true,

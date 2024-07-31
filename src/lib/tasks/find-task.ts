@@ -1,6 +1,6 @@
 import { dbClient } from '@/database/client'
+import { getOrganizationVectorDB } from '@/lib/ai/get-organization-vector-db'
 import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
-import { getPineconeClient } from '@/lib/pinecone/pinecone-client'
 import { CohereClient } from 'cohere-ai'
 
 interface FindTaskParams {
@@ -39,9 +39,9 @@ export async function findTask(
       modelName: 'text-embedding-3-large',
     })
     const embeddings = await embedder.embedQuery(query)
-    const index = getPineconeClient().Index(process.env.PINECONE_INDEX_MAIN!)
 
-    const { matches } = await index.query({
+    const vectorDB = getOrganizationVectorDB(organization_id)
+    const { matches } = await vectorDB.query({
       vector: embeddings,
       topK: 10,
       includeMetadata: true,

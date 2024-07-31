@@ -33,6 +33,8 @@ import { handleCloseMergeRequest } from '@/queue/handlers/handle-close-merge-req
 import { handleReopenMergeRequest } from '@/queue/handlers/handle-reopen-merge-request'
 import { handleReopenPullRequest } from '@/queue/handlers/handle-reopen-pull-request'
 import { handleCheckForDuplicateTask } from '@/queue/handlers/handle-check-for-duplicate-task'
+import { handleMigrateOrganizationEmbeddings } from '@/queue/handlers/handle-migrate-organization-embeddings'
+import { handleMigrateTaskEmbeddings } from '@/queue/handlers/handle-migrate-organization-task-embeddings'
 
 type HandlerFunc<TJob extends Job> = (job: TJob) => void | Promise<void>
 
@@ -78,4 +80,6 @@ export const handlers: Handlers = {
   create_asana_task_from_slack: handleCreateAsanaTaskFromSlack,
   check_for_duplicate_task: handleCheckForDuplicateTask,
   sync_asana_task_to_homie_task: handleSyncAsanaTaskToHomieTask,
+  migrate_organization_embeddings: handleMigrateOrganizationEmbeddings,
+  migrate_task_embeddings: handleMigrateTaskEmbeddings,
 }
