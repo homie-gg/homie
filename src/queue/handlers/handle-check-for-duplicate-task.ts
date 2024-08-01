@@ -2,6 +2,7 @@ import { dbClient } from '@/database/client'
 import { checkIfTasksAreIdentical } from '@/lib/ai/check-if-tasks-are-identical'
 import { TaskMetadata } from '@/lib/ai/embed-task'
 import { getOrganizationVectorDB } from '@/lib/ai/get-organization-vector-db'
+import { postPotentialDuplicateAsanaTaskComment } from '@/lib/asana/post-potential-duplicate-asana-task-commen'
 import { postPotentialDuplicateGithubIssueComment } from '@/lib/github/post-potential-duplicate-github-issue-comment'
 import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
 import { taskStatus } from '@/lib/tasks'
@@ -108,6 +109,19 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
       organization: {
         id: organization.id,
         ext_gh_install_id: organization.ext_gh_install_id,
+      },
+      duplicateTask,
+    })
+  }
+
+  if (task.ext_asana_task_id && organization.asana_access_token) {
+    await postPotentialDuplicateAsanaTaskComment({
+      targetTask: {
+        ext_asana_task_id: task.ext_asana_task_id,
+      },
+      organization: {
+        id: organization.id,
+        asana_access_token: organization.asana_access_token,
       },
       duplicateTask,
     })
