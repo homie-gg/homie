@@ -99,13 +99,13 @@ export async function handleCreateHomieTaskFromGithubIssue(
         'ext_gh_issue_id',
         'ext_gh_issue_number',
         'github_repo_id',
+        'ext_asana_task_id',
       ])
       .executeTakeFirstOrThrow()
 
     await embedTask({ task })
 
     await dispatch('check_for_duplicate_task', {
-      organization,
       task,
     })
 

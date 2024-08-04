@@ -1,3 +1,4 @@
+import { getGreeting } from '@/lib/ai/get-greeting'
 import { postAsanaTaskComment } from '@/lib/asana/post-asana-task-comment'
 import { getDuplicateTaskMessage } from '@/lib/tasks/get-duplicate-task-message'
 
@@ -20,10 +21,9 @@ export async function postPotentialDuplicateAsanaTaskComment(
 ) {
   const { targetTask, organization, duplicateTask } = params
 
-  // TODO: Test asana make sure comment goes out with markdown link
   await postAsanaTaskComment({
     asanaAccessToken: organization.asana_access_token,
     extAsanaTaskId: targetTask.ext_asana_task_id,
-    text: getDuplicateTaskMessage({ task: duplicateTask }),
+    html: `<body>${getGreeting()}, this issue might be a duplicate of: <a href="${duplicateTask.html_url}">${duplicateTask.name}</a></body>`,
   })
 }

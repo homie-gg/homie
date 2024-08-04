@@ -71,11 +71,11 @@ export async function handleUpdateHomieTaskFromGithubIssue(
       'organization_id',
       'github_repo_id',
       'ext_gh_issue_number',
+      'ext_asana_task_id',
     ])
     .executeTakeFirstOrThrow()
 
   await dispatch('check_for_duplicate_task', {
-    organization,
     task: updatedTask,
   })
 

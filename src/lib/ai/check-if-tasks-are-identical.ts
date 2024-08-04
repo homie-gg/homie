@@ -19,7 +19,7 @@ export async function checkIfTasksAreIdentical(
 ) {
   const { taskA, taskB } = params
 
-  const prompt = `Given the following two tasks, and descriptions, determine if they are identical. Answer must be TRUE/FALSE only.
+  const prompt = `There are two tasks, TASK A and TASK B. Determine if the two tasks are wanting to do the same thing. Answer must be TRUE/FALSE only.
 TASK A:
 ${taskA.name} - ${taskA.description}
 TASK B:

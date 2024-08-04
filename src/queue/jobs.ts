@@ -550,11 +550,6 @@ export type CheckForDuplicateTask = BullMQJob<
       ext_asana_task_id: string | null
       organization_id: number
     }
-    organization: {
-      id: number
-      ext_gh_install_id: number | null
-      asana_access_token: string | null
-    }
   },
   void, // return type
   'check_for_duplicate_task'

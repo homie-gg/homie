@@ -16,7 +16,27 @@ import { CohereClient } from 'cohere-ai'
 const duplicateTaskRelevanceScoreThreshold = 0.5
 
 export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
-  const { task, organization } = job.data
+  const { task } = job.data
+
+  const organization = await dbClient
+    .selectFrom('homie.organization')
+    .leftJoin(
+      'github.organization',
+      'github.organization.organization_id',
+      'homie.organization.id',
+    )
+    .leftJoin(
+      'asana.app_user',
+      'asana.app_user.organization_id',
+      'homie.organization.id',
+    )
+    .where('homie.organization.id', '=', task.organization_id)
+    .select([
+      'homie.organization.id',
+      'ext_gh_install_id',
+      'asana.app_user.asana_access_token',
+    ])
+    .executeTakeFirstOrThrow()
 
   const searchTerm = `${task.name}\n${task.description}`
 
