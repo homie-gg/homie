@@ -5,7 +5,7 @@ import { handleGenerateOpenPullRequestSummary } from '@/queue/handlers/handle-ge
 import { handleImportPullRequests } from '@/queue/handlers/handle-import-pull-requests'
 import { handleSaveMergedPullRequest } from '@/queue/handlers/handle-save-merged-pull-request'
 import { handleSaveOpenedPullRequest } from '@/queue/handlers/handle-save-opened-pull-request'
-import { Job, MigrateTaskEmbeddings } from '@/queue/jobs'
+import { Job } from '@/queue/jobs'
 import { handleSendPullRequestSummaries } from '@/queue/handlers/handle-send-pull-request-summaries'
 import { handleSendPullRequestSummariesToOrganization } from '@/queue/handlers/handle-send-pull-request-summaries-to-organization'
 import { handleCreateTrelloTaskFromSlack } from '@/queue/handlers/handle-create-trello-task-from-slack'
@@ -32,6 +32,7 @@ import { handleClosePullRequest } from '@/queue/handlers/handle-closed-pull-requ
 import { handleCloseMergeRequest } from '@/queue/handlers/handle-close-merge-request'
 import { handleReopenMergeRequest } from '@/queue/handlers/handle-reopen-merge-request'
 import { handleReopenPullRequest } from '@/queue/handlers/handle-reopen-pull-request'
+import { handleCheckForDuplicateTask } from '@/queue/handlers/handle-check-for-duplicate-task'
 import { handleMigrateOrganizationEmbeddings } from '@/queue/handlers/handle-migrate-organization-embeddings'
 import { handleMigrateTaskEmbeddings } from '@/queue/handlers/handle-migrate-organization-task-embeddings'
 
@@ -77,6 +78,7 @@ export const handlers: Handlers = {
   ask_slack_select_asana_project_for_task:
     handleAskSlackSelectAsanaProjectForTask,
   create_asana_task_from_slack: handleCreateAsanaTaskFromSlack,
+  check_for_duplicate_task: handleCheckForDuplicateTask,
   sync_asana_task_to_homie_task: handleSyncAsanaTaskToHomieTask,
   migrate_organization_embeddings: handleMigrateOrganizationEmbeddings,
   migrate_task_embeddings: handleMigrateTaskEmbeddings,

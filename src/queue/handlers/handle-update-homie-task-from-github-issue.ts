@@ -69,8 +69,16 @@ export async function handleUpdateHomieTaskFromGithubIssue(
       'priority_level',
       'created_at',
       'organization_id',
+      'github_repo_id',
+      'ext_gh_issue_number',
+      'ext_asana_task_id',
+      'ext_trello_card_id',
     ])
     .executeTakeFirstOrThrow()
+
+  await dispatch('check_for_duplicate_task', {
+    task: updatedTask,
+  })
 
   await embedTask({ task: updatedTask })
 }

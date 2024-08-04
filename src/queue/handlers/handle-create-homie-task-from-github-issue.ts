@@ -3,6 +3,7 @@ import { dbClient } from '@/database/client'
 import { classifyTask } from '@/lib/ai/clasify-task'
 import { taskStatus } from '@/lib/tasks'
 import { embedTask } from '@/lib/ai/embed-task'
+import { dispatch } from '@/queue/default-queue'
 
 export async function handleCreateHomieTaskFromGithubIssue(
   job: CreateHomieTaskFromGithubIssue,
@@ -95,10 +96,19 @@ export async function handleCreateHomieTaskFromGithubIssue(
         'priority_level',
         'organization_id',
         'created_at',
+        'ext_gh_issue_id',
+        'ext_gh_issue_number',
+        'github_repo_id',
+        'ext_asana_task_id',
+        'ext_trello_card_id',
       ])
       .executeTakeFirstOrThrow()
 
     await embedTask({ task })
+
+    await dispatch('check_for_duplicate_task', {
+      task,
+    })
 
     // Save person who made issue
     if (issue.user) {

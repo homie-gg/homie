@@ -3,6 +3,7 @@ import { classifyTask } from '@/lib/ai/clasify-task'
 import { embedTask } from '@/lib/ai/embed-task'
 import { AsanaGetTaskResponse } from '@/lib/asana/types'
 import { taskStatus } from '@/lib/tasks'
+import { dispatch } from '@/queue/default-queue'
 
 interface CreateHomieTaskFromAsanaTaskParams {
   asanaTask: AsanaGetTaskResponse['data']
@@ -55,10 +56,18 @@ export async function createHomieTaskFromAsanaTask(
       'priority_level',
       'organization_id',
       'created_at',
+      'ext_asana_task_id',
+      'ext_gh_issue_number',
+      'github_repo_id',
+      'ext_trello_card_id',
     ])
     .executeTakeFirstOrThrow()
 
   await embedTask({ task: homieTask })
+
+  await dispatch('check_for_duplicate_task', {
+    task: homieTask,
+  })
 
   if (!asanaTask.assignee) {
     return

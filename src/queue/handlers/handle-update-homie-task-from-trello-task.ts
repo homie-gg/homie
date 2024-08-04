@@ -82,11 +82,20 @@ export async function handleUpdateHomieTaskFromTrelloTask(
       'priority_level',
       'organization_id',
       'created_at',
+      'ext_gh_issue_id',
+      'ext_gh_issue_number',
+      'github_repo_id',
+      'ext_asana_task_id',
+      'ext_trello_card_id',
     ])
 
     .executeTakeFirstOrThrow()
 
   await embedTask({ task: updatedTask })
+
+  await dispatch('check_for_duplicate_task', {
+    task: updatedTask,
+  })
 }
 
 interface GetTaskStatusParams {

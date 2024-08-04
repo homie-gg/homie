@@ -7,6 +7,7 @@ import { classifyTask } from '@/lib/ai/clasify-task'
 import { taskStatus } from '@/lib/tasks'
 import { createHomieTaskFromAsanaTask } from '@/lib/asana/create-homie-task-from-asana-task'
 import { embedTask } from '@/lib/ai/embed-task'
+import { dispatch } from '@/queue/default-queue'
 
 export async function handleSyncAsanaTaskToHomieTask(
   job: SyncAsanaTaskToHomieTask,
@@ -99,10 +100,18 @@ export async function handleSyncAsanaTaskToHomieTask(
       'priority_level',
       'organization_id',
       'created_at',
+      'ext_asana_task_id',
+      'github_repo_id',
+      'ext_gh_issue_number',
+      'ext_trello_card_id',
     ])
     .executeTakeFirstOrThrow()
 
   await embedTask({ task: updatedTask })
+
+  await dispatch('check_for_duplicate_task', {
+    task: updatedTask,
+  })
 
   // If no assignee, we'll remove any assignments (if they exist)
   if (!asanaTask.assignee) {
