@@ -103,6 +103,7 @@ export async function handleSyncAsanaTaskToHomieTask(
       'ext_asana_task_id',
       'github_repo_id',
       'ext_gh_issue_number',
+      'ext_trello_card_id',
     ])
     .executeTakeFirstOrThrow()
 

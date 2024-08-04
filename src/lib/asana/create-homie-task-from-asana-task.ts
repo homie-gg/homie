@@ -59,6 +59,7 @@ export async function createHomieTaskFromAsanaTask(
       'ext_asana_task_id',
       'ext_gh_issue_number',
       'github_repo_id',
+      'ext_trello_card_id',
     ])
     .executeTakeFirstOrThrow()
 

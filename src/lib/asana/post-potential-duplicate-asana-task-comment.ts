@@ -1,6 +1,5 @@
 import { getGreeting } from '@/lib/ai/get-greeting'
 import { postAsanaTaskComment } from '@/lib/asana/post-asana-task-comment'
-import { getDuplicateTaskMessage } from '@/lib/tasks/get-duplicate-task-message'
 
 interface PostPotentialDuplicateAsanaTaskCommentParams {
   targetTask: {
@@ -24,6 +23,6 @@ export async function postPotentialDuplicateAsanaTaskComment(
   await postAsanaTaskComment({
     asanaAccessToken: organization.asana_access_token,
     extAsanaTaskId: targetTask.ext_asana_task_id,
-    html: `<body>${getGreeting()}, this issue might be a duplicate of: <a href="${duplicateTask.html_url}">${duplicateTask.name}</a></body>`,
+    html: `<body>${getGreeting()}, this might be a duplicate of: <a href="${duplicateTask.html_url}">${duplicateTask.name}</a></body>`,
   })
 }

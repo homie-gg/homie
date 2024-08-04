@@ -3,7 +3,7 @@ import { StringOutputParser } from '@langchain/core/output_parsers'
 import { ChatPromptTemplate } from '@langchain/core/prompts'
 import { RunnableSequence } from '@langchain/core/runnables'
 
-interface CheckIfTasksAreIdenticalParams {
+interface CheckIsTaskDuplicateParams {
   taskA: {
     name: string
     description: string
@@ -14,9 +14,7 @@ interface CheckIfTasksAreIdenticalParams {
   }
 }
 
-export async function checkIfTasksAreIdentical(
-  params: CheckIfTasksAreIdenticalParams,
-) {
+export async function checkIsDuplicateTask(params: CheckIsTaskDuplicateParams) {
   const { taskA, taskB } = params
 
   const prompt = `There are two tasks, TASK A and TASK B. Determine if the two tasks are wanting to do the same thing. Answer must be TRUE/FALSE only.

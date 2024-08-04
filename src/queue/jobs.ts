@@ -548,6 +548,7 @@ export type CheckForDuplicateTask = BullMQJob<
       ext_gh_issue_number: number | null
       github_repo_id: number | null
       ext_asana_task_id: string | null
+      ext_trello_card_id: string | null
       organization_id: number
     }
   },

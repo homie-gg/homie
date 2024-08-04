@@ -1,11 +1,12 @@
 import { dbClient } from '@/database/client'
-import { checkIfTasksAreIdentical } from '@/lib/ai/check-if-tasks-are-identical'
+import { checkIsDuplicateTask } from '@/lib/ai/check-is-duplicate-task'
 import { TaskMetadata } from '@/lib/ai/embed-task'
 import { getOrganizationVectorDB } from '@/lib/ai/get-organization-vector-db'
-import { postPotentialDuplicateAsanaTaskComment } from '@/lib/asana/post-potential-duplicate-asana-task-commen'
+import { postPotentialDuplicateAsanaTaskComment } from '@/lib/asana/post-potential-duplicate-asana-task-comment'
 import { postPotentialDuplicateGithubIssueComment } from '@/lib/github/post-potential-duplicate-github-issue-comment'
 import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
 import { taskStatus } from '@/lib/tasks'
+import { postPotentialDuplicateTrelloTaskComment } from '@/lib/trello/post-potential-duplicate-trello-comment'
 import { CheckForDuplicateTask } from '@/queue/jobs'
 import { CohereClient } from 'cohere-ai'
 
@@ -30,11 +31,17 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
       'asana.app_user.organization_id',
       'homie.organization.id',
     )
+    .leftJoin(
+      'trello.workspace',
+      'trello.workspace.organization_id',
+      'homie.organization.id',
+    )
     .where('homie.organization.id', '=', task.organization_id)
     .select([
       'homie.organization.id',
       'ext_gh_install_id',
       'asana.app_user.asana_access_token',
+      'trello.workspace.trello_access_token',
     ])
     .executeTakeFirstOrThrow()
 
@@ -106,7 +113,7 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
     return
   }
 
-  const isDuplicate = checkIfTasksAreIdentical({
+  const isDuplicate = checkIsDuplicateTask({
     taskA: task,
     taskB: duplicateTask,
   })
@@ -147,10 +154,16 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
     })
   }
 
-  // send asana comment
-  // send trello comment
-
-  // TODO:
-  // - Found duplicate task, send comments....
-  // - add logging
+  if (organization.trello_access_token && task.ext_trello_card_id) {
+    await postPotentialDuplicateTrelloTaskComment({
+      targetTask: {
+        ext_trello_card_id: task.ext_trello_card_id,
+      },
+      organization: {
+        id: organization.id,
+        trello_access_token: organization.trello_access_token,
+      },
+      duplicateTask,
+    })
+  }
 }

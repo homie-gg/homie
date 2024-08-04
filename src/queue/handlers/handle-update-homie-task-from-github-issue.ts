@@ -72,6 +72,7 @@ export async function handleUpdateHomieTaskFromGithubIssue(
       'github_repo_id',
       'ext_gh_issue_number',
       'ext_asana_task_id',
+      'ext_trello_card_id',
     ])
     .executeTakeFirstOrThrow()
 

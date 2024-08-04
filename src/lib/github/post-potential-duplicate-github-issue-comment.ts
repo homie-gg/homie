@@ -38,6 +38,6 @@ export async function postPotentialDuplicateGithubIssueComment(
     repo: githubRepository.name,
     owner: githubRepository.owner,
     issueNumber: targetTask.ext_gh_issue_number,
-    body: `${getGreeting()}, this issue might be a duplicate of: [${duplicateTask.name}](${duplicateTask.html_url}).`,
+    body: `${getGreeting()}, this might be a duplicate of: [${duplicateTask.name}](${duplicateTask.html_url}).`,
   })
 }
