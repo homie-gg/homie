@@ -1,6 +1,6 @@
 import { createAsanaClient } from '@/lib/asana/create-asana-client'
 import { ListAsanaTasksResponse } from '@/lib/asana/types'
-import { dispatch } from '@/queue/default-queue'
+import { dispatch } from '@/queue/dispatch'
 import { ImportAsanaTasks } from '@/queue/jobs'
 
 export async function handleImportAsanaTasks(job: ImportAsanaTasks) {

@@ -1,5 +1,5 @@
 import { dbClient } from '@/database/client'
-import { dispatch } from '@/queue/default-queue'
+import { dispatch } from '@/queue/dispatch'
 import {
   InstallationLite,
   Issue,

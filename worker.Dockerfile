@@ -12,13 +12,12 @@ RUN npm install
 
 # Copying source files
 COPY . .
-# Building app
-RUN npm run build
-
-EXPOSE 3000
 
 COPY ./worker-entrypoint.sh /usr/local/bin/docker-init.sh
 RUN chmod +x /usr/local/bin/docker-init.sh
 
 ENTRYPOINT [ "docker-init.sh" ]
+
+EXPOSE 3100
+
 CMD ["/bin/bash"]

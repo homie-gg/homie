@@ -1,6 +1,6 @@
 import { dbClient } from '@/database/client'
 import { PageProps } from '@/lib/next-js/page-props'
-import { dispatch } from '@/queue/default-queue'
+import { dispatch } from '@/queue/dispatch'
 import { auth } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 

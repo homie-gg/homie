@@ -1,7 +1,7 @@
 import { dbClient } from '@/database/client'
 import { createGithubClient } from '@/lib/github/create-github-client'
 import { ImportGithubIssues } from '@/queue/jobs'
-import { dispatch } from '@/queue/default-queue'
+import { dispatch } from '@/queue/dispatch'
 
 export async function handleImportGithubIssues(job: ImportGithubIssues) {
   const { github_organization } = job.data

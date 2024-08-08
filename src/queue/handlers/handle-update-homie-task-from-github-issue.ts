@@ -1,7 +1,7 @@
 import { UpdateHomieTaskFromGithubIssue } from '@/queue/jobs'
 import { dbClient } from '@/database/client'
 import { classifyTask } from '@/lib/ai/clasify-task'
-import { dispatch } from '@/queue/default-queue'
+import { dispatch } from '@/queue/dispatch'
 import { embedTask } from '@/lib/ai/embed-task'
 
 export async function handleUpdateHomieTaskFromGithubIssue(

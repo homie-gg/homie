@@ -1,4 +1,4 @@
-import { dispatch } from '@/queue/default-queue'
+import { dispatch } from '@/queue/dispatch'
 import { summaryKey } from '@/queue/handlers/handle-generate-open-pull-request-summary'
 import { createGithubApp } from '@/lib/github/create-github-app'
 import { assignContributorFromGithubIssue } from '@/lib/github/assign-contributor-from-github-issue'

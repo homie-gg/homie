@@ -1,15 +1,16 @@
 import { config } from '@/config'
+import { getQueueOptions } from '@/queue/get-queue-options'
 import { handlers } from '@/queue/handlers'
 import { Job } from '@/queue/jobs'
-import { JobsOptions, Queue } from 'bullmq'
+import { Queue } from 'bullmq'
 import Redis from 'ioredis'
 
-let defaultQueue: Queue<Job['data'], Job['returnvalue'], Job['name']> | null =
-  null
+const queues: Record<
+  string,
+  Queue<Job['data'], Job['returnvalue'], Job['name']>
+> = {}
 
-export const defaultQueueName = 'default'
-
-export const getDefaultQueue = () => {
+export const getQueue = (name: string) => {
   if (config.queue.driver === 'sync') {
     return {
       add: async (job: Job['name'], data: Job['data'], opts?: Job['opts']) => {
@@ -26,15 +27,19 @@ export const getDefaultQueue = () => {
     }
   }
 
-  if (defaultQueue) {
-    return defaultQueue
+  // Assert queue is defined
+  getQueueOptions(name)
+
+  const existingQueue = queues[name]
+  if (existingQueue) {
+    return existingQueue
   }
 
   const connection = new Redis(process.env.REDIS_HOST!, {
     maxRetriesPerRequest: null,
   })
 
-  defaultQueue = new Queue(defaultQueueName, {
+  const queue = new Queue<Job['data'], Job['returnvalue'], Job['name']>(name, {
     connection,
     defaultJobOptions: {
       attempts: 3,
@@ -45,7 +50,9 @@ export const getDefaultQueue = () => {
     },
   })
 
-  return defaultQueue
+  queues[name] = queue
+
+  return queue
 }
 
 export type GetDataType<
@@ -57,11 +64,3 @@ export type GetDataType<
 }
   ? InferredData
   : never
-
-export const dispatch = async <TJob extends Job, Name extends TJob['name']>(
-  name: Name,
-  data: GetDataType<TJob, Name>,
-  opts?: JobsOptions,
-) => {
-  return getDefaultQueue().add(name, data, opts)
-}

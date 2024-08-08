@@ -3,7 +3,7 @@ import { generateRandomToken } from '@/lib/crypto/generate-random-token'
 import { GitlabOAuthTokenResponse } from '@/lib/gitlab/types'
 import { http } from '@/lib/http/client/http'
 import { PageProps } from '@/lib/next-js/page-props'
-import { dispatch } from '@/queue/default-queue'
+import { dispatch } from '@/queue/dispatch'
 import { auth } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 
