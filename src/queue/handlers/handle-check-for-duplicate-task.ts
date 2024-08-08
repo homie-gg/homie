@@ -4,7 +4,9 @@ import { TaskMetadata } from '@/lib/ai/embed-task'
 import { getOrganizationVectorDB } from '@/lib/ai/get-organization-vector-db'
 import { postPotentialDuplicateAsanaTaskComment } from '@/lib/asana/post-potential-duplicate-asana-task-comment'
 import { postPotentialDuplicateGithubIssueComment } from '@/lib/github/post-potential-duplicate-github-issue-comment'
+import { logger } from '@/lib/log/logger'
 import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
+import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { taskStatus } from '@/lib/tasks'
 import { postPotentialDuplicateTrelloTaskComment } from '@/lib/trello/post-potential-duplicate-trello-comment'
 import { CheckForDuplicateTask } from '@/queue/jobs'
@@ -45,6 +47,14 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
     ])
     .executeTakeFirstOrThrow()
 
+  logger.debug('Check for duplicate task', {
+    event: 'check_for_duplicate_task:start',
+    data: {
+      task,
+      organization: getOrganizationLogData(organization),
+    },
+  })
+
   const searchTerm = `${task.name}\n${task.description}`
 
   const embedder = createOpenAIEmbedder({
@@ -75,6 +85,14 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
   })
 
   if (matches.length === 0) {
+    logger.debug('No matching tasks found', {
+      event: 'check_for_duplicate_task:no_match',
+      data: {
+        task,
+        organization: getOrganizationLogData(organization),
+      },
+    })
+
     // No matching duplicate task
     return
   }
@@ -96,6 +114,14 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
 
   // No ranked results above minimum relevant score
   if (rankedDocuments.length === 0) {
+    logger.debug('No potential duplicates above threshold', {
+      event: 'check_for_duplicate_task:no_potential_duplicates',
+      data: {
+        task,
+        organization: getOrganizationLogData(organization),
+        matches: matches.map((match) => match.metadata),
+      },
+    })
     return
   }
 
@@ -110,6 +136,15 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
     .executeTakeFirst()
 
   if (!duplicateTask) {
+    logger.debug('Missing duplicate task', {
+      event: 'check_for_duplicate_task:missing_duplicate_task',
+      data: {
+        task,
+        organization: getOrganizationLogData(organization),
+        matches: matches.map((match) => match.metadata),
+        duplicate_task_id: duplicateTaskId,
+      },
+    })
     return
   }
 
@@ -119,8 +154,27 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
   })
 
   if (!isDuplicate) {
+    logger.debug('Check: Not duplicate', {
+      event: 'check_for_duplicate_task:not_duplicate',
+      data: {
+        task,
+        organization: getOrganizationLogData(organization),
+        matches: matches.map((match) => match.metadata),
+        duplate_task: duplicateTask,
+      },
+    })
     return
   }
+
+  logger.debug('Found duplicate', {
+    event: 'check_for_duplicate_task:found_duplicate',
+    data: {
+      task,
+      organization: getOrganizationLogData(organization),
+      matches: matches.map((match) => match.metadata),
+      duplate_task: duplicateTask,
+    },
+  })
 
   // Github Issue
   if (
