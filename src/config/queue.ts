@@ -11,10 +11,10 @@ export const queue: QueueConfig = {
   driver: (process.env.QUEUE_DRIVER as any) ?? 'redis',
   queues: {
     default: {
-      concurrency: 5,
+      concurrency: 4,
     },
     high: {
-      concurrency: 10,
+      concurrency: 2,
     },
   },
 }
