@@ -63,7 +63,7 @@ export const getDefaultWorker = () => {
     },
     {
       connection,
-      concurrency: 20,
+      concurrency: 5,
       removeOnComplete: { count: 1000 },
       removeOnFail: { count: 5000 },
     },
