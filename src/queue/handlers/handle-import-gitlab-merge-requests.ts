@@ -1,6 +1,6 @@
 import { ImportGitlabMergeRequests } from '@/queue/jobs'
 import { createGitlabClient } from '@/lib/gitlab/create-gitlab-client'
-import { dispatch } from '@/queue/default-queue'
+import { dispatch } from '@/queue/dispatch'
 
 export async function handleImportGitlabMergeRequests(
   job: ImportGitlabMergeRequests,

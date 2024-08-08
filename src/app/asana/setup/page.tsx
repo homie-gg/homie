@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation'
 import { http } from '@/lib/http/client/http'
 import { dbClient } from '@/database/client'
 import { AsanaOAuthTokenResponse } from '@/lib/asana/types'
-import { dispatch } from '@/queue/default-queue'
+import { dispatch } from '@/queue/dispatch'
 
 type AsanaPageProps = PageProps<
   {},

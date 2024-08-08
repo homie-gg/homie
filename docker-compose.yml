@@ -15,3 +15,20 @@ services:
     restart: unless-stopped
     ports:
       - 6379:6379
+
+  worker:
+    image: docker:27.1.1-cli
+    build:
+      context: .
+      dockerfile: worker.Dockerfile
+    container_name: homie_worker
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      REDIS_HOST: redis:6379
+      POSTGRES_HOST: postgres
+    ports:
+      - '3100:3100'

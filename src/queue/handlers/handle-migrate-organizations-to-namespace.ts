@@ -1,5 +1,5 @@
 import { dbClient } from '@/database/client'
-import { dispatch } from '@/queue/default-queue'
+import { dispatch } from '@/queue/dispatch'
 
 export async function handleMigrateOrganizationsToNamespace() {
   const organizations = await dbClient

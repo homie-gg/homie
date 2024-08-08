@@ -1,7 +1,7 @@
 import { dbClient } from '@/database/client'
 import { embedTask } from '@/lib/ai/embed-task'
 import { taskStatus } from '@/lib/tasks'
-import { dispatch } from '@/queue/default-queue'
+import { dispatch } from '@/queue/dispatch'
 import { InstallationLite, Issue, Repository } from '@octokit/webhooks-types'
 
 interface ReopenTaskFromGithubIssueParams {

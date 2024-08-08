@@ -7,7 +7,7 @@ import { classifyTask } from '@/lib/ai/clasify-task'
 import { taskStatus } from '@/lib/tasks'
 import { createHomieTaskFromAsanaTask } from '@/lib/asana/create-homie-task-from-asana-task'
 import { embedTask } from '@/lib/ai/embed-task'
-import { dispatch } from '@/queue/default-queue'
+import { dispatch } from '@/queue/dispatch'
 
 export async function handleSyncAsanaTaskToHomieTask(
   job: SyncAsanaTaskToHomieTask,

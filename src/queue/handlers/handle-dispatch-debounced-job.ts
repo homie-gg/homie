@@ -1,5 +1,5 @@
 import { createRedisClient } from '@/lib/redis/create-redis-client'
-import { dispatch } from '@/queue/default-queue'
+import { dispatch } from '@/queue/dispatch'
 import { DispatchDebouncedJob } from '@/queue/jobs'
 
 export async function handleDispatchDebouncedJob(job: DispatchDebouncedJob) {

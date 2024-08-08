@@ -4,7 +4,7 @@ import { getOrganizationLogData } from '@/lib/organization/get-organization-log-
 import { getPullRequestLogData } from '@/lib/github/get-pull-request-log-data'
 import { logger } from '@/lib/log/logger'
 import { ImportPullRequests } from '@/queue/jobs'
-import { dispatch } from '@/queue/default-queue'
+import { dispatch } from '@/queue/dispatch'
 
 export async function handleImportPullRequests(job: ImportPullRequests) {
   logger.debug('Start pull request import', {

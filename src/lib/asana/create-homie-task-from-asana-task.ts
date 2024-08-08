@@ -3,7 +3,7 @@ import { classifyTask } from '@/lib/ai/clasify-task'
 import { embedTask } from '@/lib/ai/embed-task'
 import { AsanaGetTaskResponse } from '@/lib/asana/types'
 import { taskStatus } from '@/lib/tasks'
-import { dispatch } from '@/queue/default-queue'
+import { dispatch } from '@/queue/dispatch'
 
 interface CreateHomieTaskFromAsanaTaskParams {
   asanaTask: AsanaGetTaskResponse['data']

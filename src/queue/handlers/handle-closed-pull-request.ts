@@ -1,6 +1,6 @@
 import { dbClient } from '@/database/client'
 import { ClosePullRequest } from '@/queue/jobs'
-import { dispatch } from '@/queue/default-queue'
+import { dispatch } from '@/queue/dispatch'
 import { logger } from '@/lib/log/logger'
 import { getPullRequestLogData } from '@/lib/github/get-pull-request-log-data'
 import { getIsOverPlanContributorLimit } from '@/lib/billing/get-is-over-plan-contributor-limit'
