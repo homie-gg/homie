@@ -15,7 +15,6 @@
     "billing:create-plans": "dotenv -e .env.local tsx src/lib/billing/create-plans.ts",
     "db:seed": "dotenv -e .env.local tsx src/database/scripts/seed.ts",
     "db:reset": "npm run db:drop && npm run db:migrate && npm run db:generate && npm run db:seed && npm run billing:create-plans",
-    "worker:default": "dotenv -e .env.local tsx -- --watch src/queue/default-worker.ts",
     "queue:work": "dotenv -e .env.local tsx -- --watch src/queue/work.ts",
     "queue:schedule-jobs": "dotenv -e .env.local tsx src/queue/schedule-jobs.ts",
     "format": "next lint --fix && prettier --write --ignore-path .gitignore .",

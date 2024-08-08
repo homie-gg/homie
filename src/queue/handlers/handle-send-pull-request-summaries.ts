@@ -1,12 +1,10 @@
 import { dbClient } from '@/database/client'
-import { getDefaultQueue } from '@/queue/default-queue'
+import { dispatch } from '@/queue/dispatch'
 import { formatInTimeZone } from 'date-fns-tz'
 
 export async function handleSendPullRequestSummaries() {
   const today = formatInTimeZone(new Date(), 'UTC', 'i')
   const time = formatInTimeZone(new Date(), 'UTC', 'kk:mm')
-
-  const defaultQueue = getDefaultQueue()
 
   const organizations = await dbClient
     .selectFrom('homie.organization')
@@ -37,7 +35,7 @@ export async function handleSendPullRequestSummaries() {
       continue
     }
 
-    defaultQueue.add('send_pull_request_summaries_to_organization', {
+    dispatch('send_pull_request_summaries_to_organization', {
       organization,
     })
   }
