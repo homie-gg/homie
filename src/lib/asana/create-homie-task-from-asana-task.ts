@@ -65,9 +65,18 @@ export async function createHomieTaskFromAsanaTask(
 
   await embedTask({ task: homieTask })
 
-  await dispatch('check_for_duplicate_task', {
-    task: homieTask,
-  })
+  await dispatch(
+    'check_for_duplicate_task',
+    {
+      task: homieTask,
+    },
+    {
+      debounce: {
+        key: `check_duplicate_task:${homieTask.id}`,
+        delaySecs: 600,
+      },
+    },
+  )
 
   if (!asanaTask.assignee) {
     return

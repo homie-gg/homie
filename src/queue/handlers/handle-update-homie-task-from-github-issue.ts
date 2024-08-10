@@ -76,9 +76,18 @@ export async function handleUpdateHomieTaskFromGithubIssue(
     ])
     .executeTakeFirstOrThrow()
 
-  await dispatch('check_for_duplicate_task', {
-    task: updatedTask,
-  })
+  await dispatch(
+    'check_for_duplicate_task',
+    {
+      task: updatedTask,
+    },
+    {
+      debounce: {
+        key: `check_duplicate_task:${updatedTask.id}`,
+        delaySecs: 600,
+      },
+    },
+  )
 
   await embedTask({ task: updatedTask })
 }

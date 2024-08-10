@@ -131,7 +131,7 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
     .selectFrom('homie.task')
     .where('organization_id', '=', task.organization_id)
     .where('homie.task.id', '=', duplicateTaskId)
-    .select(['name', 'description', 'html_url'])
+    .select(['name', 'description', 'html_url', 'id'])
     .executeTakeFirst()
 
   if (!duplicateTask) {
@@ -178,6 +178,16 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
     },
   })
 
+  const alreadyNotified = await dbClient
+    .selectFrom('homie.duplicate_task_notification')
+    .where('target_task_id', '=', task.id)
+    .where('duplicate_task_id', '=', duplicateTask.id)
+    .executeTakeFirst()
+
+  if (alreadyNotified) {
+    return
+  }
+
   // Github Issue
   if (
     task.ext_gh_issue_number &&
@@ -222,4 +232,12 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
     //   duplicateTask,
     // })
   }
+
+  await dbClient
+    .insertInto('homie.duplicate_task_notification')
+    .values({
+      target_task_id: task.id,
+      duplicate_task_id: duplicateTask.id,
+    })
+    .executeTakeFirstOrThrow()
 }

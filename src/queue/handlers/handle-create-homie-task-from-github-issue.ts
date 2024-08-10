@@ -106,9 +106,18 @@ export async function handleCreateHomieTaskFromGithubIssue(
 
     await embedTask({ task })
 
-    await dispatch('check_for_duplicate_task', {
-      task,
-    })
+    await dispatch(
+      'check_for_duplicate_task',
+      {
+        task,
+      },
+      {
+        debounce: {
+          key: `check_duplicate_task:${task.id}`,
+          delaySecs: 600,
+        },
+      },
+    )
 
     // Save person who made issue
     if (issue.user) {

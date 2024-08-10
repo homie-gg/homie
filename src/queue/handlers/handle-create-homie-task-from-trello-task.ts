@@ -88,7 +88,16 @@ export async function handleCreateHomieTaskFromTrelloTask(
 
   await embedTask({ task })
 
-  await dispatch('check_for_duplicate_task', {
-    task,
-  })
+  await dispatch(
+    'check_for_duplicate_task',
+    {
+      task,
+    },
+    {
+      debounce: {
+        key: `check_duplicate_task:${task.id}`,
+        delaySecs: 600,
+      },
+    },
+  )
 }
