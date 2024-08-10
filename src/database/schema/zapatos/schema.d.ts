@@ -861,6 +861,281 @@ declare module 'zapatos/schema' {
     }
 
     /**
+     * **homie.duplicate_task_notification**
+     * - Table in database
+     */
+    export namespace duplicate_task_notification {
+      export type Table = 'homie.duplicate_task_notification'
+      export interface Selectable {
+        /**
+         * **homie.duplicate_task_notification.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at: Date
+        /**
+         * **homie.duplicate_task_notification.duplicate_task_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        duplicate_task_id: number
+        /**
+         * **homie.duplicate_task_notification.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.duplicate_task_notification_id_seq'::regclass)`
+         */
+        id: number
+        /**
+         * **homie.duplicate_task_notification.target_task_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        target_task_id: number
+        /**
+         * **homie.duplicate_task_notification.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at: Date
+      }
+      export interface JSONSelectable {
+        /**
+         * **homie.duplicate_task_notification.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at: db.TimestampTzString
+        /**
+         * **homie.duplicate_task_notification.duplicate_task_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        duplicate_task_id: number
+        /**
+         * **homie.duplicate_task_notification.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.duplicate_task_notification_id_seq'::regclass)`
+         */
+        id: number
+        /**
+         * **homie.duplicate_task_notification.target_task_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        target_task_id: number
+        /**
+         * **homie.duplicate_task_notification.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at: db.TimestampTzString
+      }
+      export interface Whereable {
+        /**
+         * **homie.duplicate_task_notification.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+        /**
+         * **homie.duplicate_task_notification.duplicate_task_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        duplicate_task_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.duplicate_task_notification.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.duplicate_task_notification_id_seq'::regclass)`
+         */
+        id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.duplicate_task_notification.target_task_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        target_task_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.duplicate_task_notification.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+      }
+      export interface Insertable {
+        /**
+         * **homie.duplicate_task_notification.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **homie.duplicate_task_notification.duplicate_task_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        duplicate_task_id: number | db.Parameter<number> | db.SQLFragment
+        /**
+         * **homie.duplicate_task_notification.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.duplicate_task_notification_id_seq'::regclass)`
+         */
+        id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+        /**
+         * **homie.duplicate_task_notification.target_task_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        target_task_id: number | db.Parameter<number> | db.SQLFragment
+        /**
+         * **homie.duplicate_task_notification.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+      }
+      export interface Updatable {
+        /**
+         * **homie.duplicate_task_notification.created_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        created_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **homie.duplicate_task_notification.duplicate_task_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        duplicate_task_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
+        /**
+         * **homie.duplicate_task_notification.id**
+         * - `int4` in database
+         * - `NOT NULL`, default: `nextval('homie.duplicate_task_notification_id_seq'::regclass)`
+         */
+        id?:
+          | number
+          | db.Parameter<number>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **homie.duplicate_task_notification.target_task_id**
+         * - `int4` in database
+         * - `NOT NULL`, no default
+         */
+        target_task_id?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>
+        /**
+         * **homie.duplicate_task_notification.updated_at**
+         * - `timestamptz` in database
+         * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
+         */
+        updated_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.DefaultType
+              | db.SQLFragment
+            >
+      }
+      export type UniqueIndex = 'duplicate_task_notification_pkey'
+      export type Column = keyof Selectable
+      export type OnlyCols<T extends readonly Column[]> = Pick<
+        Selectable,
+        T[number]
+      >
+      export type SQLExpression =
+        | Table
+        | db.ColumnNames<Updatable | (keyof Updatable)[]>
+        | db.ColumnValues<Updatable>
+        | Whereable
+        | Column
+        | db.ParentColumn
+        | db.GenericSQLExpression
+      export type SQL = SQLExpression | SQLExpression[]
+    }
+
+    /**
      * **homie.organization**
      * - Table in database
      */
@@ -5028,6 +5303,7 @@ declare module 'zapatos/schema' {
     export type Table =
       | contributor.Table
       | contributor_task.Table
+      | duplicate_task_notification.Table
       | organization.Table
       | plan.Table
       | pull_request.Table
@@ -5038,6 +5314,7 @@ declare module 'zapatos/schema' {
     export type Selectable =
       | contributor.Selectable
       | contributor_task.Selectable
+      | duplicate_task_notification.Selectable
       | organization.Selectable
       | plan.Selectable
       | pull_request.Selectable
@@ -5048,6 +5325,7 @@ declare module 'zapatos/schema' {
     export type JSONSelectable =
       | contributor.JSONSelectable
       | contributor_task.JSONSelectable
+      | duplicate_task_notification.JSONSelectable
       | organization.JSONSelectable
       | plan.JSONSelectable
       | pull_request.JSONSelectable
@@ -5058,6 +5336,7 @@ declare module 'zapatos/schema' {
     export type Whereable =
       | contributor.Whereable
       | contributor_task.Whereable
+      | duplicate_task_notification.Whereable
       | organization.Whereable
       | plan.Whereable
       | pull_request.Whereable
@@ -5068,6 +5347,7 @@ declare module 'zapatos/schema' {
     export type Insertable =
       | contributor.Insertable
       | contributor_task.Insertable
+      | duplicate_task_notification.Insertable
       | organization.Insertable
       | plan.Insertable
       | pull_request.Insertable
@@ -5078,6 +5358,7 @@ declare module 'zapatos/schema' {
     export type Updatable =
       | contributor.Updatable
       | contributor_task.Updatable
+      | duplicate_task_notification.Updatable
       | organization.Updatable
       | plan.Updatable
       | pull_request.Updatable
@@ -5088,6 +5369,7 @@ declare module 'zapatos/schema' {
     export type UniqueIndex =
       | contributor.UniqueIndex
       | contributor_task.UniqueIndex
+      | duplicate_task_notification.UniqueIndex
       | organization.UniqueIndex
       | plan.UniqueIndex
       | pull_request.UniqueIndex
@@ -5098,6 +5380,7 @@ declare module 'zapatos/schema' {
     export type Column =
       | contributor.Column
       | contributor_task.Column
+      | duplicate_task_notification.Column
       | organization.Column
       | plan.Column
       | pull_request.Column
@@ -5109,6 +5392,7 @@ declare module 'zapatos/schema' {
     export type AllBaseTables = [
       contributor.Table,
       contributor_task.Table,
+      duplicate_task_notification.Table,
       organization.Table,
       plan.Table,
       pull_request.Table,
@@ -5123,6 +5407,7 @@ declare module 'zapatos/schema' {
     export type AllTablesAndViews = [
       contributor.Table,
       contributor_task.Table,
+      duplicate_task_notification.Table,
       organization.Table,
       plan.Table,
       pull_request.Table,
@@ -8645,6 +8930,7 @@ declare module 'zapatos/schema' {
   export type SelectableForTable<T extends Table> = {
     'homie.contributor': homie.contributor.Selectable
     'homie.contributor_task': homie.contributor_task.Selectable
+    'homie.duplicate_task_notification': homie.duplicate_task_notification.Selectable
     'homie.organization': homie.organization.Selectable
     'homie.plan': homie.plan.Selectable
     'homie.pull_request': homie.pull_request.Selectable
@@ -8665,6 +8951,7 @@ declare module 'zapatos/schema' {
   export type JSONSelectableForTable<T extends Table> = {
     'homie.contributor': homie.contributor.JSONSelectable
     'homie.contributor_task': homie.contributor_task.JSONSelectable
+    'homie.duplicate_task_notification': homie.duplicate_task_notification.JSONSelectable
     'homie.organization': homie.organization.JSONSelectable
     'homie.plan': homie.plan.JSONSelectable
     'homie.pull_request': homie.pull_request.JSONSelectable
@@ -8685,6 +8972,7 @@ declare module 'zapatos/schema' {
   export type WhereableForTable<T extends Table> = {
     'homie.contributor': homie.contributor.Whereable
     'homie.contributor_task': homie.contributor_task.Whereable
+    'homie.duplicate_task_notification': homie.duplicate_task_notification.Whereable
     'homie.organization': homie.organization.Whereable
     'homie.plan': homie.plan.Whereable
     'homie.pull_request': homie.pull_request.Whereable
@@ -8705,6 +8993,7 @@ declare module 'zapatos/schema' {
   export type InsertableForTable<T extends Table> = {
     'homie.contributor': homie.contributor.Insertable
     'homie.contributor_task': homie.contributor_task.Insertable
+    'homie.duplicate_task_notification': homie.duplicate_task_notification.Insertable
     'homie.organization': homie.organization.Insertable
     'homie.plan': homie.plan.Insertable
     'homie.pull_request': homie.pull_request.Insertable
@@ -8725,6 +9014,7 @@ declare module 'zapatos/schema' {
   export type UpdatableForTable<T extends Table> = {
     'homie.contributor': homie.contributor.Updatable
     'homie.contributor_task': homie.contributor_task.Updatable
+    'homie.duplicate_task_notification': homie.duplicate_task_notification.Updatable
     'homie.organization': homie.organization.Updatable
     'homie.plan': homie.plan.Updatable
     'homie.pull_request': homie.pull_request.Updatable
@@ -8745,6 +9035,7 @@ declare module 'zapatos/schema' {
   export type UniqueIndexForTable<T extends Table> = {
     'homie.contributor': homie.contributor.UniqueIndex
     'homie.contributor_task': homie.contributor_task.UniqueIndex
+    'homie.duplicate_task_notification': homie.duplicate_task_notification.UniqueIndex
     'homie.organization': homie.organization.UniqueIndex
     'homie.plan': homie.plan.UniqueIndex
     'homie.pull_request': homie.pull_request.UniqueIndex
@@ -8765,6 +9056,7 @@ declare module 'zapatos/schema' {
   export type ColumnForTable<T extends Table> = {
     'homie.contributor': homie.contributor.Column
     'homie.contributor_task': homie.contributor_task.Column
+    'homie.duplicate_task_notification': homie.duplicate_task_notification.Column
     'homie.organization': homie.organization.Column
     'homie.plan': homie.plan.Column
     'homie.pull_request': homie.pull_request.Column
@@ -8785,6 +9077,7 @@ declare module 'zapatos/schema' {
   export type SQLForTable<T extends Table> = {
     'homie.contributor': homie.contributor.SQL
     'homie.contributor_task': homie.contributor_task.SQL
+    'homie.duplicate_task_notification': homie.duplicate_task_notification.SQL
     'homie.organization': homie.organization.SQL
     'homie.plan': homie.plan.SQL
     'homie.pull_request': homie.pull_request.SQL
