@@ -1,4 +1,3 @@
-import { getPineconeClient } from '@/lib/pinecone/pinecone-client'
 import { PineconeRecord, RecordMetadata } from '@pinecone-database/pinecone'
 import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
 import { dbClient } from '@/database/client'

@@ -1,5 +1,4 @@
 import { SlackClient } from '@/lib/slack/create-slack-client'
-import { Conversation } from '@/lib/slack/types'
 import { ConversationsRepliesResponse } from '@slack/web-api/dist/response'
 
 interface GetSlackThreadMessages {

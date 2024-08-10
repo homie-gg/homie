@@ -1,5 +1,4 @@
 import { getGreeting } from '@/lib/ai/get-greeting'
-import { postAsanaTaskComment } from '@/lib/asana/post-asana-task-comment'
 import { createTrelloClient } from '@/lib/trello/create-trello-client'
 
 interface PostPotentialDuplicateTrelloTaskCommentParams {
