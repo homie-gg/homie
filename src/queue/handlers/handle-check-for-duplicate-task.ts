@@ -162,7 +162,8 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
         task,
         organization: getOrganizationLogData(organization),
         matches: matches.map((match) => match.metadata),
-        duplate_task: duplicateTask,
+        is_duplicate: false,
+        duplicate_task: duplicateTask,
       },
     })
     return
@@ -174,7 +175,8 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
       task,
       organization: getOrganizationLogData(organization),
       matches: matches.map((match) => match.metadata),
-      duplate_task: duplicateTask,
+      duplicate_task: duplicateTask,
+      is_duplicate: true,
     },
   })
 
