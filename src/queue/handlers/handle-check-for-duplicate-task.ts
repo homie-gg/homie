@@ -146,7 +146,7 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
     return
   }
 
-  const isDuplicate = checkIsDuplicateTask({
+  const isDuplicate = await checkIsDuplicateTask({
     taskA: task,
     taskB: duplicateTask,
     logData: {
