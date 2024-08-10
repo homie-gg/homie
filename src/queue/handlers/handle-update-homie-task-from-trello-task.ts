@@ -1,6 +1,6 @@
 import { UpdateHomieTaskFromTrelloTask } from '@/queue/jobs'
 import { dbClient } from '@/database/client'
-import { classifyTask } from '@/lib/ai/clasify-task'
+import { classifyTask } from '@/lib/ai/classify-task'
 import { dispatch } from '@/queue/dispatch'
 import { parseISO } from 'date-fns'
 import { taskStatus } from '@/lib/tasks'

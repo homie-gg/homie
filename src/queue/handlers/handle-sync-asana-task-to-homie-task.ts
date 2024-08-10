@@ -3,12 +3,13 @@ import { SyncAsanaTaskToHomieTask } from '@/queue/jobs'
 import { dbClient } from '@/database/client'
 import { AsanaClient, createAsanaClient } from '@/lib/asana/create-asana-client'
 import { AsanaGetTaskResponse } from '@/lib/asana/types'
-import { classifyTask } from '@/lib/ai/clasify-task'
+import { classifyTask } from '@/lib/ai/classify-task'
 import { taskStatus } from '@/lib/tasks'
 import { createHomieTaskFromAsanaTask } from '@/lib/asana/create-homie-task-from-asana-task'
 import { embedTask } from '@/lib/ai/embed-task'
 import { dispatch } from '@/queue/dispatch'
 import { removeTaskEmbedding } from '@/lib/ai/remove-task-embedding'
+import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 
 export async function handleSyncAsanaTaskToHomieTask(
   job: SyncAsanaTaskToHomieTask,
@@ -63,6 +64,11 @@ export async function handleSyncAsanaTaskToHomieTask(
     ? await classifyTask({
         title: asanaTask.name,
         description: asanaTask.notes,
+        logData: {
+          organization: getOrganizationLogData({
+            id: project.organization_id,
+          }),
+        },
       })
     : null
 
