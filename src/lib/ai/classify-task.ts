@@ -86,6 +86,8 @@ ${description}
   logger.debug('Classified task', {
     ai_call: true,
     event: 'classify_task:success',
+    title,
+    description,
     result: output.parsed,
     ...logData,
   })
