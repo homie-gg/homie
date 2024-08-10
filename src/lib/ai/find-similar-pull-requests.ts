@@ -1,5 +1,5 @@
 import { getEmbeddingMatches } from '@/lib/ai/get-embedding-matches'
-import { OpenAIEmbeddings } from '@langchain/openai'
+import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
 
 interface FindSimilarPullRequestsParams {
   diffSummary: string
@@ -11,16 +11,18 @@ export async function findSimilarPullRequests(
 ) {
   const { diffSummary, organizationId } = params
 
-  const embedder = new OpenAIEmbeddings({
-    modelName: 'text-embedding-3-large',
-  })
-
   const findSimilarPullRequestsQuery = `Find similar pull requests that have made changes to the same parts of the application as the following pull request summary: ${diffSummary}`
 
-  const embeddings = await embedder.embedQuery(findSimilarPullRequestsQuery)
+  const openAI = createOpenAIClient()
+  const embeddings = (
+    await openAI.embeddings.create({
+      model: 'text-embedding-3-large',
+      input: findSimilarPullRequestsQuery,
+    })
+  ).data[0].embedding
 
   const { matches } = await getEmbeddingMatches({
-    embeddings,
+    embeddings: embeddings,
     numTopResults: 10,
     organizationId,
   })

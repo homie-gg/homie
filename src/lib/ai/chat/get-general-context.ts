@@ -4,7 +4,7 @@ import {
   shortenQuestionContext,
 } from '@/lib/ai/shorten-question-context'
 import { CohereClient } from 'cohere-ai'
-import { OpenAIEmbeddings } from '@langchain/openai'
+import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
 
 interface GetGeneralContext {
   question: string
@@ -18,13 +18,15 @@ export async function getGeneralContext(
 ): Promise<string> {
   const { question, organization } = params
 
-  const embedder = new OpenAIEmbeddings({
-    modelName: 'text-embedding-3-large',
-  })
-
   // 1. Turn question into a vector
 
-  const embeddings = await embedder.embedQuery(question)
+  const openAI = createOpenAIClient()
+  const embeddings = (
+    await openAI.embeddings.create({
+      model: 'text-embedding-3-large',
+      input: question,
+    })
+  ).data[0].embedding
 
   // 2. Find 'answers' which are really just similar vectors
 
