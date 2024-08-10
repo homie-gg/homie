@@ -60,7 +60,7 @@ ${taskB.name} - ${taskB.description}
   }
 
   logger.debug('Check duplicate task: got result', {
-    event: 'check_for_duplicate_task:failed_to_parse',
+    event: 'check_for_duplicate_task:got_result',
     ai_call: true,
     prompt,
     logData,
