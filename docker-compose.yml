@@ -21,6 +21,8 @@ services:
     build:
       context: .
       dockerfile: worker.Dockerfile
+      args:
+        WATCH_MODE: true
     container_name: homie_worker
     volumes:
       - .:/app
