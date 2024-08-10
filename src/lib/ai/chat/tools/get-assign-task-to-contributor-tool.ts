@@ -5,7 +5,7 @@ import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { assignContributorToTask } from '@/lib/tasks/assign-contributor-to-task'
 import { createTrelloClient } from '@/lib/trello/create-trello-client'
-import { DynamicStructuredTool } from '@langchain/core/tools'
+import { zodFunction } from 'openai/helpers/zod.mjs'
 import { z } from 'zod'
 
 interface GetAssignTaskToContributorTool {
@@ -23,17 +23,18 @@ export function getAssignTaskToContributorTool(
   params: GetAssignTaskToContributorTool,
 ) {
   const { organization, answerId } = params
-  return new DynamicStructuredTool({
+
+  return zodFunction({
     name: 'assign_task_to_contributor',
     description: 'Assigns a task to a given contributor.',
-    schema: z.object({
+    parameters: z.object({
       task_id: z.number().describe('Task ID for the task to assign'),
       ext_slack_member_id: z
         .string()
         .describe("Slack ID for the target contributor starting with a '@'."),
     }),
-    func: async (params) => {
-      const { ext_slack_member_id, task_id } = params
+    function: async (args) => {
+      const { ext_slack_member_id, task_id } = args
 
       logger.debug('Call - Assign Task To Contributor', {
         event: 'get_answer:assign_task_to_contributor:call',

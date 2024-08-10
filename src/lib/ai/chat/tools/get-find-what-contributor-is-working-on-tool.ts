@@ -1,10 +1,10 @@
 import { dbClient } from '@/database/client'
 import { taskStatus } from '@/lib/tasks'
-import { DynamicStructuredTool } from '@langchain/core/tools'
 import { z } from 'zod'
 import { subBusinessDays } from 'date-fns'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
+import { zodFunction } from 'openai/helpers/zod.mjs'
 
 interface GetFindWhatContributorIsWorkingOnTool {
   organization: {
@@ -17,15 +17,16 @@ export function getFindWhatContributorIsWorkingOnTool(
   params: GetFindWhatContributorIsWorkingOnTool,
 ) {
   const { organization, answerId } = params
-  return new DynamicStructuredTool({
+
+  return zodFunction({
     name: 'find_what_contributor_is_working_on',
     description: 'Find what a contributor is working on.',
-    schema: z.object({
+    parameters: z.object({
       ext_slack_member_id: z
         .string()
         .describe("Slack ID for the target user starting with a '@'."),
     }),
-    func: async ({ ext_slack_member_id }) => {
+    function: async ({ ext_slack_member_id }) => {
       logger.debug('Call - Find What Contributor Is Working On', {
         event: 'get_answer:find_what_contributor_is_working_on:call',
         answer_id: answerId,

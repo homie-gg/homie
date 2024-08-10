@@ -5,7 +5,7 @@ import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { setTaskCompleted } from '@/lib/tasks/set-task-completed'
 import { createTrelloClient } from '@/lib/trello/create-trello-client'
-import { DynamicStructuredTool } from '@langchain/core/tools'
+import { zodFunction } from 'openai/helpers/zod.mjs'
 import { z } from 'zod'
 
 interface GetMarkTaskAsDoneTool {
@@ -22,14 +22,14 @@ interface GetMarkTaskAsDoneTool {
 export function getMarkTaskAsDoneTool(params: GetMarkTaskAsDoneTool) {
   const { organization, answerId } = params
 
-  return new DynamicStructuredTool({
+  return zodFunction({
     name: 'mark_task_as_done',
     description: 'Marks a given task as done.',
-    schema: z.object({
+    parameters: z.object({
       task_id: z.number().describe('Task ID for the task to mark as done.'),
     }),
-    func: async (params) => {
-      const { task_id } = params
+    function: async (args) => {
+      const { task_id } = args
       logger.debug('Call - Mark Task Done', {
         event: 'get_answer:mark_task_done:call',
         answer_id: answerId,

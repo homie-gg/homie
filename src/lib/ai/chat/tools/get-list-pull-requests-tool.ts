@@ -1,8 +1,8 @@
 import { dbClient } from '@/database/client'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
-import { DynamicStructuredTool } from '@langchain/core/tools'
 import { endOfDay, startOfDay } from 'date-fns'
+import { zodFunction } from 'openai/helpers/zod.mjs'
 import { z } from 'zod'
 
 interface getListPullRequestsToolParams {
@@ -14,10 +14,11 @@ interface getListPullRequestsToolParams {
 
 export function getListPullRequestsTool(params: getListPullRequestsToolParams) {
   const { organization, answerId } = params
-  return new DynamicStructuredTool({
+
+  return zodFunction({
     name: 'list_pull_requests',
     description: 'List pull requests',
-    schema: z.object({
+    parameters: z.object({
       startDate: z.coerce
         .date()
         .describe('The lower bound date of pull requests')
@@ -35,7 +36,12 @@ export function getListPullRequestsTool(params: getListPullRequestsToolParams) {
         .describe("Slack ID for the target user starting with a '@'.")
         .optional(),
     }),
-    func: async ({ startDate, endDate, targetBranch, extSlackMemberId }) => {
+    function: async ({
+      startDate,
+      endDate,
+      targetBranch,
+      extSlackMemberId,
+    }) => {
       logger.debug('Call - List Pull Requests', {
         event: 'get_answer:list_pull_requests:call',
         answer_id: answerId,

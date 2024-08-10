@@ -2,7 +2,7 @@ import { dbClient } from '@/database/client'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { taskStatus } from '@/lib/tasks'
-import { DynamicStructuredTool } from '@langchain/core/tools'
+import { zodFunction } from 'openai/helpers/zod.mjs'
 import { z } from 'zod'
 
 interface GetFindCompletedTasksToolParams {
@@ -16,15 +16,15 @@ export function getFindCompletedTasksTool(
   params: GetFindCompletedTasksToolParams,
 ) {
   const { organization, answerId } = params
-  return new DynamicStructuredTool({
+  return zodFunction({
     name: 'find_completed_tasks',
     description: 'Find tasks that were completed since the given date',
-    schema: z.object({
+    parameters: z.object({
       date: z.coerce
         .date()
         .describe('The lower bound date of when tasks were completed.'),
     }),
-    func: async (params) => {
+    function: async (args) => {
       logger.debug('Call: Find Completed Tasks', {
         event: 'get_answer:find_completed_tasks:call',
         answer_id: answerId,
@@ -37,7 +37,7 @@ export function getFindCompletedTasksTool(
           .where('organization_id', '=', organization.id)
           .where('task_status_id', '=', taskStatus.done)
           .where('completed_at', 'is not', null)
-          .where('completed_at', '>', params.date)
+          .where('completed_at', '>', args.date)
           .orderBy('completed_at', 'desc')
           .select(['name', 'description', 'html_url'])
           .execute()

@@ -6,7 +6,7 @@ import { getOrganizationLogData } from '@/lib/organization/get-organization-log-
 import { createSlackClient } from '@/lib/slack/create-slack-client'
 import { getConversation } from '@/lib/slack/get-conversation'
 import { getMessageLink } from '@/lib/slack/get-message-link'
-import { DynamicStructuredTool } from '@langchain/core/tools'
+import { zodFunction } from 'openai/helpers/zod.mjs'
 import { z } from 'zod'
 
 interface getRememberConversationToolParams {
@@ -25,13 +25,14 @@ export function getRememberConversationTool(
 ) {
   const { targetMessageTS, organization, messages, channelID, answerId } =
     params
-  return new DynamicStructuredTool({
+
+  return zodFunction({
     name: 'remember_conversation',
     description: 'Remember or bookmark a conversation',
-    schema: z.object({
+    parameters: z.object({
       todaysDate: z.coerce.date().describe('The date today'),
     }),
-    func: async ({ todaysDate }) => {
+    function: async ({ todaysDate }) => {
       logger.debug('Call - Remember Conversation', {
         event: 'get_answer:remember_conversation:call',
         answer_id: answerId,

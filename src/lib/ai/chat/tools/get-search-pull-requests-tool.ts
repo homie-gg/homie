@@ -2,11 +2,11 @@ import { TaskMetadata } from '@/lib/ai/embed-task'
 import { logger } from '@/lib/log/logger'
 import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
-import { DynamicStructuredTool } from '@langchain/core/tools'
 import { CohereClient } from 'cohere-ai'
 import { z } from 'zod'
 import * as Sentry from '@sentry/nextjs'
 import { getOrganizationVectorDB } from '@/lib/ai/get-organization-vector-db'
+import { zodFunction } from 'openai/helpers/zod.mjs'
 
 interface GetSearchPullRequestsToolParams {
   organization: {
@@ -30,13 +30,13 @@ export function getSearchPullRequestsTool(
 ) {
   const { organization, answerId } = params
 
-  return new DynamicStructuredTool({
+  return zodFunction({
     name: 'search_for_pull_requests',
     description: 'Search for Pull Requests',
-    schema: z.object({
+    parameters: z.object({
       searchTerm: z.string().describe('Term the pull request is related to'),
     }),
-    func: async (params) => {
+    function: async (params) => {
       const { searchTerm } = params
 
       logger.debug('Call - Search for pull requests', {

@@ -1,7 +1,8 @@
 import { dbClient } from '@/database/client'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
-import { DynamicTool } from '@langchain/core/tools'
+import { zodFunction } from 'openai/helpers/zod.mjs'
+import { z } from 'zod'
 
 interface GetListGithubReposTool {
   answerId: string
@@ -12,10 +13,11 @@ interface GetListGithubReposTool {
 
 export function getListGithubReposTool(params: GetListGithubReposTool) {
   const { answerId, organization } = params
-  return new DynamicTool({
+  return zodFunction({
     name: 'list_github_repos',
     description: 'Returns all GitHub Repositories',
-    func: async () => {
+    parameters: z.object({}),
+    function: async () => {
       logger.debug('Call: List GitHub Repos', {
         event: 'get_answer:list_github_repos:call',
         answer_id: answerId,

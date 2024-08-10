@@ -1,7 +1,8 @@
 import { searchGeneralContext } from '@/lib/ai/chat/search-general-context'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
-import { DynamicTool } from '@langchain/core/tools'
+import { zodFunction } from 'openai/helpers/zod.mjs'
+import { z } from 'zod'
 
 interface getSearchGeneralContextToolParams {
   organization: {
@@ -14,11 +15,14 @@ export function getSearchGeneralContextTool(
   params: getSearchGeneralContextToolParams,
 ) {
   const { organization, answerId } = params
-  return new DynamicTool({
+  return zodFunction({
     name: 'search_general_context',
     description:
       'Search the general context for potential answers as a fallback if other search did not return results.',
-    func: async (question: string) => {
+    parameters: z.object({
+      question: z.string(),
+    }),
+    function: async ({ question }) => {
       logger.debug('Call: Search General Context', {
         event: 'get_answer:search_general_context:call',
         answer_id: answerId,

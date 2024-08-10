@@ -2,13 +2,12 @@ import { TaskMetadata } from '@/lib/ai/embed-task'
 import { logger } from '@/lib/log/logger'
 import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
-import { getPineconeClient } from '@/lib/pinecone/pinecone-client'
-import { DynamicStructuredTool } from '@langchain/core/tools'
 import { CohereClient } from 'cohere-ai'
 import { parseISO } from 'date-fns'
 import { z } from 'zod'
 import * as Sentry from '@sentry/nextjs'
 import { getOrganizationVectorDB } from '@/lib/ai/get-organization-vector-db'
+import { zodFunction } from 'openai/helpers/zod.mjs'
 
 interface GetSearchForTasksToolParams {
   organization: {
@@ -30,10 +29,10 @@ const searchRelevanceThreshold = 0.4
 export function getSearchForTasksTool(params: GetSearchForTasksToolParams) {
   const { organization, answerId } = params
 
-  return new DynamicStructuredTool({
+  return zodFunction({
     name: 'search_for_tasks',
     description: 'Search for tasks related to a given search term',
-    schema: z.object({
+    parameters: z.object({
       searchTerm: z.string().describe('Term the task is related to'),
       includeCompletedTasks: z
         .boolean()
@@ -44,7 +43,7 @@ export function getSearchForTasksTool(params: GetSearchForTasksToolParams) {
         .describe('What kind of task to search for')
         .optional(),
     }),
-    func: async (params) => {
+    function: async (params) => {
       const { searchTerm, includeCompletedTasks, type } = params
 
       logger.debug('Call - Search for tasks', {

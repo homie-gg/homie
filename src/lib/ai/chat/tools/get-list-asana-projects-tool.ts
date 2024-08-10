@@ -1,7 +1,8 @@
 import { dbClient } from '@/database/client'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
-import { DynamicTool } from '@langchain/core/tools'
+import { zodFunction } from 'openai/helpers/zod.mjs'
+import { z } from 'zod'
 
 interface GetListAsanaProjectsTool {
   answerId: string
@@ -12,10 +13,11 @@ interface GetListAsanaProjectsTool {
 
 export function getListAsanaProjectsTool(params: GetListAsanaProjectsTool) {
   const { answerId, organization } = params
-  return new DynamicTool({
+  return zodFunction({
     name: 'list_asana_projects',
     description: 'Returns all Asana projects',
-    func: async () => {
+    parameters: z.object({}),
+    function: async () => {
       logger.debug('Call: List Asana Projects', {
         event: 'get_answer:list_asana_projects:call',
         answer_id: answerId,

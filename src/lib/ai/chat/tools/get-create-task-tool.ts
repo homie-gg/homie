@@ -8,9 +8,9 @@ import { getMessageLink } from '@/lib/slack/get-message-link'
 import { sendTaskCreatedMessage } from '@/lib/slack/send-task-created-message'
 import { createTrelloClient } from '@/lib/trello/create-trello-client'
 import { TrelloCard } from '@/lib/trello/types'
-import { DynamicStructuredTool } from '@langchain/core/tools'
 import { z } from 'zod'
 import { marked } from 'marked'
+import { zodFunction } from 'openai/helpers/zod.mjs'
 
 interface GetCreateTaskToolParams {
   organization: {
@@ -29,10 +29,10 @@ interface GetCreateTaskToolParams {
 export function getCreateTaskTool(params: GetCreateTaskToolParams) {
   const { organization, answerId, channelID, targetMessageTS } = params
 
-  return new DynamicStructuredTool({
+  return zodFunction({
     name: 'create_task',
     description: 'Creates a task',
-    schema: z.object({
+    parameters: z.object({
       title: z
         .string()
         .describe('Main requirement of the task in one sentence.'),
@@ -54,7 +54,7 @@ export function getCreateTaskTool(params: GetCreateTaskToolParams) {
         .optional()
         .describe('Github Repository ID to create the issue in'),
     }),
-    func: async (data) => {
+    function: async (data) => {
       const {
         app,
         requirements,

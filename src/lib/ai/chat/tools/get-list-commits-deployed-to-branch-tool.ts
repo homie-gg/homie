@@ -3,9 +3,9 @@ import { listPullRequestCommits } from '@/lib/github/list-pull-request-commits'
 import { listMergeRequestCommits } from '@/lib/gitlab/list-merge-request-commits'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
-import { DynamicStructuredTool } from '@langchain/core/tools'
 import { z } from 'zod'
 import { formatDistance } from 'date-fns'
+import { zodFunction } from 'openai/helpers/zod.mjs'
 
 interface getListCommitsDeployedToBranchToolParams {
   organization: {
@@ -21,11 +21,11 @@ export function getListCommitsDeployedToBranchTool(
   const { organization, answerId, onAnswer } = params
 
   const { id: orgId } = organization
-  return new DynamicStructuredTool({
+  return zodFunction({
     name: 'list_commits_deployed_to_branch',
     description:
       'Lists all the commits that were deployed to a specific branch',
-    schema: z.object({
+    parameters: z.object({
       branch: z
         .string()
         .describe('Branch that we want to get commits for')
@@ -37,7 +37,7 @@ export function getListCommitsDeployedToBranchTool(
         .date()
         .describe('The upper bound date of commits to include'),
     }),
-    func: async ({ branch, startDate, endDate }) => {
+    function: async ({ branch, startDate, endDate }) => {
       logger.debug('Call - list commits deployed to branch', {
         event: 'get_answer:list_commits_deployed:call',
         answer_id: answerId,

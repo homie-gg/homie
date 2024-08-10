@@ -1,7 +1,7 @@
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { findTask } from '@/lib/tasks/find-task'
-import { DynamicStructuredTool } from '@langchain/core/tools'
+import { zodFunction } from 'openai/helpers/zod.mjs'
 import { z } from 'zod'
 
 interface GetFindTaskTool {
@@ -14,15 +14,15 @@ interface GetFindTaskTool {
 
 export function getFindTaskTool(params: GetFindTaskTool) {
   const { organization, answerId } = params
-  return new DynamicStructuredTool({
+  return zodFunction({
     name: 'find_task',
     description: 'Finds a given task.',
-    schema: z.object({
+    parameters: z.object({
       name: z.string().describe('Name of the task').optional(),
       task_id: z.number().describe('Task ID for the task to find.').optional(),
     }),
-    func: async (params) => {
-      const { task_id, name } = params
+    function: async (args) => {
+      const { task_id, name } = args
 
       logger.debug('Call - Find Task', {
         event: 'get_answer:find_task:call',

@@ -5,7 +5,7 @@ import { getMergeRequestDiff } from '@/lib/gitlab/get-merge-request-diff'
 import { listMergeRequestCommits } from '@/lib/gitlab/list-merge-request-commits'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
-import { DynamicStructuredTool } from '@langchain/core/tools'
+import { zodFunction } from 'openai/helpers/zod.mjs'
 import { z } from 'zod'
 
 interface getFetchPullRequestDetailToolParams {
@@ -21,15 +21,15 @@ export function getFetchPullRequestDetailTool(
   const { organization, answerId } = params
 
   const { id: orgId } = organization
-  return new DynamicStructuredTool({
+  return zodFunction({
     name: 'fetch_pull_request_details',
     description: 'Fetches details for a specific pull request',
-    schema: z.object({
+    parameters: z.object({
       pull_request_id: z
         .number()
         .describe('ID of the pull request to fetch details for'),
     }),
-    func: async ({ pull_request_id }) => {
+    function: async ({ pull_request_id }) => {
       logger.debug('Call - fetch PR details', {
         event: 'get_answer:fetch_pr_details:call',
         answer_id: answerId,
