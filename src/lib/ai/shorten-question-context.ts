@@ -1,5 +1,4 @@
-import { PromptTemplate } from '@langchain/core/prompts'
-import { OpenAI } from '@langchain/openai'
+import OpenAI from 'openai'
 
 interface ShortenQuestionContextParams {
   question: string
@@ -58,30 +57,29 @@ function getChunks(context: string): string[] {
 
 async function summarize(params: ShortenQuestionContextParams) {
   const { context, question } = params
-  const promptTemplate = new PromptTemplate({
-    template: prompt,
-    inputVariables: ['question', 'context'],
-  })
 
-  const input = await promptTemplate.format({
-    context,
-    question,
-  })
+  const openAI = new OpenAI()
 
-  const model = new OpenAI({ temperature: 0, modelName: 'gpt-4o-2024-05-13' })
-
-  return model.invoke(input)
-}
-
-const prompt = `Shorten the CONTEXT to answer the QUESTION. You must follow the following rules:
+  const result = await openAI.chat.completions.create({
+    model: 'gpt-4o-2024-08-06',
+    messages: [
+      {
+        role: 'system',
+        content: `Shorten the CONTEXT to answer the QUESTION. You must follow the following rules:
 - If the point is not relevant to the question DO NOT include it in your answer.
 - Your answer MUST be in bullet points.
 - Any code found in the CONTEXT should ALWAYS be preserved in the summary, unchanged.
 - DO NOT make up information, only use what is in the CONTEXT.
 
 QUESTION:
-{question}
+${question}
 
 CONTEXT: 
-{context}
-`
+${context}
+`,
+      },
+    ],
+  })
+
+  return result.choices[0].message.content
+}
