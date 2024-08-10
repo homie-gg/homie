@@ -108,9 +108,18 @@ export async function handleSyncAsanaTaskToHomieTask(
 
   await embedTask({ task: updatedTask })
 
-  await dispatch('check_for_duplicate_task', {
-    task: updatedTask,
-  })
+  await dispatch(
+    'check_for_duplicate_task',
+    {
+      task: updatedTask,
+    },
+    {
+      debounce: {
+        key: `check_duplicate_task:${updatedTask.id}`,
+        delaySecs: 600,
+      },
+    },
+  )
 
   // If no assignee, we'll remove any assignments (if they exist)
   if (!asanaTask.assignee) {
