@@ -8,6 +8,7 @@ import { taskStatus } from '@/lib/tasks'
 import { createHomieTaskFromAsanaTask } from '@/lib/asana/create-homie-task-from-asana-task'
 import { embedTask } from '@/lib/ai/embed-task'
 import { dispatch } from '@/queue/dispatch'
+import { removeTaskEmbedding } from '@/lib/ai/remove-task-embedding'
 
 export async function handleSyncAsanaTaskToHomieTask(
   job: SyncAsanaTaskToHomieTask,
@@ -39,10 +40,7 @@ export async function handleSyncAsanaTaskToHomieTask(
 
   const asanaTask = await tryGetTask(ext_asana_task_id, asana)
   if (!asanaTask) {
-    await dbClient
-      .deleteFrom('homie.task')
-      .where('ext_asana_task_id', '=', ext_asana_task_id)
-      .executeTakeFirst()
+    await deleteAsanaTask(ext_asana_task_id)
     return
   }
 
@@ -154,5 +152,17 @@ async function tryGetTask(extAsanaTaskId: string, asana: AsanaClient) {
     return task
   } catch {
     return null
+  }
+}
+
+async function deleteAsanaTask(extAsanaTaskId: string) {
+  const deletedTask = await dbClient
+    .deleteFrom('homie.task')
+    .where('ext_asana_task_id', '=', extAsanaTaskId)
+    .returning(['id', 'organization_id'])
+    .executeTakeFirst()
+
+  if (deletedTask) {
+    await removeTaskEmbedding({ task: deletedTask })
   }
 }

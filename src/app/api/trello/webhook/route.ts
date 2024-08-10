@@ -1,4 +1,5 @@
 import { dbClient } from '@/database/client'
+import { removeTaskEmbedding } from '@/lib/ai/remove-task-embedding'
 import { assignContributorFromTrelloMember } from '@/lib/trello/assign-contributor-from-trello-member'
 import { unassignContributorFromTrelloMember } from '@/lib/trello/unassign-contributor-from-trello-member'
 import { verifyTrelloWebhook } from '@/lib/trello/verify-trello-webhook'
@@ -42,10 +43,15 @@ export const POST = async (request: NextRequest) => {
       break
     }
     case 'deleteCard': {
-      await dbClient
+      const deletedTask = await dbClient
         .deleteFrom('homie.task')
         .where('ext_trello_card_id', '=', action.data.card.id)
+        .returning(['id', 'organization_id'])
         .executeTakeFirst()
+
+      if (deletedTask) {
+        await removeTaskEmbedding({ task: deletedTask })
+      }
 
       break
     }
