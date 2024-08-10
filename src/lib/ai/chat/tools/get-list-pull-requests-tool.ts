@@ -19,12 +19,12 @@ export function getListPullRequestsTool(params: getListPullRequestsToolParams) {
     name: 'list_pull_requests',
     description: 'List pull requests',
     parameters: z.object({
-      startDate: z.coerce
-        .date()
+      startDate: z
+        .string()
         .describe('The lower bound date of pull requests')
         .optional(),
-      endDate: z.coerce
-        .date()
+      endDate: z
+        .string()
         .describe('The upper bound date of pull requests')
         .optional(),
       targetBranch: z
@@ -42,6 +42,8 @@ export function getListPullRequestsTool(params: getListPullRequestsToolParams) {
       targetBranch,
       extSlackMemberId,
     }) => {
+      console.log('startDate: ', startDate)
+      console.log('endDate: ', endDate)
       logger.debug('Call - List Pull Requests', {
         event: 'get_answer:list_pull_requests:call',
         answer_id: answerId,

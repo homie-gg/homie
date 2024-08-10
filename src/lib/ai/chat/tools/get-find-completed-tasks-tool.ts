@@ -20,8 +20,8 @@ export function getFindCompletedTasksTool(
     name: 'find_completed_tasks',
     description: 'Find tasks that were completed since the given date',
     parameters: z.object({
-      date: z.coerce
-        .date()
+      date: z
+        .string()
         .describe('The lower bound date of when tasks were completed.'),
     }),
     function: async (args) => {

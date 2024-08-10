@@ -160,7 +160,6 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
         answerId,
       }),
     ],
-    tool_choice: 'required',
   })
 
   const result = (await completion.finalChatCompletion()).choices[0].message

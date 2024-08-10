@@ -30,7 +30,7 @@ export function getRememberConversationTool(
     name: 'remember_conversation',
     description: 'Remember or bookmark a conversation',
     parameters: z.object({
-      todaysDate: z.coerce.date().describe('The date today'),
+      todaysDate: z.string().describe('The date today'),
     }),
     function: async ({ todaysDate }) => {
       logger.debug('Call - Remember Conversation', {

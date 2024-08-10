@@ -30,11 +30,11 @@ export function getListCommitsDeployedToBranchTool(
         .string()
         .describe('Branch that we want to get commits for')
         .optional(),
-      startDate: z.coerce
-        .date()
+      startDate: z
+        .string()
         .describe('The lower bound date of commits to include'),
-      endDate: z.coerce
-        .date()
+      endDate: z
+        .string()
         .describe('The upper bound date of commits to include'),
     }),
     function: async ({ branch, startDate, endDate }) => {

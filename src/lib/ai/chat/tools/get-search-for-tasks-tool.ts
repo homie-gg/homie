@@ -36,15 +36,15 @@ export function getSearchForTasksTool(params: GetSearchForTasksToolParams) {
       searchTerm: z.string().describe('Term the task is related to'),
       includeCompletedTasks: z
         .boolean()
-        .default(false)
-        .describe('Whether to only include done tasks'),
+        .describe('Whether to only include done tasks')
+        .optional(),
       type: z
         .enum(['feature', 'bug_fix', 'maintenance', 'planning'])
         .describe('What kind of task to search for')
         .optional(),
     }),
     function: async (params) => {
-      const { searchTerm, includeCompletedTasks, type } = params
+      const { searchTerm, includeCompletedTasks = false, type } = params
 
       logger.debug('Call - Search for tasks', {
         event: 'get_answer:search_tasks:call',
