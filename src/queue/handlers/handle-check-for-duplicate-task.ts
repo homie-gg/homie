@@ -131,7 +131,6 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
     .selectFrom('homie.task')
     .where('organization_id', '=', task.organization_id)
     .where('homie.task.id', '=', duplicateTaskId)
-    .where('task_status_id', '=', taskStatus.open)
     .select(['name', 'description', 'html_url'])
     .executeTakeFirst()
 
