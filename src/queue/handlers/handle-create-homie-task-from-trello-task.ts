@@ -1,9 +1,10 @@
 import { CreateHomieTaskFromTrelloTask } from '@/queue/jobs'
 import { dbClient } from '@/database/client'
-import { classifyTask } from '@/lib/ai/clasify-task'
+import { classifyTask } from '@/lib/ai/classify-task'
 import { taskStatus } from '@/lib/tasks'
 import { embedTask } from '@/lib/ai/embed-task'
 import { dispatch } from '@/queue/dispatch'
+import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 
 export async function handleCreateHomieTaskFromTrelloTask(
   job: CreateHomieTaskFromTrelloTask,
@@ -37,6 +38,9 @@ export async function handleCreateHomieTaskFromTrelloTask(
   const { task_type_id, priority_level } = await classifyTask({
     title: card.name,
     description: '',
+    logData: {
+      organization: getOrganizationLogData(organization),
+    },
   })
 
   const isDone = card.idList

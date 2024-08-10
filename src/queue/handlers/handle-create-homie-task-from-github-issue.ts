@@ -1,9 +1,10 @@
 import { CreateHomieTaskFromGithubIssue } from '@/queue/jobs'
 import { dbClient } from '@/database/client'
-import { classifyTask } from '@/lib/ai/clasify-task'
+import { classifyTask } from '@/lib/ai/classify-task'
 import { taskStatus } from '@/lib/tasks'
 import { embedTask } from '@/lib/ai/embed-task'
 import { dispatch } from '@/queue/dispatch'
+import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 
 export async function handleCreateHomieTaskFromGithubIssue(
   job: CreateHomieTaskFromGithubIssue,
@@ -32,6 +33,9 @@ export async function handleCreateHomieTaskFromGithubIssue(
   const { task_type_id, priority_level } = await classifyTask({
     title: issue.title,
     description: issue.body ?? '',
+    logData: {
+      organization: getOrganizationLogData(organization),
+    },
   })
 
   const owner = repository.full_name.split('/')[0]

@@ -1,7 +1,8 @@
 import { dbClient } from '@/database/client'
-import { classifyTask } from '@/lib/ai/clasify-task'
+import { classifyTask } from '@/lib/ai/classify-task'
 import { embedTask } from '@/lib/ai/embed-task'
 import { AsanaGetTaskResponse } from '@/lib/asana/types'
+import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { taskStatus } from '@/lib/tasks'
 import { dispatch } from '@/queue/dispatch'
 
@@ -20,6 +21,11 @@ export async function createHomieTaskFromAsanaTask(
   const { task_type_id, priority_level } = await classifyTask({
     title: asanaTask.name,
     description: asanaTask.notes,
+    logData: {
+      organization: getOrganizationLogData({
+        id: project.organization_id,
+      }),
+    },
   })
   const homieTask = await dbClient
     .insertInto('homie.task')

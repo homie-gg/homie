@@ -1,8 +1,9 @@
 import { UpdateHomieTaskFromGithubIssue } from '@/queue/jobs'
 import { dbClient } from '@/database/client'
-import { classifyTask } from '@/lib/ai/clasify-task'
+import { classifyTask } from '@/lib/ai/classify-task'
 import { dispatch } from '@/queue/dispatch'
 import { embedTask } from '@/lib/ai/embed-task'
+import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 
 export async function handleUpdateHomieTaskFromGithubIssue(
   job: UpdateHomieTaskFromGithubIssue,
@@ -46,6 +47,9 @@ export async function handleUpdateHomieTaskFromGithubIssue(
   const { task_type_id, priority_level } = await classifyTask({
     title: issue.title,
     description: issue.body ?? '',
+    logData: {
+      organization: getOrganizationLogData(organization),
+    },
   })
 
   const updatedTask = await dbClient
