@@ -1,7 +1,4 @@
-import { createOpenAIChatClient } from '@/lib/open-ai/create-open-ai-chat-client'
-import { StringOutputParser } from '@langchain/core/output_parsers'
-import { ChatPromptTemplate } from '@langchain/core/prompts'
-import { RunnableSequence } from '@langchain/core/runnables'
+import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
 
 interface SummarizeConversationParams {
   messages: Array<{ text: string }>
@@ -12,18 +9,15 @@ export async function summarizeConversation(
 ) {
   const { messages } = params
 
-  const model = createOpenAIChatClient({
-    temperature: 0,
-    modelName: 'gpt-4o-2024-05-13',
-  })
-  const chatPrompt = ChatPromptTemplate.fromTemplate(prompt)
-  const parser = new StringOutputParser()
-  const chain = RunnableSequence.from([chatPrompt, model, parser])
+  const openAI = createOpenAIClient()
 
-  return chain.invoke({ context: JSON.stringify(messages) })
-}
-
-const prompt = `Summarize the following conversation in the CONTEXT> You should follow ALL of the following rules when generating an answer:
+  const result = await openAI.chat.completions.create({
+    model: 'gpt-4o-2024-08-06',
+    messages: [
+      { role: 'system', content: 'You are a helpful project manager.' },
+      {
+        role: 'user',
+        content: `Summarize the following conversation in the CONTEXT> You should follow ALL of the following rules when generating an answer:
 - There will be a CONTEXT.
 - The context is a set of JSON objects, each object includes a "text" property that is chat message that was sent.
 - The chat messages are in order with latest messages first.
@@ -33,5 +27,12 @@ const prompt = `Summarize the following conversation in the CONTEXT> You should 
 - Summarize the CONTEXT to make it easier to read, but don't omit any information.
 - Each point should be less than 10 words.
 
-CONTEXT: {context}
-`
+CONTEXT:
+${JSON.stringify(messages)}
+`,
+      },
+    ],
+  })
+
+  return result.choices[0].message.content ?? ''
+}

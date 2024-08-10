@@ -1,4 +1,5 @@
 import { logger } from '@/lib/log/logger'
+import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
 import { taskPriority } from '@/lib/tasks/task-priority'
 import { taskType } from '@/lib/tasks/task-type'
 import OpenAI from 'openai'
@@ -40,7 +41,7 @@ export async function classifyTask(
 ): Promise<ClassifyTaskResult> {
   const { title, description, logData } = params
 
-  const client = new OpenAI()
+  const client = createOpenAIClient()
 
   const chatCompletion = await client.beta.chat.completions.parse({
     messages: [

@@ -1,9 +1,6 @@
 import { summarizeDiff } from '@/lib/ai/summarize-diff'
 import { logger } from '@/lib/log/logger'
-import { createOpenAIChatClient } from '@/lib/open-ai/create-open-ai-chat-client'
-import { StringOutputParser } from '@langchain/core/output_parsers'
-import { ChatPromptTemplate } from '@langchain/core/prompts'
-import { RunnableSequence } from '@langchain/core/runnables'
+import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
 
 interface SummarizeCodeChangeParams {
   title: string
@@ -40,24 +37,48 @@ export async function summarizeCodeChange(params: SummarizeCodeChangeParams) {
     conversation,
   })
 
-  const chatPrompt = ChatPromptTemplate.fromTemplate(template)
+  const openAI = createOpenAIClient()
+  const result = await openAI.chat.completions.create({
+    model: 'gpt-4o-2024-08-06',
+    messages: [
+      {
+        role: 'system',
+        content: 'You are a helpful code assistant',
+      },
+      {
+        role: 'user',
+        content: `Create a Pull Request summary from the information below. You MUST follow the following rules when generating the summary:
+- The TITLE is the pull request title.
+- The CHANGES will be a summary of all the changes.
+- The ISSUE will contain the description of a issue that this pull request aims to solve.
+- The BODY will contain a description of what this pull request attempts to achieve.
+- The CONVERSATION will background information to why this Pull Request is required.
+- The summary should only be based on the CHANGES, ISSUE, BODY, and CONVERSATION. Do not generate the summary without a clear reference to the CHANGES, ISSUE, BODY, or CONVERSATION.
+- Do not infer any initiatives, or features other than what has already been mentioned in the CHANGES, ISSUE, BODY, or CONVERSATION.
+- Use bullet points to present the summary
+- The summary should be a single list with no headings, or sub-lists
+${rules}
 
-  const model = createOpenAIChatClient({
-    temperature: 0,
-    modelName: 'gpt-4o-2024-05-13',
+TITLE: 
+${title}
+  
+CHANGES:
+${diffSummary ?? 'NONE'}
+  
+ISSUE:
+${issue ?? 'NONE'}
+  
+BODY:
+${body ?? 'NONE'}
+
+CONVERSATION:
+${conversation ?? 'NONE'}
+`,
+      },
+    ],
   })
 
-  const parser = new StringOutputParser()
-  const chain = RunnableSequence.from([chatPrompt, model, parser])
-
-  const result = await chain.invoke({
-    diff: diffSummary ?? 'NONE',
-    issue: issue ?? 'NONE',
-    title,
-    body: body ?? 'NONE',
-    rules,
-    conversation: conversation ?? 'NONE',
-  })
+  const summary = result.choices[0].message.content
 
   logger.debug('Summarize Code Change - Result', {
     ...logData,
@@ -70,9 +91,10 @@ export async function summarizeCodeChange(params: SummarizeCodeChangeParams) {
     length,
     result,
     conversation,
+    summary,
   })
 
-  return result
+  return summary ?? ''
 }
 
 interface GetInputParams {
@@ -112,31 +134,3 @@ function getRules(params: GetInputParams): string {
 
   return ''
 }
-
-const template = `Create a Pull Request summary from the information below. You MUST follow the following rules when generating the summary:
-- The TITLE is the pull request title.
-- The CHANGES will be a summary of all the changes.
-- The ISSUE will contain the description of a issue that this pull request aims to solve.
-- The BODY will contain a description of what this pull request attempts to achieve.
-- The CONVERSATION will background information to why this Pull Request is required.
-- The summary should only be based on the CHANGES, ISSUE, BODY, and CONVERSATION. Do not generate the summary without a clear reference to the CHANGES, ISSUE, BODY, or CONVERSATION.
-- Do not infer any initiatives, or features other than what has already been mentioned in the CHANGES, ISSUE, BODY, or CONVERSATION.
-- Use bullet points to present the summary
-- The summary should be a single list with no headings, or sub-lists
-{rules}
-
-TITLE: 
-{title}
-  
-CHANGES:
-{diff}
-  
-ISSUE:
-{issue}
-  
-BODY:
-{body}
-
-CONVERSATION:
-{conversation}
-`

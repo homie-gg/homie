@@ -18,10 +18,17 @@ export async function getSampleResponse(params: GetSampleResponseParams) {
     emojiLevel,
   })
 
-  const model = createOpenAIClient({
-    temperature: 0,
-    modelName: 'gpt-3.5-turbo',
+  const openAI = createOpenAIClient()
+
+  const result = await openAI.chat.completions.create({
+    model: 'gpt-3.5-turbo',
+    messages: [
+      {
+        role: 'user',
+        content: prompt,
+      },
+    ],
   })
 
-  return model.invoke(prompt)
+  return result.choices[0].message.content ?? 'Failed to get sample response'
 }

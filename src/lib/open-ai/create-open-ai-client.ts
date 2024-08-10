@@ -1,10 +1,8 @@
-import { OpenAI, OpenAIBaseInput } from '@langchain/openai'
+import OpenAI, { ClientOptions } from 'openai'
 
 let client: OpenAI | null
 
-export const createOpenAIClient = (
-  options?: Partial<OpenAIBaseInput>,
-): OpenAI => {
+export const createOpenAIClient = (options?: ClientOptions): OpenAI => {
   if (client) {
     return client
   }

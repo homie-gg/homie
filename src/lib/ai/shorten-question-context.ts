@@ -1,3 +1,4 @@
+import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
 import OpenAI from 'openai'
 
 interface ShortenQuestionContextParams {
@@ -58,13 +59,17 @@ function getChunks(context: string): string[] {
 async function summarize(params: ShortenQuestionContextParams) {
   const { context, question } = params
 
-  const openAI = new OpenAI()
+  const openAI = createOpenAIClient()
 
   const result = await openAI.chat.completions.create({
     model: 'gpt-4o-2024-08-06',
     messages: [
       {
         role: 'system',
+        content: 'You are a helpful project manager',
+      },
+      {
+        role: 'user',
         content: `Shorten the CONTEXT to answer the QUESTION. You must follow the following rules:
 - If the point is not relevant to the question DO NOT include it in your answer.
 - Your answer MUST be in bullet points.

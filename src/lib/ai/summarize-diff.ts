@@ -1,8 +1,5 @@
-import { PromptTemplate } from '@langchain/core/prompts'
-import { Document } from '@langchain/core/documents'
-import { loadSummarizationChain } from 'langchain/chains'
 import { logger } from '@/lib/log/logger'
-import { createOpenAIChatClient } from '@/lib/open-ai/create-open-ai-chat-client'
+import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
 
 interface SummarizeDiffParams {
   diff: string
@@ -28,37 +25,52 @@ export async function summarizeDiff(
     diff,
   })
 
-  const documents = chunkDiff(diff).map(
-    (file) => new Document({ pageContent: file }),
-  )
+  const openAI = createOpenAIClient()
 
-  const model = createOpenAIChatClient({
-    temperature: 0,
-    modelName: 'gpt-4o-2024-05-13',
-  })
+  let summary = ''
 
-  const summarizeChain = loadSummarizationChain(model, {
-    type: 'map_reduce',
-    combineMapPrompt: PromptTemplate.fromTemplate(mapPrompt),
-    combinePrompt: PromptTemplate.fromTemplate(combinePrompt),
-    verbose: false,
-  })
+  const files = chunkDiffByFiles(diff)
 
-  const result = await summarizeChain.invoke({
-    input_documents: documents,
-  })
+  for (const file of files) {
+    const result = await openAI.chat.completions.create({
+      model: 'gpt-4o-2024-08-06',
+      messages: [
+        {
+          role: 'system',
+          content: 'You are a helpful code assistant',
+        },
+        {
+          role: 'user',
+          content: `
+  Summarize the following Pull Request DIFF. You MUST follow the following rules when generating the summary:
+  - The DIFF will include the files, and changes made in a Pull Request.
+  - Describe each change, and how it affects the application.
+  - The summary should only be based on the DIFF. Do not generate the summary without a clear reference to the DIFF.
+  - Use bullet points to present the summary.
+  - Each point should be 1 to 2 sentences long.
+  - Do not include a conclusion.
+  
+  DIFF:
+  ${file}
+  `,
+        },
+      ],
+    })
 
-  logger.debug('Summarize Diff - Result', {
-    ...logData,
-    event: 'summarize_diff:result',
-    ai_call: true,
-    diff,
-    documents,
-    map_prompt: mapPrompt,
-    combine_prompt: combinePrompt,
-  })
+    const pageDiffSummary = result.choices[0].message.content
 
-  return result.text
+    logger.debug('Summarize Diff - Result', {
+      ...logData,
+      event: 'summarize_diff:result',
+      ai_call: true,
+      diff,
+      page_diff_summary: pageDiffSummary,
+    })
+
+    summary += `\n${pageDiffSummary}`
+  }
+
+  return summary
 }
 
 /**
@@ -69,7 +81,7 @@ export async function summarizeDiff(
  * @param diff
  * @param chunkSize
  */
-export function chunkDiff(
+export function chunkDiffByFiles(
   diff: string,
   chunkSize = chatGPTCharLimit,
 ): string[] {
@@ -98,29 +110,3 @@ export function chunkDiff(
       }, [] as string[])
   )
 }
-
-const mapPrompt = `
-Summarize the following Pull Request DIFF. You MUST follow the following rules when generating the summary:
-- The DIFF will include the files, and changes made in a Pull Request.
-- Describe each change, and how it affects the application.
-- The summary should only be based on the DIFF. Do not generate the summary without a clear reference to the DIFF.
-- Use bullet points to present the summary.
-- Each point should be 1 to 2 sentences long.
-- Do not include a conclusion.
-
-DIFF:
-{text}
-`
-
-const combinePrompt = `
-Summarize the following CHANGES for a Pull Request. You MUST follow the following rules when generating the summary:
-- The CHANGES will include all the changes made to the pull request.
-- Combine, and summarize any related key points, but do not omit information.
-- The summary should only be based on the CHANGES. Do not generate the summary without a clear reference to the CHANGES.
-- Use bullet points to present the summary.
-- Each point should be 1 to 2 sentences long.
-- Do not include a conclusion.
-
-CHANGES:
-{text}
-`

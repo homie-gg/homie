@@ -1,7 +1,5 @@
-import { createOpenAIChatClient } from '@/lib/open-ai/create-open-ai-chat-client'
-import { ChatPromptTemplate } from '@langchain/core/prompts'
-import { StringOutputParser } from '@langchain/core/output_parsers'
-import { RunnableSequence } from '@langchain/core/runnables'
+import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
+import OpenAI from 'openai'
 
 interface ExtractCodeSnippetsParams {
   diff: string
@@ -11,24 +9,18 @@ interface ExtractCodeSnippetsParams {
 export async function extractCodeSnippets(params: ExtractCodeSnippetsParams) {
   const { diff, summary } = params
 
-  const model = createOpenAIChatClient({
-    temperature: 0,
-    modelName: 'gpt-4o-2024-05-13',
-  })
+  const openAI = createOpenAIClient()
 
-  const chatPrompt = ChatPromptTemplate.fromTemplate(prompt)
-  const parser = new StringOutputParser()
-  const chain = RunnableSequence.from([chatPrompt, model, parser])
-
-  return (
-    await chain.invoke({
-      diff,
-      summary,
-    })
-  ).split(/^-/gm)
-}
-
-export const prompt = `Given the following SUMMARY, extract out relevant snippets of code from the DIFF. You MUST 
+  const result = await openAI.chat.completions.create({
+    model: 'gpt-4o-2024-08-06',
+    messages: [
+      {
+        role: 'system',
+        content: 'You are a helpful code tool',
+      },
+      {
+        role: 'user',
+        content: `Given the following SUMMARY, extract out relevant snippets of code from the DIFF. You MUST 
 follow the following rules when extracting:
 - Only return code from the DIFF.
 - Only look at files in the DIFF.
@@ -38,8 +30,14 @@ follow the following rules when extracting:
 - Do NOT use outside references.
 
 SUMMARY:
-{summary}
+${summary}
 
 DIFF:
-{diff}
-`
+${diff}
+`,
+      },
+    ],
+  })
+
+  return result.choices[0].message.content?.split(/^-/gm) ?? ''
+}

@@ -1,8 +1,6 @@
 import { getGeneralContext } from '@/lib/ai/chat/get-general-context'
-import { createOpenAIChatClient } from '@/lib/open-ai/create-open-ai-chat-client'
-import { StringOutputParser } from '@langchain/core/output_parsers'
-import { ChatPromptTemplate } from '@langchain/core/prompts'
-import { RunnableSequence } from '@langchain/core/runnables'
+import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
+import OpenAI from 'openai'
 
 interface SearchGeneralContextParams {
   question: string
@@ -21,23 +19,18 @@ export async function searchGeneralContext(
     question,
   })
 
-  const model = createOpenAIChatClient({
-    temperature: 0,
-    model: 'gpt-4o-2024-05-13',
-  })
+  const openAI = createOpenAIClient()
 
-  const chatPrompt = ChatPromptTemplate.fromTemplate(prompt)
-
-  const parser = new StringOutputParser()
-  const chain = RunnableSequence.from([chatPrompt, model, parser])
-
-  return chain.invoke({
-    question,
-    context,
-  })
-}
-
-const prompt = `Answer the question based on the context below. You should follow ALL the following rules when generating and answer:
+  const result = await openAI.chat.completions.create({
+    model: 'gpt-4o-2024-08-06',
+    messages: [
+      {
+        role: 'system',
+        content: 'You are a helpful software engineer.',
+      },
+      {
+        role: 'user',
+        content: `Answer the question based on the context below. You should follow ALL the following rules when generating and answer:
 - There will be a CONTEXT, and a QUESTION.
 - The CONTEXT is a JSON object that contains data you should use to answer the QUESTION.
 - Your goal is to provide the user with an answer that is relevant to the question.
@@ -50,9 +43,14 @@ const prompt = `Answer the question based on the context below. You should follo
 - If the answer mentions a Pull Request, include the Pull Request title, and url.
 
 QUESTION:
-{question}
+${question}
 
 CONTEXT:
-{context}
+${context}
+`,
+      },
+    ],
+  })
 
-Final Answer:`
+  return result.choices[0].message.content ?? 'No Result'
+}

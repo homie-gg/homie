@@ -18,8 +18,8 @@ import { getListGithubReposTool } from '@/lib/ai/chat/tools/get-list-github-repo
 import { getListAsanaProjectsTool } from '@/lib/ai/chat/tools/get-list-asana-projects-tool'
 import { getSearchPullRequestsTool } from '@/lib/ai/chat/tools/get-search-pull-requests-tool'
 import { getSearchGeneralContextTool } from '@/lib/ai/chat/tools/get-search-general-context-tool'
-import OpenAI from 'openai'
 import { ChatCompletionMessageParam } from 'openai/resources/index.mjs'
+import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
 
 interface GetAnswerParams {
   organization: {
@@ -76,8 +76,8 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
 
   const currentDate = new Date().toISOString()
 
-  const client = new OpenAI()
-  const completion = client.beta.chat.completions.runTools({
+  const openAI = createOpenAIClient()
+  const completion = openAI.beta.chat.completions.runTools({
     model: 'gpt-4o-2024-08-06',
     messages: [
       {

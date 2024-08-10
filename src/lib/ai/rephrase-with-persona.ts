@@ -1,7 +1,5 @@
-import { createOpenAIChatClient } from '@/lib/open-ai/create-open-ai-chat-client'
-import { StringOutputParser } from '@langchain/core/output_parsers'
-import { ChatPromptTemplate } from '@langchain/core/prompts'
-import { RunnableSequence } from '@langchain/core/runnables'
+import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
+import OpenAI from 'openai'
 
 interface RephraseWithPersonaParams {
   gLevel: number
@@ -11,7 +9,7 @@ interface RephraseWithPersonaParams {
   text: string
 }
 
-export function rephraseWithPersona(params: RephraseWithPersonaParams) {
+export async function rephraseWithPersona(params: RephraseWithPersonaParams) {
   const { gLevel, affectionLevel, positivityLevel, emojiLevel, text } = params
 
   const persona =
@@ -23,14 +21,11 @@ TEXT:
 ${text}
 `
 
-  const chatPrompt = ChatPromptTemplate.fromTemplate(prompt)
-
-  const parser = new StringOutputParser()
-  const model = createOpenAIChatClient({
-    temperature: 0,
-    modelName: 'gpt-4o-2024-05-13',
+  const openAI = createOpenAIClient()
+  const result = await openAI.chat.completions.create({
+    model: 'gpt-4o-2024-08-06',
+    messages: [{ role: 'user', content: prompt }],
   })
-  const chain = RunnableSequence.from([chatPrompt, model, parser])
 
-  return chain.invoke({})
+  return result.choices[0].message.content ?? text
 }

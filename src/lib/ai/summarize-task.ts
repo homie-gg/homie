@@ -1,7 +1,5 @@
-import { createOpenAIChatClient } from '@/lib/open-ai/create-open-ai-chat-client'
-import { StructuredOutputParser } from '@langchain/core/output_parsers'
-import { ChatPromptTemplate } from '@langchain/core/prompts'
-import { RunnableSequence } from '@langchain/core/runnables'
+import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
+import { zodResponseFormat } from 'openai/helpers/zod.mjs'
 import { z } from 'zod'
 
 interface SummarizeTaskParams {
@@ -13,34 +11,32 @@ interface SummarizeTaskResult {
   requirements: string
 }
 
-const parser = StructuredOutputParser.fromZodSchema(
-  z.object({
-    task: z.string().describe('The task to complete'),
-    requirements: z.string().describe('Task requirements in a markdown list'),
-  }),
-)
+const summarizeTaskResponse = z.object({
+  task: z.string().describe('The task to complete'),
+  requirements: z.string().describe('Task requirements in a markdown list'),
+})
 
 export async function summarizeTask(
   params: SummarizeTaskParams,
 ): Promise<SummarizeTaskResult> {
   const { messages } = params
 
-  const model = createOpenAIChatClient({
-    temperature: 0,
-    modelName: 'gpt-4o-2024-05-13',
-  })
+  const openAI = createOpenAIClient()
 
-  const chatPrompt = ChatPromptTemplate.fromTemplate(prompt)
-
-  const chain = RunnableSequence.from([chatPrompt, model, parser])
-
-  return chain.invoke({
-    context: JSON.stringify(messages),
-    format_instructions: parser.getFormatInstructions(),
-  })
-}
-
-const prompt = `Identify, and summarize a single Task that needs to be done from the context below. You should follow ALL of the following rules when generating an answer:
+  const completion = await openAI.beta.chat.completions.parse({
+    model: 'gpt-4o-2024-08-06',
+    response_format: zodResponseFormat(
+      summarizeTaskResponse,
+      'summarizeTaskResponse',
+    ),
+    messages: [
+      {
+        role: 'system',
+        content: 'You are a helpful project manager.',
+      },
+      {
+        role: 'user',
+        content: `Identify, and summarize a single Task that needs to be done from the context below. You should follow ALL of the following rules when generating an answer:
 - There will be a CONTEXT.
 - The context is a set of JSON objects, each object includes a "text" property that is chat message that was sent.
 - The chat messages are in order with latest messages first.
@@ -54,7 +50,23 @@ const prompt = `Identify, and summarize a single Task that needs to be done from
 - The summary should contain the following headings: Task, Requirements.
 - Each point should be less than 10 words.
 
-{format_instructions}
+CONTEXT:
+${JSON.stringify(messages)}
+`,
+      },
+    ],
+  })
+  const output = completion.choices[0].message
 
-CONTEXT: {context}
-`
+  if (!output?.parsed || output.refusal) {
+    return {
+      task: 'Unknown',
+      requirements: 'Could not be summarized',
+    }
+  }
+
+  return {
+    task: output.parsed.task,
+    requirements: output.parsed.requirements,
+  }
+}
