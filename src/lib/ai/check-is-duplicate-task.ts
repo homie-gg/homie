@@ -24,6 +24,13 @@ export async function checkIsDuplicateTask(params: CheckIsTaskDuplicateParams) {
 
   const openAI = new OpenAI()
 
+  const prompt = `There are two tasks, TASK A and TASK B. Determine if the two tasks are wanting to do the same thing. Answer must be TRUE/FALSE only.
+TASK A:
+${taskA.name} - ${taskA.description}
+TASK B:
+${taskB.name} - ${taskB.description}
+`
+
   const result = await openAI.beta.chat.completions.parse({
     model: 'gpt-4o-2024-08-06',
     messages: [
@@ -33,12 +40,7 @@ export async function checkIsDuplicateTask(params: CheckIsTaskDuplicateParams) {
       },
       {
         role: 'user',
-        content: `There are two tasks, TASK A and TASK B. Determine if the two tasks are wanting to do the same thing. Answer must be TRUE/FALSE only.
-TASK A:
-${taskA.name} - ${taskA.description}
-TASK B:
-${taskB.name} - ${taskB.description}
-`,
+        content: prompt,
       },
     ],
     response_format: zodResponseFormat(
