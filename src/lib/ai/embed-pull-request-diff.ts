@@ -2,8 +2,8 @@ import { extractCodeSnippets } from '@/lib/ai/extract-code-snippets'
 import { v4 as uuid } from 'uuid'
 import { chatGPTCharLimit, chunkDiffByFiles } from '@/lib/ai/summarize-diff'
 import { PineconeRecord } from '@pinecone-database/pinecone'
-import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
 import { getOrganizationVectorDB } from '@/lib/ai/get-organization-vector-db'
+import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
 
 interface EmbedPullRequestDiffParams {
   diff: string
@@ -30,13 +30,17 @@ export async function embedPullRequestDiff(params: EmbedPullRequestDiffParams) {
       summary,
     })
 
-    const embedder = createOpenAIEmbedder({
-      modelName: 'text-embedding-3-large',
-    })
+    const openAI = createOpenAIClient()
 
     for (const snippet of snippets) {
       const text = `${pullRequest.title}\n${snippet}`
-      const embedding = await embedder.embedQuery(text)
+
+      const embedding = (
+        await openAI.embeddings.create({
+          model: 'text-embedding-3-large',
+          input: text,
+        })
+      ).data[0].embedding
 
       const record: PineconeRecord = {
         id: uuid(),

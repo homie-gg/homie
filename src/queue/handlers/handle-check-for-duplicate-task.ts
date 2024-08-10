@@ -5,9 +5,8 @@ import { getOrganizationVectorDB } from '@/lib/ai/get-organization-vector-db'
 import { postPotentialDuplicateAsanaTaskComment } from '@/lib/asana/post-potential-duplicate-asana-task-comment'
 import { postPotentialDuplicateGithubIssueComment } from '@/lib/github/post-potential-duplicate-github-issue-comment'
 import { logger } from '@/lib/log/logger'
-import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
+import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
-import { taskStatus } from '@/lib/tasks'
 import { postPotentialDuplicateTrelloTaskComment } from '@/lib/trello/post-potential-duplicate-trello-comment'
 import { CheckForDuplicateTask } from '@/queue/jobs'
 import { CohereClient } from 'cohere-ai'
@@ -57,11 +56,13 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
 
   const searchTerm = `${task.name}\n${task.description}`
 
-  const embedder = createOpenAIEmbedder({
-    modelName: 'text-embedding-3-large',
-  })
-
-  const embeddings = await embedder.embedQuery(searchTerm)
+  const openAI = createOpenAIClient()
+  const embeddings = (
+    await openAI.embeddings.create({
+      model: 'text-embedding-3-large',
+      input: searchTerm,
+    })
+  ).data[0].embedding
 
   const pineconeSearchFilters: Record<string, any> = {
     organization_id: {

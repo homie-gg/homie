@@ -1,6 +1,6 @@
 import { dbClient } from '@/database/client'
 import { logger } from '@/lib/log/logger'
-import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
+import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
 import { getPineconeClient } from '@/lib/pinecone/pinecone-client'
 import { MigrateOrganizationEmbeddings } from '@/queue/jobs'
 
@@ -50,14 +50,18 @@ export async function handleMigrateOrganizationEmbeddings(
   const { organization } = job.data
   const index = getPineconeClient().Index(process.env.PINECONE_INDEX_MAIN!)
 
-  const embedder = createOpenAIEmbedder({
-    modelName: 'text-embedding-3-large',
-  })
-
   const namespace = `organization_${organization.id}`
   const namespaceIndex = index.namespace(namespace)
 
-  const randomSearchVector = await embedder.embedQuery('any string')
+  const openAI = createOpenAIClient()
+  const embeddings = (
+    await openAI.embeddings.create({
+      model: 'text-embedding-3-large',
+      input: 'any string',
+    })
+  ).data[0].embedding
+
+  const randomSearchVector = embeddings
 
   logger.debug(`Migration organization ${organization.id} embeddings`, {
     event: 'migrate_org_embeddings:start',
@@ -239,7 +243,12 @@ export async function handleMigrateOrganizationEmbeddings(
     }
 
     const newChangeText = `${pr.title}\n${change}`
-    const newChangeEmbedding = await embedder.embedQuery(newChangeText)
+    const newChangeEmbedding = (
+      await openAI.embeddings.create({
+        model: 'text-embedding-3-large',
+        input: newChangeText,
+      })
+    ).data[0].embedding
 
     namespaceIndex.upsert([
       {
@@ -321,7 +330,13 @@ export async function handleMigrateOrganizationEmbeddings(
     }
 
     const newChangeText = `${pr.title}\n${change}`
-    const newChangeEmbedding = await embedder.embedQuery(newChangeText)
+
+    const newChangeEmbedding = (
+      await openAI.embeddings.create({
+        model: 'text-embedding-3-large',
+        input: newChangeText,
+      })
+    ).data[0].embedding
 
     namespaceIndex.upsert([
       {
@@ -406,7 +421,12 @@ export async function handleMigrateOrganizationEmbeddings(
     }
 
     const newSnippetText = `${pr.title}\n${snippet}`
-    const newSnippetEmbedding = await embedder.embedQuery(newSnippetText)
+    const newSnippetEmbedding = (
+      await openAI.embeddings.create({
+        model: 'text-embedding-3-large',
+        input: newSnippetText,
+      })
+    ).data[0].embedding
 
     namespaceIndex.upsert([
       {

@@ -1,5 +1,4 @@
 import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
-import OpenAI from 'openai'
 
 interface ExtractCodeSnippetsParams {
   diff: string

@@ -1,6 +1,5 @@
 import { TaskMetadata } from '@/lib/ai/embed-task'
 import { logger } from '@/lib/log/logger'
-import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { CohereClient } from 'cohere-ai'
 import { parseISO } from 'date-fns'
@@ -8,6 +7,7 @@ import { z } from 'zod'
 import * as Sentry from '@sentry/nextjs'
 import { getOrganizationVectorDB } from '@/lib/ai/get-organization-vector-db'
 import { zodFunction } from 'openai/helpers/zod.mjs'
+import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
 
 interface GetSearchForTasksToolParams {
   organization: {
@@ -56,10 +56,13 @@ export function getSearchForTasksTool(params: GetSearchForTasksToolParams) {
       })
 
       try {
-        const embedder = createOpenAIEmbedder({
-          modelName: 'text-embedding-3-large',
-        })
-        const embeddings = await embedder.embedQuery(searchTerm)
+        const openAI = createOpenAIClient()
+        const embeddings = (
+          await openAI.embeddings.create({
+            model: 'text-embedding-3-large',
+            input: searchTerm,
+          })
+        ).data[0].embedding
 
         const pineconeSearchFilters: Record<string, any> = {
           organization_id: {

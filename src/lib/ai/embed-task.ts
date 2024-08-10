@@ -1,7 +1,7 @@
 import { PineconeRecord, RecordMetadata } from '@pinecone-database/pinecone'
-import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
 import { dbClient } from '@/database/client'
 import { getOrganizationVectorDB } from '@/lib/ai/get-organization-vector-db'
+import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
 
 interface EmbedTaskParams {
   task: {
@@ -35,10 +35,6 @@ export interface TaskMetadata extends RecordMetadata {
 export async function embedTask(params: EmbedTaskParams) {
   const { task } = params
 
-  const embedder = createOpenAIEmbedder({
-    modelName: 'text-embedding-3-large',
-  })
-
   const status = await dbClient
     .selectFrom('homie.task_status')
     .where('homie.task_status.id', '=', task.task_status_id)
@@ -53,7 +49,13 @@ export async function embedTask(params: EmbedTaskParams) {
 
   const text = `${task.name}\n${task.description}`
 
-  const embedding = await embedder.embedQuery(text)
+  const openAI = createOpenAIClient()
+  const embedding = (
+    await openAI.embeddings.create({
+      model: 'text-embedding-3-large',
+      input: text,
+    })
+  ).data[0].embedding
 
   const metadata: TaskMetadata = {
     type: 'task',

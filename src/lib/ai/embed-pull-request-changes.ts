@@ -1,7 +1,7 @@
 import { PineconeRecord } from '@pinecone-database/pinecone'
 import { v4 as uuid } from 'uuid'
-import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
 import { getOrganizationVectorDB } from '@/lib/ai/get-organization-vector-db'
+import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
 
 interface EmbedPullRequestChanges {
   pullRequest: {
@@ -22,15 +22,18 @@ export async function embedPullRequestChanges(params: EmbedPullRequestChanges) {
 
   const points = summary.split(/^-/gm)
 
+  const openAI = createOpenAIClient()
+
   // Embed each PR point separately
   for (const point of points) {
     const text = `${pullRequest.title}\n${point}`
 
-    const embedder = createOpenAIEmbedder({
-      modelName: 'text-embedding-3-large',
-    })
-
-    const embedding = await embedder.embedQuery(text)
+    const embedding = (
+      await openAI.embeddings.create({
+        model: 'text-embedding-3-large',
+        input: text,
+      })
+    ).data[0].embedding
 
     const record: PineconeRecord = {
       id: uuid(),

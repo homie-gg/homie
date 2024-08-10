@@ -1,6 +1,5 @@
 import { getGeneralContext } from '@/lib/ai/chat/get-general-context'
 import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
-import OpenAI from 'openai'
 
 interface SearchGeneralContextParams {
   question: string

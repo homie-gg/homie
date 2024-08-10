@@ -1,6 +1,6 @@
 import { dbClient } from '@/database/client'
 import { getOrganizationVectorDB } from '@/lib/ai/get-organization-vector-db'
-import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
+import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
 import { CohereClient } from 'cohere-ai'
 
 interface FindTaskParams {
@@ -35,10 +35,13 @@ export async function findTask(
 
   if (name) {
     const query = `Task: ${name}`
-    const embedder = createOpenAIEmbedder({
-      modelName: 'text-embedding-3-large',
-    })
-    const embeddings = await embedder.embedQuery(query)
+    const openAI = createOpenAIClient()
+    const embeddings = (
+      await openAI.embeddings.create({
+        model: 'text-embedding-3-large',
+        input: query,
+      })
+    ).data[0].embedding
 
     const vectorDB = getOrganizationVectorDB(organization_id)
     const { matches } = await vectorDB.query({

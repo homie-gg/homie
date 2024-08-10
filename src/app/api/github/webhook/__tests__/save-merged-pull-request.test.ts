@@ -1,6 +1,5 @@
 import { mockCreateGithubApp } from '@/__utils__/mock-create-github-app'
 import { mockCreateGithubClient } from '@/__utils__/mock-create-github-client'
-import { mockCreateOpenAIEmbedder } from '@/__utils__/mock-create-open-ai-embedder'
 import { mockExtractCodeSnippets } from '@/__utils__/mock-extract-code-snippets'
 import { mockGetPineconeClient } from '@/__utils__/mock-get-pinecone-client'
 import { mockSummarizeCodeChange } from '@/__utils__/mock-summarize-code-change'
@@ -78,9 +77,9 @@ it('should create and embed a pr', async () => {
 
   const mockEmbed = jest.fn()
 
-  mockCreateOpenAIEmbedder.mockReturnValue({
-    embedQuery: mockEmbed,
-  })
+  // mockCreateOpenAIEmbedder.mockReturnValue({
+  //   embedQuery: mockEmbed,
+  // })
 
   mockEmbed.mockResolvedValueOnce([1.232, 2.3434])
 

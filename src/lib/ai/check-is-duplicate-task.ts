@@ -1,6 +1,5 @@
 import { logger } from '@/lib/log/logger'
 import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
-import OpenAI from 'openai'
 import { zodResponseFormat } from 'openai/helpers/zod.mjs'
 import { z } from 'zod'
 

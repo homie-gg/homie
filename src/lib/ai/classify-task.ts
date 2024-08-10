@@ -2,7 +2,6 @@ import { logger } from '@/lib/log/logger'
 import { createOpenAIClient } from '@/lib/open-ai/create-open-ai-client'
 import { taskPriority } from '@/lib/tasks/task-priority'
 import { taskType } from '@/lib/tasks/task-type'
-import OpenAI from 'openai'
 import { zodResponseFormat } from 'openai/helpers/zod'
 import { z } from 'zod'
 
