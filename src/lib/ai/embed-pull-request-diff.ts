@@ -22,7 +22,7 @@ interface EmbedPullRequestDiffParams {
 export async function embedPullRequestDiff(params: EmbedPullRequestDiffParams) {
   const { diff, summary, pullRequest } = params
 
-  const chunks = chunkDiffByFiles(diff, chatGPTCharLimit - prompt.length / 3)
+  const chunks = chunkDiffByFiles(diff, chatGPTCharLimit / 3)
 
   for (const chunk of chunks) {
     const snippets = await extractCodeSnippets({
