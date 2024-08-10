@@ -86,6 +86,7 @@ export async function handleSyncAsanaTaskToHomieTask(
       task_type_id: classification
         ? classification.task_type_id
         : homieTask.task_type_id,
+      completed_at: asanaTask.completed ? new Date() : null,
     })
     .where('homie.task.id', '=', homieTask.id)
     .returning([
