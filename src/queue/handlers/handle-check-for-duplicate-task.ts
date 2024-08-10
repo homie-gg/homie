@@ -7,7 +7,6 @@ import { postPotentialDuplicateGithubIssueComment } from '@/lib/github/post-pote
 import { logger } from '@/lib/log/logger'
 import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
-import { taskStatus } from '@/lib/tasks'
 import { postPotentialDuplicateTrelloTaskComment } from '@/lib/trello/post-potential-duplicate-trello-comment'
 import { CheckForDuplicateTask } from '@/queue/jobs'
 import { CohereClient } from 'cohere-ai'
@@ -147,7 +146,7 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
     return
   }
 
-  const isDuplicate = checkIsDuplicateTask({
+  const isDuplicate = await checkIsDuplicateTask({
     taskA: task,
     taskB: duplicateTask,
     logData: {
@@ -196,43 +195,43 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
     task.github_repo_id &&
     organization.ext_gh_install_id
   ) {
-    // await postPotentialDuplicateGithubIssueComment({
-    //   targetTask: {
-    //     ext_gh_issue_number: task.ext_gh_issue_number,
-    //     github_repo_id: task.github_repo_id,
-    //   },
-    //   organization: {
-    //     id: organization.id,
-    //     ext_gh_install_id: organization.ext_gh_install_id,
-    //   },
-    //   duplicateTask,
-    // })
+    await postPotentialDuplicateGithubIssueComment({
+      targetTask: {
+        ext_gh_issue_number: task.ext_gh_issue_number,
+        github_repo_id: task.github_repo_id,
+      },
+      organization: {
+        id: organization.id,
+        ext_gh_install_id: organization.ext_gh_install_id,
+      },
+      duplicateTask,
+    })
   }
 
   if (task.ext_asana_task_id && organization.asana_access_token) {
-    // await postPotentialDuplicateAsanaTaskComment({
-    //   targetTask: {
-    //     ext_asana_task_id: task.ext_asana_task_id,
-    //   },
-    //   organization: {
-    //     id: organization.id,
-    //     asana_access_token: organization.asana_access_token,
-    //   },
-    //   duplicateTask,
-    // })
+    await postPotentialDuplicateAsanaTaskComment({
+      targetTask: {
+        ext_asana_task_id: task.ext_asana_task_id,
+      },
+      organization: {
+        id: organization.id,
+        asana_access_token: organization.asana_access_token,
+      },
+      duplicateTask,
+    })
   }
 
   if (organization.trello_access_token && task.ext_trello_card_id) {
-    // await postPotentialDuplicateTrelloTaskComment({
-    //   targetTask: {
-    //     ext_trello_card_id: task.ext_trello_card_id,
-    //   },
-    //   organization: {
-    //     id: organization.id,
-    //     trello_access_token: organization.trello_access_token,
-    //   },
-    //   duplicateTask,
-    // })
+    await postPotentialDuplicateTrelloTaskComment({
+      targetTask: {
+        ext_trello_card_id: task.ext_trello_card_id,
+      },
+      organization: {
+        id: organization.id,
+        trello_access_token: organization.trello_access_token,
+      },
+      duplicateTask,
+    })
   }
 
   await dbClient
