@@ -4,6 +4,6 @@ type OrganizationData = {
 }
 
 export const getOrganizationLogData = (organization: OrganizationData) => ({
-  organization_id: organization.id,
+  id: organization.id,
   ext_gh_install_id: organization.ext_gh_install_id,
 })

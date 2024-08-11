@@ -9,6 +9,7 @@ import { parseISO } from 'date-fns'
 import { getReferencedSlackMessages } from '@/lib/slack/get-referenced-slack-messages'
 import { embedPullRequestChanges } from '@/lib/ai/embed-pull-request-changes'
 import { embedPullRequestDiff } from '@/lib/ai/embed-pull-request-diff'
+import { dispatch } from '@/queue/dispatch'
 
 interface SaveMergedMergeRequestParams {
   mergeRequest: {
@@ -149,6 +150,24 @@ export async function saveMergedMergeRequest(
     summary,
     wasMergedToDefaultBranch,
   })
+
+  await dispatch(
+    'check_for_unclosed_task',
+    {
+      pull_request: {
+        ...pullRequestRecord,
+        merged_at: pullRequestRecord.merged_at?.toISOString() ?? null,
+        created_at: pullRequestRecord.created_at.toISOString(),
+      },
+      summary,
+    },
+    {
+      debounce: {
+        key: `check_unclosed_task:pull_request:${pullRequestRecord.id}`,
+        delaySecs: 120,
+      },
+    },
+  )
 
   if (diff) {
     await embedPullRequestDiff({

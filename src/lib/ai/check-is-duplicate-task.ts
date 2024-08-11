@@ -55,7 +55,7 @@ ${taskB.name} - ${taskB.description}
       ai_call: true,
       prompt,
       output_refusal: output.refusal,
-      logData,
+      ...logData,
     })
 
     return false
@@ -65,8 +65,8 @@ ${taskB.name} - ${taskB.description}
     event: 'check_for_duplicate_task:got_result',
     ai_call: true,
     prompt,
-    logData,
     is_duplicate: output.parsed.is_duplicate,
+    ...logData,
   })
 
   return output.parsed.is_duplicate
