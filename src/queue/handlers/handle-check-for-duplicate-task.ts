@@ -146,15 +146,32 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
     return
   }
 
-  const isDuplicate = await checkIsDuplicateTask({
+  const checkIsDuplicateResult = await checkIsDuplicateTask({
     taskA: task,
     taskB: duplicateTask,
-    logData: {
-      organization: getOrganizationLogData(organization),
-    },
   })
 
-  if (!isDuplicate) {
+  if (checkIsDuplicateResult.failed) {
+    logger.debug('Check duplicate task: failed to parse output', {
+      event: 'check_for_duplicate_task:failed_to_parse',
+      ai_call: true,
+      prompt,
+      error: checkIsDuplicateResult.error,
+      organization: getOrganizationLogData(organization),
+    })
+
+    return
+  }
+
+  logger.debug('Check duplicate task: got result', {
+    event: 'check_for_duplicate_task:got_result',
+    ai_call: true,
+    prompt,
+    is_duplicate: checkIsDuplicateResult.isDuplicate,
+    organization: getOrganizationLogData(organization),
+  })
+
+  if (!checkIsDuplicateResult.isDuplicate) {
     logger.debug('Check: Not duplicate', {
       event: 'check_for_duplicate_task:not_duplicate',
       data: {

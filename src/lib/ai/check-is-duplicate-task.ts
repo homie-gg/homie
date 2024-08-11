@@ -1,4 +1,3 @@
-import { logger } from '@/lib/log/logger'
 import OpenAI from 'openai'
 import { zodResponseFormat } from 'openai/helpers/zod'
 import { z } from 'zod'
@@ -12,15 +11,28 @@ interface CheckIsTaskDuplicateParams {
     name: string
     description: string
   }
-  logData?: Record<string, any>
 }
 
 const checkIsDuplicateResponse = z.object({
   is_duplicate: z.boolean().describe('Whether the two tasks are the same'),
 })
 
-export async function checkIsDuplicateTask(params: CheckIsTaskDuplicateParams) {
-  const { taskA, taskB, logData } = params
+type CheckIsDuplicateResult =
+  | {
+      failed: true
+      error: string | null
+      prompt: string
+    }
+  | {
+      failed: false
+      isDuplicate: boolean
+      prompt: string
+    }
+
+export async function checkIsDuplicateTask(
+  params: CheckIsTaskDuplicateParams,
+): Promise<CheckIsDuplicateResult> {
+  const { taskA, taskB } = params
 
   const openAI = new OpenAI()
 
@@ -50,24 +62,16 @@ ${taskB.name} - ${taskB.description}
   })
   const output = result.choices[0].message
   if (!output?.parsed || output.refusal) {
-    logger.debug('Check duplicate task: failed to parse output', {
-      event: 'check_for_duplicate_task:failed_to_parse',
-      ai_call: true,
+    return {
+      failed: true,
+      error: output.refusal,
       prompt,
-      output_refusal: output.refusal,
-      ...logData,
-    })
-
-    return false
+    }
   }
 
-  logger.debug('Check duplicate task: got result', {
-    event: 'check_for_duplicate_task:got_result',
-    ai_call: true,
+  return {
+    failed: false,
+    isDuplicate: output.parsed.is_duplicate,
     prompt,
-    is_duplicate: output.parsed.is_duplicate,
-    ...logData,
-  })
-
-  return output.parsed.is_duplicate
+  }
 }
