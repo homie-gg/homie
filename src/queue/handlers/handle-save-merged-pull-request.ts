@@ -84,24 +84,23 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
   })
 
   if (pullRequest) {
-    console.log('QUEUE: ', config.queue.driver)
-    // await dispatch(
-    //   'check_for_unclosed_task',
-    //   {
-    //     pull_request: {
-    //       ...pullRequest,
-    //       merged_at: pullRequest.merged_at?.toISOString() ?? null,
-    //       created_at: pullRequest.created_at.toISOString(),
-    //     },
-    //     summary: pullRequest.summary,
-    //   },
-    //   {
-    //     debounce: {
-    //       key: `check_unclosed_task:pull_request:${pullRequest.id}`,
-    //       delaySecs: 120,
-    //     },
-    //   },
-    // )
+    await dispatch(
+      'check_for_unclosed_task',
+      {
+        pull_request: {
+          ...pullRequest,
+          merged_at: pullRequest.merged_at?.toISOString() ?? null,
+          created_at: pullRequest.created_at.toISOString(),
+        },
+        summary: pullRequest.summary,
+      },
+      {
+        debounce: {
+          key: `check_unclosed_task:pull_request:${pullRequest.id}`,
+          delaySecs: 120,
+        },
+      },
+    )
   }
 
   logger.debug('Finished saving merged PR', {
