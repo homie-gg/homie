@@ -18,13 +18,13 @@ import { config } from '@/config'
       async (job: Job) => {
         logger.debug(`got job: ${job.name}`, {
           event: 'job.start',
-          data: job.data,
+          data: JSON.stringify(job.data),
         })
         const handle = handlers[job.name]
         if (!handle) {
           logger.debug(`Missing job handler" ${job.name}`, {
             event: 'job.missing_handler',
-            data: job.data,
+            data: JSON.stringify(job.data),
           })
           return
         }
@@ -33,7 +33,7 @@ import { config } from '@/config'
           const result = await handle(job as any) // Ignore TS, as already type-safe when accessing hadnle
           logger.debug(`Completed job: ${job.name}`, {
             event: 'job.complete',
-            data: job.data,
+            data: JSON.stringify(job.data),
             result,
           })
           return result
@@ -41,7 +41,7 @@ import { config } from '@/config'
           if (error instanceof Error) {
             logger.debug(`Failed job: ${job.name}`, {
               event: 'job.failed',
-              data: job.data,
+              data: JSON.stringify(job.data),
               error: error.message,
               stack: error.stack,
             })
@@ -51,7 +51,7 @@ import { config } from '@/config'
 
           logger.debug(`Failed job: ${job.name}`, {
             event: 'job.failed',
-            data: job.data,
+            data: JSON.stringify(job.data),
             error,
           })
 
