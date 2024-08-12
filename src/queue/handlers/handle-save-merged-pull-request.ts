@@ -6,6 +6,7 @@ import { logger } from '@/lib/log/logger'
 import { SaveMergedPullRequest } from '@/queue/jobs'
 import { getIsOverPlanContributorLimit } from '@/lib/billing/get-is-over-plan-contributor-limit'
 import { dispatch } from '@/queue/dispatch'
+import { config } from '@/config'
 
 export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
   const { pull_request, installation } = job.data
@@ -83,6 +84,7 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
   })
 
   if (pullRequest) {
+    console.log('QUEUE: ', config.queue.driver)
     // await dispatch(
     //   'check_for_unclosed_task',
     //   {
