@@ -63,6 +63,8 @@ export async function handleCheckForUnclosedTask(job: CheckForUnclosedTask) {
     modelName: 'text-embedding-3-large',
   })
 
+  console.log('embedder: ', embedder)
+
   const embeddings = await embedder.embedQuery(query)
 
   const vectorDB = getOrganizationVectorDB(pull_request.organization_id)
