@@ -6,6 +6,7 @@ import { dbClient } from '@/database/client'
 import { auth, clerkClient } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 import { mailchimp } from '@/lib/mailchimp'
+import { config } from '@/config'
 
 interface UserLayoutProps {
   children: React.ReactNode
@@ -49,9 +50,11 @@ export default async function UserLayout(props: UserLayoutProps) {
     .executeTakeFirst()
 
   if (!organization) {
-    const mailchimpSubscriberHash = await mailchimp.subscribeUser({
-      email: user.emailAddresses[0].emailAddress,
-    })
+    const mailchimpSubscriberHash = config.app.isProduction
+      ? await mailchimp.subscribeUser({
+          email: user.emailAddresses[0].emailAddress,
+        })
+      : null
 
     const newOrganization = await dbClient
       .insertInto('homie.organization')
@@ -92,6 +95,7 @@ export default async function UserLayout(props: UserLayoutProps) {
   }
 
   if (
+    config.app.isProduction &&
     !organization.has_completed_setup &&
     organization.mailchimp_subscriber_hash
   ) {
