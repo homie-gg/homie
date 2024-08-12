@@ -21,55 +21,57 @@ const matchingTaskRelevantScoreThreshold = 0.5
 export async function handleCheckForUnclosedTask(job: CheckForUnclosedTask) {
   const { pull_request, summary } = job.data
 
-  logger.debug('Check for unclosed tasks', {
-    event: 'check_for_unclosed_tasks:start',
-    data: {
-      pull_request: getPullRequestLogData(pull_request),
-      organization: getOrganizationLogData({
-        id: pull_request.organization_id,
-      }),
-    },
-  })
+  console.log('here.')
 
-  const organization = await dbClient
-    .selectFrom('homie.organization')
-    .leftJoin(
-      'github.organization',
-      'github.organization.organization_id',
-      'homie.organization.id',
-    )
-    .leftJoin(
-      'asana.app_user',
-      'asana.app_user.organization_id',
-      'homie.organization.id',
-    )
-    .leftJoin(
-      'trello.workspace',
-      'trello.workspace.organization_id',
-      'homie.organization.id',
-    )
-    .where('homie.organization.id', '=', pull_request.organization_id)
-    .select([
-      'homie.organization.id',
-      'ext_gh_install_id',
-      'asana.app_user.asana_access_token',
-      'trello.workspace.trello_access_token',
-    ])
-    .executeTakeFirstOrThrow()
+  // logger.debug('Check for unclosed tasks', {
+  //   event: 'check_for_unclosed_tasks:start',
+  //   data: {
+  //     pull_request: getPullRequestLogData(pull_request),
+  //     organization: getOrganizationLogData({
+  //       id: pull_request.organization_id,
+  //     }),
+  //   },
+  // })
 
-  const query = `${pull_request.title}\n${pull_request.body}\n${summary}`
+  // const organization = await dbClient
+  //   .selectFrom('homie.organization')
+  //   .leftJoin(
+  //     'github.organization',
+  //     'github.organization.organization_id',
+  //     'homie.organization.id',
+  //   )
+  //   .leftJoin(
+  //     'asana.app_user',
+  //     'asana.app_user.organization_id',
+  //     'homie.organization.id',
+  //   )
+  //   .leftJoin(
+  //     'trello.workspace',
+  //     'trello.workspace.organization_id',
+  //     'homie.organization.id',
+  //   )
+  //   .where('homie.organization.id', '=', pull_request.organization_id)
+  //   .select([
+  //     'homie.organization.id',
+  //     'ext_gh_install_id',
+  //     'asana.app_user.asana_access_token',
+  //     'trello.workspace.trello_access_token',
+  //   ])
+  //   .executeTakeFirstOrThrow()
 
-  const embedder = createOpenAIEmbedder({
-    modelName: 'text-embedding-3-large',
-  })
+  // const query = `${pull_request.title}\n${pull_request.body}\n${summary}`
 
-  console.log('embedder: ', embedder)
+  // const embedder = createOpenAIEmbedder({
+  //   modelName: 'text-embedding-3-large',
+  // })
 
-  const embeddings = await embedder.embedQuery(query)
+  // console.log('embedder: ', embedder)
 
-  const vectorDB = getOrganizationVectorDB(pull_request.organization_id)
+  // const embeddings = await embedder.embedQuery(query)
 
-  console.log('embeddings: ', embeddings)
+  // const vectorDB = getOrganizationVectorDB(pull_request.organization_id)
+
+  // console.log('embeddings: ', embeddings)
 
   // const { matches } = await vectorDB.query({
   //   vector: embeddings,
