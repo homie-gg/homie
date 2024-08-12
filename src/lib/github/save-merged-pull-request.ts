@@ -214,24 +214,6 @@ export async function saveMergedPullRequest(
     return
   }
 
-  await dispatch(
-    'check_for_unclosed_task',
-    {
-      pull_request: {
-        ...pullRequestRecord,
-        merged_at: pullRequestRecord.merged_at?.toISOString() ?? null,
-        created_at: pullRequestRecord.created_at.toISOString(),
-      },
-      summary,
-    },
-    {
-      debounce: {
-        key: `check_unclosed_task:pull_request:${pullRequestRecord.id}`,
-        delaySecs: 120,
-      },
-    },
-  )
-
   await embedPullRequestChanges({
     pullRequest: pullRequestRecord,
     summary,
@@ -244,5 +226,10 @@ export async function saveMergedPullRequest(
       summary,
       pullRequest: pullRequestRecord,
     })
+  }
+
+  return {
+    ...pullRequestRecord,
+    summary,
   }
 }
