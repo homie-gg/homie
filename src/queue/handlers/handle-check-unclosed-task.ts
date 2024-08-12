@@ -21,248 +21,242 @@ const matchingTaskRelevantScoreThreshold = 0.5
 export async function handleCheckForUnclosedTask(job: CheckForUnclosedTask) {
   const { pull_request, summary } = job.data
 
-  console.log('here.')
+  logger.debug('Check for unclosed tasks', {
+    event: 'check_for_unclosed_tasks:start',
+    data: {
+      pull_request: getPullRequestLogData(pull_request),
+      organization: getOrganizationLogData({
+        id: pull_request.organization_id,
+      }),
+    },
+  })
 
-  // logger.debug('Check for unclosed tasks', {
-  //   event: 'check_for_unclosed_tasks:start',
-  //   data: {
-  //     pull_request: getPullRequestLogData(pull_request),
-  //     organization: getOrganizationLogData({
-  //       id: pull_request.organization_id,
-  //     }),
-  //   },
-  // })
+  const organization = await dbClient
+    .selectFrom('homie.organization')
+    .leftJoin(
+      'github.organization',
+      'github.organization.organization_id',
+      'homie.organization.id',
+    )
+    .leftJoin(
+      'asana.app_user',
+      'asana.app_user.organization_id',
+      'homie.organization.id',
+    )
+    .leftJoin(
+      'trello.workspace',
+      'trello.workspace.organization_id',
+      'homie.organization.id',
+    )
+    .where('homie.organization.id', '=', pull_request.organization_id)
+    .select([
+      'homie.organization.id',
+      'ext_gh_install_id',
+      'asana.app_user.asana_access_token',
+      'trello.workspace.trello_access_token',
+    ])
+    .executeTakeFirstOrThrow()
 
-  // const organization = await dbClient
-  //   .selectFrom('homie.organization')
-  //   .leftJoin(
-  //     'github.organization',
-  //     'github.organization.organization_id',
-  //     'homie.organization.id',
-  //   )
-  //   .leftJoin(
-  //     'asana.app_user',
-  //     'asana.app_user.organization_id',
-  //     'homie.organization.id',
-  //   )
-  //   .leftJoin(
-  //     'trello.workspace',
-  //     'trello.workspace.organization_id',
-  //     'homie.organization.id',
-  //   )
-  //   .where('homie.organization.id', '=', pull_request.organization_id)
-  //   .select([
-  //     'homie.organization.id',
-  //     'ext_gh_install_id',
-  //     'asana.app_user.asana_access_token',
-  //     'trello.workspace.trello_access_token',
-  //   ])
-  //   .executeTakeFirstOrThrow()
+  const query = `${pull_request.title}\n${pull_request.body}\n${summary}`
 
-  // const query = `${pull_request.title}\n${pull_request.body}\n${summary}`
+  const embedder = createOpenAIEmbedder({
+    modelName: 'text-embedding-3-large',
+  })
 
-  // const embedder = createOpenAIEmbedder({
-  //   modelName: 'text-embedding-3-large',
-  // })
+  const embeddings = await embedder.embedQuery(query)
 
-  // console.log('embedder: ', embedder)
+  const vectorDB = getOrganizationVectorDB(pull_request.organization_id)
 
-  // const embeddings = await embedder.embedQuery(query)
+  const { matches } = await vectorDB.query({
+    vector: embeddings,
+    topK: 50,
+    includeMetadata: true,
+    filter: {
+      organization_id: {
+        $eq: pull_request.organization_id,
+      },
+      type: {
+        $eq: 'task',
+      },
+      task_status: {
+        $eq: 'open',
+      },
+    },
+  })
 
-  // const vectorDB = getOrganizationVectorDB(pull_request.organization_id)
+  if (matches.length === 0) {
+    logger.debug('No matching tasks', {
+      event: 'check_for_unclosed_tasks:no_matches',
+      data: {
+        pull_request: getPullRequestLogData(pull_request),
+        organization: getOrganizationLogData(organization),
+      },
+    })
 
-  // console.log('embeddings: ', embeddings)
+    // No matching unclosed tasks
+    return
+  }
 
-  // const { matches } = await vectorDB.query({
-  //   vector: embeddings,
-  //   topK: 50,
-  //   includeMetadata: true,
-  //   filter: {
-  //     organization_id: {
-  //       $eq: pull_request.organization_id,
-  //     },
-  //     type: {
-  //       $eq: 'task',
-  //     },
-  //     task_status: {
-  //       $eq: 'open',
-  //     },
-  //   },
-  // })
+  const cohere = new CohereClient({
+    token: process.env.COHERE_API_KEY,
+  })
 
-  // if (matches.length === 0) {
-  //   logger.debug('No matching tasks', {
-  //     event: 'check_for_unclosed_tasks:no_matches',
-  //     data: {
-  //       pull_request: getPullRequestLogData(pull_request),
-  //       organization: getOrganizationLogData(organization),
-  //     },
-  //   })
+  const reranked = await cohere.rerank({
+    query: query,
+    documents: matches.map((match) => (match.metadata?.text ?? '') as string),
+  })
 
-  //   // No matching unclosed tasks
-  //   return
-  // }
+  const rankedDocuments = reranked.results
+    .filter(
+      (result) => result.relevanceScore > matchingTaskRelevantScoreThreshold,
+    )
+    .map((result) => matches[result.index].metadata as unknown as TaskMetadata)
 
-  // const cohere = new CohereClient({
-  //   token: process.env.COHERE_API_KEY,
-  // })
+  // No ranked results above minimum relevant score
+  if (rankedDocuments.length === 0) {
+    logger.debug('No potential matching tasks above threshold', {
+      event: 'check_for_duplicate_task:no_potential_target_tasks',
+      data: {
+        organization: getOrganizationLogData({
+          id: pull_request.organization_id,
+        }),
+        matches: matches.map((match) => match.metadata),
+      },
+    })
+    return
+  }
 
-  // const reranked = await cohere.rerank({
-  //   query: query,
-  //   documents: matches.map((match) => (match.metadata?.text ?? '') as string),
-  // })
+  const tasks: Array<{
+    id: number
+    description: string
+    html_url: string
+    name: string
+    ext_gh_issue_number: number | null
+    github_repo_id: number | null
+    ext_asana_task_id: string | null
+    ext_trello_card_id: string | null
+  }> = []
 
-  // const rankedDocuments = reranked.results
-  //   .filter(
-  //     (result) => result.relevanceScore > matchingTaskRelevantScoreThreshold,
-  //   )
-  //   .map((result) => matches[result.index].metadata as unknown as TaskMetadata)
+  for (const document of rankedDocuments) {
+    const task = await dbClient
+      .selectFrom('homie.task')
+      .where('organization_id', '=', pull_request.organization_id)
+      .where('homie.task.id', '=', document.task_id)
+      .select([
+        'name',
+        'description',
+        'html_url',
+        'id',
+        'ext_gh_issue_number',
+        'github_repo_id',
+        'ext_asana_task_id',
+        'ext_trello_card_id',
+      ])
+      .executeTakeFirst()
 
-  // // No ranked results above minimum relevant score
-  // if (rankedDocuments.length === 0) {
-  //   logger.debug('No potential matching tasks above threshold', {
-  //     event: 'check_for_duplicate_task:no_potential_target_tasks',
-  //     data: {
-  //       organization: getOrganizationLogData({
-  //         id: pull_request.organization_id,
-  //       }),
-  //       matches: matches.map((match) => match.metadata),
-  //     },
-  //   })
-  //   return
-  // }
+    if (task) {
+      tasks.push(task)
+    }
+  }
 
-  // const tasks: Array<{
-  //   id: number
-  //   description: string
-  //   html_url: string
-  //   name: string
-  //   ext_gh_issue_number: number | null
-  //   github_repo_id: number | null
-  //   ext_asana_task_id: string | null
-  //   ext_trello_card_id: string | null
-  // }> = []
+  await Promise.all(
+    tasks.map(async (task) => {
+      const matchResult = await checkPullRequestIsForTask({
+        task: {
+          name: task.name,
+          description: task.description,
+        },
+        pullRequest: {
+          title: pull_request.title,
+          body: pull_request.body,
+          summary: summary,
+        },
+      })
 
-  // for (const document of rankedDocuments) {
-  //   const task = await dbClient
-  //     .selectFrom('homie.task')
-  //     .where('organization_id', '=', pull_request.organization_id)
-  //     .where('homie.task.id', '=', document.task_id)
-  //     .select([
-  //       'name',
-  //       'description',
-  //       'html_url',
-  //       'id',
-  //       'ext_gh_issue_number',
-  //       'github_repo_id',
-  //       'ext_asana_task_id',
-  //       'ext_trello_card_id',
-  //     ])
-  //     .executeTakeFirst()
+      if (matchResult.failed) {
+        logger.debug('Failed to check if PR matches task', {
+          event: 'check_for_unclosed_tasks:pr_match_failed',
+          ai_call: true,
+          task,
+          pull_request,
+          prompt: matchResult.prompt,
+          error: matchResult.error,
+          organization: getOrganizationLogData({
+            id: pull_request.organization_id,
+          }),
+        })
 
-  //   if (task) {
-  //     tasks.push(task)
-  //   }
-  // }
+        return
+      }
 
-  // await Promise.all(
-  //   tasks.map(async (task) => {
-  //     const matchResult = await checkPullRequestIsForTask({
-  //       task: {
-  //         name: task.name,
-  //         description: task.description,
-  //       },
-  //       pullRequest: {
-  //         title: pull_request.title,
-  //         body: pull_request.body,
-  //         summary: summary,
-  //       },
-  //     })
+      logger.debug('Got PR match result for task', {
+        ai_call: true,
+        event: 'check_for_unclosed_tasks:check_pr_matches_task',
+        task,
+        pull_request,
+        organization: getOrganizationLogData({
+          id: pull_request.organization_id,
+        }),
+        is_match: matchResult.isMatch,
+      })
 
-  //     if (matchResult.failed) {
-  //       logger.debug('Failed to check if PR matches task', {
-  //         event: 'check_for_unclosed_tasks:pr_match_failed',
-  //         ai_call: true,
-  //         task,
-  //         pull_request,
-  //         prompt: matchResult.prompt,
-  //         error: matchResult.error,
-  //         organization: getOrganizationLogData({
-  //           id: pull_request.organization_id,
-  //         }),
-  //       })
+      if (!matchResult.isMatch) {
+        return
+      }
 
-  //       return
-  //     }
+      // Github Issue
+      if (
+        task.ext_gh_issue_number &&
+        task.github_repo_id &&
+        organization.ext_gh_install_id
+      ) {
+        await postUnclosedGithubIssueComment({
+          task: {
+            ext_gh_issue_number: task.ext_gh_issue_number,
+            github_repo_id: task.github_repo_id,
+          },
+          organization: {
+            id: organization.id,
+            ext_gh_install_id: organization.ext_gh_install_id,
+          },
+          pullRequest: {
+            title: pull_request.title,
+            html_url: pull_request.html_url,
+          },
+        })
+      }
 
-  //     logger.debug('Got PR match result for task', {
-  //       ai_call: true,
-  //       event: 'check_for_unclosed_tasks:check_pr_matches_task',
-  //       task,
-  //       pull_request,
-  //       organization: getOrganizationLogData({
-  //         id: pull_request.organization_id,
-  //       }),
-  //       is_match: matchResult.isMatch,
-  //     })
+      if (task.ext_asana_task_id && organization.asana_access_token) {
+        await postUnclosedAsanaTaskComment({
+          task: {
+            ext_asana_task_id: task.ext_asana_task_id,
+          },
+          organization: {
+            id: organization.id,
+            asana_access_token: organization.asana_access_token,
+          },
+          pullRequest: {
+            title: pull_request.title,
+            html_url: pull_request.html_url,
+          },
+        })
+      }
 
-  //     if (!matchResult.isMatch) {
-  //       return
-  //     }
-
-  //     // Github Issue
-  //     if (
-  //       task.ext_gh_issue_number &&
-  //       task.github_repo_id &&
-  //       organization.ext_gh_install_id
-  //     ) {
-  //       await postUnclosedGithubIssueComment({
-  //         task: {
-  //           ext_gh_issue_number: task.ext_gh_issue_number,
-  //           github_repo_id: task.github_repo_id,
-  //         },
-  //         organization: {
-  //           id: organization.id,
-  //           ext_gh_install_id: organization.ext_gh_install_id,
-  //         },
-  //         pullRequest: {
-  //           title: pull_request.title,
-  //           html_url: pull_request.html_url,
-  //         },
-  //       })
-  //     }
-
-  //     if (task.ext_asana_task_id && organization.asana_access_token) {
-  //       await postUnclosedAsanaTaskComment({
-  //         task: {
-  //           ext_asana_task_id: task.ext_asana_task_id,
-  //         },
-  //         organization: {
-  //           id: organization.id,
-  //           asana_access_token: organization.asana_access_token,
-  //         },
-  //         pullRequest: {
-  //           title: pull_request.title,
-  //           html_url: pull_request.html_url,
-  //         },
-  //       })
-  //     }
-
-  //     if (organization.trello_access_token && task.ext_trello_card_id) {
-  //       await postUnclosedTrelloTaskComment({
-  //         task: {
-  //           ext_trello_card_id: task.ext_trello_card_id,
-  //         },
-  //         organization: {
-  //           id: organization.id,
-  //           trello_access_token: organization.trello_access_token,
-  //         },
-  //         pullRequest: {
-  //           title: pull_request.title,
-  //           html_url: pull_request.html_url,
-  //         },
-  //       })
-  //     }
-  //   }),
-  // )
+      if (organization.trello_access_token && task.ext_trello_card_id) {
+        await postUnclosedTrelloTaskComment({
+          task: {
+            ext_trello_card_id: task.ext_trello_card_id,
+          },
+          organization: {
+            id: organization.id,
+            trello_access_token: organization.trello_access_token,
+          },
+          pullRequest: {
+            title: pull_request.title,
+            html_url: pull_request.html_url,
+          },
+        })
+      }
+    }),
+  )
 }

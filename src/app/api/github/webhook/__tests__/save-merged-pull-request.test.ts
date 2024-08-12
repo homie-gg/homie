@@ -82,7 +82,7 @@ it('should create and embed a pr', async () => {
     embedQuery: mockEmbed,
   })
 
-  mockEmbed.mockResolvedValueOnce([1.232, 2.3434]) // Pull request embed
+  mockEmbed.mockResolvedValue([1.232, 2.3434])
 
   const mockUpsert = jest.fn()
   const mockQuery = jest.fn()
@@ -95,7 +95,6 @@ it('should create and embed a pr', async () => {
     }),
   })
 
-  mockEmbed.mockResolvedValueOnce([1.232, 2.3434]) // Check unclosed task for PR
   mockQuery.mockResolvedValueOnce({
     matches: [],
   })
