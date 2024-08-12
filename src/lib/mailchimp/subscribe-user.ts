@@ -1,4 +1,4 @@
-import { mailchimpClient } from '@/lib/mailchimp/client'
+import { getMailchimp } from '@/lib/mailchimp/get-mailchimp'
 import { tags } from '@/lib/mailchimp/tags'
 
 interface SubscribeMailchimpUserParams {
@@ -8,7 +8,7 @@ interface SubscribeMailchimpUserParams {
 export async function subscribeUser(params: SubscribeMailchimpUserParams) {
   const { email } = params
 
-  const response = await mailchimpClient.lists.addListMember(
+  const response = await getMailchimp().lists.addListMember(
     process.env.MAILCHIMP_LIST_ID!,
     {
       status: 'subscribed',

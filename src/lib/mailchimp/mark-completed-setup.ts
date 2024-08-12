@@ -1,4 +1,4 @@
-import { mailchimpClient } from '@/lib/mailchimp/client'
+import { getMailchimp } from '@/lib/mailchimp/get-mailchimp'
 import { tags } from '@/lib/mailchimp/tags'
 
 interface MarkCompletedSetupParams {
@@ -8,7 +8,7 @@ interface MarkCompletedSetupParams {
 export async function markCompletedSetup(params: MarkCompletedSetupParams) {
   const { subscriberHash } = params
 
-  const response = await mailchimpClient.lists.updateListMemberTags(
+  const response = await getMailchimp().lists.updateListMemberTags(
     process.env.MAILCHIMP_LIST_ID!,
     subscriberHash,
     {
