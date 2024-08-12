@@ -9,7 +9,6 @@ import { getLinkedIssuesAndTasksInPullRequest } from '@/lib/github/get-linked-is
 import { getReferencedSlackMessages } from '@/lib/slack/get-referenced-slack-messages'
 import { embedPullRequestChanges } from '@/lib/ai/embed-pull-request-changes'
 import { embedPullRequestDiff } from '@/lib/ai/embed-pull-request-diff'
-import { dispatch } from '@/queue/dispatch'
 
 interface SaveMergedPullRequestParams {
   pullRequest: {

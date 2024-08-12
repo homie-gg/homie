@@ -5,6 +5,7 @@ import { getMergeRequestLogData } from '@/lib/gitlab/get-merge-request-log-data'
 import { saveMergedMergeRequest } from '@/lib/gitlab/save-merged-merge-request'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
+import { dispatch } from '@/queue/dispatch'
 import { SaveMergedMergeRequest } from '@/queue/jobs'
 
 export async function handleSaveMergedMergeRequest(
@@ -61,10 +62,30 @@ export async function handleSaveMergedMergeRequest(
     merge_request.iid,
   )
 
-  await saveMergedMergeRequest({
+  const pullRequest = await saveMergedMergeRequest({
     mergeRequest: mergeRequestInfo,
     organization,
     project,
     defaultBranch,
   })
+
+  if (pullRequest) {
+    await dispatch(
+      'check_for_unclosed_task',
+      {
+        pull_request: {
+          ...pullRequest,
+          merged_at: pullRequest.merged_at?.toISOString() ?? null,
+          created_at: pullRequest.created_at.toISOString(),
+        },
+        summary: pullRequest.summary,
+      },
+      {
+        debounce: {
+          key: `check_unclosed_task:pull_request:${pullRequest.id}`,
+          delaySecs: 120,
+        },
+      },
+    )
+  }
 }
