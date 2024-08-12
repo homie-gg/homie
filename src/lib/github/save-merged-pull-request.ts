@@ -226,4 +226,9 @@ export async function saveMergedPullRequest(
       pullRequest: pullRequestRecord,
     })
   }
+
+  return {
+    ...pullRequestRecord,
+    summary,
+  }
 }

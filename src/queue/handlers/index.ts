@@ -5,7 +5,7 @@ import { handleGenerateOpenPullRequestSummary } from '@/queue/handlers/handle-ge
 import { handleImportPullRequests } from '@/queue/handlers/handle-import-pull-requests'
 import { handleSaveMergedPullRequest } from '@/queue/handlers/handle-save-merged-pull-request'
 import { handleSaveOpenedPullRequest } from '@/queue/handlers/handle-save-opened-pull-request'
-import { Job } from '@/queue/jobs'
+import { CheckForUnclosedTask, Job } from '@/queue/jobs'
 import { handleSendPullRequestSummaries } from '@/queue/handlers/handle-send-pull-request-summaries'
 import { handleSendPullRequestSummariesToOrganization } from '@/queue/handlers/handle-send-pull-request-summaries-to-organization'
 import { handleCreateTrelloTaskFromSlack } from '@/queue/handlers/handle-create-trello-task-from-slack'
@@ -35,6 +35,7 @@ import { handleReopenPullRequest } from '@/queue/handlers/handle-reopen-pull-req
 import { handleCheckForDuplicateTask } from '@/queue/handlers/handle-check-for-duplicate-task'
 import { handleMigrateOrganizationEmbeddings } from '@/queue/handlers/handle-migrate-organization-embeddings'
 import { handleMigrateTaskEmbeddings } from '@/queue/handlers/handle-migrate-organization-task-embeddings'
+import { handleCheckForUnclosedTask } from '@/queue/handlers/handle-check-unclosed-task'
 
 type HandlerFunc<TJob extends Job> = (job: TJob) => void | Promise<void>
 
@@ -82,4 +83,5 @@ export const handlers: Handlers = {
   sync_asana_task_to_homie_task: handleSyncAsanaTaskToHomieTask,
   migrate_organization_embeddings: handleMigrateOrganizationEmbeddings,
   migrate_task_embeddings: handleMigrateTaskEmbeddings,
+  check_for_unclosed_task: handleCheckForUnclosedTask,
 }

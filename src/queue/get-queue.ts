@@ -1,6 +1,4 @@
-import { config } from '@/config'
 import { getQueueOptions } from '@/queue/get-queue-options'
-import { handlers } from '@/queue/handlers'
 import { Job } from '@/queue/jobs'
 import { Queue } from 'bullmq'
 import Redis from 'ioredis'
@@ -11,22 +9,6 @@ const queues: Record<
 > = {}
 
 export const getQueue = (name: string) => {
-  if (config.queue.driver === 'sync') {
-    return {
-      add: async (job: Job['name'], data: Job['data'], opts?: Job['opts']) => {
-        const handler = handlers[job]
-        if (!handler) {
-          throw new Error(`Missing job handler: ${job}`)
-        }
-
-        await handler({ name: job, data, opts } as any)
-      },
-      getRepeatableJobs: () => [],
-      removeRepeatableByKey: (_key: string) => {},
-      remove: (_key: string) => {},
-    }
-  }
-
   // Assert queue is defined
   getQueueOptions(name)
 

@@ -5,6 +5,8 @@ import { getPullRequestLogData } from '@/lib/github/get-pull-request-log-data'
 import { logger } from '@/lib/log/logger'
 import { SaveMergedPullRequest } from '@/queue/jobs'
 import { getIsOverPlanContributorLimit } from '@/lib/billing/get-is-over-plan-contributor-limit'
+import { dispatch } from '@/queue/dispatch'
+import { config } from '@/config'
 
 export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
   const { pull_request, installation } = job.data
@@ -76,10 +78,30 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
     return
   }
 
-  await saveMergedPullRequest({
+  const pullRequest = await saveMergedPullRequest({
     pullRequest: pull_request,
     organization,
   })
+
+  if (pullRequest) {
+    await dispatch(
+      'check_for_unclosed_task',
+      {
+        pull_request: {
+          ...pullRequest,
+          merged_at: pullRequest.merged_at?.toISOString() ?? null,
+          created_at: pullRequest.created_at.toISOString(),
+        },
+        summary: pullRequest.summary,
+      },
+      {
+        debounce: {
+          key: `check_unclosed_task:pull_request:${pullRequest.id}`,
+          delaySecs: 120,
+        },
+      },
+    )
+  }
 
   logger.debug('Finished saving merged PR', {
     event: 'save_merged_pull_request.complete',

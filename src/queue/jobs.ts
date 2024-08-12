@@ -556,6 +556,24 @@ export type CheckForDuplicateTask = BullMQJob<
   'check_for_duplicate_task'
 >
 
+export type CheckForUnclosedTask = BullMQJob<
+  {
+    pull_request: {
+      id: number
+      merged_at: string | null
+      body: string | null
+      title: string
+      number: number
+      created_at: string
+      html_url: string
+      organization_id: number
+    }
+    summary: string
+  },
+  void, // return type
+  'check_for_unclosed_task'
+>
+
 export type DispatchDebouncedJob = BullMQJob<
   {
     job: {
@@ -626,3 +644,4 @@ export type Job =
   | DispatchDebouncedJob
   | MigrateOrganizationEmbeddings
   | MigrateTaskEmbeddings
+  | CheckForUnclosedTask

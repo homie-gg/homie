@@ -82,15 +82,21 @@ it('should create and embed a pr', async () => {
     embedQuery: mockEmbed,
   })
 
-  mockEmbed.mockResolvedValueOnce([1.232, 2.3434])
+  mockEmbed.mockResolvedValue([1.232, 2.3434])
 
   const mockUpsert = jest.fn()
+  const mockQuery = jest.fn()
   mockGetPineconeClient.mockReturnValue({
     Index: () => ({
       namespace: () => ({
         upsert: mockUpsert,
+        query: mockQuery,
       }),
     }),
+  })
+
+  mockQuery.mockResolvedValueOnce({
+    matches: [],
   })
 
   await pullRequestClosedHandler({
