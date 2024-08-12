@@ -1161,6 +1161,12 @@ declare module 'zapatos/schema' {
          */
         ext_stripe_customer_id: string | null
         /**
+         * **homie.organization.has_completed_setup**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        has_completed_setup: boolean
+        /**
          * **homie.organization.has_unlimited_usage**
          * - `bool` in database
          * - Nullable, default: `false`
@@ -1178,6 +1184,12 @@ declare module 'zapatos/schema' {
          * - `NOT NULL`, default: `false`
          */
         is_persona_enabled: boolean
+        /**
+         * **homie.organization.mailchimp_subscriber_hash**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        mailchimp_subscriber_hash: string | null
         /**
          * **homie.organization.persona_affection_level**
          * - `int4` in database
@@ -1253,6 +1265,12 @@ declare module 'zapatos/schema' {
          */
         ext_stripe_customer_id: string | null
         /**
+         * **homie.organization.has_completed_setup**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        has_completed_setup: boolean
+        /**
          * **homie.organization.has_unlimited_usage**
          * - `bool` in database
          * - Nullable, default: `false`
@@ -1270,6 +1288,12 @@ declare module 'zapatos/schema' {
          * - `NOT NULL`, default: `false`
          */
         is_persona_enabled: boolean
+        /**
+         * **homie.organization.mailchimp_subscriber_hash**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        mailchimp_subscriber_hash: string | null
         /**
          * **homie.organization.persona_affection_level**
          * - `int4` in database
@@ -1372,6 +1396,20 @@ declare module 'zapatos/schema' {
               string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
             >
         /**
+         * **homie.organization.has_completed_setup**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        has_completed_setup?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn
+            >
+        /**
          * **homie.organization.has_unlimited_usage**
          * - `bool` in database
          * - Nullable, default: `false`
@@ -1412,6 +1450,20 @@ declare module 'zapatos/schema' {
           | db.SQLFragment<
               any,
               boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.organization.mailchimp_subscriber_hash**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        mailchimp_subscriber_hash?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
             >
         /**
          * **homie.organization.persona_affection_level**
@@ -1572,6 +1624,16 @@ declare module 'zapatos/schema' {
           | db.DefaultType
           | db.SQLFragment
         /**
+         * **homie.organization.has_completed_setup**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        has_completed_setup?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
          * **homie.organization.has_unlimited_usage**
          * - `bool` in database
          * - Nullable, default: `false`
@@ -1596,6 +1658,17 @@ declare module 'zapatos/schema' {
         is_persona_enabled?:
           | boolean
           | db.Parameter<boolean>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **homie.organization.mailchimp_subscriber_hash**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        mailchimp_subscriber_hash?:
+          | string
+          | db.Parameter<string>
+          | null
           | db.DefaultType
           | db.SQLFragment
         /**
@@ -1737,6 +1810,20 @@ declare module 'zapatos/schema' {
               | db.SQLFragment
             >
         /**
+         * **homie.organization.has_completed_setup**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        has_completed_setup?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment
+            >
+        /**
          * **homie.organization.has_unlimited_usage**
          * - `bool` in database
          * - Nullable, default: `false`
@@ -1782,6 +1869,25 @@ declare module 'zapatos/schema' {
           | db.SQLFragment<
               any,
               boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **homie.organization.mailchimp_subscriber_hash**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        mailchimp_subscriber_hash?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | string
+              | db.Parameter<string>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
             >
         /**
          * **homie.organization.persona_affection_level**

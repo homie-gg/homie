@@ -5,6 +5,7 @@ import { MainNav } from '@/app/(user)/_components/MainNav'
 import { dbClient } from '@/database/client'
 import { auth, clerkClient } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
+import { mailchimp } from '@/lib/mailchimp'
 
 interface UserLayoutProps {
   children: React.ReactNode
@@ -42,15 +43,21 @@ export default async function UserLayout(props: UserLayoutProps) {
       'github.organization.ext_gh_install_id',
       'slack.workspace.ext_slack_team_id',
       'gitlab_access_token',
+      'has_completed_setup',
     ])
     .where('ext_clerk_user_id', '=', userId)
     .executeTakeFirst()
 
   if (!organization) {
+    const mailchimpSubscriberHash = await mailchimp.subscribeUser({
+      email: user.emailAddresses[0].emailAddress,
+    })
+
     const newOrganization = await dbClient
       .insertInto('homie.organization')
       .values({
         ext_clerk_user_id: userId,
+        mailchimp_subscriber_hash: mailchimpSubscriberHash,
       })
       .returningAll()
       .executeTakeFirstOrThrow()
@@ -82,6 +89,25 @@ export default async function UserLayout(props: UserLayoutProps) {
         </Content>
       </div>
     )
+  }
+
+  if (
+    !organization.has_completed_setup &&
+    organization.mailchimp_subscriber_hash
+  ) {
+    await mailchimp.markCompletedSetup({
+      subscriberHash: organization.mailchimp_subscriber_hash,
+    })
+  }
+
+  if (!organization.has_completed_setup) {
+    await dbClient
+      .updateTable('homie.organization')
+      .where('id', '=', organization.id)
+      .set({
+        has_completed_setup: true,
+      })
+      .executeTakeFirstOrThrow()
   }
 
   return (
