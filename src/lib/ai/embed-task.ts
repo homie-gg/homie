@@ -21,6 +21,8 @@ interface EmbedTaskParams {
 
 export interface TaskMetadata extends RecordMetadata {
   type: 'task'
+  name: string
+  description: string
   organization_id: number
   task_id: number
   task_status: string
@@ -57,6 +59,8 @@ export async function embedTask(params: EmbedTaskParams) {
 
   const metadata: TaskMetadata = {
     type: 'task',
+    name: task.name,
+    description: task.description,
     organization_id: task.organization_id,
     task_id: task.id,
     task_status: status.name,
@@ -66,6 +70,7 @@ export async function embedTask(params: EmbedTaskParams) {
     created_at: task.created_at.toISOString(),
     due_date: task.due_date?.toISOString() ?? '',
     completed_at: task.completed_at?.toISOString() ?? '',
+    url: task.html_url,
   }
 
   const record: PineconeRecord = {
