@@ -20,6 +20,8 @@ export default async function UserLayout(props: UserLayoutProps) {
     redirect('/')
   }
 
+  // Fix pw reset
+
   const user = await clerkClient.users.getUser(userId)
 
   const organization = await dbClient
