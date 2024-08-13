@@ -17,7 +17,7 @@ services:
       - 6379:6379
 
   worker:
-    image: docker:27.1.1-cli
+    image: node:20.10.0
     build:
       context: .
       dockerfile: worker.Dockerfile
