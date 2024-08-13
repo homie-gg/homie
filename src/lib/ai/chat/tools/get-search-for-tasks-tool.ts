@@ -183,7 +183,10 @@ export function getSearchForTasksTool(params: GetSearchForTasksToolParams) {
           matches,
           reranked_raw: reranked.results.map(
             (result) =>
-              matches[result.index].metadata as unknown as TaskMetadata,
+              {
+                const metadata = matches[result.index].metadata as unknown as TaskMetadata
+  return {name: metadata.text, id: metadata.task_id}
+              }
           ),
           search_relevance_threshold: searchRelevanceThreshold,
           result: rankedDocuments,
