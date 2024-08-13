@@ -1,7 +1,6 @@
 import { dbClient } from '@/database/client'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
-import { findTask } from '@/lib/tasks/find-task'
 import { DynamicStructuredTool } from '@langchain/core/tools'
 import { z } from 'zod'
 
