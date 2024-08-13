@@ -181,13 +181,11 @@ export function getSearchForTasksTool(params: GetSearchForTasksToolParams) {
           organization: getOrganizationLogData(organization),
           search_term: searchTerm,
           matches,
-          reranked_raw: reranked.results.map(
-            (result) =>
-              {
-                const metadata = matches[result.index].metadata as unknown as TaskMetadata
-  return {name: metadata.text, id: metadata.task_id}
-              }
-          ),
+          reranked_raw: reranked.results.map((result) => {
+            const metadata = matches[result.index]
+              .metadata as unknown as TaskMetadata
+            return { name: metadata.text, id: metadata.task_id }
+          }),
           search_relevance_threshold: searchRelevanceThreshold,
           result: rankedDocuments,
           include_completed_tasks: includeCompletedTasks,
