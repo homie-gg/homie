@@ -155,7 +155,7 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
     logger.debug('Check duplicate task: failed to parse output', {
       event: 'check_for_duplicate_task:failed_to_parse',
       ai_call: true,
-      prompt,
+      prompt: checkIsDuplicateResult.prompt,
       error: checkIsDuplicateResult.error,
       organization: getOrganizationLogData(organization),
     })
@@ -166,7 +166,7 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
   logger.debug('Check duplicate task: got result', {
     event: 'check_for_duplicate_task:got_result',
     ai_call: true,
-    prompt,
+    prompt: checkIsDuplicateResult.prompt,
     is_duplicate: checkIsDuplicateResult.isDuplicate,
     organization: getOrganizationLogData(organization),
   })
