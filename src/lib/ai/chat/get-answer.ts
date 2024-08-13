@@ -35,6 +35,7 @@ import { getListGithubReposTool } from '@/lib/ai/chat/tools/get-list-github-repo
 import { getListAsanaProjectsTool } from '@/lib/ai/chat/tools/get-list-asana-projects-tool'
 import { getSearchPullRequestsTool } from '@/lib/ai/chat/tools/get-search-pull-requests-tool'
 import { getSearchGeneralContextTool } from '@/lib/ai/chat/tools/get-search-general-context-tool'
+import { getFindContributorTool } from '@/lib/ai/chat/tools/get-find-contributor-tool'
 
 interface GetAnswerParams {
   organization: {
@@ -141,6 +142,10 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       answerId,
     }),
     getSearchPullRequestsTool({
+      organization,
+      answerId,
+    }),
+    getFindContributorTool({
       organization,
       answerId,
     }),
