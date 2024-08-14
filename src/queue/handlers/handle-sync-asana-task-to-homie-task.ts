@@ -127,6 +127,19 @@ export async function handleSyncAsanaTaskToHomieTask(
     },
   )
 
+  await dispatch(
+    'calculate_task_complexity',
+    {
+      task: updatedTask,
+    },
+    {
+      debounce: {
+        key: `calculate_task_complexity:${updatedTask.id}`,
+        delaySecs: 600,
+      },
+    },
+  )
+
   // If no assignee, we'll remove any assignments (if they exist)
   if (!asanaTask.assignee) {
     await dbClient

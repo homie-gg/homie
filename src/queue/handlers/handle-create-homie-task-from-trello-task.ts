@@ -104,4 +104,17 @@ export async function handleCreateHomieTaskFromTrelloTask(
       },
     },
   )
+
+  await dispatch(
+    'calculate_task_complexity',
+    {
+      task,
+    },
+    {
+      debounce: {
+        key: `calculate_task_complexity:${task.id}`,
+        delaySecs: 600,
+      },
+    },
+  )
 }

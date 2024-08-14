@@ -2,27 +2,27 @@ import OpenAI from 'openai'
 import { zodResponseFormat } from 'openai/helpers/zod'
 import { z } from 'zod'
 
-interface CalculatePullRequestComplexityScoreParams {
+interface CalculatePullRequestComplexityParams {
   diff: string
 }
 
-const calculatePullRequestComplexityScoreResponse = z.object({
-  complexity_score: z
+const calculatePullRequestCompexityResponse = z.object({
+  score: z
     .number()
     .describe(
-      'A score from 0 to 100 indicating the complexity of the pull request.',
+      'A numeric score from 0 to 100 indicating the complexity of the pull request.',
     ),
 })
 
-type CalculatePullRequestComplexityScoreResult = {
+type CalculatePullRequestComplexityResult = {
   prompt: string
   error?: string
-  complexity_score?: number
+  score?: number
 }
 
-export async function calculatePullRequestComplexityScore(
-  params: CalculatePullRequestComplexityScoreParams,
-): Promise<CalculatePullRequestComplexityScoreResult> {
+export async function calculatePullRequestComplexity(
+  params: CalculatePullRequestComplexityParams,
+): Promise<CalculatePullRequestComplexityResult> {
   const { diff } = params
 
   const prompt = `
@@ -51,8 +51,8 @@ ${diff}`
     ],
     model: 'gpt-4o-2024-08-06',
     response_format: zodResponseFormat(
-      calculatePullRequestComplexityScoreResponse,
-      'calculatePullRequestComplexityScoreResponse',
+      calculatePullRequestCompexityResponse,
+      'calculatePullRequestCompexityResponse',
     ),
   })
 
@@ -64,5 +64,5 @@ ${diff}`
     }
   }
 
-  return { prompt, complexity_score: output.parsed.complexity_score }
+  return { prompt, score: output.parsed.score }
 }

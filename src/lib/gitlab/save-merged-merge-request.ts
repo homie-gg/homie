@@ -9,7 +9,7 @@ import { parseISO } from 'date-fns'
 import { getReferencedSlackMessages } from '@/lib/slack/get-referenced-slack-messages'
 import { embedPullRequestChanges } from '@/lib/ai/embed-pull-request-changes'
 import { embedPullRequestDiff } from '@/lib/ai/embed-pull-request-diff'
-import { calculatePullRequestComplexityScore } from '@/lib/ai/calculate-pull-request-complexity-score'
+import { calculatePullRequestComplexity } from '@/lib/ai/calculate-pull-request-complexity'
 
 interface SaveMergedMergeRequestParams {
   mergeRequest: {
@@ -99,7 +99,7 @@ export async function saveMergedMergeRequest(
   })
 
   const complexityScoreResult = diff
-    ? await calculatePullRequestComplexityScore({ diff })
+    ? await calculatePullRequestComplexity({ diff })
     : null
 
   if (complexityScoreResult) {
@@ -109,7 +109,7 @@ export async function saveMergedMergeRequest(
       ai_call: true,
       merge_request: getMergeRequestLogData(mergeRequest),
       prompt: complexityScoreResult.prompt,
-      complexity_score: complexityScoreResult.complexity_score,
+      complexity_score: complexityScoreResult.score,
       failed: Boolean(complexityScoreResult.error),
       error: complexityScoreResult.error,
     })
@@ -136,7 +136,7 @@ export async function saveMergedMergeRequest(
       target_branch: mergeRequest.target_branch,
       source_branch: mergeRequest.source_branch,
       was_merged_to_default_branch: wasMergedToDefaultBranch,
-      complexity_score: complexityScoreResult?.complexity_score,
+      complexity_score: complexityScoreResult?.score,
     })
     .onConflict((oc) =>
       oc.column('ext_gitlab_merge_request_id').doUpdateSet({

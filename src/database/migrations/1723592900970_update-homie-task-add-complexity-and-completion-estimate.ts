@@ -15,6 +15,10 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
         notNull: true,
         default: 0,
       },
+      estimated_days_to_complete: {
+        type: 'integer',
+        notNull: false,
+      },
     },
   )
 }
@@ -25,6 +29,6 @@ export async function down(pgm: MigrationBuilder): Promise<void> {
       schema: 'homie',
       name: 'task',
     },
-    ['complexity_score'],
+    ['complexity_score', 'estimated_days_to_complete'],
   )
 }

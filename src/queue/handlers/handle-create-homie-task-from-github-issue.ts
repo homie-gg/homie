@@ -123,6 +123,19 @@ export async function handleCreateHomieTaskFromGithubIssue(
       },
     )
 
+    await dispatch(
+      'calculate_task_complexity',
+      {
+        task,
+      },
+      {
+        debounce: {
+          key: `calculate_task_complexity:${task.id}`,
+          delaySecs: 600,
+        },
+      },
+    )
+
     // Save person who made issue
     if (issue.user) {
       await trx

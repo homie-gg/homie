@@ -1,3 +1,4 @@
+import { calculatePullRequestComplexity } from '@/lib/ai/calculate-pull-request-complexity'
 import { summarizeGithubPullRequest } from '@/lib/github/summarize-github-pull-request'
 import { dbClient } from '@/database/client'
 import { createGithubClient } from '@/lib/github/create-github-client'
@@ -9,7 +10,6 @@ import { getLinkedIssuesAndTasksInPullRequest } from '@/lib/github/get-linked-is
 import { getReferencedSlackMessages } from '@/lib/slack/get-referenced-slack-messages'
 import { embedPullRequestChanges } from '@/lib/ai/embed-pull-request-changes'
 import { embedPullRequestDiff } from '@/lib/ai/embed-pull-request-diff'
-import { calculatePullRequestComplexityScore } from '@/lib/ai/calculate-pull-request-complexity-score'
 
 interface SaveMergedPullRequestParams {
   pullRequest: {
@@ -149,7 +149,7 @@ export async function saveMergedPullRequest(
   })
 
   const complexityScoreResult = diff
-    ? await calculatePullRequestComplexityScore({ diff })
+    ? await calculatePullRequestComplexity({ diff })
     : null
 
   if (complexityScoreResult) {
@@ -201,7 +201,7 @@ export async function saveMergedPullRequest(
       source_branch: pullRequest.head.ref,
       target_branch: pullRequest.base.ref,
       was_merged_to_default_branch: wasMergedToDefaultBranch,
-      complexity_score: complexityScoreResult?.complexity_score,
+      complexity_score: complexityScoreResult?.score,
     })
     .onConflict((oc) =>
       oc.column('ext_gh_pull_request_id').doUpdateSet({

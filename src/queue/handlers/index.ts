@@ -37,6 +37,7 @@ import { handleMigrateOrganizationEmbeddings } from '@/queue/handlers/handle-mig
 import { handleMigrateTaskEmbeddings } from '@/queue/handlers/handle-migrate-organization-task-embeddings'
 import { handleCheckForUnclosedTask } from '@/queue/handlers/handle-check-unclosed-task'
 import { handleCalculateOrganizationComplexityScorePerDay } from '@/queue/handlers/handle-calculate-organization-complexity-score-per-day'
+import { handleCalculateTaskComplexity } from '@/queue/handlers/handle-calculate-task-complexity'
 
 type HandlerFunc<TJob extends Job> = (job: TJob) => void | Promise<void>
 
@@ -81,6 +82,7 @@ export const handlers: Handlers = {
     handleAskSlackSelectAsanaProjectForTask,
   create_asana_task_from_slack: handleCreateAsanaTaskFromSlack,
   check_for_duplicate_task: handleCheckForDuplicateTask,
+  calculate_task_complexity: handleCalculateTaskComplexity,
   sync_asana_task_to_homie_task: handleSyncAsanaTaskToHomieTask,
   migrate_organization_embeddings: handleMigrateOrganizationEmbeddings,
   migrate_task_embeddings: handleMigrateTaskEmbeddings,
