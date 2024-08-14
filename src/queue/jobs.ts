@@ -607,6 +607,12 @@ export type MigrateTaskEmbeddings = BullMQJob<
   'migrate_task_embeddings'
 >
 
+export type CalculateOrganizationComplexityScorePerDay = BullMQJob<
+  null,
+  void, // return type
+  'calculate_organization_complexity_score_per_day'
+>
+
 export type Job =
   | CreateGithubIssueFromSlack
   | CreateHomieTaskFromGithubIssue
@@ -645,3 +651,4 @@ export type Job =
   | MigrateOrganizationEmbeddings
   | MigrateTaskEmbeddings
   | CheckForUnclosedTask
+  | CalculateOrganizationComplexityScorePerDay

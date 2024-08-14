@@ -36,6 +36,7 @@ import { handleCheckForDuplicateTask } from '@/queue/handlers/handle-check-for-d
 import { handleMigrateOrganizationEmbeddings } from '@/queue/handlers/handle-migrate-organization-embeddings'
 import { handleMigrateTaskEmbeddings } from '@/queue/handlers/handle-migrate-organization-task-embeddings'
 import { handleCheckForUnclosedTask } from '@/queue/handlers/handle-check-unclosed-task'
+import { handleCalculateOrganizationComplexityScorePerDay } from '@/queue/handlers/handle-calculate-organization-complexity-score-per-day'
 
 type HandlerFunc<TJob extends Job> = (job: TJob) => void | Promise<void>
 
@@ -84,4 +85,6 @@ export const handlers: Handlers = {
   migrate_organization_embeddings: handleMigrateOrganizationEmbeddings,
   migrate_task_embeddings: handleMigrateTaskEmbeddings,
   check_for_unclosed_task: handleCheckForUnclosedTask,
+  calculate_organization_complexity_score_per_day:
+    handleCalculateOrganizationComplexityScorePerDay,
 }

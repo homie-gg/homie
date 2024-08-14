@@ -38,6 +38,15 @@ import { getQueue } from '@/queue/get-queue'
     },
   })
 
+  await dispatch('calculate_organization_complexity_score_per_day', null, {
+    repeat: {
+      // weekly at 00:00 Sunday
+      // Must update cut-off date in job handler if this
+      // is changed.
+      pattern: '0 0 * * 0',
+    },
+  })
+
   // eslint-disable-next-line no-console
   console.log('Scheduled jobs added.')
   process.exit()
