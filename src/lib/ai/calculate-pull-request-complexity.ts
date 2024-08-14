@@ -1,3 +1,4 @@
+import { createOpenAISDK } from '@/lib/open-ai/create-open-ai-sdk'
 import OpenAI from 'openai'
 import { zodResponseFormat } from 'openai/helpers/zod'
 import { z } from 'zod'
@@ -36,7 +37,7 @@ Given the following Pull Request, assign a complexity score on a scale of 0 to 1
 Pull Request:
 ${diff}`
 
-  const client = new OpenAI()
+  const client = createOpenAISDK()
 
   const chatCompletion = await client.beta.chat.completions.parse({
     messages: [
