@@ -159,7 +159,7 @@ export async function saveMergedPullRequest(
       ai_call: true,
       pull_request: getPullRequestLogData(pullRequest),
       prompt: complexityScoreResult.prompt,
-      complexity_score: complexityScoreResult.complexity_score,
+      complexity_score: complexityScoreResult.score,
       failed: Boolean(complexityScoreResult.error),
       error: complexityScoreResult.error,
     })
