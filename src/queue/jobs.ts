@@ -556,6 +556,23 @@ export type CheckForDuplicateTask = BullMQJob<
   'check_for_duplicate_task'
 >
 
+export type CalculateTaskComplexity = BullMQJob<
+  {
+    task: {
+      id: number
+      name: string
+      description: string
+      ext_gh_issue_number: number | null
+      github_repo_id: number | null
+      ext_asana_task_id: string | null
+      ext_trello_card_id: string | null
+      organization_id: number
+    }
+  },
+  void, // return type
+  'calculate_task_complexity'
+>
+
 export type CheckForUnclosedTask = BullMQJob<
   {
     pull_request: {
@@ -607,6 +624,12 @@ export type MigrateTaskEmbeddings = BullMQJob<
   'migrate_task_embeddings'
 >
 
+export type CalculateOrganizationComplexityScorePerDay = BullMQJob<
+  null,
+  void, // return type
+  'calculate_organization_complexity_score_per_day'
+>
+
 export type Job =
   | CreateGithubIssueFromSlack
   | CreateHomieTaskFromGithubIssue
@@ -641,7 +664,9 @@ export type Job =
   | RefreshAsanaTokens
   | SyncAsanaTaskToHomieTask
   | CheckForDuplicateTask
+  | CalculateTaskComplexity
   | DispatchDebouncedJob
   | MigrateOrganizationEmbeddings
   | MigrateTaskEmbeddings
   | CheckForUnclosedTask
+  | CalculateOrganizationComplexityScorePerDay

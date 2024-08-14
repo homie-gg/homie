@@ -105,6 +105,19 @@ export async function handleUpdateHomieTaskFromTrelloTask(
       },
     },
   )
+
+  await dispatch(
+    'calculate_task_complexity',
+    {
+      task: updatedTask,
+    },
+    {
+      debounce: {
+        key: `calculate_task_complexity:${updatedTask.id}`,
+        delaySecs: 600,
+      },
+    },
+  )
 }
 
 interface GetTaskStatusParams {

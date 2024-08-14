@@ -1143,6 +1143,12 @@ declare module 'zapatos/schema' {
       export type Table = 'homie.organization'
       export interface Selectable {
         /**
+         * **homie.organization.complexity_score_per_day**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        complexity_score_per_day: number | null
+        /**
          * **homie.organization.created_at**
          * - `timestamptz` in database
          * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -1247,6 +1253,12 @@ declare module 'zapatos/schema' {
       }
       export interface JSONSelectable {
         /**
+         * **homie.organization.complexity_score_per_day**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        complexity_score_per_day: number | null
+        /**
          * **homie.organization.created_at**
          * - `timestamptz` in database
          * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -1350,6 +1362,20 @@ declare module 'zapatos/schema' {
         updated_at: db.TimestampTzString
       }
       export interface Whereable {
+        /**
+         * **homie.organization.complexity_score_per_day**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        complexity_score_per_day?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
         /**
          * **homie.organization.created_at**
          * - `timestamptz` in database
@@ -1597,6 +1623,17 @@ declare module 'zapatos/schema' {
       }
       export interface Insertable {
         /**
+         * **homie.organization.complexity_score_per_day**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        complexity_score_per_day?:
+          | number
+          | db.Parameter<number>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
          * **homie.organization.created_at**
          * - `timestamptz` in database
          * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -1763,6 +1800,25 @@ declare module 'zapatos/schema' {
           | db.SQLFragment
       }
       export interface Updatable {
+        /**
+         * **homie.organization.complexity_score_per_day**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        complexity_score_per_day?:
+          | number
+          | db.Parameter<number>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | number
+              | db.Parameter<number>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
         /**
          * **homie.organization.created_at**
          * - `timestamptz` in database
@@ -2376,6 +2432,12 @@ declare module 'zapatos/schema' {
          */
         closed_at: Date | null
         /**
+         * **homie.pull_request.complexity_score**
+         * - `int4` in database
+         * - `NOT NULL`, default: `0`
+         */
+        complexity_score: number
+        /**
          * **homie.pull_request.contributor_id**
          * - `int4` in database
          * - `NOT NULL`, no default
@@ -2503,6 +2565,12 @@ declare module 'zapatos/schema' {
          * - Nullable, no default
          */
         closed_at: db.TimestampTzString | null
+        /**
+         * **homie.pull_request.complexity_score**
+         * - `int4` in database
+         * - `NOT NULL`, default: `0`
+         */
+        complexity_score: number
         /**
          * **homie.pull_request.contributor_id**
          * - `int4` in database
@@ -2649,6 +2717,20 @@ declare module 'zapatos/schema' {
               | db.Parameter<db.TimestampTzString | Date>
               | db.SQLFragment
               | db.ParentColumn
+            >
+        /**
+         * **homie.pull_request.complexity_score**
+         * - `int4` in database
+         * - `NOT NULL`, default: `0`
+         */
+        complexity_score?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
             >
         /**
          * **homie.pull_request.contributor_id**
@@ -2948,6 +3030,16 @@ declare module 'zapatos/schema' {
           | db.DefaultType
           | db.SQLFragment
         /**
+         * **homie.pull_request.complexity_score**
+         * - `int4` in database
+         * - `NOT NULL`, default: `0`
+         */
+        complexity_score?:
+          | number
+          | db.Parameter<number>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
          * **homie.pull_request.contributor_id**
          * - `int4` in database
          * - `NOT NULL`, no default
@@ -3153,6 +3245,20 @@ declare module 'zapatos/schema' {
               | null
               | db.DefaultType
               | db.SQLFragment
+            >
+        /**
+         * **homie.pull_request.complexity_score**
+         * - `int4` in database
+         * - `NOT NULL`, default: `0`
+         */
+        complexity_score?:
+          | number
+          | db.Parameter<number>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.DefaultType | db.SQLFragment
             >
         /**
          * **homie.pull_request.contributor_id**
@@ -4065,6 +4171,12 @@ declare module 'zapatos/schema' {
          */
         completed_at: Date | null
         /**
+         * **homie.task.complexity_score**
+         * - `int4` in database
+         * - `NOT NULL`, default: `0`
+         */
+        complexity_score: number
+        /**
          * **homie.task.created_at**
          * - `timestamptz` in database
          * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -4082,6 +4194,12 @@ declare module 'zapatos/schema' {
          * - Nullable, no default
          */
         due_date: Date | null
+        /**
+         * **homie.task.estimated_days_to_complete**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        estimated_days_to_complete: number | null
         /**
          * **homie.task.ext_asana_task_id**
          * - `text` in database
@@ -4169,6 +4287,12 @@ declare module 'zapatos/schema' {
          */
         completed_at: db.TimestampTzString | null
         /**
+         * **homie.task.complexity_score**
+         * - `int4` in database
+         * - `NOT NULL`, default: `0`
+         */
+        complexity_score: number
+        /**
          * **homie.task.created_at**
          * - `timestamptz` in database
          * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -4186,6 +4310,12 @@ declare module 'zapatos/schema' {
          * - Nullable, no default
          */
         due_date: db.TimestampTzString | null
+        /**
+         * **homie.task.estimated_days_to_complete**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        estimated_days_to_complete: number | null
         /**
          * **homie.task.ext_asana_task_id**
          * - `text` in database
@@ -4284,6 +4414,20 @@ declare module 'zapatos/schema' {
               | db.ParentColumn
             >
         /**
+         * **homie.task.complexity_score**
+         * - `int4` in database
+         * - `NOT NULL`, default: `0`
+         */
+        complexity_score?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
          * **homie.task.created_at**
          * - `timestamptz` in database
          * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -4330,6 +4474,20 @@ declare module 'zapatos/schema' {
               | db.Parameter<db.TimestampTzString | Date>
               | db.SQLFragment
               | db.ParentColumn
+            >
+        /**
+         * **homie.task.estimated_days_to_complete**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        estimated_days_to_complete?:
+          | number
+          | db.Parameter<number>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
             >
         /**
          * **homie.task.ext_asana_task_id**
@@ -4530,6 +4688,16 @@ declare module 'zapatos/schema' {
           | db.DefaultType
           | db.SQLFragment
         /**
+         * **homie.task.complexity_score**
+         * - `int4` in database
+         * - `NOT NULL`, default: `0`
+         */
+        complexity_score?:
+          | number
+          | db.Parameter<number>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
          * **homie.task.created_at**
          * - `timestamptz` in database
          * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -4553,6 +4721,17 @@ declare module 'zapatos/schema' {
         due_date?:
           | (db.TimestampTzString | Date)
           | db.Parameter<db.TimestampTzString | Date>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **homie.task.estimated_days_to_complete**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        estimated_days_to_complete?:
+          | number
+          | db.Parameter<number>
           | null
           | db.DefaultType
           | db.SQLFragment
@@ -4685,6 +4864,20 @@ declare module 'zapatos/schema' {
               | db.SQLFragment
             >
         /**
+         * **homie.task.complexity_score**
+         * - `int4` in database
+         * - `NOT NULL`, default: `0`
+         */
+        complexity_score?:
+          | number
+          | db.Parameter<number>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+            >
+        /**
          * **homie.task.created_at**
          * - `timestamptz` in database
          * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -4726,6 +4919,25 @@ declare module 'zapatos/schema' {
               any,
               | (db.TimestampTzString | Date)
               | db.Parameter<db.TimestampTzString | Date>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **homie.task.estimated_days_to_complete**
+         * - `int4` in database
+         * - Nullable, no default
+         */
+        estimated_days_to_complete?:
+          | number
+          | db.Parameter<number>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | number
+              | db.Parameter<number>
               | null
               | db.DefaultType
               | db.SQLFragment

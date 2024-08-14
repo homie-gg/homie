@@ -1,6 +1,7 @@
 import { mockCreateGithubApp } from '@/__utils__/mock-create-github-app'
 import { mockCreateGithubClient } from '@/__utils__/mock-create-github-client'
 import { mockCreateOpenAIEmbedder } from '@/__utils__/mock-create-open-ai-embedder'
+import { mockCreateOpenAISDK } from '@/__utils__/mock-create-open-ai-sdk'
 import { mockExtractCodeSnippets } from '@/__utils__/mock-extract-code-snippets'
 import { mockGetPineconeClient } from '@/__utils__/mock-get-pinecone-client'
 import { mockSummarizeCodeChange } from '@/__utils__/mock-summarize-code-change'
@@ -99,6 +100,31 @@ it('should create and embed a pr', async () => {
     matches: [],
   })
 
+  const mockChatCompletion = jest.fn()
+
+  // Mock calculating PR complexity
+  mockChatCompletion.mockResolvedValueOnce({
+    choices: [
+      {
+        message: {
+          parsed: {
+            score: 50,
+          },
+        },
+      },
+    ],
+  })
+
+  mockCreateOpenAISDK.mockReturnValue({
+    beta: {
+      chat: {
+        completions: {
+          parse: mockChatCompletion,
+        },
+      },
+    },
+  })
+
   await pullRequestClosedHandler({
     payload: {
       pull_request: {
@@ -162,6 +188,7 @@ it('should create and embed a pr', async () => {
     .selectAll()
     .executeTakeFirstOrThrow()
   expect(pullRequest.title).toBe('My test closed PR')
+  expect(pullRequest.complexity_score).toBe(50)
 
   expect(mockUpsert.mock.calls[0][0][0]['metadata']['type']).toBe(
     'pull_request_change',
