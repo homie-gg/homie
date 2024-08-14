@@ -9,6 +9,7 @@ import { getLinkedIssuesAndTasksInPullRequest } from '@/lib/github/get-linked-is
 import { getReferencedSlackMessages } from '@/lib/slack/get-referenced-slack-messages'
 import { embedPullRequestChanges } from '@/lib/ai/embed-pull-request-changes'
 import { embedPullRequestDiff } from '@/lib/ai/embed-pull-request-diff'
+import { calculatePullRequestComplexityScore } from '@/lib/ai/calculate-pull-request-complexity-score'
 
 interface SaveMergedPullRequestParams {
   pullRequest: {
@@ -53,10 +54,8 @@ export async function saveMergedPullRequest(
 
   logger.debug('Start Save pull request', {
     event: 'save_pull_request.start',
-    data: {
-      organization: getOrganizationLogData(organization),
-      pull_request: getPullRequestLogData(pullRequest),
-    },
+    organization: getOrganizationLogData(organization),
+    pull_request: getPullRequestLogData(pullRequest),
   })
 
   /**
@@ -65,10 +64,8 @@ export async function saveMergedPullRequest(
   if (!pullRequest.merged_at) {
     logger.debug('Missing merged_at - abort', {
       event: 'save_pull_request.missing_merged_at',
-      data: {
-        organization: getOrganizationLogData(organization),
-        pull_request: getPullRequestLogData(pullRequest),
-      },
+      organization: getOrganizationLogData(organization),
+      pull_request: getPullRequestLogData(pullRequest),
     })
     return
   }
@@ -151,6 +148,23 @@ export async function saveMergedPullRequest(
     conversation,
   })
 
+  const complexityScoreResult = diff
+    ? await calculatePullRequestComplexityScore({ diff })
+    : null
+
+  if (complexityScoreResult) {
+    logger.debug('Calculated complexity score', {
+      event: 'save_pull_request.calculated_complexity_score',
+      organization: getOrganizationLogData(organization),
+      ai_call: true,
+      pull_request: getPullRequestLogData(pullRequest),
+      prompt: complexityScoreResult.prompt,
+      complexity_score: complexityScoreResult.complexity_score,
+      failed: Boolean(complexityScoreResult.error),
+      error: complexityScoreResult.error,
+    })
+  }
+
   const wasMergedToDefaultBranch =
     pullRequest.base.ref === pullRequest.base.repo.default_branch
 
@@ -187,6 +201,7 @@ export async function saveMergedPullRequest(
       source_branch: pullRequest.head.ref,
       target_branch: pullRequest.base.ref,
       was_merged_to_default_branch: wasMergedToDefaultBranch,
+      complexity_score: complexityScoreResult?.complexity_score,
     })
     .onConflict((oc) =>
       oc.column('ext_gh_pull_request_id').doUpdateSet({
