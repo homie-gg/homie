@@ -1,4 +1,5 @@
 import { dbClient } from '@/database/client'
+import { checkPullRequestAddressesSimilarIssue } from '@/lib/ai/check-pull-request-addresses-similar-issue'
 import { PullRequestChangeMetadata } from '@/lib/ai/embed-pull-request-changes'
 import { getOrganizationVectorDB } from '@/lib/ai/get-organization-vector-db'
 import { postSimilarPullRequestsAsanaTaskComment } from '@/lib/asana/post-similar-pull-requests-asana-task-comment'
@@ -144,36 +145,61 @@ export async function handleSendSimilarPullRequestsForTask(
     return
   }
 
-  const pullRequestIds: Record<string, number> = {}
+  const pullRequestSummaries: Record<number, string> = {}
 
   // Changes could contain duplicate pull requests, so we'll de-dupe
   // them here.
   for (const metadata of rankedDocuments) {
-    pullRequestIds[metadata.pull_request_id] = metadata.pull_request_id
+    pullRequestSummaries[metadata.pull_request_id] =
+      metadata.pull_request_summary
   }
 
-  const records = await Promise.all(
-    Object.values(pullRequestIds).map(async (id) =>
-      dbClient
-        .selectFrom('homie.pull_request')
-        .where('organization_id', '=', organization.id)
-        .where('homie.pull_request.id', '=', id)
-        .select(['id', 'title', 'html_url'])
-        .executeTakeFirst(),
-    ),
-  )
+  const pullRequests: Array<{
+    id: number
+    title: string
+    html_url: string
+    summary: string
+  }> = []
 
-  // Filter out missing prs (may have been deleted since being embedded)
-  const pullRequests: Array<{ id: number; title: string; html_url: string }> =
-    []
-  for (const record of records) {
+  for (const [id, summary] of Object.keys(pullRequestSummaries)) {
+    const record = await dbClient
+      .selectFrom('homie.pull_request')
+      .where('organization_id', '=', organization.id)
+      .where('homie.pull_request.id', '=', parseInt(id))
+      .select(['id', 'title', 'html_url', 'body'])
+      .executeTakeFirst()
+
+    // ignore missing prs (may have been deleted since being embedded)
     if (!record) {
       continue
     }
 
-    if (pullRequests.length < maxNumPullRequestsToSend) {
-      pullRequests.push(record)
+    if (pullRequests.length >= maxNumPullRequestsToSend) {
+      continue
     }
+
+    const isSimilar = await checkPullRequestAddressesSimilarIssue({
+      task: {
+        name: task.name,
+        description: task.description,
+      },
+      pullRequest: {
+        title: record.title,
+        body: record.body,
+        summary: summary,
+      },
+    })
+
+    if (!isSimilar) {
+      continue
+    }
+
+    pullRequests.push({
+      id: record.id,
+      title: record.title,
+      html_url: record.html_url,
+      summary,
+    })
   }
 
   logger.debug('Found similar pull requests', {
