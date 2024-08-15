@@ -7,14 +7,15 @@ import { ImportPullRequests } from '@/queue/jobs'
 import { dispatch } from '@/queue/dispatch'
 
 export async function handleImportPullRequests(job: ImportPullRequests) {
+  const { github_organization } = job.data
+
   logger.debug('Start pull request import', {
     event: 'import_pull_requests.start',
-    data: {
-      job,
+    organization: {
+      id: github_organization.organization_id,
+      ext_gh_install_id: github_organization.ext_gh_install_id,
     },
   })
-
-  const { github_organization } = job.data
 
   const organization = await dbClient
     .selectFrom('homie.organization')
@@ -45,8 +46,8 @@ export async function handleImportPullRequests(job: ImportPullRequests) {
   if (!organization) {
     logger.debug('Missing organization - abort', {
       event: 'import_pull_requests.missing_organization',
-      data: {
-        job,
+      organization: {
+        id: github_organization.organization_id,
         ext_gh_install_id: github_organization.ext_gh_install_id,
       },
     })
@@ -80,12 +81,8 @@ export async function handleImportPullRequests(job: ImportPullRequests) {
       if (!pullRequest.user) {
         logger.debug('Missing pull request user - skipping', {
           event: 'import_pull_requests.missing_user',
-          data: {
-            job,
-            ext_gh_install_id: github_organization.ext_gh_install_id,
-            organization: getOrganizationLogData(organization),
-            pull_request: getPullRequestLogData(pullRequest),
-          },
+          organization: getOrganizationLogData(organization),
+          pull_request: getPullRequestLogData(pullRequest),
         })
         continue
       }

@@ -11,9 +11,7 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
 
   logger.debug('Start save opened PR', {
     event: 'save_opened_pull_request:start',
-    data: {
-      pull_request: getPullRequestLogData(pull_request),
-    },
+    pull_request: getPullRequestLogData(pull_request),
   })
 
   const organization = await dbClient
@@ -40,9 +38,7 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
   if (!organization) {
     logger.debug('Missing organization', {
       event: 'save_opened_pull_request.missing_organization',
-      data: {
-        pull_request: getPullRequestLogData(pull_request),
-      },
+      pull_request: getPullRequestLogData(pull_request),
     })
     return
   }
@@ -50,10 +46,8 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
   if (await getIsOverPlanContributorLimit({ organization })) {
     logger.debug('org over plan limit', {
       event: 'save_opened_pull_request:org_over_plan_limit',
-      data: {
-        pull_request: getPullRequestLogData(pull_request),
-        organization: getOrganizationLogData(organization),
-      },
+      pull_request: getPullRequestLogData(pull_request),
+      organization: getOrganizationLogData(organization),
     })
     return
   }
@@ -117,9 +111,7 @@ export async function handleSaveOpenedPullRequest(job: SaveOpenedPullRequest) {
 
   logger.debug('Finished saving opened PR', {
     event: 'save_opened_pull_request:complete',
-    data: {
-      pull_request: getPullRequestLogData(pull_request),
-      organization: getOrganizationLogData(organization),
-    },
+    pull_request: getPullRequestLogData(pull_request),
+    organization: getOrganizationLogData(organization),
   })
 }

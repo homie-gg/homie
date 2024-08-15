@@ -48,10 +48,8 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
 
   logger.debug('Check for duplicate task', {
     event: 'check_for_duplicate_task:start',
-    data: {
-      task,
-      organization: getOrganizationLogData(organization),
-    },
+    task,
+    organization: getOrganizationLogData(organization),
   })
 
   const searchTerm = `${task.name}\n${task.description}`
@@ -86,10 +84,8 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
   if (matches.length === 0) {
     logger.debug('No matching tasks found', {
       event: 'check_for_duplicate_task:no_match',
-      data: {
-        task,
-        organization: getOrganizationLogData(organization),
-      },
+      task,
+      organization: getOrganizationLogData(organization),
     })
 
     // No matching duplicate task
@@ -115,11 +111,9 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
   if (rankedDocuments.length === 0) {
     logger.debug('No potential duplicates above threshold', {
       event: 'check_for_duplicate_task:no_potential_duplicates',
-      data: {
-        task,
-        organization: getOrganizationLogData(organization),
-        matches: matches.map((match) => match.metadata),
-      },
+      task,
+      organization: getOrganizationLogData(organization),
+      matches: matches.map((match) => match.metadata),
     })
     return
   }
@@ -136,12 +130,10 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
   if (!duplicateTask) {
     logger.debug('Missing duplicate task', {
       event: 'check_for_duplicate_task:missing_duplicate_task',
-      data: {
-        task,
-        organization: getOrganizationLogData(organization),
-        matches: matches.map((match) => match.metadata),
-        duplicate_task_id: duplicateTaskId,
-      },
+      task,
+      organization: getOrganizationLogData(organization),
+      matches: matches.map((match) => match.metadata),
+      duplicate_task_id: duplicateTaskId,
     })
     return
   }
@@ -174,26 +166,22 @@ export async function handleCheckForDuplicateTask(job: CheckForDuplicateTask) {
   if (!checkIsDuplicateResult.isDuplicate) {
     logger.debug('Check: Not duplicate', {
       event: 'check_for_duplicate_task:not_duplicate',
-      data: {
-        task,
-        organization: getOrganizationLogData(organization),
-        matches: matches.map((match) => match.metadata),
-        is_duplicate: false,
-        duplicate_task: duplicateTask,
-      },
+      task,
+      organization: getOrganizationLogData(organization),
+      matches: matches.map((match) => match.metadata),
+      is_duplicate: false,
+      duplicate_task: duplicateTask,
     })
     return
   }
 
   logger.debug('Found duplicate', {
     event: 'check_for_duplicate_task:found_duplicate',
-    data: {
-      task,
-      organization: getOrganizationLogData(organization),
-      matches: matches.map((match) => match.metadata),
-      duplicate_task: duplicateTask,
-      is_duplicate: true,
-    },
+    task,
+    organization: getOrganizationLogData(organization),
+    matches: matches.map((match) => match.metadata),
+    duplicate_task: duplicateTask,
+    is_duplicate: true,
   })
 
   const alreadyNotified = await dbClient

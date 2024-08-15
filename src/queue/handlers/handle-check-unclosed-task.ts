@@ -23,12 +23,10 @@ export async function handleCheckForUnclosedTask(job: CheckForUnclosedTask) {
 
   logger.debug('Check for unclosed tasks', {
     event: 'check_for_unclosed_tasks:start',
-    data: {
-      pull_request: getPullRequestLogData(pull_request),
-      organization: getOrganizationLogData({
-        id: pull_request.organization_id,
-      }),
-    },
+    pull_request: getPullRequestLogData(pull_request),
+    organization: getOrganizationLogData({
+      id: pull_request.organization_id,
+    }),
   })
 
   const organization = await dbClient
@@ -87,10 +85,8 @@ export async function handleCheckForUnclosedTask(job: CheckForUnclosedTask) {
   if (matches.length === 0) {
     logger.debug('No matching tasks', {
       event: 'check_for_unclosed_tasks:no_matches',
-      data: {
-        pull_request: getPullRequestLogData(pull_request),
-        organization: getOrganizationLogData(organization),
-      },
+      pull_request: getPullRequestLogData(pull_request),
+      organization: getOrganizationLogData(organization),
     })
 
     // No matching unclosed tasks
@@ -116,12 +112,10 @@ export async function handleCheckForUnclosedTask(job: CheckForUnclosedTask) {
   if (rankedDocuments.length === 0) {
     logger.debug('No potential matching tasks above threshold', {
       event: 'check_for_duplicate_task:no_potential_target_tasks',
-      data: {
-        organization: getOrganizationLogData({
-          id: pull_request.organization_id,
-        }),
-        matches: matches.map((match) => match.metadata),
-      },
+      organization: getOrganizationLogData({
+        id: pull_request.organization_id,
+      }),
+      matches: matches.map((match) => match.metadata),
     })
     return
   }

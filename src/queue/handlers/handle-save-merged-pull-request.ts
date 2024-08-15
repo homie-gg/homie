@@ -12,9 +12,7 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
 
   logger.debug('Start save merged PR', {
     event: 'save_merged_pull_request.start',
-    data: {
-      pull_request: getPullRequestLogData(pull_request),
-    },
+    pull_request: getPullRequestLogData(pull_request),
   })
 
   const organization = await dbClient
@@ -59,9 +57,7 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
   if (!organization) {
     logger.debug('Missing organization', {
       event: 'save_merged_pull_request.missing_organization',
-      data: {
-        pull_request: getPullRequestLogData(pull_request),
-      },
+      pull_request: getPullRequestLogData(pull_request),
     })
     return
   }
@@ -69,10 +65,8 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
   if (await getIsOverPlanContributorLimit({ organization })) {
     logger.debug('org over plan contributor limit', {
       event: 'save_merged_merge_request.org_over_plan_limit',
-      data: {
-        pull_request: getPullRequestLogData(pull_request),
-        organization: getOrganizationLogData(organization),
-      },
+      pull_request: getPullRequestLogData(pull_request),
+      organization: getOrganizationLogData(organization),
     })
     return
   }
@@ -104,9 +98,7 @@ export async function handleSaveMergedPullRequest(job: SaveMergedPullRequest) {
 
   logger.debug('Finished saving merged PR', {
     event: 'save_merged_pull_request.complete',
-    data: {
-      pull_request: getPullRequestLogData(pull_request),
-      organization: getOrganizationLogData(organization),
-    },
+    pull_request: getPullRequestLogData(pull_request),
+    organization: getOrganizationLogData(organization),
   })
 }

@@ -59,15 +59,13 @@ export async function handleCalculateTaskComplexity(
 
   logger.debug('Checked complexity', {
     event: 'calculate_task_complexity:calculated',
-    data: {
-      task,
-      organization: getOrganizationLogData(organization),
-      ai_call: true,
-      prompt: calculateComplexityResult.prompt,
-      complexity_score: calculateComplexityResult.score,
-      failed: Boolean(calculateComplexityResult.error),
-      error: calculateComplexityResult.error,
-    },
+    task,
+    organization: getOrganizationLogData(organization),
+    ai_call: true,
+    prompt: calculateComplexityResult.prompt,
+    complexity_score: calculateComplexityResult.score,
+    failed: Boolean(calculateComplexityResult.error),
+    error: calculateComplexityResult.error,
   })
 
   if (!calculateComplexityResult.score) {

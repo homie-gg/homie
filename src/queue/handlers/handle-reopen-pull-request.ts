@@ -28,9 +28,7 @@ export async function handleReopenPullRequest(job: ReopenPullRequest) {
   if (!organization) {
     logger.debug('Missing organization', {
       event: 'handle_reopen_pull_request:start',
-      data: {
-        pull_request: getPullRequestLogData(pull_request),
-      },
+      pull_request: getPullRequestLogData(pull_request),
     })
     return
   }
@@ -38,10 +36,8 @@ export async function handleReopenPullRequest(job: ReopenPullRequest) {
   if (await getIsOverPlanContributorLimit({ organization })) {
     logger.debug('org over plan limit', {
       event: 'handle_reopen_pull_request:org_over_plan_limit',
-      data: {
-        pull_request: getPullRequestLogData(pull_request),
-        organization: getOrganizationLogData(organization),
-      },
+      pull_request: getPullRequestLogData(pull_request),
+      organization: getOrganizationLogData(organization),
     })
     return
   }
@@ -63,9 +59,7 @@ export async function handleReopenPullRequest(job: ReopenPullRequest) {
 
     logger.debug('Reopened existing pr', {
       event: 'handle_reopen_pull_request:reopened_existing_pr',
-      data: {
-        pull_request: getPullRequestLogData(pull_request),
-      },
+      pull_request: getPullRequestLogData(pull_request),
     })
     return
   }
@@ -130,9 +124,7 @@ export async function handleReopenPullRequest(job: ReopenPullRequest) {
 
   logger.debug('Saved untracked reopened PR', {
     event: 'handle_reopen_pull_request:save_untracked_pr',
-    data: {
-      pull_request: getPullRequestLogData(pull_request),
-      organization: getOrganizationLogData(organization),
-    },
+    pull_request: getPullRequestLogData(pull_request),
+    organization: getOrganizationLogData(organization),
   })
 }

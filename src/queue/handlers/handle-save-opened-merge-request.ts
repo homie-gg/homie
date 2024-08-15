@@ -14,10 +14,8 @@ export async function handleSaveOpenedMergeRequest(
 
   logger.debug('Start save opened PR', {
     event: 'save_opened_merge_request.start',
-    data: {
-      organization: getOrganizationLogData(organization),
-      merge_request: getMergeRequestLogData(merge_request),
-    },
+    organization: getOrganizationLogData(organization),
+    merge_request: getMergeRequestLogData(merge_request),
   })
 
   const project = await dbClient
@@ -31,10 +29,8 @@ export async function handleSaveOpenedMergeRequest(
   if (!project) {
     logger.debug('Missing project; is the project enabled?', {
       event: 'save_opened_merge_request.missing_project',
-      data: {
-        merge_request: getMergeRequestLogData(merge_request),
-        organization: getOrganizationLogData(organization),
-      },
+      merge_request: getMergeRequestLogData(merge_request),
+      organization: getOrganizationLogData(organization),
     })
 
     return
@@ -43,11 +39,9 @@ export async function handleSaveOpenedMergeRequest(
   if (await getIsOverPlanContributorLimit({ organization })) {
     logger.debug('org over plan limit', {
       event: 'save_opened_merge_request.org_over_plan_limit',
-      data: {
-        project: getProjectLogData(project),
-        merge_request: getMergeRequestLogData(merge_request),
-        organization: getOrganizationLogData(organization),
-      },
+      project: getProjectLogData(project),
+      merge_request: getMergeRequestLogData(merge_request),
+      organization: getOrganizationLogData(organization),
     })
     return
   }
@@ -63,11 +57,9 @@ export async function handleSaveOpenedMergeRequest(
   if (!mergeRequestData) {
     logger.debug('missing gitlab merge request data', {
       event: 'save_opened_merge_request.missing_merge_request_data',
-      data: {
-        project: getProjectLogData(project),
-        merge_request: getMergeRequestLogData(merge_request),
-        organization: getOrganizationLogData(organization),
-      },
+      project: getProjectLogData(project),
+      merge_request: getMergeRequestLogData(merge_request),
+      organization: getOrganizationLogData(organization),
     })
 
     return
@@ -76,11 +68,9 @@ export async function handleSaveOpenedMergeRequest(
   if (!author) {
     logger.debug('missing gitlab user info', {
       event: 'save_opened_merge_request.missing_gitlab_user_info',
-      data: {
-        project: getProjectLogData(project),
-        merge_request: getMergeRequestLogData(merge_request),
-        organization: getOrganizationLogData(organization),
-      },
+      project: getProjectLogData(project),
+      merge_request: getMergeRequestLogData(merge_request),
+      organization: getOrganizationLogData(organization),
     })
 
     return
@@ -136,10 +126,8 @@ export async function handleSaveOpenedMergeRequest(
 
   logger.debug('Finished saving opened MR', {
     event: 'save_opened_merge_request.complete',
-    data: {
-      project: getProjectLogData(project),
-      merge_request: getMergeRequestLogData(merge_request),
-      organization: getOrganizationLogData(organization),
-    },
+    project: getProjectLogData(project),
+    merge_request: getMergeRequestLogData(merge_request),
+    organization: getOrganizationLogData(organization),
   })
 }
