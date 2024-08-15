@@ -118,6 +118,19 @@ export async function handleUpdateHomieTaskFromTrelloTask(
       },
     },
   )
+
+  await dispatch(
+    'send_similar_pull_requests_for_task',
+    {
+      task: updatedTask,
+    },
+    {
+      debounce: {
+        key: `send_similar_pull_requests_for_task:${updatedTask.id}`,
+        delaySecs: 10800,
+      },
+    },
+  )
 }
 
 interface GetTaskStatusParams {
