@@ -49,10 +49,8 @@ export async function saveMergedMergeRequest(
 
   logger.debug('Start Save merge request', {
     event: 'save_merge_request.start',
-    data: {
-      organization: getOrganizationLogData(organization),
-      merge_request: getMergeRequestLogData(mergeRequest),
-    },
+    organization: getOrganizationLogData(organization),
+    merge_request: getMergeRequestLogData(mergeRequest),
   })
 
   // Create contributor

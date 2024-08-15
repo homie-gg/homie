@@ -28,9 +28,7 @@ export async function handleClosePullRequest(job: ClosePullRequest) {
   if (!organization) {
     logger.debug('Missing organization', {
       event: 'handle_close_pull_request:start',
-      data: {
-        pull_request: getPullRequestLogData(pull_request),
-      },
+      pull_request: getPullRequestLogData(pull_request),
     })
     return
   }
@@ -38,10 +36,8 @@ export async function handleClosePullRequest(job: ClosePullRequest) {
   if (await getIsOverPlanContributorLimit({ organization })) {
     logger.debug('org over plan limit', {
       event: 'handle_close_pull_request:org_over_plan_limit',
-      data: {
-        pull_request: getPullRequestLogData(pull_request),
-        organization: getOrganizationLogData(organization),
-      },
+      pull_request: getPullRequestLogData(pull_request),
+      organization: getOrganizationLogData(organization),
     })
     return
   }
@@ -63,9 +59,7 @@ export async function handleClosePullRequest(job: ClosePullRequest) {
 
     logger.debug('Closed existing pr', {
       event: 'handle_close_pull_request:closed_existing_pr',
-      data: {
-        pull_request: getPullRequestLogData(pull_request),
-      },
+      pull_request: getPullRequestLogData(pull_request),
     })
     return
   }
@@ -132,10 +126,8 @@ export async function handleClosePullRequest(job: ClosePullRequest) {
 
     logger.debug('Saved untracked closed PR', {
       event: 'handle_close_pull_request:save_untracked_pr',
-      data: {
-        pull_request: getPullRequestLogData(pull_request),
-        organization: getOrganizationLogData(organization),
-      },
+      pull_request: getPullRequestLogData(pull_request),
+      organization: getOrganizationLogData(organization),
     })
 
     return

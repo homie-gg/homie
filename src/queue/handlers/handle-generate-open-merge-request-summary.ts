@@ -27,10 +27,8 @@ export async function handleGenerateOpenMergeRequestSummary(
   if (!project) {
     logger.debug('Missing project; is the project enabled?', {
       event: 'generate_open_merge_request_summary.missing_project',
-      data: {
-        merge_request: getMergeRequestLogData(merge_request),
-        organization: getOrganizationLogData(organization),
-      },
+      merge_request: getMergeRequestLogData(merge_request),
+      organization: getOrganizationLogData(organization),
     })
 
     return

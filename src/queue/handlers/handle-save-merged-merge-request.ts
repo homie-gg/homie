@@ -19,9 +19,7 @@ export async function handleSaveMergedMergeRequest(
 
   logger.debug('Start save merged MR', {
     event: 'save_merged_merge_request.start',
-    data: {
-      merge_request: getMergeRequestLogData(merge_request),
-    },
+    merge_request: getMergeRequestLogData(merge_request),
   })
 
   const project = await dbClient
@@ -35,10 +33,8 @@ export async function handleSaveMergedMergeRequest(
   if (!project) {
     logger.debug('Missing project; is the project enabled?', {
       event: 'save_merged_merge_request.missing_project',
-      data: {
-        merge_request: getMergeRequestLogData(merge_request),
-        organization: getOrganizationLogData(organization),
-      },
+      merge_request: getMergeRequestLogData(merge_request),
+      organization: getOrganizationLogData(organization),
     })
 
     return
@@ -47,10 +43,8 @@ export async function handleSaveMergedMergeRequest(
   if (await getIsOverPlanContributorLimit({ organization })) {
     logger.debug('org over plan contributor limit', {
       event: 'save_merged_merge_request.org_over_plan_limit',
-      data: {
-        merge_request: getMergeRequestLogData(merge_request),
-        organization: getOrganizationLogData(organization),
-      },
+      merge_request: getMergeRequestLogData(merge_request),
+      organization: getOrganizationLogData(organization),
     })
     return
   }

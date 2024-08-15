@@ -70,10 +70,8 @@ export async function handleSendSimilarPullRequestsForTask(
 
   logger.debug('Send similar pull requests', {
     event: 'send_similar_pull_requests:start',
-    data: {
-      task,
-      organization: getOrganizationLogData(organization),
-    },
+    task,
+    organization: getOrganizationLogData(organization),
   })
 
   const searchTerm = `${task.name}\n${task.description}`
@@ -105,10 +103,8 @@ export async function handleSendSimilarPullRequestsForTask(
   if (matches.length === 0) {
     logger.debug('No similar pull requests found', {
       event: 'send_similar_pull_requests:none',
-      data: {
-        task,
-        organization: getOrganizationLogData(organization),
-      },
+      task,
+      organization: getOrganizationLogData(organization),
     })
 
     // No similar pull requests
@@ -137,10 +133,8 @@ export async function handleSendSimilarPullRequestsForTask(
   if (rankedDocuments.length === 0) {
     logger.debug('No pull requests above score threshold', {
       event: 'send_similar_pull_requests:none_above_threshold',
-      data: {
-        task,
-        organization: getOrganizationLogData(organization),
-      },
+      task,
+      organization: getOrganizationLogData(organization),
     })
     return
   }
@@ -236,11 +230,9 @@ export async function handleSendSimilarPullRequestsForTask(
   if (pullRequests.length === 0) {
     logger.debug('No similar pull requests.', {
       event: 'send_similar_pull_requests:none_similar',
-      data: {
-        task,
-        organization: getOrganizationLogData(organization),
-        pullRequests,
-      },
+      task,
+      organization: getOrganizationLogData(organization),
+      pullRequests,
     })
 
     return
@@ -248,11 +240,9 @@ export async function handleSendSimilarPullRequestsForTask(
 
   logger.debug('Found similar pull requests', {
     event: 'send_similar_pull_requests:found_matches',
-    data: {
-      task,
-      organization: getOrganizationLogData(organization),
-      pullRequests,
-    },
+    task,
+    organization: getOrganizationLogData(organization),
+    pullRequests,
   })
 
   // Github Issue
