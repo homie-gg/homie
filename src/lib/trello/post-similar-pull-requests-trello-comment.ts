@@ -18,7 +18,7 @@ export async function postSimilarPullRequestsTrelloTaskComment(
 
   const trelloClient = createTrelloClient(organization.trello_access_token)
 
-  const text = `Here are some pull requests that could be similar to this task:\n${pullRequests.map((pullRequest) => `- [${pullRequest.title}][${pullRequest.html_url}]`).join('\n')}`
+  const text = `Here are some pull requests that could be similar to this task:\n${pullRequests.map((pullRequest) => `- [${pullRequest.title}](${pullRequest.html_url})`).join('\n')}`
 
   await trelloClient.post(
     `/cards/${targetTask.ext_trello_card_id}/actions/comments?text=${text}`,

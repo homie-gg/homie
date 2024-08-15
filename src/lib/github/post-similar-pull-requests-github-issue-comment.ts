@@ -29,7 +29,7 @@ export async function postSimilarPullRequestsGithubIssueComment(
     throw new Error('Missing Github repository owner')
   }
 
-  const body = `Here are some pull requests that could be similar to this task:\n${pullRequests.map((pullRequest) => `- [${pullRequest.title}][${pullRequest.html_url}]`).join('\n')}`
+  const body = `Here are some pull requests that could be similar to this task:\n${pullRequests.map((pullRequest) => `- [${pullRequest.title}](${pullRequest.html_url})`).join('\n')}`
 
   await postGithubIssueComment({
     installationId: organization.ext_gh_install_id,
