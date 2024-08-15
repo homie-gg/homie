@@ -1,4 +1,3 @@
-import { getGreeting } from '@/lib/ai/get-greeting'
 import { createTrelloClient } from '@/lib/trello/create-trello-client'
 
 interface PostPotentialDuplicateTrelloTaskCommentParams {
@@ -22,7 +21,7 @@ export async function postPotentialDuplicateTrelloTaskComment(
 
   const trelloClient = createTrelloClient(organization.trello_access_token)
 
-  const text = `${getGreeting()}, this might be a duplicate of: [${duplicateTask.name}](${duplicateTask.html_url}).`
+  const text = `This might be a duplicate of: [${duplicateTask.name}](${duplicateTask.html_url}).`
 
   await trelloClient.post(
     `/cards/${targetTask.ext_trello_card_id}/actions/comments?text=${text}`,

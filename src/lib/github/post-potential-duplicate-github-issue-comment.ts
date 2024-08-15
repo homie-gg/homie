@@ -1,5 +1,4 @@
 import { dbClient } from '@/database/client'
-import { getGreeting } from '@/lib/ai/get-greeting'
 import { postGithubIssueComment } from '@/lib/github/post-github-issue-comment'
 
 interface PostPotentialDuplicateGithubIssueCommentParams {
@@ -38,6 +37,6 @@ export async function postPotentialDuplicateGithubIssueComment(
     repo: githubRepository.name,
     owner: githubRepository.owner,
     issueNumber: targetTask.ext_gh_issue_number,
-    body: `${getGreeting()}, this might be a duplicate of: [${duplicateTask.name}](${duplicateTask.html_url}).`,
+    body: `This might be a duplicate of: [${duplicateTask.name}](${duplicateTask.html_url}).`,
   })
 }

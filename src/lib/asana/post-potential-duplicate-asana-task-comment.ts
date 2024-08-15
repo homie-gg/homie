@@ -1,4 +1,3 @@
-import { getGreeting } from '@/lib/ai/get-greeting'
 import { postAsanaTaskComment } from '@/lib/asana/post-asana-task-comment'
 
 interface PostPotentialDuplicateAsanaTaskCommentParams {
@@ -23,6 +22,6 @@ export async function postPotentialDuplicateAsanaTaskComment(
   await postAsanaTaskComment({
     asanaAccessToken: organization.asana_access_token,
     extAsanaTaskId: targetTask.ext_asana_task_id,
-    html: `<body>${getGreeting()}, this might be a duplicate of: <a href="${duplicateTask.html_url}">${duplicateTask.name}</a></body>`,
+    html: `<body>This might be a duplicate of: <a href="${duplicateTask.html_url}">${duplicateTask.name}</a></body>`,
   })
 }
