@@ -230,6 +230,19 @@ export async function handleSendSimilarPullRequestsForTask(
     })
   }
 
+  if (pullRequests.length === 0) {
+    logger.debug('No similar pull requests.', {
+      event: 'send_similar_pull_requests:none_similar',
+      data: {
+        task,
+        organization: getOrganizationLogData(organization),
+        pullRequests,
+      },
+    })
+
+    return
+  }
+
   logger.debug('Found similar pull requests', {
     event: 'send_similar_pull_requests:found_matches',
     data: {
