@@ -193,6 +193,7 @@ export async function handleSendSimilarPullRequestsForTask(
     if (isSimilarResult.failed) {
       logger.debug('failed to check if similar', {
         event: 'send_similar_pull_requests:fail_similar_check',
+        ai_call: true,
         task,
         organization: getOrganizationLogData(organization),
         pull_request: {
@@ -206,13 +207,10 @@ export async function handleSendSimilarPullRequestsForTask(
       continue
     }
 
-    if (!isSimilarResult.isSimilar) {
-      continue
-    }
-
     logger.debug('Check is similar', {
       event: 'send_similar_pull_requests:is_similar',
       task,
+      ai_call: true,
       organization: getOrganizationLogData(organization),
       pull_request: {
         title: record.title,
@@ -220,7 +218,12 @@ export async function handleSendSimilarPullRequestsForTask(
         summary: summary,
       },
       prompt: isSimilarResult.prompt,
+      is_similar: isSimilarResult.isSimilar,
     })
+
+    if (!isSimilarResult.isSimilar) {
+      continue
+    }
 
     pullRequests.push({
       id: record.id,
