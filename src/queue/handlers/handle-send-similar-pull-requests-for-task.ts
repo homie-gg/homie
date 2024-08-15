@@ -190,9 +190,33 @@ export async function handleSendSimilarPullRequestsForTask(
       },
     })
 
-    if (!isSimilar) {
+    if (isSimilar.failed) {
+      logger.debug('failed to check if similar', {
+        event: 'send_similar_pull_requests:fail_similar_check',
+        task,
+        organization: getOrganizationLogData(organization),
+        pull_request: {
+          title: record.title,
+          body: record.body,
+          summary: summary,
+        },
+        prompt: isSimilar.prompt,
+        error: isSimilar.error,
+      })
       continue
     }
+
+    logger.debug('Check is similar', {
+      event: 'send_similar_pull_requests:is_similar',
+      task,
+      organization: getOrganizationLogData(organization),
+      pull_request: {
+        title: record.title,
+        body: record.body,
+        summary: summary,
+      },
+      prompt: isSimilar.prompt,
+    })
 
     pullRequests.push({
       id: record.id,
