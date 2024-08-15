@@ -42,12 +42,13 @@ export async function checkIsReferencePullRequest(
   const openAI = new OpenAI()
 
   const prompt = `Determine whether the following PULL REQUEST can be referenced in helping to complete the following TASK.
+
 TASK:
-${task.name} - ${task.description}
+${task.name} - ${task.description ?? ''}
 PULL REQUEST:
 ${pullRequest.title}
-${pullRequest.body}
-${pullRequest.summary}
+${pullRequest.body ?? ''}
+${pullRequest.summary ?? ''}
 `
 
   const result = await openAI.beta.chat.completions.parse({
