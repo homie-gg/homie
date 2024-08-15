@@ -2,7 +2,7 @@ import OpenAI from 'openai'
 import { zodResponseFormat } from 'openai/helpers/zod'
 import { z } from 'zod'
 
-interface CheckPullRequestAddressesSimilarIssueParams {
+interface CheckIsReferencePullRequestParams {
   task: {
     name: string
     description: string
@@ -14,15 +14,15 @@ interface CheckPullRequestAddressesSimilarIssueParams {
   }
 }
 
-const checkPullRequestAddressesSimilarIssueResponse = z.object({
-  is_similar: z
+const checkIsReferencePullRequestResponse = z.object({
+  is_reference: z
     .boolean()
     .describe(
-      'Whether the given pull request addresses a similar issue to the task in terms of code implementation.',
+      'Whether the given pull request can be a helpful reference to implement the task in terms of code implementation.',
     ),
 })
 
-type CheckPullRequestAddressesSimilarIssueResult =
+type CheckIsReferencePullRequestResult =
   | {
       failed: true
       error: string | null
@@ -30,18 +30,18 @@ type CheckPullRequestAddressesSimilarIssueResult =
     }
   | {
       failed: false
-      isSimilar: boolean
+      isReference: boolean
       prompt: string
     }
 
-export async function checkPullRequestAddressesSimilarIssue(
-  params: CheckPullRequestAddressesSimilarIssueParams,
-): Promise<CheckPullRequestAddressesSimilarIssueResult> {
+export async function checkIsReferencePullRequest(
+  params: CheckIsReferencePullRequestParams,
+): Promise<CheckIsReferencePullRequestResult> {
   const { task, pullRequest } = params
 
   const openAI = new OpenAI()
 
-  const prompt = `Determine whether the following PULL REQUEST addresses a similar issue to the TASK in terms of code implementation, and can be used as a reference.
+  const prompt = `Determine whether the following PULL REQUEST can be referenced in helping to complete the following TASK.
 TASK:
 ${task.name} - ${task.description}
 PULL REQUEST:
@@ -63,8 +63,8 @@ ${pullRequest.summary}
       },
     ],
     response_format: zodResponseFormat(
-      checkPullRequestAddressesSimilarIssueResponse,
-      'checkPullRequestAddressesSimilarIssueResult',
+      checkIsReferencePullRequestResponse,
+      'checkIsReferencePullRequestResponse',
     ),
   })
   const output = result.choices[0].message
@@ -79,7 +79,7 @@ ${pullRequest.summary}
 
   return {
     failed: false,
-    isSimilar: output.parsed.is_similar,
+    isReference: output.parsed.is_reference,
     prompt,
   }
 }

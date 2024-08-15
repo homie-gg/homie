@@ -1,5 +1,5 @@
 import { dbClient } from '@/database/client'
-import { checkPullRequestAddressesSimilarIssue } from '@/lib/ai/check-pull-request-addresses-similar-issue'
+import { checkIsReferencePullRequest } from '@/lib/ai/check-is-reference-pull-request'
 import { PullRequestChangeMetadata } from '@/lib/ai/embed-pull-request-changes'
 import { getOrganizationVectorDB } from '@/lib/ai/get-organization-vector-db'
 import { postSimilarPullRequestsAsanaTaskComment } from '@/lib/asana/post-similar-pull-requests-asana-task-comment'
@@ -155,7 +155,7 @@ export async function handleSendSimilarPullRequestsForTask(
     summary: string
   }> = []
 
-  for (const [id, summary] of Object.keys(pullRequestSummaries)) {
+  for (const [id, summary] of Object.entries(pullRequestSummaries)) {
     const record = await dbClient
       .selectFrom('homie.pull_request')
       .where('organization_id', '=', organization.id)
@@ -172,7 +172,7 @@ export async function handleSendSimilarPullRequestsForTask(
       continue
     }
 
-    const isSimilarResult = await checkPullRequestAddressesSimilarIssue({
+    const isReferenceResult = await checkIsReferencePullRequest({
       task: {
         name: task.name,
         description: task.description,
@@ -184,38 +184,40 @@ export async function handleSendSimilarPullRequestsForTask(
       },
     })
 
-    if (isSimilarResult.failed) {
+    if (isReferenceResult.failed) {
       logger.debug('failed to check if similar', {
-        event: 'send_similar_pull_requests:fail_similar_check',
+        event: 'send_similar_pull_requests:fail_reference_check',
         ai_call: true,
         task,
         organization: getOrganizationLogData(organization),
         pull_request: {
+          id,
           title: record.title,
           body: record.body,
           summary: summary,
         },
-        prompt: isSimilarResult.prompt,
-        error: isSimilarResult.error,
+        prompt: isReferenceResult.prompt,
+        error: isReferenceResult.error,
       })
       continue
     }
 
-    logger.debug('Check is similar', {
-      event: 'send_similar_pull_requests:is_similar',
+    logger.debug('Check is reference', {
+      event: 'send_similar_pull_requests:is_reference',
       task,
       ai_call: true,
       organization: getOrganizationLogData(organization),
       pull_request: {
+        id,
         title: record.title,
         body: record.body,
         summary: summary,
       },
-      prompt: isSimilarResult.prompt,
-      is_similar: isSimilarResult.isSimilar,
+      prompt: isReferenceResult.prompt,
+      is_reference: isReferenceResult.isReference,
     })
 
-    if (!isSimilarResult.isSimilar) {
+    if (!isReferenceResult.isReference) {
       continue
     }
 
