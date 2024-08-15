@@ -117,4 +117,17 @@ export async function handleCreateHomieTaskFromTrelloTask(
       },
     },
   )
+
+  await dispatch(
+    'send_similar_pull_requests_for_task',
+    {
+      task,
+    },
+    {
+      debounce: {
+        key: `send_similar_pull_requests_for_task:${task.id}`,
+        delaySecs: 10800,
+      },
+    },
+  )
 }

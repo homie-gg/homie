@@ -84,6 +84,32 @@ export async function createHomieTaskFromAsanaTask(
     },
   )
 
+  await dispatch(
+    'calculate_task_complexity',
+    {
+      task: homieTask,
+    },
+    {
+      debounce: {
+        key: `calculate_task_complexity:${homieTask.id}`,
+        delaySecs: 600,
+      },
+    },
+  )
+
+  await dispatch(
+    'send_similar_pull_requests_for_task',
+    {
+      task: homieTask,
+    },
+    {
+      debounce: {
+        key: `send_similar_pull_requests_for_task:${homieTask.id}`,
+        delaySecs: 10800,
+      },
+    },
+  )
+
   if (!asanaTask.assignee) {
     return
   }

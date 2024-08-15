@@ -4231,6 +4231,12 @@ declare module 'zapatos/schema' {
          */
         github_repo_id: number | null
         /**
+         * **homie.task.has_received_similar_pull_requests**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        has_received_similar_pull_requests: boolean
+        /**
          * **homie.task.html_url**
          * - `text` in database
          * - `NOT NULL`, no default
@@ -4346,6 +4352,12 @@ declare module 'zapatos/schema' {
          * - Nullable, no default
          */
         github_repo_id: number | null
+        /**
+         * **homie.task.has_received_similar_pull_requests**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        has_received_similar_pull_requests: boolean
         /**
          * **homie.task.html_url**
          * - `text` in database
@@ -4558,6 +4570,20 @@ declare module 'zapatos/schema' {
           | db.SQLFragment<
               any,
               number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.task.has_received_similar_pull_requests**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        has_received_similar_pull_requests?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn
             >
         /**
          * **homie.task.html_url**
@@ -4788,6 +4814,16 @@ declare module 'zapatos/schema' {
           | number
           | db.Parameter<number>
           | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **homie.task.has_received_similar_pull_requests**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        has_received_similar_pull_requests?:
+          | boolean
+          | db.Parameter<boolean>
           | db.DefaultType
           | db.SQLFragment
         /**
@@ -5036,6 +5072,20 @@ declare module 'zapatos/schema' {
               | null
               | db.DefaultType
               | db.SQLFragment
+            >
+        /**
+         * **homie.task.has_received_similar_pull_requests**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        has_received_similar_pull_requests?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment
             >
         /**
          * **homie.task.html_url**

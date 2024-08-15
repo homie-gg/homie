@@ -140,6 +140,19 @@ export async function handleSyncAsanaTaskToHomieTask(
     },
   )
 
+  await dispatch(
+    'send_similar_pull_requests_for_task',
+    {
+      task: updatedTask,
+    },
+    {
+      debounce: {
+        key: `send_similar_pull_requests_for_task:${updatedTask.id}`,
+        delaySecs: 10800,
+      },
+    },
+  )
+
   // If no assignee, we'll remove any assignments (if they exist)
   if (!asanaTask.assignee) {
     await dbClient
