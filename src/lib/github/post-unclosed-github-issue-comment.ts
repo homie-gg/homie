@@ -1,5 +1,4 @@
 import { dbClient } from '@/database/client'
-import { getGreeting } from '@/lib/ai/get-greeting'
 import { postGithubIssueComment } from '@/lib/github/post-github-issue-comment'
 
 interface PostUnclosedGithubIssueCommentParams {
@@ -38,6 +37,6 @@ export async function postUnclosedGithubIssueComment(
     repo: githubRepository.name,
     owner: githubRepository.owner,
     issueNumber: task.ext_gh_issue_number,
-    body: `${getGreeting()}, this might have already been done via: [${pullRequest.title}](${pullRequest.html_url}).`,
+    body: `This might have already been done via: [${pullRequest.title}](${pullRequest.html_url}).`,
   })
 }

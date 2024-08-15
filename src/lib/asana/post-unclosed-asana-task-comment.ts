@@ -1,4 +1,3 @@
-import { getGreeting } from '@/lib/ai/get-greeting'
 import { postAsanaTaskComment } from '@/lib/asana/post-asana-task-comment'
 
 interface PostUnclosedAsanaTaskCommentParams {
@@ -23,6 +22,6 @@ export async function postUnclosedAsanaTaskComment(
   await postAsanaTaskComment({
     asanaAccessToken: organization.asana_access_token,
     extAsanaTaskId: task.ext_asana_task_id,
-    html: `<body>${getGreeting()}, this might have already been done via: <a href="${pullRequest.html_url}">${pullRequest.title}</a></body>`,
+    html: `<body>This might have already been done via: <a href="${pullRequest.html_url}">${pullRequest.title}</a></body>`,
   })
 }
