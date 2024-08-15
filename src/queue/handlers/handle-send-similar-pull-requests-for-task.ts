@@ -178,7 +178,7 @@ export async function handleSendSimilarPullRequestsForTask(
       continue
     }
 
-    const isSimilar = await checkPullRequestAddressesSimilarIssue({
+    const isSimilarResult = await checkPullRequestAddressesSimilarIssue({
       task: {
         name: task.name,
         description: task.description,
@@ -190,7 +190,7 @@ export async function handleSendSimilarPullRequestsForTask(
       },
     })
 
-    if (isSimilar.failed) {
+    if (isSimilarResult.failed) {
       logger.debug('failed to check if similar', {
         event: 'send_similar_pull_requests:fail_similar_check',
         task,
@@ -200,9 +200,13 @@ export async function handleSendSimilarPullRequestsForTask(
           body: record.body,
           summary: summary,
         },
-        prompt: isSimilar.prompt,
-        error: isSimilar.error,
+        prompt: isSimilarResult.prompt,
+        error: isSimilarResult.error,
       })
+      continue
+    }
+
+    if (!isSimilarResult.isSimilar) {
       continue
     }
 
@@ -215,7 +219,7 @@ export async function handleSendSimilarPullRequestsForTask(
         body: record.body,
         summary: summary,
       },
-      prompt: isSimilar.prompt,
+      prompt: isSimilarResult.prompt,
     })
 
     pullRequests.push({
