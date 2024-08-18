@@ -9,8 +9,6 @@ import { Toaster } from '@/lib/ui/Toast/Toaster'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
-const googleAnalayticsMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
-
 export const metadata: Metadata = {
   title: 'homie',
   description: 'AI Project Management',
@@ -21,6 +19,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const googleAnalayticsMeasurementId =
+    process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
+
   return (
     <ClerkProvider>
       <TooltipProvider>
