@@ -1245,6 +1245,12 @@ declare module 'zapatos/schema' {
          */
         send_pull_request_summaries_time: string
         /**
+         * **homie.organization.trial_ends_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        trial_ends_at: Date | null
+        /**
          * **homie.organization.updated_at**
          * - `timestamptz` in database
          * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -1354,6 +1360,12 @@ declare module 'zapatos/schema' {
          * - `NOT NULL`, default: `'22:00'::text`
          */
         send_pull_request_summaries_time: string
+        /**
+         * **homie.organization.trial_ends_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        trial_ends_at: db.TimestampTzString | null
         /**
          * **homie.organization.updated_at**
          * - `timestamptz` in database
@@ -1604,6 +1616,23 @@ declare module 'zapatos/schema' {
               string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
             >
         /**
+         * **homie.organization.trial_ends_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        trial_ends_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+        /**
          * **homie.organization.updated_at**
          * - `timestamptz` in database
          * - `NOT NULL`, default: `CURRENT_TIMESTAMP`
@@ -1786,6 +1815,17 @@ declare module 'zapatos/schema' {
         send_pull_request_summaries_time?:
           | string
           | db.Parameter<string>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **homie.organization.trial_ends_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        trial_ends_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | null
           | db.DefaultType
           | db.SQLFragment
         /**
@@ -2056,6 +2096,25 @@ declare module 'zapatos/schema' {
           | db.SQLFragment<
               any,
               string | db.Parameter<string> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **homie.organization.trial_ends_at**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        trial_ends_at?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
             >
         /**
          * **homie.organization.updated_at**
