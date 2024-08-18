@@ -4,7 +4,7 @@ import { subDays } from 'date-fns'
 export async function handleCalculateOrganizationComplexityScorePerDay() {
   // Scores are calculated weekly.
   // queue/schedule-jobs.ts for cron pattern
-  const lastWeek = subDays(new Date(), 1)
+  const lastWeek = subDays(new Date(), 7)
 
   const organizations = await dbClient
     .selectFrom('homie.organization')
