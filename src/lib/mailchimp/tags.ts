@@ -5,4 +5,5 @@
 export const tags = {
   signedUp: 'SignedUp',
   completedSetup: 'CompletedSetup',
+  oneYearTrial: 'OneYearTrial',
 }

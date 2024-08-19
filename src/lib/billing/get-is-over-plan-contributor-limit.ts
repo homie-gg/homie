@@ -1,6 +1,7 @@
 import { dbClient } from '@/database/client'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
+import { isBefore } from 'date-fns'
 
 interface GetIsOverPlanContributorLimitParams {
   organization: {
@@ -35,6 +36,7 @@ export async function getIsOverPlanContributorLimit(
       'homie.subscription.quantity as subscription_quantity',
       'homie.subscription.stripe_status as subscription_stripe_status',
       'homie.plan.name as plan',
+      'homie.organization.trial_ends_at',
     ])
     .executeTakeFirst()
 
@@ -47,6 +49,19 @@ export async function getIsOverPlanContributorLimit(
   if (organizationWithBilling?.has_unlimited_usage) {
     logger.debug('Has unlimited usage', {
       event: 'check_over_plan_contributor_limit:has_unlimited_usage',
+      organization: getOrganizationLogData(organization),
+      organization_with_billing: organizationWithBilling,
+    })
+
+    return false
+  }
+
+  if (
+    organizationWithBilling?.trial_ends_at &&
+    isBefore(organizationWithBilling.trial_ends_at, new Date()) // not past ended
+  ) {
+    logger.debug('Is on trial', {
+      event: 'check_over_plan_contributor_limit:on_trial',
       organization: getOrganizationLogData(organization),
       organization_with_billing: organizationWithBilling,
     })

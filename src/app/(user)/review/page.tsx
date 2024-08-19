@@ -9,7 +9,11 @@ import PullRequestsTable from '@/app/(user)/review/_components/PullRequestsTable
 import { getPullRequests } from '@/app/(user)/review/_utils/get-pull-requests'
 
 interface ReviewPageProps {
-  searchParams: { from?: string; to?: string; tab?: string }
+  searchParams: {
+    from?: string
+    to?: string
+    tab?: string
+  }
 }
 
 export default async function ReviewPage(props: ReviewPageProps) {
