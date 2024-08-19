@@ -1,6 +1,7 @@
 import { getMailchimp } from '@/lib/mailchimp/get-mailchimp'
 import { getMailchimpErrorResponse } from '@/lib/mailchimp/get-mailchimp-error-response'
 import { tags } from '@/lib/mailchimp/tags'
+import crypto from 'crypto'
 
 interface SubscribeMailchimpUserParams {
   email: string
@@ -32,7 +33,8 @@ export async function subscribeUser(params: SubscribeMailchimpUserParams) {
     }
 
     if (errorResponse.title === 'Member Exists') {
-      return
+      // Return subscriber hash manually
+      return crypto.createHash('md5').update(email.toLowerCase()).digest('hex')
     }
 
     throw error
