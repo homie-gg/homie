@@ -2,7 +2,7 @@ import { dbClient } from '@/database/client'
 import { calculateTaskComplexity } from '@/lib/ai/calculate-task-complexity'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
-import { CalculateTaskComplexity} from '@/queue/jobs'
+import { CalculateTaskComplexity } from '@/queue/jobs'
 
 export async function handleCalculateTaskComplexity(
   job: CalculateTaskComplexity,
