@@ -1,5 +1,4 @@
 import { createOpenAISDK } from '@/lib/open-ai/create-open-ai-sdk'
-import OpenAI from 'openai'
 import { zodResponseFormat } from 'openai/helpers/zod'
 import { z } from 'zod'
 

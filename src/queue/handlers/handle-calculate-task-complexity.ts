@@ -1,16 +1,8 @@
 import { dbClient } from '@/database/client'
 import { calculateTaskComplexity } from '@/lib/ai/calculate-task-complexity'
-import { checkIsDuplicateTask } from '@/lib/ai/check-is-duplicate-task'
-import { TaskMetadata } from '@/lib/ai/embed-task'
-import { getOrganizationVectorDB } from '@/lib/ai/get-organization-vector-db'
-import { postPotentialDuplicateAsanaTaskComment } from '@/lib/asana/post-potential-duplicate-asana-task-comment'
-import { postPotentialDuplicateGithubIssueComment } from '@/lib/github/post-potential-duplicate-github-issue-comment'
 import { logger } from '@/lib/log/logger'
-import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
-import { postPotentialDuplicateTrelloTaskComment } from '@/lib/trello/post-potential-duplicate-trello-comment'
-import { CalculateTaskComplexity, CheckForDuplicateTask } from '@/queue/jobs'
-import { CohereClient } from 'cohere-ai'
+import { CalculateTaskComplexity} from '@/queue/jobs'
 
 export async function handleCalculateTaskComplexity(
   job: CalculateTaskComplexity,
