@@ -7,6 +7,7 @@ import { auth, clerkClient } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 import { mailchimp } from '@/lib/mailchimp'
 import { config } from '@/config'
+import Script from 'next/script'
 
 interface UserLayoutProps {
   children: React.ReactNode
@@ -66,12 +67,19 @@ export default async function UserLayout(props: UserLayoutProps) {
       .executeTakeFirstOrThrow()
 
     return (
-      <div className="flex flex-col">
-        <AppBar user={user} />
-        <Content>
-          <SetupPage organization={newOrganization} />
-        </Content>
-      </div>
+      <>
+        {config.app.isProduction && (
+          <Script id="google-analytics-signed-up">
+            {`gtag('event', 'signed_up')`}
+          </Script>
+        )}
+        <div className="flex flex-col">
+          <AppBar user={user} />
+          <Content>
+            <SetupPage organization={newOrganization} />
+          </Content>
+        </div>
+      </>
     )
   }
 
