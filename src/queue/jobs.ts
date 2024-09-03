@@ -249,6 +249,12 @@ export type SendPullRequestSummaries = BullMQJob<
   'send_pull_request_summaries'
 >
 
+export type SendDailyReport = BullMQJob<
+  null,
+  void, // return type
+  'send_daily_report'
+>
+
 export type SendPullRequestSummariesToOrganization = BullMQJob<
   {
     organization: {
@@ -688,3 +694,4 @@ export type Job =
   | MigrateTaskEmbeddings
   | CheckForUnclosedTask
   | CalculateOrganizationComplexityScorePerDay
+  | SendDailyReport
