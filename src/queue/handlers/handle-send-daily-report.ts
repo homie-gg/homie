@@ -19,14 +19,17 @@ export async function handleSendDailyReport() {
     ])
     .executeTakeFirstOrThrow()
 
-  // TODO
-  // - generate input.mmd dynamically
-  // - move this into a job on worker and make sure things still work
+  const diagram = `pie
+    "repo/1" : 1
+    "repo/2" : 2
+    "repo/3" : 2`
+
+  await storage.put('input.mmd', diagram)
 
   await (
     await mermaidCLIModule
   ).run(
-    '/app/src/app/(guest)/test/input.mmd',
+    storage.getPath('input.mmd'),
     // @ts-ignore - ignoring a type for .png pattern in outputPath
     '/app/test.png',
     {

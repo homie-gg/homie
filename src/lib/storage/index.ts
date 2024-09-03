@@ -1,9 +1,7 @@
-import { getPath } from '@/lib/storage/get-path'
-import { getUrl } from '@/lib/storage/get-url'
-import { move } from '@/lib/storage/move'
+import { getStorage } from '@/lib/storage/get-storage'
 
-export const storage = {
-  getUrl,
-  move,
-  getPath,
-}
+export * from '@/lib/storage/types'
+
+const storage = getStorage()
+
+export { storage }

@@ -108,6 +108,7 @@
     "@types/he": "^1.2.3",
     "@types/jest": "^29.5.12",
     "@types/mailchimp__mailchimp_marketing": "^3.0.20",
+    "@types/mime-types": "^2.1.4",
     "@types/ms": "^0.7.34",
     "@types/node": "^20",
     "@types/react": "^18",
