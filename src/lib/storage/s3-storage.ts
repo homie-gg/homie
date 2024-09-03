@@ -14,4 +14,10 @@ export const s3: Storage = {
   put: function (file: string, contents: string): Promise<void> {
     throw new Error('Function not implemented.')
   },
+  deleteDirectory: function (directory: string): Promise<boolean> {
+    throw new Error('Function not implemented.')
+  },
+  delete: function (file: string): Promise<void> {
+    throw new Error('Function not implemented.')
+  },
 }

@@ -1,6 +1,7 @@
 import { dbClient } from '@/database/client'
 import { createSlackClient } from '@/lib/slack/create-slack-client'
 import { storage } from '@/lib/storage'
+import { v4 as uuid } from 'uuid'
 
 const mermaidCLIModule = import('@mermaid-js/mermaid-cli')
 
@@ -24,14 +25,18 @@ export async function handleSendDailyReport() {
     "repo/2" : 2
     "repo/3" : 2`
 
-  await storage.put('input.mmd', diagram)
+  const id = uuid()
+  const inputFile = `daily_report_diagram_${id}.mmd`
+  const outputFile = `daily_report_diagram_${id}.png`
+
+  await storage.put(inputFile, diagram)
 
   await (
     await mermaidCLIModule
   ).run(
-    storage.getPath('input.mmd'),
+    storage.getPath(inputFile),
     // @ts-ignore - ignoring a type for .png pattern in outputPath
-    '/app/test.png',
+    storage.getPath(outputFile),
     {
       outputFormat: 'png',
       parseMMDOptions: {
@@ -50,8 +55,6 @@ export async function handleSendDailyReport() {
     },
   )
   const slackClient = createSlackClient(organization.slack_access_token)
-
-  await storage.move('/app/test.png', 'test_2.png')
 
   // Initial message
   const res = await slackClient.post<{
@@ -187,7 +190,7 @@ export async function handleSendDailyReport() {
           text: 'Repo overview',
           emoji: true,
         },
-        image_url: storage.getUrl('test_2.png'),
+        image_url: storage.getUrl(outputFile),
         alt_text: 'delicious tacos',
       },
       {
@@ -469,4 +472,6 @@ export async function handleSendDailyReport() {
       },
     ],
   })
+
+  await storage.delete(inputFile)
 }
