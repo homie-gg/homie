@@ -1,5 +1,7 @@
 import { dbClient } from '@/database/client'
 import { createSlackClient } from '@/lib/slack/create-slack-client'
+import { storage } from '@/lib/storage'
+const mermaidCLIModule = import('@mermaid-js/mermaid-cli')
 
 interface TestPageProps {}
 
@@ -16,11 +18,40 @@ export default async function TestPage(props: TestPageProps) {
     .select([
       'slack_access_token',
       'ext_slack_webhook_channel_id',
-      'organization.id',
+      'homie.organization.id',
     ])
     .executeTakeFirstOrThrow()
 
+  // TODO
+  // - generate input.mmd dynamically
+  // - move this into a job on worker and make sure things still work
+
+  await (
+    await mermaidCLIModule
+  ).run(
+    '/Users/mike/Code/homie/homie/src/app/(guest)/test/input.mmd',
+    // @ts-ignore - ignoring a type for .png pattern in outputPath
+    '/Users/mike/Code/homie/homie/test.png',
+    {
+      outputFormat: 'png',
+      parseMMDOptions: {
+        viewport: {
+          width: 2048,
+          height: 2048,
+        },
+      },
+      puppeteerConfig: {
+        headless: 'new',
+        executablePath: process.env.CHROME_BIN
+          ? process.env.CHROME_BIN
+          : undefined,
+        args: ['--no-sandbox'], // I couldn't figure out how to run this in a container without this
+      },
+    },
+  )
   const slackClient = createSlackClient(organization.slack_access_token)
+
+  await storage.move('/Users/mike/Code/homie/homie/test.png', 'test_2.png')
 
   // Initial message
   const res = await slackClient.post<{
@@ -148,6 +179,16 @@ export default async function TestPage(props: TestPageProps) {
           text: 'Pull Requests 🚢',
           emoji: true,
         },
+      },
+      {
+        type: 'image',
+        title: {
+          type: 'plain_text',
+          text: 'Repo overview',
+          emoji: true,
+        },
+        image_url: storage.getUrl('test_2.png'),
+        alt_text: 'delicious tacos',
       },
       {
         type: 'section',

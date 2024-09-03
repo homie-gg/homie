@@ -1,5 +1,5 @@
 import { join } from 'node:path'
-import { getFiles } from '@/lib/file-system/get-files'
+import { getFiles } from '@/lib/storage/get-files'
 import { readPostFile } from '@/lib/blog/read-post-file'
 
 export function getAllPosts() {
