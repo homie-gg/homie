@@ -192,7 +192,11 @@ export async function handleSendDailyReport() {
     {
       name: string
       html_url: string
-      contributors: { username: string; ext_slack_member_id: string | null }[]
+      contributors: {
+        username: string
+        ext_slack_member_id: string | null
+        id: number
+      }[]
     }
   > = {}
   for (const taskAssignment of taskAssignments) {
@@ -205,7 +209,7 @@ export async function handleSendDailyReport() {
       name: taskAssignment.name,
       html_url: taskAssignment.html_url,
       contributors: [
-        ...assignedTasks[taskAssignment.task_id].contributors,
+        ...(assignedTasks[taskAssignment.task_id]?.contributors ?? []),
         contributor,
       ],
     }
@@ -447,7 +451,7 @@ export async function handleSendDailyReport() {
     }
   }
 
-  pullRequestBlocks.concat([
+  pullRequestBlocks.push(
     {
       type: 'section',
       text: {
@@ -458,7 +462,7 @@ export async function handleSendDailyReport() {
     {
       type: 'divider',
     },
-  ])
+  )
 
   await slackClient.post<{
     ts: string
@@ -579,7 +583,13 @@ export async function handleSendDailyReport() {
         elements: [
           {
             type: 'link',
-            text: `${taskAssignment.name} to ${taskAssignment.contributors.join(', ')}`,
+            text: `${taskAssignment.name} to ${taskAssignment.contributors
+              .map((contributor) =>
+                contributor.ext_slack_member_id
+                  ? `<@${contributor.ext_slack_member_id}>`
+                  : contributor.username,
+              )
+              .join(', ')}`,
             url: taskAssignment.html_url,
           },
         ],
@@ -600,7 +610,7 @@ export async function handleSendDailyReport() {
     elements: taskElements,
   })
 
-  taskBlocks.concat([
+  taskBlocks.push(
     {
       type: 'section',
       text: {
@@ -611,7 +621,7 @@ export async function handleSendDailyReport() {
     {
       type: 'divider',
     },
-  ])
+  )
   // Tasks
   await slackClient.post<{
     ts: string
