@@ -7,7 +7,7 @@ import {
   ChatPostMessageArguments,
   RichTextBlock,
 } from '@slack/web-api/dist/methods'
-import { RichTextList, RichTextSection } from '@slack/bolt'
+import { RichTextList } from '@slack/bolt'
 
 const mermaidCLIModule = import('@mermaid-js/mermaid-cli')
 
@@ -94,7 +94,14 @@ export async function handleSendDailyReport() {
 
   let numPullRequests = 0
   let diagram = `pie`
-  const contributors: Record<string, any> = {}
+  const contributors: Record<
+    number,
+    {
+      id: number
+      username: string
+      ext_slack_member_id: string | null
+    }
+  > = {}
 
   for (const repo of reposWithPullRequests) {
     if (repo.pullRequests.length === 0) {
@@ -105,7 +112,18 @@ export async function handleSendDailyReport() {
     numPullRequests += repo.pullRequests.length
 
     for (const pullRequest of repo.pullRequests) {
-      contributors[pullRequest.contributor_id] = true
+      const contributor = await dbClient
+        .selectFrom('homie.contributor')
+        .where('organization_id', '=', organization.id)
+        .where('id', '=', pullRequest.contributor_id)
+        .select(['username', 'ext_slack_member_id', 'id'])
+        .executeTakeFirst()
+
+      if (!contributor) {
+        continue
+      }
+
+      contributors[pullRequest.contributor_id] = contributor
     }
   }
 
@@ -174,16 +192,21 @@ export async function handleSendDailyReport() {
     {
       name: string
       html_url: string
-      contributors: number[]
+      contributors: { username: string; ext_slack_member_id: string | null }[]
     }
   > = {}
   for (const taskAssignment of taskAssignments) {
+    const contributor = contributors[taskAssignment.assigned_contributor_id]
+    if (!contributor) {
+      continue
+    }
+
     assignedTasks[taskAssignment.task_id] = {
       name: taskAssignment.name,
       html_url: taskAssignment.html_url,
       contributors: [
         ...assignedTasks[taskAssignment.task_id].contributors,
-        taskAssignment.assigned_contributor_id,
+        contributor,
       ],
     }
   }
@@ -326,17 +349,7 @@ export async function handleSendDailyReport() {
     },
   ]
 
-  for (const contributorID of Object.keys(contributors)) {
-    const contributor = await dbClient
-      .selectFrom('homie.contributor')
-      .where('organization_id', '=', organization.id)
-      .select(['ext_slack_member_id', 'username'])
-      .executeTakeFirst()
-
-    if (!contributor) {
-      continue
-    }
-
+  for (const contributor of Object.values(contributors)) {
     pullRequestBlocks.push({
       type: 'section',
       text: {
@@ -350,7 +363,7 @@ export async function handleSendDailyReport() {
     for (const repo of repos) {
       let pullRequestsQuery = dbClient
         .selectFrom('homie.pull_request')
-        .where('contributor_id', '=', parseInt(contributorID))
+        .where('contributor_id', '=', contributor.id)
         .where('merged_at', 'is not', null)
         // .where('merged_at', '>', cutOffDate)
         // Only send PRs merged to default branch
