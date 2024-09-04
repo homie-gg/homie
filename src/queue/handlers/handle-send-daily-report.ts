@@ -1,9 +1,20 @@
 import { dbClient } from '@/database/client'
 import { createSlackClient } from '@/lib/slack/create-slack-client'
 import { storage } from '@/lib/storage'
+import { taskStatus } from '@/lib/tasks'
 import { v4 as uuid } from 'uuid'
+import {
+  ChatPostMessageArguments,
+  RichTextBlock,
+} from '@slack/web-api/dist/methods'
 
 const mermaidCLIModule = import('@mermaid-js/mermaid-cli')
+
+// TODO
+// - add homie tips at the end
+// - send actual data
+// - update job to run on schedule and send per org
+// - add settings to configure when daily reports should go out
 
 export async function handleSendDailyReport() {
   const organization = await dbClient
@@ -20,10 +31,84 @@ export async function handleSendDailyReport() {
     ])
     .executeTakeFirstOrThrow()
 
-  const diagram = `pie
-    "repo/1" : 1
-    "repo/2" : 2
-    "repo/3" : 2`
+  // const cutOffDate = getPullRequestCutoffDate({ organization })
+
+  const githubRepos = await dbClient
+    .selectFrom('github.repo')
+    .select(['name', 'id as github_repo_id', 'html_url as url'])
+    .where('github.repo.organization_id', '=', organization.id)
+    .execute()
+
+  const gitlabProjects = await dbClient
+    .selectFrom('gitlab.project')
+    .select(['name', 'id as gitlab_project_id', 'web_url as url'])
+    .where('gitlab.project.organization_id', '=', organization.id)
+    .execute()
+
+  const repos = [...githubRepos, ...gitlabProjects]
+
+  const reposWithPullRequests = await Promise.all(
+    repos.map(async (repo) => {
+      let pullRequestsQuery = dbClient
+        .selectFrom('homie.pull_request')
+        .where('merged_at', 'is not', null)
+        // .where('merged_at', '>', cutOffDate)
+        // Only send PRs merged to default branch
+        .where((eb) =>
+          eb('homie.pull_request.was_merged_to_default_branch', '=', true)
+            // Assume no target_branch (legacy) to be default branch, which were the only PRs saved.
+            .or('homie.pull_request.target_branch', 'is', null),
+        )
+        .select([
+          'homie.pull_request.html_url',
+          'homie.pull_request.title',
+          'homie.pull_request.contributor_id',
+        ])
+        .orderBy('merged_at')
+
+      if ('github_repo_id' in repo) {
+        pullRequestsQuery = pullRequestsQuery.where(
+          'github_repo_id',
+          '=',
+          repo.github_repo_id,
+        )
+      }
+
+      if ('gitlab_project_id' in repo) {
+        pullRequestsQuery = pullRequestsQuery.where(
+          'gitlab_project_id',
+          '=',
+          repo.gitlab_project_id,
+        )
+      }
+
+      const pullRequests = await pullRequestsQuery.execute()
+
+      return {
+        name: repo.name,
+        pullRequests,
+      }
+    }),
+  )
+
+  let numPullRequests = 0
+  let diagram = `pie`
+  const contributors: Record<string, any> = {}
+
+  for (const repo of reposWithPullRequests) {
+    if (repo.pullRequests.length === 0) {
+      continue
+    }
+
+    diagram += `\n  "${repo.name}" : ${repo.pullRequests.length}`
+    numPullRequests += repo.pullRequests.length
+
+    for (const pullRequest of repo.pullRequests) {
+      contributors[pullRequest.contributor_id] = true
+    }
+  }
+
+  const numContributors = Object.keys(contributors).length
 
   const id = uuid()
   const inputFile = `daily_report_diagram_${id}.mmd`
@@ -54,6 +139,62 @@ export async function handleSendDailyReport() {
       },
     },
   )
+
+  const addedTasks = await dbClient
+    .selectFrom('homie.task')
+    .where('organization_id', '=', organization.id)
+    // .where('created_at', '>', cutOffDate)
+    .where('task_status_id', '=', taskStatus.open)
+    .select(['name', 'html_url'])
+    .execute()
+
+  const completedTasks = await dbClient
+    .selectFrom('homie.task')
+    .where('organization_id', '=', organization.id)
+    // .where('completed_at', '>', cutOffDate)
+    .select(['name', 'html_url'])
+    .execute()
+
+  const taskAssignments = await dbClient
+    .selectFrom('homie.contributor_task')
+    .innerJoin('homie.task', 'homie.contributor_task.task_id', 'homie.task.id')
+    .where('homie.task.organization_id', '=', organization.id)
+    .select([
+      'name',
+      'html_url',
+      'homie.contributor_task.contributor_id as assigned_contributor_id',
+      'homie.task.id as task_id',
+    ])
+    // .where('homie.contributor_task.created_at', '>', cutOffDate)
+    .execute()
+
+  const assignedTasks: Record<
+    number,
+    {
+      name: string
+      html_url: string
+      contributors: number[]
+    }
+  > = {}
+  for (const taskAssignment of taskAssignments) {
+    assignedTasks[taskAssignment.task_id] = {
+      name: taskAssignment.name,
+      html_url: taskAssignment.html_url,
+      contributors: [
+        ...assignedTasks[taskAssignment.task_id].contributors,
+        taskAssignment.assigned_contributor_id,
+      ],
+    }
+  }
+
+  const numAssignedTasks = Object.keys(assignedTasks).length
+
+  const pendingTasks = await dbClient
+    .selectFrom('homie.task')
+    .where('task_status_id', '=', taskStatus.open)
+    .where('homie.task.organization_id', '=', organization.id)
+    .execute()
+
   const slackClient = createSlackClient(organization.slack_access_token)
 
   // Initial message
@@ -66,7 +207,7 @@ export async function handleSendDailyReport() {
         type: 'header',
         text: {
           type: 'plain_text',
-          text: 'Daily Report 🎉',
+          text: 'Daily Report 📋',
           emoji: true,
         },
       },
@@ -96,7 +237,7 @@ export async function handleSendDailyReport() {
                 elements: [
                   {
                     type: 'text',
-                    text: '3 merged by 2 contributors\n\n',
+                    text: `${numPullRequests} merged by ${numContributors} contributors\n\n`,
                   },
                 ],
               },
@@ -125,7 +266,7 @@ export async function handleSendDailyReport() {
                 elements: [
                   {
                     type: 'text',
-                    text: '0 added\n',
+                    text: `${addedTasks.length} added\n`,
                   },
                 ],
               },
@@ -134,7 +275,7 @@ export async function handleSendDailyReport() {
                 elements: [
                   {
                     type: 'text',
-                    text: '2 completed\n',
+                    text: `${completedTasks.length} completed\n`,
                   },
                 ],
               },
@@ -143,7 +284,7 @@ export async function handleSendDailyReport() {
                 elements: [
                   {
                     type: 'text',
-                    text: '5 assigned\n',
+                    text: `${numAssignedTasks} assigned\n`,
                   },
                 ],
               },
@@ -152,7 +293,7 @@ export async function handleSendDailyReport() {
                 elements: [
                   {
                     type: 'text',
-                    text: '34 pending\n',
+                    text: `${pendingTasks.length} pending\n`,
                   },
                 ],
               },
@@ -163,314 +304,277 @@ export async function handleSendDailyReport() {
     ],
   })
 
-  const contributor = await dbClient
-    .selectFrom('homie.contributor')
-    .where('organization_id', '=', organization.id)
-    .select(['ext_slack_member_id', 'username'])
-    .executeTakeFirstOrThrow()
+  const pullRequestBlocks: ChatPostMessageArguments['blocks'] = [
+    {
+      type: 'header',
+      text: {
+        type: 'plain_text',
+        text: 'Pull Requests 🚢',
+        emoji: true,
+      },
+    },
+    {
+      type: 'image',
+      title: {
+        type: 'plain_text',
+        text: 'Repos',
+        emoji: true,
+      },
+      image_url: storage.getUrl(outputFile),
+      alt_text: 'repos pie chart',
+    },
+  ]
+
+  for (const contributorID of Object.keys(contributors)) {
+    const contributor = await dbClient
+      .selectFrom('homie.contributor')
+      .where('organization_id', '=', organization.id)
+      .select(['ext_slack_member_id', 'username'])
+      .executeTakeFirst()
+
+    if (!contributor) {
+      continue
+    }
+
+    pullRequestBlocks.push({
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: contributor.ext_slack_member_id
+          ? `<@${contributor.ext_slack_member_id}>`
+          : contributor.username,
+      },
+    })
+
+    for (const repo of repos) {
+      let pullRequestsQuery = dbClient
+        .selectFrom('homie.pull_request')
+        .where('contributor_id', '=', parseInt(contributorID))
+        .where('merged_at', 'is not', null)
+        // .where('merged_at', '>', cutOffDate)
+        // Only send PRs merged to default branch
+        .where((eb) =>
+          eb('homie.pull_request.was_merged_to_default_branch', '=', true)
+            // Assume no target_branch (legacy) to be default branch, which were the only PRs saved.
+            .or('homie.pull_request.target_branch', 'is', null),
+        )
+        .select(['homie.pull_request.html_url', 'homie.pull_request.title'])
+        .orderBy('merged_at')
+
+      if ('github_repo_id' in repo) {
+        pullRequestsQuery = pullRequestsQuery.where(
+          'github_repo_id',
+          '=',
+          repo.github_repo_id,
+        )
+      }
+
+      if ('gitlab_project_id' in repo) {
+        pullRequestsQuery = pullRequestsQuery.where(
+          'gitlab_project_id',
+          '=',
+          repo.gitlab_project_id,
+        )
+      }
+
+      const pullRequests = await pullRequestsQuery.execute()
+
+      if (pullRequests.length === 0) {
+        continue
+      }
+
+      const elements: RichTextBlock['elements'] = []
+
+      // Repo header
+      elements.push({
+        type: 'rich_text_list',
+        style: 'bullet',
+        indent: 0,
+        border: 0,
+        elements: [
+          {
+            type: 'rich_text_section',
+            elements: [
+              {
+                type: 'link',
+                url: repo.url,
+                text: repo.name,
+                style: {
+                  bold: true,
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // Pull requests
+      elements.push({
+        type: 'rich_text_list',
+        style: 'bullet',
+        indent: 1,
+        border: 0,
+        elements: pullRequests.map((pullRequest) => ({
+          type: 'rich_text_section',
+          elements: [
+            {
+              type: 'link',
+              url: pullRequest.html_url,
+              text: pullRequest.title,
+            },
+          ],
+        })),
+      })
+
+      pullRequestBlocks.push({
+        type: 'rich_text',
+        elements,
+      })
+    }
+  }
+
+  pullRequestBlocks.concat([
+    {
+      type: 'section',
+      text: {
+        type: 'plain_text',
+        text: '\n',
+      },
+    },
+    {
+      type: 'divider',
+    },
+  ])
 
   await slackClient.post<{
     ts: string
   }>('chat.postMessage', {
     channel: organization.ext_slack_webhook_channel_id,
     thread_ts: res.ts,
-    blocks: [
-      {
-        type: 'header',
-        text: {
-          type: 'plain_text',
-          text: 'Pull Requests 🚢',
-          emoji: true,
-        },
-      },
-      {
-        type: 'image',
-        title: {
-          type: 'plain_text',
-          text: 'Repo overview',
-          emoji: true,
-        },
-        image_url: storage.getUrl(outputFile),
-        alt_text: 'delicious tacos',
-      },
-      {
-        type: 'section',
-        text: {
-          type: 'mrkdwn',
-          text: contributor.ext_slack_member_id
-            ? `<@${contributor.ext_slack_member_id}>`
-            : contributor.username,
-        },
-      },
-      {
-        type: 'rich_text',
-        elements: [
-          {
-            type: 'rich_text_list',
-            style: 'bullet',
-            indent: 0,
-            border: 0,
-            elements: [
-              {
-                type: 'rich_text_section',
-                elements: [
-                  {
-                    type: 'text',
-                    text: 'Repo',
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            type: 'rich_text_list',
-            style: 'bullet',
-            indent: 1,
-            border: 0,
-            elements: [
-              {
-                type: 'rich_text_section',
-                elements: [
-                  {
-                    type: 'text',
-                    text: 'PR #1',
-                  },
-                ],
-              },
-              {
-                type: 'rich_text_section',
-                elements: [
-                  {
-                    type: 'text',
-                    text: 'PR #2',
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-      {
-        type: 'section',
-        text: {
-          type: 'plain_text',
-          text: '\n',
-        },
-      },
-      {
-        type: 'divider',
-      },
-    ],
+    blocks: pullRequestBlocks,
   })
 
+  const taskBlocks: ChatPostMessageArguments['blocks'] = [
+    {
+      type: 'header',
+      text: {
+        type: 'plain_text',
+        text: 'Tasks 🎯',
+        emoji: true,
+      },
+    },
+  ]
+
+  const taskElements: RichTextBlock['elements'] = []
+
+  if (addedTasks.length > 0) {
+    taskElements.push({
+      type: 'rich_text_section',
+      elements: [
+        {
+          type: 'text',
+          text: '\nAdded',
+          style: {
+            bold: true,
+          },
+        },
+      ],
+    })
+
+    for (const addedTask of addedTasks) {
+      taskElements.push({
+        type: 'rich_text_section',
+        elements: [
+          {
+            type: 'link',
+            text: addedTask.name,
+            url: addedTask.html_url,
+          },
+        ],
+      })
+    }
+  }
+
+  if (completedTasks.length > 0) {
+    taskElements.push({
+      type: 'rich_text_section',
+      elements: [
+        {
+          type: 'text',
+          text: 'Completed',
+          style: {
+            bold: true,
+          },
+        },
+      ],
+    })
+
+    for (const completedTask of completedTasks) {
+      taskElements.push({
+        type: 'rich_text_section',
+        elements: [
+          {
+            type: 'link',
+            text: completedTask.name,
+            url: completedTask.html_url,
+          },
+        ],
+      })
+    }
+  }
+
+  if (taskAssignments.length > 0) {
+    taskElements.push({
+      type: 'rich_text_section',
+      elements: [
+        {
+          type: 'text',
+          text: 'Assigned',
+          style: {
+            bold: true,
+          },
+        },
+      ],
+    })
+
+    for (const taskAssignment of Object.values(assignedTasks)) {
+      taskElements.push({
+        type: 'rich_text_section',
+        elements: [
+          {
+            type: 'link',
+            text: `${taskAssignment.name} to ${taskAssignment.contributors.join(', ')}`,
+            url: taskAssignment.html_url,
+          },
+        ],
+      })
+    }
+  }
+
+  taskBlocks.push({
+    type: 'rich_text',
+    elements: taskElements,
+  })
+
+  taskBlocks.concat([
+    {
+      type: 'section',
+      text: {
+        type: 'plain_text',
+        text: '\n',
+      },
+    },
+    {
+      type: 'divider',
+    },
+  ])
   // Tasks
   await slackClient.post<{
     ts: string
   }>('chat.postMessage', {
     channel: organization.ext_slack_webhook_channel_id,
     thread_ts: res.ts,
-    blocks: [
-      {
-        type: 'header',
-        text: {
-          type: 'plain_text',
-          text: 'Tasks 🎯',
-          emoji: true,
-        },
-      },
-      {
-        type: 'rich_text',
-        elements: [
-          {
-            type: 'rich_text_section',
-            elements: [
-              {
-                type: 'text',
-                text: '\nAdded',
-                style: {
-                  bold: true,
-                },
-              },
-            ],
-          },
-          {
-            type: 'rich_text_list',
-            style: 'bullet',
-            indent: 0,
-            border: 0,
-            elements: [
-              {
-                type: 'rich_text_section',
-                elements: [
-                  {
-                    type: 'text',
-                    text: 'Task #1',
-                  },
-                ],
-              },
-              {
-                type: 'rich_text_section',
-                elements: [
-                  {
-                    type: 'text',
-                    text: 'Task #2',
-                  },
-                ],
-              },
-              {
-                type: 'rich_text_section',
-                elements: [
-                  {
-                    type: 'text',
-                    text: 'Task #3',
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            type: 'rich_text_section',
-            elements: [
-              {
-                type: 'text',
-                text: '\n',
-              },
-            ],
-          },
-        ],
-      },
-      {
-        type: 'rich_text',
-        elements: [
-          {
-            type: 'rich_text_section',
-            elements: [
-              {
-                type: 'text',
-                text: 'Completed',
-                style: {
-                  bold: true,
-                },
-              },
-            ],
-          },
-          {
-            type: 'rich_text_list',
-            style: 'bullet',
-            indent: 0,
-            border: 0,
-            elements: [
-              {
-                type: 'rich_text_section',
-                elements: [
-                  {
-                    type: 'text',
-                    text: 'Task #4',
-                  },
-                ],
-              },
-              {
-                type: 'rich_text_section',
-                elements: [
-                  {
-                    type: 'text',
-                    text: 'Task #5',
-                  },
-                ],
-              },
-              {
-                type: 'rich_text_section',
-                elements: [
-                  {
-                    type: 'text',
-                    text: 'Task #6',
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            type: 'rich_text_section',
-            elements: [
-              {
-                type: 'text',
-                text: '\n',
-              },
-            ],
-          },
-        ],
-      },
-      {
-        type: 'rich_text',
-        elements: [
-          {
-            type: 'rich_text_section',
-            elements: [
-              {
-                type: 'text',
-                text: 'Assigned',
-                style: {
-                  bold: true,
-                },
-              },
-            ],
-          },
-          {
-            type: 'rich_text_list',
-            style: 'bullet',
-            indent: 0,
-            border: 0,
-            elements: [
-              {
-                type: 'rich_text_section',
-                elements: [
-                  {
-                    type: 'text',
-                    text: `Task #7 to ${
-                      contributor.ext_slack_member_id
-                        ? `<@${contributor.ext_slack_member_id}>`
-                        : contributor.username
-                    }`,
-                  },
-                ],
-              },
-              {
-                type: 'rich_text_section',
-                elements: [
-                  {
-                    type: 'text',
-                    text: `Task #8 to ${
-                      contributor.ext_slack_member_id
-                        ? `<@${contributor.ext_slack_member_id}>`
-                        : contributor.username
-                    }`,
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            type: 'rich_text_section',
-            elements: [
-              {
-                type: 'text',
-                text: '\n',
-              },
-            ],
-          },
-        ],
-      },
-      {
-        type: 'section',
-        text: {
-          type: 'plain_text',
-          text: '\n',
-        },
-      },
-      {
-        type: 'divider',
-      },
-    ],
+    blocks: taskBlocks,
   })
 
   await storage.delete(inputFile)
