@@ -7,6 +7,7 @@ import {
   ChatPostMessageArguments,
   RichTextBlock,
 } from '@slack/web-api/dist/methods'
+import { RichTextList, RichTextSection } from '@slack/bolt'
 
 const mermaidCLIModule = import('@mermaid-js/mermaid-cli')
 
@@ -481,8 +482,10 @@ export async function handleSendDailyReport() {
       ],
     })
 
+    const addedElements: RichTextList['elements'] = []
+
     for (const addedTask of addedTasks) {
-      taskElements.push({
+      addedElements.push({
         type: 'rich_text_section',
         elements: [
           {
@@ -493,6 +496,14 @@ export async function handleSendDailyReport() {
         ],
       })
     }
+
+    taskElements.push({
+      type: 'rich_text_list',
+      style: 'bullet',
+      indent: 0,
+      border: 0,
+      elements: addedElements,
+    })
   }
 
   if (completedTasks.length > 0) {
@@ -509,8 +520,10 @@ export async function handleSendDailyReport() {
       ],
     })
 
+    const completedElements: RichTextList['elements'] = []
+
     for (const completedTask of completedTasks) {
-      taskElements.push({
+      completedElements.push({
         type: 'rich_text_section',
         elements: [
           {
@@ -521,6 +534,14 @@ export async function handleSendDailyReport() {
         ],
       })
     }
+
+    taskElements.push({
+      type: 'rich_text_list',
+      style: 'bullet',
+      indent: 0,
+      border: 0,
+      elements: completedElements,
+    })
   }
 
   if (taskAssignments.length > 0) {
@@ -537,8 +558,10 @@ export async function handleSendDailyReport() {
       ],
     })
 
+    const assignedElements: RichTextList['elements'] = []
+
     for (const taskAssignment of Object.values(assignedTasks)) {
-      taskElements.push({
+      assignedElements.push({
         type: 'rich_text_section',
         elements: [
           {
@@ -549,6 +572,14 @@ export async function handleSendDailyReport() {
         ],
       })
     }
+
+    taskElements.push({
+      type: 'rich_text_list',
+      style: 'bullet',
+      indent: 0,
+      border: 0,
+      elements: assignedElements,
+    })
   }
 
   taskBlocks.push({
