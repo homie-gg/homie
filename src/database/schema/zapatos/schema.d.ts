@@ -1221,6 +1221,12 @@ declare module 'zapatos/schema' {
          */
         persona_positivity_level: number
         /**
+         * **homie.organization.send_daily_report_time**
+         * - `text` in database
+         * - `NOT NULL`, default: `'12:00'::text`
+         */
+        send_daily_report_time: string
+        /**
          * **homie.organization.send_pull_request_summaries_day**
          * - `text` in database
          * - `NOT NULL`, default: `'7'::text`
@@ -1336,6 +1342,12 @@ declare module 'zapatos/schema' {
          * - `NOT NULL`, default: `10`
          */
         persona_positivity_level: number
+        /**
+         * **homie.organization.send_daily_report_time**
+         * - `text` in database
+         * - `NOT NULL`, default: `'12:00'::text`
+         */
+        send_daily_report_time: string
         /**
          * **homie.organization.send_pull_request_summaries_day**
          * - `text` in database
@@ -1560,6 +1572,20 @@ declare module 'zapatos/schema' {
               number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
             >
         /**
+         * **homie.organization.send_daily_report_time**
+         * - `text` in database
+         * - `NOT NULL`, default: `'12:00'::text`
+         */
+        send_daily_report_time?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
          * **homie.organization.send_pull_request_summaries_day**
          * - `text` in database
          * - `NOT NULL`, default: `'7'::text`
@@ -1775,6 +1801,16 @@ declare module 'zapatos/schema' {
         persona_positivity_level?:
           | number
           | db.Parameter<number>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **homie.organization.send_daily_report_time**
+         * - `text` in database
+         * - `NOT NULL`, default: `'12:00'::text`
+         */
+        send_daily_report_time?:
+          | string
+          | db.Parameter<string>
           | db.DefaultType
           | db.SQLFragment
         /**
@@ -2040,6 +2076,20 @@ declare module 'zapatos/schema' {
           | db.SQLFragment<
               any,
               number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **homie.organization.send_daily_report_time**
+         * - `text` in database
+         * - `NOT NULL`, default: `'12:00'::text`
+         */
+        send_daily_report_time?:
+          | string
+          | db.Parameter<string>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.DefaultType | db.SQLFragment
             >
         /**
          * **homie.organization.send_pull_request_summaries_day**

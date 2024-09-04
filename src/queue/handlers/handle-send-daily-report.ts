@@ -13,7 +13,6 @@ const mermaidCLIModule = import('@mermaid-js/mermaid-cli')
 
 // TODO
 // - add homie tips at the end
-// - send actual data
 // - update job to run on schedule and send per org
 // - add settings to configure when daily reports should go out
 
