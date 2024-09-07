@@ -1,23 +1,80 @@
 import { config } from '@/config'
 import { Storage } from '@/lib/storage/types'
+import {
+  S3Client,
+  CopyObjectCommand,
+  PutObjectCommand,
+  ListObjectsCommand,
+  DeleteObjectCommand,
+  DeleteObjectsCommand,
+} from '@aws-sdk/client-s3'
 
 export const s3: Storage = {
   getUrl: function (file: string): string {
     return `${config.storage.cdnUrl}/${file}`
   },
   getPath: function (file: string): string {
-    throw new Error('Function not implemented.')
+    return `s3://${config.storage.s3Bucket}/${file}`
   },
-  move: function (oldPath: string, newPath: string): Promise<void> {
-    throw new Error('Function not implemented.')
+  move: async function (oldPath: string, newPath: string): Promise<void> {
+    const client = new S3Client({ region: config.aws.region })
+
+    await client.send(
+      new CopyObjectCommand({
+        Bucket: config.storage.s3Bucket,
+        CopySource: `${config.storage.s3Bucket}/${oldPath}`,
+        Key: newPath,
+      }),
+    )
   },
-  put: function (file: string, contents: string): Promise<void> {
-    throw new Error('Function not implemented.')
+  put: async function (file: string, contents: string): Promise<void> {
+    const client = new S3Client({ region: config.aws.region })
+
+    await client.send(
+      new PutObjectCommand({
+        Bucket: config.storage.s3Bucket,
+        Key: file,
+        ACL: 'public-read',
+        ContentType: 'binary',
+        Body: Buffer.from(contents, 'binary'),
+      }),
+    )
   },
-  deleteDirectory: function (directory: string): Promise<boolean> {
-    throw new Error('Function not implemented.')
+  deleteDirectory: async function (directory: string): Promise<boolean> {
+    const client = new S3Client({ region: config.aws.region })
+
+    const objects = await client.send(
+      new ListObjectsCommand({
+        Bucket: config.storage.s3Bucket,
+        Prefix: directory,
+      }),
+    )
+
+    if (!objects.Contents?.length) {
+      return true
+    }
+
+    await client.send(
+      new DeleteObjectsCommand({
+        Bucket: config.storage.s3Bucket,
+        Delete: {
+          Objects: objects.Contents.filter((object) => !!object.Key).map(
+            (object) => ({ Key: object.Key }),
+          ),
+        },
+      }),
+    )
+
+    return true
   },
-  delete: function (file: string): Promise<void> {
-    throw new Error('Function not implemented.')
+  delete: async function (file: string): Promise<void> {
+    const client = new S3Client({ region: config.aws.region })
+
+    await client.send(
+      new DeleteObjectCommand({
+        Bucket: config.storage.s3Bucket,
+        Key: `${config.storage.s3Bucket}/${file}`,
+      }),
+    )
   },
 }

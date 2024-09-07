@@ -12,9 +12,6 @@ import { getDailyReportHomieHintsBlocks } from '@/lib/daily-report/get-daily-rep
 import { SendOrganizationDailyReport } from '@/queue/jobs'
 import { subHours } from 'date-fns'
 
-// TODO
-// - add settings to configure when daily reports should go out
-
 export async function handleSendOrganizationDailyReport(
   job: SendOrganizationDailyReport,
 ) {

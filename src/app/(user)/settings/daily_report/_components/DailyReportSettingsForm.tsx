@@ -32,6 +32,10 @@ interface DailyReportSettingsFormProps {
   organization: Organization
 }
 
+// TODO
+// - update file system to store & send on S3 for prod
+// - clean up pull requests
+
 export default function DailyReportSettingsForm(
   props: DailyReportSettingsFormProps,
 ) {
