@@ -28,6 +28,10 @@ export default function SettingsPage(props: SettingsPageProps) {
                 text: 'Pull Request Summaries',
               },
               {
+                href: '/settings/daily_report',
+                text: 'Daily Report',
+              },
+              {
                 href: '/settings/asana',
                 text: 'Asana',
               },

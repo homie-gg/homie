@@ -10,6 +10,11 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       name: 'organization',
     },
     {
+      send_daily_report_enabled: {
+        type: 'boolean',
+        default: true,
+        notNull: true,
+      },
       send_daily_report_time: {
         type: 'string',
         default: '12:00',
@@ -25,6 +30,6 @@ export async function down(pgm: MigrationBuilder): Promise<void> {
       schema: 'homie',
       name: 'organization',
     },
-    ['send_daily_report_time'],
+    ['send_daily_report_enabled', 'send_daily_report_time'],
   )
 }

@@ -2,7 +2,7 @@ import { getDate } from '@/lib/date/get-date'
 import { subMinutes } from 'date-fns'
 
 interface GetLocalDateParams {
-  day: number
+  day?: number
   hours: number
   minutes: number
 }

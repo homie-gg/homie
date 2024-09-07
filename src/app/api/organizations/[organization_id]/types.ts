@@ -18,6 +18,10 @@ export const organizationData = z.object({
   send_pull_request_summaries_time: z
     .string()
     .refine((value) => /^\d\d:\d\d$/.test(value), 'Must be hh:mm'),
+  send_daily_report_enabled: z.boolean(),
+  send_daily_report_time: z
+    .string()
+    .refine((value) => /^\d\d:\d\d$/.test(value), 'Must be hh:mm'),
   is_persona_enabled: z.boolean(),
   persona_positivity_level: z.number(),
   persona_g_level: z.number(),
