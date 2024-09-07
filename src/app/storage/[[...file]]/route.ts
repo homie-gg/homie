@@ -30,7 +30,7 @@ export const GET = (
     return new NextResponse(file, {
       status: 200,
       headers: {
-        'Content-type': contentType,
+        'Content-type': contentType || 'text/plain',
       },
     })
   } catch {

@@ -9,29 +9,18 @@ import { getDailyReportSummaryBlocks } from '@/lib/daily-report/get-daily-report
 import { getDailyReportPullRequestBlocks } from '@/lib/daily-report/get-daily-report-pull-request-blocks'
 import { getDailyReportTaskBlocks } from '@/lib/daily-report/get-daily-report-task-blocks'
 import { getDailyReportHomieHintsBlocks } from '@/lib/daily-report/get-daily-report-homie-hints-blocks'
+import { SendOrganizationDailyReport } from '@/queue/jobs'
+import { subHours } from 'date-fns'
 
 // TODO
-// - add homie tips at the end
-// - update job to run on schedule and send per org
 // - add settings to configure when daily reports should go out
 
-export async function handleSendDailyReport() {
-  const organization = await dbClient
-    .selectFrom('homie.organization')
-    .innerJoin(
-      'slack.workspace',
-      'slack.workspace.organization_id',
-      'homie.organization.id',
-    )
-    .select([
-      'slack_access_token',
-      'ext_slack_webhook_channel_id',
-      'homie.organization.id',
-      'ext_slack_bot_user_id',
-    ])
-    .executeTakeFirstOrThrow()
+export async function handleSendOrganizationDailyReport(
+  job: SendOrganizationDailyReport,
+) {
+  const { organization } = job.data
 
-  // const cutOffDate = getPullRequestCutoffDate({ organization })
+  const yesterday = subHours(new Date(), 24)
 
   const githubRepos = await dbClient
     .selectFrom('github.repo')
@@ -52,7 +41,7 @@ export async function handleSendDailyReport() {
       let pullRequestsQuery = dbClient
         .selectFrom('homie.pull_request')
         .where('merged_at', 'is not', null)
-        // .where('merged_at', '>', cutOffDate)
+        .where('merged_at', '>', yesterday)
         // Only send PRs merged to default branch
         .where((eb) =>
           eb('homie.pull_request.was_merged_to_default_branch', '=', true)
@@ -137,7 +126,7 @@ export async function handleSendDailyReport() {
   const addedTasks = await dbClient
     .selectFrom('homie.task')
     .where('organization_id', '=', organization.id)
-    // .where('created_at', '>', cutOffDate)
+    .where('created_at', '>', yesterday)
     .where('task_status_id', '=', taskStatus.open)
     .select(['name', 'html_url'])
     .execute()
@@ -145,7 +134,7 @@ export async function handleSendDailyReport() {
   const completedTasks = await dbClient
     .selectFrom('homie.task')
     .where('organization_id', '=', organization.id)
-    // .where('completed_at', '>', cutOffDate)
+    .where('completed_at', '>', yesterday)
     .select(['name', 'html_url'])
     .execute()
 
@@ -159,7 +148,7 @@ export async function handleSendDailyReport() {
       'homie.contributor_task.contributor_id as assigned_contributor_id',
       'homie.task.id as task_id',
     ])
-    // .where('homie.contributor_task.created_at', '>', cutOffDate)
+    .where('homie.contributor_task.created_at', '>', yesterday)
     .execute()
 
   const assignedTasks = await getAssignedTasks({

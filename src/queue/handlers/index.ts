@@ -39,7 +39,8 @@ import { handleCheckForUnclosedTask } from '@/queue/handlers/handle-check-unclos
 import { handleCalculateOrganizationComplexityScorePerDay } from '@/queue/handlers/handle-calculate-organization-complexity-score-per-day'
 import { handleCalculateTaskComplexity } from '@/queue/handlers/handle-calculate-task-complexity'
 import { handleSendSimilarPullRequestsForTask } from '@/queue/handlers/handle-send-similar-pull-requests-for-task'
-import { handleSendDailyReport } from '@/queue/handlers/handle-send-daily-report'
+import { handleSendOrganizationDailyReport } from '@/queue/handlers/handle-send-organization-daily-report'
+import { handleSendDailyReports } from '@/queue/handlers/handle-send-daily-reports'
 
 type HandlerFunc<TJob extends Job> = (job: TJob) => void | Promise<void>
 
@@ -92,5 +93,6 @@ export const handlers: Handlers = {
   check_for_unclosed_task: handleCheckForUnclosedTask,
   calculate_organization_complexity_score_per_day:
     handleCalculateOrganizationComplexityScorePerDay,
-  send_daily_report: handleSendDailyReport,
+  send_daily_reports: handleSendDailyReports,
+  send_organization_daily_report: handleSendOrganizationDailyReport,
 }

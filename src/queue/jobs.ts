@@ -249,10 +249,23 @@ export type SendPullRequestSummaries = BullMQJob<
   'send_pull_request_summaries'
 >
 
-export type SendDailyReport = BullMQJob<
+export type SendDailyReports = BullMQJob<
   null,
   void, // return type
-  'send_daily_report'
+  'send_daily_reports'
+>
+
+export type SendOrganizationDailyReport = BullMQJob<
+  {
+    organization: {
+      id: number
+      slack_access_token: string
+      ext_slack_webhook_channel_id: string
+      ext_slack_bot_user_id: string
+    }
+  },
+  void, // return type
+  'send_organization_daily_report'
 >
 
 export type SendPullRequestSummariesToOrganization = BullMQJob<
@@ -694,4 +707,5 @@ export type Job =
   | MigrateTaskEmbeddings
   | CheckForUnclosedTask
   | CalculateOrganizationComplexityScorePerDay
-  | SendDailyReport
+  | SendDailyReports
+  | SendOrganizationDailyReport
