@@ -177,4 +177,6 @@ export async function getDailyReportTaskBlocks(
       type: 'divider',
     },
   )
+
+  return taskBlocks
 }

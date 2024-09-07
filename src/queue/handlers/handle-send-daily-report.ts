@@ -8,6 +8,7 @@ import { getAssignedTasks } from '@/lib/daily-report/get-assigned-tasks'
 import { getDailyReportSummaryBlocks } from '@/lib/daily-report/get-daily-report-summary-blocks'
 import { getDailyReportPullRequestBlocks } from '@/lib/daily-report/get-daily-report-pull-request-blocks'
 import { getDailyReportTaskBlocks } from '@/lib/daily-report/get-daily-report-task-blocks'
+import { getDailyReportHomieHintsBlocks } from '@/lib/daily-report/get-daily-report-homie-hints-blocks'
 
 // TODO
 // - add homie tips at the end
@@ -26,6 +27,7 @@ export async function handleSendDailyReport() {
       'slack_access_token',
       'ext_slack_webhook_channel_id',
       'homie.organization.id',
+      'ext_slack_bot_user_id',
     ])
     .executeTakeFirstOrThrow()
 
@@ -84,6 +86,7 @@ export async function handleSendDailyReport() {
 
       return {
         name: repo.name,
+        url: repo.url,
         pullRequests,
       }
     }),
@@ -170,6 +173,7 @@ export async function handleSendDailyReport() {
     .selectFrom('homie.task')
     .where('task_status_id', '=', taskStatus.open)
     .where('homie.task.organization_id', '=', organization.id)
+    .select(['name', 'html_url'])
     .execute()
 
   const slackClient = createSlackClient(organization.slack_access_token)
@@ -198,7 +202,7 @@ export async function handleSendDailyReport() {
     blocks: await getDailyReportPullRequestBlocks({
       contributors,
       repositoryContributionChartFile,
-      repos,
+      repos: reposWithPullRequests,
     }),
   })
 
@@ -213,6 +217,21 @@ export async function handleSendDailyReport() {
       completedTasks,
       taskAssignments,
       assignedTasks,
+    }),
+  })
+
+  // Homie hints
+  await slackClient.post<{
+    ts: string
+  }>('chat.postMessage', {
+    channel: organization.ext_slack_webhook_channel_id,
+    thread_ts: res.ts,
+    blocks: await getDailyReportHomieHintsBlocks({
+      addedTasks,
+      pendingTasks,
+      pullRequests: reposWithPullRequests.flatMap((repo) => repo.pullRequests),
+      contributors: Object.values(contributors),
+      extSlackBotUserId: organization.ext_slack_bot_user_id,
     }),
   })
 

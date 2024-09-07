@@ -1,4 +1,3 @@
-import { dbClient } from '@/database/client'
 import { storage } from '@/lib/storage'
 import {
   ChatPostMessageArguments,
@@ -15,18 +14,15 @@ interface GetDailyReportPullRequestBlocks {
       id: number
     }
   >
-  repos: Array<
-    | {
-        name: string
-        github_repo_id: number
-        url: string
-      }
-    | {
-        name: string
-        gitlab_project_id: number
-        url: string
-      }
-  >
+  repos: Array<{
+    name: string
+    url: string
+    pullRequests: Array<{
+      title: string
+      contributor_id: number
+      html_url: string
+    }>
+  }>
 }
 
 export async function getDailyReportPullRequestBlocks(
@@ -66,42 +62,6 @@ export async function getDailyReportPullRequestBlocks(
     })
 
     for (const repo of repos) {
-      let pullRequestsQuery = dbClient
-        .selectFrom('homie.pull_request')
-        .where('contributor_id', '=', contributor.id)
-        .where('merged_at', 'is not', null)
-        // .where('merged_at', '>', cutOffDate)
-        // Only send PRs merged to default branch
-        .where((eb) =>
-          eb('homie.pull_request.was_merged_to_default_branch', '=', true)
-            // Assume no target_branch (legacy) to be default branch, which were the only PRs saved.
-            .or('homie.pull_request.target_branch', 'is', null),
-        )
-        .select(['homie.pull_request.html_url', 'homie.pull_request.title'])
-        .orderBy('merged_at')
-
-      if ('github_repo_id' in repo) {
-        pullRequestsQuery = pullRequestsQuery.where(
-          'github_repo_id',
-          '=',
-          repo.github_repo_id,
-        )
-      }
-
-      if ('gitlab_project_id' in repo) {
-        pullRequestsQuery = pullRequestsQuery.where(
-          'gitlab_project_id',
-          '=',
-          repo.gitlab_project_id,
-        )
-      }
-
-      const pullRequests = await pullRequestsQuery.execute()
-
-      if (pullRequests.length === 0) {
-        continue
-      }
-
       const elements: RichTextBlock['elements'] = []
 
       // Repo header
@@ -133,7 +93,7 @@ export async function getDailyReportPullRequestBlocks(
         style: 'bullet',
         indent: 1,
         border: 0,
-        elements: pullRequests.map((pullRequest) => ({
+        elements: repo.pullRequests.map((pullRequest) => ({
           type: 'rich_text_section',
           elements: [
             {
@@ -164,4 +124,6 @@ export async function getDailyReportPullRequestBlocks(
       type: 'divider',
     },
   )
+
+  return pullRequestBlocks
 }
