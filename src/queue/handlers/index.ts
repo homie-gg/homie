@@ -6,8 +6,6 @@ import { handleImportPullRequests } from '@/queue/handlers/handle-import-pull-re
 import { handleSaveMergedPullRequest } from '@/queue/handlers/handle-save-merged-pull-request'
 import { handleSaveOpenedPullRequest } from '@/queue/handlers/handle-save-opened-pull-request'
 import { Job } from '@/queue/jobs'
-import { handleSendPullRequestSummaries } from '@/queue/handlers/handle-send-pull-request-summaries'
-import { handleSendPullRequestSummariesToOrganization } from '@/queue/handlers/handle-send-pull-request-summaries-to-organization'
 import { handleCreateTrelloTaskFromSlack } from '@/queue/handlers/handle-create-trello-task-from-slack'
 import { handleCloseLinkedTasks } from '@/queue/handlers/handle-closed-linked-tasks'
 import { handleImportGitlabProjects } from '@/queue/handlers/handle-import-gitlab-projects'
@@ -39,6 +37,8 @@ import { handleCheckForUnclosedTask } from '@/queue/handlers/handle-check-unclos
 import { handleCalculateOrganizationComplexityScorePerDay } from '@/queue/handlers/handle-calculate-organization-complexity-score-per-day'
 import { handleCalculateTaskComplexity } from '@/queue/handlers/handle-calculate-task-complexity'
 import { handleSendSimilarPullRequestsForTask } from '@/queue/handlers/handle-send-similar-pull-requests-for-task'
+import { handleSendOrganizationDailyReport } from '@/queue/handlers/handle-send-organization-daily-report'
+import { handleSendDailyReports } from '@/queue/handlers/handle-send-daily-reports'
 
 type HandlerFunc<TJob extends Job> = (job: TJob) => void | Promise<void>
 
@@ -64,9 +64,6 @@ export const handlers: Handlers = {
   close_linked_tasks: handleCloseLinkedTasks,
   generate_open_pull_request_summary: handleGenerateOpenPullRequestSummary,
   reply_slack_mention: handleReplySlackMention,
-  send_pull_request_summaries: handleSendPullRequestSummaries,
-  send_pull_request_summaries_to_organization:
-    handleSendPullRequestSummariesToOrganization,
   import_gitlab_projects: handleImportGitlabProjects,
   import_gitlab_merge_requests: handleImportGitlabMergeRequests,
   reopen_merge_request: handleReopenMergeRequest,
@@ -91,4 +88,6 @@ export const handlers: Handlers = {
   check_for_unclosed_task: handleCheckForUnclosedTask,
   calculate_organization_complexity_score_per_day:
     handleCalculateOrganizationComplexityScorePerDay,
+  send_daily_reports: handleSendDailyReports,
+  send_organization_daily_report: handleSendOrganizationDailyReport,
 }
