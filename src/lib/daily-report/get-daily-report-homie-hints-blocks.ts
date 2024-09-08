@@ -19,12 +19,7 @@ interface GetDailyReportHomieHintsBlocks {
 export async function getDailyReportHomieHintsBlocks(
   params: GetDailyReportHomieHintsBlocks,
 ) {
-  const {
-    pendingTasks,
-    contributors,
-    pullRequests,
-    extSlackBotUserId,
-  } = params
+  const { pendingTasks, contributors, pullRequests, extSlackBotUserId } = params
 
   const hintsBlocks: ChatPostMessageArguments['blocks'] = [
     {

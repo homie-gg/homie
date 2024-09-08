@@ -32,7 +32,6 @@ interface DailyReportSettingsFormProps {
   organization: Organization
 }
 
-
 export default function DailyReportSettingsForm(
   props: DailyReportSettingsFormProps,
 ) {
