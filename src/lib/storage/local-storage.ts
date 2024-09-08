@@ -17,7 +17,7 @@ export const localStorage: Storage = {
   move: function (oldPath: string, newPath: string): Promise<void> {
     return fs.rename(oldPath, localStorage.getPath(newPath))
   },
-  put: function (file: string, contents: string): Promise<void> {
+  put: function (file: string, contents: string | Buffer): Promise<void> {
     const path = localStorage.getPath(file)
 
     // Recursively create directories as needed
@@ -37,5 +37,8 @@ export const localStorage: Storage = {
   },
   deleteDirectory: function (directory: string): Promise<boolean> {
     return rimraf(localStorage.getPath(directory))
+  },
+  read: function (file: string): Promise<Buffer> {
+    return fs.readFile(this.getPath(file))
   },
 }

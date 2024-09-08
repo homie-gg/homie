@@ -12,7 +12,6 @@ export async function handleSendDailyReports() {
       'slack.workspace.organization_id',
       'homie.organization.id',
     )
-    .where('send_pull_request_summaries_time', '=', time)
     .where('send_daily_report_time', '=', time)
     .select([
       'homie.organization.id',

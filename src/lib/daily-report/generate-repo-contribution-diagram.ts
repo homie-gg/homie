@@ -1,4 +1,6 @@
+import { config } from '@/config'
 import { storage } from '@/lib/storage'
+import { getStorage } from '@/lib/storage/get-storage'
 import { v4 as uuid } from 'uuid'
 
 const mermaidCLIModule = import('@mermaid-js/mermaid-cli')
@@ -20,14 +22,17 @@ export async function generateRepositoryContributionDiagram(
   const mermaidDiagramFile = `repository_contribution_${id}.mmd`
   const repositoryContributionChartFile = `repository_contribution_${id}.png`
 
-  await storage.put(mermaidDiagramFile, mermaidDiagram)
+  const localStorage = getStorage({ driver: 'local' })
 
+  await localStorage.put(mermaidDiagramFile, mermaidDiagram)
+
+  // Generate image file locally
   await (
     await mermaidCLIModule
   ).run(
-    storage.getPath(mermaidDiagramFile),
+    localStorage.getPath(mermaidDiagramFile),
     // @ts-ignore - ignoring a type for .png pattern in outputPath
-    storage.getPath(repositoryContributionChartFile),
+    localStorage.getPath(repositoryContributionChartFile),
     {
       outputFormat: 'png',
       parseMMDOptions: {
@@ -46,8 +51,18 @@ export async function generateRepositoryContributionDiagram(
     },
   )
 
-  return {
-    mermaidDiagramFile,
-    repositoryContributionChartFile,
+  if (config.storage.driver === 's3') {
+    const contents = await localStorage.read(repositoryContributionChartFile)
+
+    const remoteFile = `daily_report/repository_contributions/${repositoryContributionChartFile}`
+    await storage.put(remoteFile, contents)
+
+    await localStorage.delete(mermaidDiagramFile)
+    await localStorage.delete(repositoryContributionChartFile)
+
+    return remoteFile
   }
+
+  await localStorage.delete(mermaidDiagramFile)
+  return repositoryContributionChartFile
 }

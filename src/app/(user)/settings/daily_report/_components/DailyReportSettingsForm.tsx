@@ -33,8 +33,8 @@ interface DailyReportSettingsFormProps {
 }
 
 // TODO
-// - update file system to store & send on S3 for prod
 // - clean up pull requests
+// - update prod env with aws keys and storage driver to s3
 
 export default function DailyReportSettingsForm(
   props: DailyReportSettingsFormProps,

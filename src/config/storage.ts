@@ -1,4 +1,4 @@
-interface StorageConfig {
+export interface StorageConfig {
   driver: 'local' | 's3'
   cdnUrl: string | undefined
   s3Bucket: string | undefined

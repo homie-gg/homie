@@ -116,7 +116,7 @@ export async function getDailyReportTaskBlocks(
     })
   }
 
-  if (taskAssignments.length > 0) {
+  if (Object.values(assignedTasks).length > 0) {
     taskElements.push({
       type: 'rich_text_section',
       elements: [
