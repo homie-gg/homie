@@ -1,12 +1,7 @@
-import { RichTextList } from '@slack/bolt'
-import {
-  ChatPostMessageArguments,
-  RichTextBlock,
-} from '@slack/web-api/dist/methods'
+import { ChatPostMessageArguments } from '@slack/web-api/dist/methods'
 import { sample } from 'lodash'
 
 interface GetDailyReportHomieHintsBlocks {
-  addedTasks: Array<{ name: string; html_url: string }>
   pendingTasks: Array<{ name: string; html_url: string }>
   pullRequests: Array<{
     title: string
@@ -25,7 +20,6 @@ export async function getDailyReportHomieHintsBlocks(
   params: GetDailyReportHomieHintsBlocks,
 ) {
   const {
-    addedTasks,
     pendingTasks,
     contributors,
     pullRequests,

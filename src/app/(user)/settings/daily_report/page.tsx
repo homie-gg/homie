@@ -1,5 +1,4 @@
 import { Separator } from '@/lib/ui/Separator'
-import PullRequestSumariesSettingsForm from '@/app/(user)/settings/pull_request_summaries/_components/PullRequestSumariesSettingsForm'
 import { getUserOrganization } from '@/lib/auth/get-user-organization'
 import DailyReportSettingsForm from '@/app/(user)/settings/daily_report/_components/DailyReportSettingsForm'
 

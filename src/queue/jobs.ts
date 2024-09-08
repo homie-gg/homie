@@ -243,12 +243,6 @@ export type ReplySlackMention = BullMQJob<
   'reply_slack_mention'
 >
 
-export type SendPullRequestSummaries = BullMQJob<
-  null,
-  void, // return type
-  'send_pull_request_summaries'
->
-
 export type SendDailyReports = BullMQJob<
   null,
   void, // return type
@@ -266,21 +260,6 @@ export type SendOrganizationDailyReport = BullMQJob<
   },
   void, // return type
   'send_organization_daily_report'
->
-
-export type SendPullRequestSummariesToOrganization = BullMQJob<
-  {
-    organization: {
-      id: number
-      slack_access_token: string
-      ext_slack_webhook_channel_id: string
-      send_pull_request_summaries_interval: string
-      send_pull_request_summaries_day: string
-      send_pull_request_summaries_time: string
-    }
-  },
-  void, // return type
-  'send_pull_request_summaries_to_organization'
 >
 
 export type CreateTrelloTaskFromSlack = BullMQJob<
@@ -680,8 +659,6 @@ export type Job =
   | CloseLinkedTasks
   | GenerateOpenPullRequestSummary
   | ReplySlackMention
-  | SendPullRequestSummaries
-  | SendPullRequestSummariesToOrganization
   | CreateTrelloTaskFromSlack
   | CreateHomieTaskFromTrelloTask
   | UpdateHomieTaskFromTrelloTask

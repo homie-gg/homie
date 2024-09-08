@@ -1,8 +1,6 @@
 import { dbClient } from '@/database/client'
 import { createSlackClient } from '@/lib/slack/create-slack-client'
-import { storage } from '@/lib/storage'
 import { taskStatus } from '@/lib/tasks'
-
 import { generateRepositoryContributionDiagram } from '@/lib/daily-report/generate-repo-contribution-diagram'
 import { getAssignedTasks } from '@/lib/daily-report/get-assigned-tasks'
 import { getDailyReportSummaryBlocks } from '@/lib/daily-report/get-daily-report-summary-blocks'
@@ -38,7 +36,7 @@ export async function handleSendOrganizationDailyReport(
       let pullRequestsQuery = dbClient
         .selectFrom('homie.pull_request')
         .where('merged_at', 'is not', null)
-        // .where('merged_at', '>', yesterday)
+        .where('merged_at', '>', yesterday)
         // Only send PRs merged to default branch
         .where((eb) =>
           eb('homie.pull_request.was_merged_to_default_branch', '=', true)
@@ -115,7 +113,7 @@ export async function handleSendOrganizationDailyReport(
 
   const numContributors = Object.keys(contributors).length
 
-  const  repositoryContributionChartFile =
+  const repositoryContributionChartFile =
     await generateRepositoryContributionDiagram({
       mermaidDiagram: diagram,
     })
@@ -123,7 +121,7 @@ export async function handleSendOrganizationDailyReport(
   const addedTasks = await dbClient
     .selectFrom('homie.task')
     .where('organization_id', '=', organization.id)
-    // .where('created_at', '>', yesterday)
+    .where('created_at', '>', yesterday)
     .where('task_status_id', '=', taskStatus.open)
     .select(['name', 'html_url'])
     .execute()
@@ -131,7 +129,7 @@ export async function handleSendOrganizationDailyReport(
   const completedTasks = await dbClient
     .selectFrom('homie.task')
     .where('organization_id', '=', organization.id)
-    // .where('completed_at', '>', yesterday)
+    .where('completed_at', '>', yesterday)
     .select(['name', 'html_url'])
     .execute()
 
@@ -145,7 +143,7 @@ export async function handleSendOrganizationDailyReport(
       'homie.contributor_task.contributor_id as assigned_contributor_id',
       'homie.task.id as task_id',
     ])
-    // .where('homie.contributor_task.created_at', '>', yesterday)
+    .where('homie.contributor_task.created_at', '>', yesterday)
     .execute()
 
   const assignedTasks = await getAssignedTasks({

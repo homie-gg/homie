@@ -791,30 +791,6 @@ declare module 'zapatos/schema' {
         */
         send_daily_report_time: string;
         /**
-        * **homie.organization.send_pull_request_summaries_day**
-        * - `text` in database
-        * - `NOT NULL`, default: `'7'::text`
-        */
-        send_pull_request_summaries_day: string;
-        /**
-        * **homie.organization.send_pull_request_summaries_enabled**
-        * - `bool` in database
-        * - `NOT NULL`, default: `true`
-        */
-        send_pull_request_summaries_enabled: boolean;
-        /**
-        * **homie.organization.send_pull_request_summaries_interval**
-        * - `text` in database
-        * - `NOT NULL`, default: `'weekly'::text`
-        */
-        send_pull_request_summaries_interval: string;
-        /**
-        * **homie.organization.send_pull_request_summaries_time**
-        * - `text` in database
-        * - `NOT NULL`, default: `'22:00'::text`
-        */
-        send_pull_request_summaries_time: string;
-        /**
         * **homie.organization.trial_ends_at**
         * - `timestamptz` in database
         * - Nullable, no default
@@ -918,30 +894,6 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, default: `'12:00'::text`
         */
         send_daily_report_time: string;
-        /**
-        * **homie.organization.send_pull_request_summaries_day**
-        * - `text` in database
-        * - `NOT NULL`, default: `'7'::text`
-        */
-        send_pull_request_summaries_day: string;
-        /**
-        * **homie.organization.send_pull_request_summaries_enabled**
-        * - `bool` in database
-        * - `NOT NULL`, default: `true`
-        */
-        send_pull_request_summaries_enabled: boolean;
-        /**
-        * **homie.organization.send_pull_request_summaries_interval**
-        * - `text` in database
-        * - `NOT NULL`, default: `'weekly'::text`
-        */
-        send_pull_request_summaries_interval: string;
-        /**
-        * **homie.organization.send_pull_request_summaries_time**
-        * - `text` in database
-        * - `NOT NULL`, default: `'22:00'::text`
-        */
-        send_pull_request_summaries_time: string;
         /**
         * **homie.organization.trial_ends_at**
         * - `timestamptz` in database
@@ -1047,30 +999,6 @@ declare module 'zapatos/schema' {
         */
         send_daily_report_time?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
         /**
-        * **homie.organization.send_pull_request_summaries_day**
-        * - `text` in database
-        * - `NOT NULL`, default: `'7'::text`
-        */
-        send_pull_request_summaries_day?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
-        /**
-        * **homie.organization.send_pull_request_summaries_enabled**
-        * - `bool` in database
-        * - `NOT NULL`, default: `true`
-        */
-        send_pull_request_summaries_enabled?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
-        /**
-        * **homie.organization.send_pull_request_summaries_interval**
-        * - `text` in database
-        * - `NOT NULL`, default: `'weekly'::text`
-        */
-        send_pull_request_summaries_interval?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
-        /**
-        * **homie.organization.send_pull_request_summaries_time**
-        * - `text` in database
-        * - `NOT NULL`, default: `'22:00'::text`
-        */
-        send_pull_request_summaries_time?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
-        /**
         * **homie.organization.trial_ends_at**
         * - `timestamptz` in database
         * - Nullable, no default
@@ -1175,30 +1103,6 @@ declare module 'zapatos/schema' {
         */
         send_daily_report_time?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment;
         /**
-        * **homie.organization.send_pull_request_summaries_day**
-        * - `text` in database
-        * - `NOT NULL`, default: `'7'::text`
-        */
-        send_pull_request_summaries_day?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment;
-        /**
-        * **homie.organization.send_pull_request_summaries_enabled**
-        * - `bool` in database
-        * - `NOT NULL`, default: `true`
-        */
-        send_pull_request_summaries_enabled?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
-        /**
-        * **homie.organization.send_pull_request_summaries_interval**
-        * - `text` in database
-        * - `NOT NULL`, default: `'weekly'::text`
-        */
-        send_pull_request_summaries_interval?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment;
-        /**
-        * **homie.organization.send_pull_request_summaries_time**
-        * - `text` in database
-        * - `NOT NULL`, default: `'22:00'::text`
-        */
-        send_pull_request_summaries_time?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment;
-        /**
         * **homie.organization.trial_ends_at**
         * - `timestamptz` in database
         * - Nullable, no default
@@ -1302,30 +1206,6 @@ declare module 'zapatos/schema' {
         * - `NOT NULL`, default: `'12:00'::text`
         */
         send_daily_report_time?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.DefaultType | db.SQLFragment>;
-        /**
-        * **homie.organization.send_pull_request_summaries_day**
-        * - `text` in database
-        * - `NOT NULL`, default: `'7'::text`
-        */
-        send_pull_request_summaries_day?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.DefaultType | db.SQLFragment>;
-        /**
-        * **homie.organization.send_pull_request_summaries_enabled**
-        * - `bool` in database
-        * - `NOT NULL`, default: `true`
-        */
-        send_pull_request_summaries_enabled?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
-        /**
-        * **homie.organization.send_pull_request_summaries_interval**
-        * - `text` in database
-        * - `NOT NULL`, default: `'weekly'::text`
-        */
-        send_pull_request_summaries_interval?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.DefaultType | db.SQLFragment>;
-        /**
-        * **homie.organization.send_pull_request_summaries_time**
-        * - `text` in database
-        * - `NOT NULL`, default: `'22:00'::text`
-        */
-        send_pull_request_summaries_time?: string | db.Parameter<string> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.DefaultType | db.SQLFragment>;
         /**
         * **homie.organization.trial_ends_at**
         * - `timestamptz` in database

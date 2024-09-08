@@ -16,7 +16,7 @@ import { getQueue } from '@/queue/get-queue'
     }
   }
 
-  await dispatch('send_pull_request_summaries', null, {
+  await dispatch('send_daily_reports', null, {
     repeat: {
       pattern: '* * * * *', // send every minute
     },

@@ -7,7 +7,6 @@ import {
 interface GetDailyReportTaskBlocks {
   addedTasks: Array<{ name: string; html_url: string }>
   completedTasks: Array<{ name: string; html_url: string }>
-  taskAssignments: Array<{ name: string; html_url: string }>
   assignedTasks: Record<
     number,
     {
@@ -25,7 +24,7 @@ interface GetDailyReportTaskBlocks {
 export async function getDailyReportTaskBlocks(
   params: GetDailyReportTaskBlocks,
 ) {
-  const { completedTasks, addedTasks, taskAssignments, assignedTasks } = params
+  const { completedTasks, addedTasks, assignedTasks } = params
 
   const taskBlocks: ChatPostMessageArguments['blocks'] = [
     {

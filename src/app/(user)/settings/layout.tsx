@@ -24,10 +24,6 @@ export default function SettingsPage(props: SettingsPageProps) {
               { href: '/settings/persona', text: 'Persona' },
               { href: '/settings/contributors', text: 'Contributors' },
               {
-                href: '/settings/pull_request_summaries',
-                text: 'Pull Request Summaries',
-              },
-              {
                 href: '/settings/daily_report',
                 text: 'Daily Report',
               },
