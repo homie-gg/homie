@@ -199,7 +199,6 @@ export async function handleSendOrganizationDailyReport(
     blocks: await getDailyReportTaskBlocks({
       addedTasks,
       completedTasks,
-      taskAssignments,
       assignedTasks,
     }),
   })
@@ -211,7 +210,6 @@ export async function handleSendOrganizationDailyReport(
     channel: organization.ext_slack_webhook_channel_id,
     thread_ts: res.ts,
     blocks: await getDailyReportHomieHintsBlocks({
-      addedTasks,
       pendingTasks,
       pullRequests: reposWithPullRequests.flatMap((repo) => repo.pullRequests),
       contributors: Object.values(contributors),

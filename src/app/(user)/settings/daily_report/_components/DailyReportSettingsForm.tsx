@@ -32,9 +32,6 @@ interface DailyReportSettingsFormProps {
   organization: Organization
 }
 
-// TODO
-// - clean up pull requests
-// - update prod env with aws keys and storage driver to s3
 
 export default function DailyReportSettingsForm(
   props: DailyReportSettingsFormProps,
