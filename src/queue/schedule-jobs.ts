@@ -1,6 +1,7 @@
 import { config } from '@/config'
 import { dispatch } from '@/queue/dispatch'
 import { getQueue } from '@/queue/get-queue'
+import { calculateOrganizationComplexityScorePerDay } from '@/queue/jobs/calculate-organization-complexity-score-per-day'
 ;(async () => {
   const queues = Object.keys(config.queue.queues)
   for (const name of queues) {
@@ -38,7 +39,7 @@ import { getQueue } from '@/queue/get-queue'
     },
   })
 
-  await dispatch('calculate_organization_complexity_score_per_day', null, {
+  calculateOrganizationComplexityScorePerDay.dispatch(null, {
     repeat: {
       // weekly at 00:00 Sunday
       // Must update cut-off date in job handler if this

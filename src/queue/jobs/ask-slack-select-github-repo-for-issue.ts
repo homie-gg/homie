@@ -12,7 +12,7 @@ export type CreateGithubIssueSelectedRepoMetadata = {
   response_url: string
 }
 
-export const askSlackSelectAsanaProjectForTask = createJob({
+export const askSlackSelectGithubRepoForIssue = createJob({
   id: 'ask_slack_select_github_repo_for_issue',
   handle: async (payload: {
     team_id: string
