@@ -5,6 +5,7 @@ import { taskStatus } from '@/lib/tasks'
 import { embedTask } from '@/lib/ai/embed-task'
 import { dispatch } from '@/queue/dispatch'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
+import { setTaskComplexity } from '@/queue/jobs/calculate-task-complexity'
 
 export async function handleCreateHomieTaskFromGithubIssue(
   job: CreateHomieTaskFromGithubIssue,
@@ -123,8 +124,7 @@ export async function handleCreateHomieTaskFromGithubIssue(
       },
     )
 
-    await dispatch(
-      'calculate_task_complexity',
+    await setTaskComplexity.dispatch(
       {
         task,
       },
