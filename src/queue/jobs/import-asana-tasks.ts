@@ -1,7 +1,7 @@
 import { createJob } from '@/queue/create-job'
 import { createAsanaClient } from '@/lib/asana/create-asana-client'
 import { ListAsanaTasksResponse } from '@/lib/asana/types'
-import { dispatch } from '@/queue/dispatch'
+import { syncAsanaTaskToHomieTask } from '@/queue/jobs/sync-asana-task-to-homie-task'
 
 export const importAsanaTasks = createJob({
   id: 'import_asana_tasks',
@@ -25,7 +25,7 @@ export const importAsanaTasks = createJob({
 
     await Promise.all(
       tasks.map(async (task) => {
-        await dispatch('sync_asana_task_to_homie_task', {
+        await syncAsanaTaskToHomieTask.dispatch({
           ext_asana_task_id: task.gid,
           project_id: project.id,
         })

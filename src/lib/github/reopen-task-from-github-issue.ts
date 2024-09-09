@@ -1,7 +1,7 @@
 import { dbClient } from '@/database/client'
 import { embedTask } from '@/lib/ai/embed-task'
 import { taskStatus } from '@/lib/tasks'
-import { dispatch } from '@/queue/dispatch'
+import { createHomieTaskFromGithubIssue } from '@/queue/jobs/create-homie-task-from-github-issue'
 import { InstallationLite, Issue, Repository } from '@octokit/webhooks-types'
 
 interface ReopenTaskFromGithubIssueParams {
@@ -41,7 +41,7 @@ export async function reopenTaskFromGithubIssue(
     .executeTakeFirst()
 
   if (!task) {
-    await dispatch('create_homie_task_from_github_issue', {
+    await createHomieTaskFromGithubIssue.dispatch({
       issue,
       installation,
       repository,

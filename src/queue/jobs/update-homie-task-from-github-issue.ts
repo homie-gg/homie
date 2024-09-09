@@ -5,6 +5,7 @@ import { dispatch } from '@/queue/dispatch'
 import { embedTask } from '@/lib/ai/embed-task'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { InstallationLite, Repository, Issue } from '@octokit/webhooks-types'
+import { createHomieTaskFromGithubIssue } from '@/queue/jobs/create-homie-task-from-github-issue'
 
 export const updateHomieTaskFromGithubIssue = createJob({
   id: 'update_homie_task_from_github_issue',
@@ -41,7 +42,7 @@ export const updateHomieTaskFromGithubIssue = createJob({
       .executeTakeFirst()
 
     if (!task) {
-      await dispatch('create_homie_task_from_github_issue', {
+      await createHomieTaskFromGithubIssue.dispatch({
         issue,
         installation,
         repository,

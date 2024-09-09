@@ -5,6 +5,7 @@ import { dispatch } from '@/queue/dispatch'
 import { parseISO } from 'date-fns'
 import { taskStatus } from '@/lib/tasks'
 import { embedTask } from '@/lib/ai/embed-task'
+import { createHomieTaskFromTrelloTask } from '@/queue/jobs/create-homie-task-from-trello-task'
 
 export const updateHomieTaskFromTrelloTask = createJob({
   id: 'update_homie_task_from_trello_task',
@@ -62,7 +63,7 @@ export const updateHomieTaskFromTrelloTask = createJob({
       .executeTakeFirst()
 
     if (!task) {
-      await dispatch('create_homie_task_from_trello_task', {
+      await createHomieTaskFromTrelloTask.dispatch({
         board,
         card,
       })

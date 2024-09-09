@@ -1,8 +1,8 @@
 import { createJob } from '@/queue/create-job'
 import { dbClient } from '@/database/client'
 import { createGithubClient } from '@/lib/github/create-github-client'
-import { dispatch } from '@/queue/dispatch'
 import { GithubOrganization } from '@/database/types'
+import { createHomieTaskFromGithubIssue } from '@/queue/jobs/create-homie-task-from-github-issue'
 
 export const importGithubIssues = createJob({
   id: 'import_github_issues',
@@ -62,7 +62,7 @@ export const importGithubIssues = createJob({
           continue
         }
 
-        await dispatch('create_homie_task_from_github_issue', {
+        await createHomieTaskFromGithubIssue.dispatch({
           issue,
           installation: {
             id: github_organization.ext_gh_install_id,

@@ -3,8 +3,8 @@ import { dbClient } from '@/database/client'
 import { formatInTimeZone } from 'date-fns-tz'
 import { dispatch } from '@/queue/dispatch'
 
-export const sendDailyReport = createJob({
-  id: 'send_daily_report',
+export const sendDailyReports = createJob({
+  id: 'send_daily_reports',
   handle: async () => {
     const time = formatInTimeZone(new Date(), 'UTC', 'kk:mm')
 

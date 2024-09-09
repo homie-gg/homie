@@ -7,7 +7,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@/lib/http/server/exceptions'
-import { dispatch } from '@/queue/dispatch'
+import { importAsanaTasks } from '@/queue/jobs/import-asana-tasks'
 import { auth } from '@clerk/nextjs'
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
@@ -75,7 +75,7 @@ export const PATCH = createRoute(
       .executeTakeFirstOrThrow()
 
     if (project.enabled && !project.has_completed_setup) {
-      await dispatch('import_asana_tasks', {
+      await importAsanaTasks.dispatch({
         organization,
         project,
       })

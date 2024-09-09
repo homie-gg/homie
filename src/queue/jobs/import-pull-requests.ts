@@ -4,8 +4,8 @@ import { createGithubClient } from '@/lib/github/create-github-client'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { getPullRequestLogData } from '@/lib/github/get-pull-request-log-data'
 import { logger } from '@/lib/log/logger'
-import { dispatch } from '@/queue/dispatch'
 import { GithubOrganization } from '@/database/types'
+import { saveMergedPullRequest } from '@/queue/jobs/save-merged-pull-request'
 
 export const importPullRequests = createJob({
   id: 'import_pull_requests',
@@ -91,7 +91,7 @@ export const importPullRequests = createJob({
             continue
           }
 
-          await dispatch('save_merged_pull_request', {
+          await saveMergedPullRequest.dispatch({
             pull_request: {
               user: {
                 id: pullRequest.user.id,

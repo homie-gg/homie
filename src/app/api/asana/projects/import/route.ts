@@ -4,7 +4,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@/lib/http/server/exceptions'
-import { dispatch } from '@/queue/dispatch'
+import { importAsanaProjects } from '@/queue/jobs/import-asana-projects'
 import { auth } from '@clerk/nextjs'
 import { NextResponse } from 'next/server'
 
@@ -33,7 +33,7 @@ export const POST = createRoute({}, async () => {
     })
   }
 
-  await dispatch('import_asana_projects', {
+  await importAsanaProjects.dispatch({
     organization: {
       id: organization.id,
       asana_access_token: organization.asana_access_token,

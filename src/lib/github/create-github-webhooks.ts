@@ -1,11 +1,18 @@
-import { dispatch } from '@/queue/dispatch'
 import { createGithubApp } from '@/lib/github/create-github-app'
 import { assignContributorFromGithubIssue } from '@/lib/github/assign-contributor-from-github-issue'
 import { unassignContributorFromGithubIssue } from '@/lib/github/unassign-contributor-from-github-issue'
 import { closeTaskFromGithubIssue } from '@/lib/github/close-task-from-github-issue'
 import { deleteTaskFromGithubIssue } from '@/lib/github/delete-task-from-github-issue'
 import { reopenTaskFromGithubIssue } from '@/lib/github/reopen-task-from-github-issue'
-import { summaryKey } from '@/queue/jobs/generate-open-pull-request-summary'
+import {
+  generateOpenPullRequestSummary,
+  summaryKey,
+} from '@/queue/jobs/generate-open-pull-request-summary'
+import { createHomieTaskFromGithubIssue } from '@/queue/jobs/create-homie-task-from-github-issue'
+import { updateHomieTaskFromGithubIssue } from '@/queue/jobs/update-homie-task-from-github-issue'
+import { reopenPullRequest } from '@/queue/jobs/reopen-pull-request'
+import { closePullRequest } from '@/queue/jobs/close-pull-requests'
+import { saveOpenedPullRequest } from '@/queue/jobs/save-opened-pull-request'
 
 let webhooks: ReturnType<typeof createGithubApp>['webhooks'] | null = null
 
@@ -21,7 +28,7 @@ export const getGithubWebhooks = () => {
       payload: { issue, installation, repository },
     } = params
 
-    await dispatch('create_homie_task_from_github_issue', {
+    await createHomieTaskFromGithubIssue.dispatch({
       issue,
       repository,
       installation,
@@ -49,7 +56,7 @@ export const getGithubWebhooks = () => {
       payload: { issue, installation, repository },
     } = params
 
-    await dispatch('update_homie_task_from_github_issue', {
+    await updateHomieTaskFromGithubIssue.dispatch({
       issue,
       installation,
       repository,
@@ -65,7 +72,7 @@ export const getGithubWebhooks = () => {
       payload: { pull_request, installation },
     } = params
 
-    await dispatch('reopen_pull_request', {
+    await reopenPullRequest.dispatch({
       pull_request,
       installation,
     })
@@ -76,7 +83,7 @@ export const getGithubWebhooks = () => {
       payload: { pull_request, installation },
     } = params
 
-    await dispatch('close_pull_request', {
+    await closePullRequest.dispatch({
       pull_request,
       installation,
     })
@@ -86,7 +93,7 @@ export const getGithubWebhooks = () => {
     const { pull_request, installation } = params.payload
 
     if (pull_request.body?.includes(summaryKey)) {
-      await dispatch('generate_open_pull_request_summary', {
+      await generateOpenPullRequestSummary.dispatch({
         pull_request,
         installation,
       })
@@ -96,13 +103,13 @@ export const getGithubWebhooks = () => {
   app.webhooks.on('pull_request.opened', async (params) => {
     const { pull_request, installation } = params.payload
 
-    await dispatch('save_opened_pull_request', {
+    await saveOpenedPullRequest.dispatch({
       pull_request,
       installation,
     })
 
     if (pull_request.body?.includes(summaryKey)) {
-      await dispatch('generate_open_pull_request_summary', {
+      await generateOpenPullRequestSummary.dispatch({
         pull_request,
         installation,
       })

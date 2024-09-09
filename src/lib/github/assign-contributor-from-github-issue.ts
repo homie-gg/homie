@@ -1,5 +1,5 @@
 import { dbClient } from '@/database/client'
-import { dispatch } from '@/queue/dispatch'
+import { createHomieTaskFromGithubIssue } from '@/queue/jobs/create-homie-task-from-github-issue'
 import {
   InstallationLite,
   Issue,
@@ -50,7 +50,7 @@ export async function assignContributorFromGithubIssue(
 
   // Create a task here if one doesn't exist here
   if (!task) {
-    await dispatch('create_homie_task_from_github_issue', {
+    await createHomieTaskFromGithubIssue.dispatch({
       issue,
       installation,
       repository,

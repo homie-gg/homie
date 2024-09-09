@@ -1,6 +1,6 @@
 import { createGitlabClient } from '@/lib/gitlab/create-gitlab-client'
-import { dispatch } from '@/queue/dispatch'
 import { createJob } from '@/queue/create-job'
+import { saveMergedMergeRequest } from '@/queue/jobs/save-merged-merge-request'
 
 export const importGitlabMergeRequests = createJob({
   id: 'import_gitlab_merge_requests',
@@ -40,7 +40,7 @@ export const importGitlabMergeRequests = createJob({
     })
 
     for (const mergeRequest of mergeRequests) {
-      await dispatch('save_merged_merge_request', {
+      await saveMergedMergeRequest.dispatch({
         merge_request: {
           created_at: mergeRequest.created_at,
           id: mergeRequest.id,

@@ -1,11 +1,12 @@
 import { createJob } from '@/queue/create-job'
 import { dbClient } from '@/database/client'
-import { dispatch } from '@/queue/dispatch'
 import { logger } from '@/lib/log/logger'
 import { getPullRequestLogData } from '@/lib/github/get-pull-request-log-data'
 import { getIsOverPlanContributorLimit } from '@/lib/billing/get-is-over-plan-contributor-limit'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { parseISO } from 'date-fns'
+import { saveMergedPullRequest } from '@/queue/jobs/save-merged-pull-request'
+import { closeLinkedTasks } from '@/queue/jobs/close-linked-tasks'
 
 export const closePullRequest = createJob({
   id: 'close_pull_request',
@@ -165,12 +166,12 @@ export const closePullRequest = createJob({
       return
     }
 
-    await dispatch('save_merged_pull_request', {
+    await saveMergedPullRequest.dispatch({
       pull_request,
       installation,
     })
 
-    await dispatch('close_linked_tasks', {
+    await closeLinkedTasks.dispatch({
       pull_request: {
         body: pull_request.body ?? '',
         title: pull_request.title,
