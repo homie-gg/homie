@@ -18,8 +18,8 @@ import { createJob } from '@/queue/create-job'
  */
 const matchingTaskRelevantScoreThreshold = 0.5
 
-export const checkUnclosedTask = createJob({
-  id: 'check_unclosed_task',
+export const checkForUnclosedTask = createJob({
+  id: 'check_for_unclosed_task',
   handle: async (payload: {
     pull_request: {
       id: number

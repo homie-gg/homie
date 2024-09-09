@@ -1,5 +1,6 @@
 import { createRedisClient } from '@/lib/redis/create-redis-client'
-import { dispatch, DispatchOptions } from '@/queue/dispatch'
+import { DispatchOptions } from '@/queue/dispatch'
+import { debounceJob } from '@/queue/jobs/debounce-job'
 
 interface DebouncedDispatchParams {
   job: {
@@ -31,8 +32,7 @@ export async function debouncedDispatch(params: DebouncedDispatchParams) {
     .expire(debounce.key, debounce.delaySecs + 5) // +5 max secs before key is set (arbitrary)
     .exec()
 
-  await dispatch(
-    'dispatch_debounced_job',
+  await debounceJob.dispatch(
     {
       job,
       debounce,

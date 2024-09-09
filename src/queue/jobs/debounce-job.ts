@@ -1,11 +1,10 @@
 import { createJob } from '@/queue/create-job'
-
 import { createRedisClient } from '@/lib/redis/create-redis-client'
 import { dispatch } from '@/queue/dispatch'
 import { JobsOptions } from 'bullmq'
 
-export const dispatchDebouncedJob = createJob({
-  id: 'dispatch_debounced_job',
+export const debounceJob = createJob({
+  id: 'debounce_job',
   handle: async (payload: {
     job: {
       name: string

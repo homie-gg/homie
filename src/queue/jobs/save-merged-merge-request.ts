@@ -6,7 +6,7 @@ import { getMergeRequestLogData } from '@/lib/gitlab/get-merge-request-log-data'
 import { saveMergedMergeRequest as saveMergeRequest } from '@/lib/gitlab/save-merged-merge-request'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
-import { dispatch } from '@/queue/dispatch'
+import { checkForUnclosedTask } from '@/queue/jobs/check-for-unclosed-task'
 
 export const saveMergedMergeRequest = createJob({
   id: 'save_merged_merge_request',
@@ -86,8 +86,7 @@ export const saveMergedMergeRequest = createJob({
     })
 
     if (pullRequest) {
-      await dispatch(
-        'check_for_unclosed_task',
+      await checkForUnclosedTask.dispatch(
         {
           pull_request: {
             ...pullRequest,

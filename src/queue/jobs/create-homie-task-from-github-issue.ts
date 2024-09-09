@@ -2,10 +2,11 @@ import { dbClient } from '@/database/client'
 import { classifyTask } from '@/lib/ai/classify-task'
 import { taskStatus } from '@/lib/tasks'
 import { embedTask } from '@/lib/ai/embed-task'
-import { dispatch } from '@/queue/dispatch'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { createJob } from '@/queue/create-job'
 import { setTaskComplexity } from '@/queue/jobs/calculate-task-complexity'
+import { checkForDuplicateTask } from '@/queue/jobs/check-for-duplicate-task'
+import { sendSimilarPullRequestsForTask } from '@/queue/jobs/send-similar-pull-requests-for-task'
 
 export const createHomieTaskFromGithubIssue = createJob({
   id: 'create_homie_task_from_github_issue',
@@ -138,8 +139,7 @@ export const createHomieTaskFromGithubIssue = createJob({
 
       await embedTask({ task })
 
-      await dispatch(
-        'check_for_duplicate_task',
+      await checkForDuplicateTask.dispatch(
         {
           task,
         },
@@ -163,8 +163,7 @@ export const createHomieTaskFromGithubIssue = createJob({
         },
       )
 
-      await dispatch(
-        'send_similar_pull_requests_for_task',
+      await sendSimilarPullRequestsForTask.dispatch(
         {
           task,
         },

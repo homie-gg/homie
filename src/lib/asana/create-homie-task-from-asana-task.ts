@@ -4,7 +4,9 @@ import { embedTask } from '@/lib/ai/embed-task'
 import { AsanaGetTaskResponse } from '@/lib/asana/types'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { taskStatus } from '@/lib/tasks'
-import { dispatch } from '@/queue/dispatch'
+import { setTaskComplexity } from '@/queue/jobs/calculate-task-complexity'
+import { checkForDuplicateTask } from '@/queue/jobs/check-for-duplicate-task'
+import { sendSimilarPullRequestsForTask } from '@/queue/jobs/send-similar-pull-requests-for-task'
 
 interface CreateHomieTaskFromAsanaTaskParams {
   asanaTask: AsanaGetTaskResponse['data']
@@ -71,8 +73,7 @@ export async function createHomieTaskFromAsanaTask(
 
   await embedTask({ task: homieTask })
 
-  await dispatch(
-    'check_for_duplicate_task',
+  await checkForDuplicateTask.dispatch(
     {
       task: homieTask,
     },
@@ -84,8 +85,7 @@ export async function createHomieTaskFromAsanaTask(
     },
   )
 
-  await dispatch(
-    'calculate_task_complexity',
+  await setTaskComplexity.dispatch(
     {
       task: homieTask,
     },
@@ -97,8 +97,7 @@ export async function createHomieTaskFromAsanaTask(
     },
   )
 
-  await dispatch(
-    'send_similar_pull_requests_for_task',
+  await sendSimilarPullRequestsForTask.dispatch(
     {
       task: homieTask,
     },

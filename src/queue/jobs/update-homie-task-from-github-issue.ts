@@ -1,11 +1,13 @@
 import { createJob } from '@/queue/create-job'
 import { dbClient } from '@/database/client'
 import { classifyTask } from '@/lib/ai/classify-task'
-import { dispatch } from '@/queue/dispatch'
 import { embedTask } from '@/lib/ai/embed-task'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { InstallationLite, Repository, Issue } from '@octokit/webhooks-types'
 import { createHomieTaskFromGithubIssue } from '@/queue/jobs/create-homie-task-from-github-issue'
+import { checkForDuplicateTask } from '@/queue/jobs/check-for-duplicate-task'
+import { setTaskComplexity } from '@/queue/jobs/calculate-task-complexity'
+import { sendSimilarPullRequestsForTask } from '@/queue/jobs/send-similar-pull-requests-for-task'
 
 export const updateHomieTaskFromGithubIssue = createJob({
   id: 'update_homie_task_from_github_issue',
@@ -86,8 +88,7 @@ export const updateHomieTaskFromGithubIssue = createJob({
       ])
       .executeTakeFirstOrThrow()
 
-    await dispatch(
-      'check_for_duplicate_task',
+    await checkForDuplicateTask.dispatch(
       {
         task: updatedTask,
       },
@@ -99,8 +100,7 @@ export const updateHomieTaskFromGithubIssue = createJob({
       },
     )
 
-    await dispatch(
-      'calculate_task_complexity',
+    await setTaskComplexity.dispatch(
       {
         task: updatedTask,
       },
@@ -112,8 +112,7 @@ export const updateHomieTaskFromGithubIssue = createJob({
       },
     )
 
-    await dispatch(
-      'send_similar_pull_requests_for_task',
+    await sendSimilarPullRequestsForTask.dispatch(
       {
         task: updatedTask,
       },

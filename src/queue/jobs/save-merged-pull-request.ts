@@ -5,7 +5,7 @@ import { getOrganizationLogData } from '@/lib/organization/get-organization-log-
 import { getPullRequestLogData } from '@/lib/github/get-pull-request-log-data'
 import { logger } from '@/lib/log/logger'
 import { getIsOverPlanContributorLimit } from '@/lib/billing/get-is-over-plan-contributor-limit'
-import { dispatch } from '@/queue/dispatch'
+import { checkForUnclosedTask } from '@/queue/jobs/check-for-unclosed-task'
 
 export const saveMergedPullRequest = createJob({
   id: 'save_merged_pull_request',
@@ -109,8 +109,7 @@ export const saveMergedPullRequest = createJob({
     })
 
     if (pullRequest) {
-      await dispatch(
-        'check_for_unclosed_task',
+      await checkForUnclosedTask.dispatch(
         {
           pull_request: {
             ...pullRequest,

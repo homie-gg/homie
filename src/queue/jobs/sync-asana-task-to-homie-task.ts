@@ -7,9 +7,11 @@ import { classifyTask } from '@/lib/ai/classify-task'
 import { taskStatus } from '@/lib/tasks'
 import { createHomieTaskFromAsanaTask } from '@/lib/asana/create-homie-task-from-asana-task'
 import { embedTask } from '@/lib/ai/embed-task'
-import { dispatch } from '@/queue/dispatch'
 import { removeTaskEmbedding } from '@/lib/ai/remove-task-embedding'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
+import { checkForDuplicateTask } from '@/queue/jobs/check-for-duplicate-task'
+import { setTaskComplexity } from '@/queue/jobs/calculate-task-complexity'
+import { sendSimilarPullRequestsForTask } from '@/queue/jobs/send-similar-pull-requests-for-task'
 
 export const syncAsanaTaskToHomieTask = createJob({
   id: 'sync_asana_task_to_homie_task',
@@ -117,8 +119,7 @@ export const syncAsanaTaskToHomieTask = createJob({
 
     await embedTask({ task: updatedTask })
 
-    await dispatch(
-      'check_for_duplicate_task',
+    await checkForDuplicateTask.dispatch(
       {
         task: updatedTask,
       },
@@ -130,8 +131,7 @@ export const syncAsanaTaskToHomieTask = createJob({
       },
     )
 
-    await dispatch(
-      'calculate_task_complexity',
+    await setTaskComplexity.dispatch(
       {
         task: updatedTask,
       },
@@ -143,8 +143,7 @@ export const syncAsanaTaskToHomieTask = createJob({
       },
     )
 
-    await dispatch(
-      'send_similar_pull_requests_for_task',
+    await sendSimilarPullRequestsForTask.dispatch(
       {
         task: updatedTask,
       },

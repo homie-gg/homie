@@ -1,11 +1,13 @@
 import { createJob } from '@/queue/create-job'
 import { dbClient } from '@/database/client'
 import { classifyTask } from '@/lib/ai/classify-task'
-import { dispatch } from '@/queue/dispatch'
 import { parseISO } from 'date-fns'
 import { taskStatus } from '@/lib/tasks'
 import { embedTask } from '@/lib/ai/embed-task'
 import { createHomieTaskFromTrelloTask } from '@/queue/jobs/create-homie-task-from-trello-task'
+import { checkForDuplicateTask } from '@/queue/jobs/check-for-duplicate-task'
+import { setTaskComplexity } from '@/queue/jobs/calculate-task-complexity'
+import { sendSimilarPullRequestsForTask } from '@/queue/jobs/send-similar-pull-requests-for-task'
 
 export const updateHomieTaskFromTrelloTask = createJob({
   id: 'update_homie_task_from_trello_task',
@@ -114,8 +116,7 @@ export const updateHomieTaskFromTrelloTask = createJob({
 
     await embedTask({ task: updatedTask })
 
-    await dispatch(
-      'check_for_duplicate_task',
+    await checkForDuplicateTask.dispatch(
       {
         task: updatedTask,
       },
@@ -127,8 +128,7 @@ export const updateHomieTaskFromTrelloTask = createJob({
       },
     )
 
-    await dispatch(
-      'calculate_task_complexity',
+    await setTaskComplexity.dispatch(
       {
         task: updatedTask,
       },
@@ -140,8 +140,7 @@ export const updateHomieTaskFromTrelloTask = createJob({
       },
     )
 
-    await dispatch(
-      'send_similar_pull_requests_for_task',
+    await sendSimilarPullRequestsForTask.dispatch(
       {
         task: updatedTask,
       },
