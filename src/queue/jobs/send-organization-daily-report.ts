@@ -84,7 +84,11 @@ export const sendOrganizationDailyReport = createJob({
         }),
       )
 
-      let numPullRequests = 0
+      const pullRequests = reposWithPullRequests.flatMap(
+        (repo) => repo.pullRequests,
+      )
+
+      const numPullRequests = pullRequests.length
       let diagram = `pie`
       const contributors: Record<
         number,
@@ -101,7 +105,6 @@ export const sendOrganizationDailyReport = createJob({
         }
 
         diagram += `\n  "${repo.name}" : ${repo.pullRequests.length}`
-        numPullRequests += repo.pullRequests.length
 
         for (const pullRequest of repo.pullRequests) {
           const contributor = await dbClient
@@ -189,31 +192,39 @@ export const sendOrganizationDailyReport = createJob({
         }),
       })
 
-      // Pull Requests
-      await slackClient.post<{
-        ts: string
-      }>('chat.postMessage', {
-        channel: organization.ext_slack_webhook_channel_id,
-        thread_ts: res.ts,
-        blocks: await getDailyReportPullRequestBlocks({
-          contributors,
-          repositoryContributionChartFile,
-          repos: reposWithPullRequests,
-        }),
-      })
+      if (numPullRequests > 0) {
+        // Pull Requests
+        await slackClient.post<{
+          ts: string
+        }>('chat.postMessage', {
+          channel: organization.ext_slack_webhook_channel_id,
+          thread_ts: res.ts,
+          blocks: await getDailyReportPullRequestBlocks({
+            contributors,
+            repositoryContributionChartFile,
+            repos: reposWithPullRequests,
+          }),
+        })
+      }
 
-      // Tasks
-      await slackClient.post<{
-        ts: string
-      }>('chat.postMessage', {
-        channel: organization.ext_slack_webhook_channel_id,
-        thread_ts: res.ts,
-        blocks: await getDailyReportTaskBlocks({
-          addedTasks,
-          completedTasks,
-          assignedTasks,
-        }),
-      })
+      if (
+        addedTasks.length > 0 ||
+        completedTasks.length > 0 ||
+        Object.values(assignedTasks).length > 0
+      ) {
+        // Tasks
+        await slackClient.post<{
+          ts: string
+        }>('chat.postMessage', {
+          channel: organization.ext_slack_webhook_channel_id,
+          thread_ts: res.ts,
+          blocks: await getDailyReportTaskBlocks({
+            addedTasks,
+            completedTasks,
+            assignedTasks,
+          }),
+        })
+      }
 
       // Homie hints
       await slackClient.post<{
@@ -223,9 +234,7 @@ export const sendOrganizationDailyReport = createJob({
         thread_ts: res.ts,
         blocks: await getDailyReportHomieHintsBlocks({
           pendingTasks,
-          pullRequests: reposWithPullRequests.flatMap(
-            (repo) => repo.pullRequests,
-          ),
+          pullRequests,
           contributors: Object.values(contributors),
           extSlackBotUserId: organization.ext_slack_bot_user_id,
         }),
