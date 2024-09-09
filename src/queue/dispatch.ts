@@ -1,8 +1,7 @@
 import { config } from '@/config'
 import { generateUuid } from '@/lib/crypto/generate-uuid'
 import { debouncedDispatch } from '@/queue/debounced-dispatch'
-import { GetDataType, getQueue } from '@/queue/get-queue'
-import { Job } from '@/queue/jobs'
+import { getQueue } from '@/queue/get-queue'
 import { syncQueue } from '@/queue/sync-queue'
 import { JobsOptions } from 'bullmq'
 
