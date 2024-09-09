@@ -208,6 +208,7 @@ export const checkForUnclosedTask = createJob({
             id: pull_request.organization_id,
           }),
           is_match: matchResult.isMatch,
+          prompt: matchResult.prompt,
         })
 
         if (!matchResult.isMatch) {
