@@ -1,12 +1,10 @@
 import { createRedisClient } from '@/lib/redis/create-redis-client'
 import { dispatch, DispatchOptions } from '@/queue/dispatch'
-import { GetDataType } from '@/queue/get-queue'
-import { Job } from '@/queue/jobs'
 
-interface DebouncedDispatchParams<TJob extends Job, Name extends TJob['name']> {
+interface DebouncedDispatchParams {
   job: {
-    name: Name
-    data: GetDataType<TJob, Name>
+    name: string
+    data: any
     options?: DispatchOptions
   }
   debounce: {
@@ -21,10 +19,7 @@ interface DebouncedDispatchParams<TJob extends Job, Name extends TJob['name']> {
   }
 }
 
-export async function debouncedDispatch<
-  TJob extends Job,
-  Name extends TJob['name'],
->(params: DebouncedDispatchParams<TJob, Name>) {
+export async function debouncedDispatch(params: DebouncedDispatchParams) {
   const { job, debounce } = params
   const { options } = job
 

@@ -31,9 +31,9 @@ interface DebounceOptions {
   delaySecs: number
 }
 
-export const dispatch = async <TJob extends Job, Name extends TJob['name']>(
-  name: Name,
-  data: GetDataType<TJob, Name>,
+export const dispatch = async (
+  name: string,
+  data: any,
   options: DispatchOptions = {},
 ) => {
   const { queue = 'default', debounce, ...jobOptions } = options
