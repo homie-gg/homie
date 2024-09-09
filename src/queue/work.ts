@@ -1,11 +1,15 @@
 import { Worker } from 'bullmq'
 import Redis from 'ioredis'
-import { Job } from '@/queue/jobs'
 import { logger } from '@/lib/log/logger'
-import { handlers } from '@/queue/handlers'
+import { Job as BullMQJob } from 'bullmq'
 import { getQueueOptions } from '@/queue/get-queue-options'
 import { config } from '@/config'
+import { getJobs } from '@/queue/get-jobs'
+
+
 ;(async () => {
+  const jobs = await getJobs()
+
   for (const queue in config.queue.queues) {
     const connection = new Redis(process.env.REDIS_HOST!, {
       maxRetriesPerRequest: null,
@@ -15,13 +19,13 @@ import { config } from '@/config'
 
     new Worker(
       queue,
-      async (job: Job) => {
+      async (job: BullMQJob) => {
         logger.debug(`got job: ${job.name}`, {
           event: 'job.start',
           data: JSON.stringify(job.data),
         })
-        const handle = handlers[job.name]
-        if (!handle) {
+        const definedJob = jobs[job.name]
+        if (!definedJob) {
           logger.debug(`Missing job handler" ${job.name}`, {
             event: 'job.missing_handler',
             data: JSON.stringify(job.data),
@@ -30,7 +34,7 @@ import { config } from '@/config'
         }
 
         try {
-          const result = await handle(job as any) // Ignore TS, as already type-safe when accessing hadnle
+          const result = await definedJob.handle(job.data as any) // Ignore TS, as already type-safe when accessing hadnle
           logger.debug(`Completed job: ${job.name}`, {
             event: 'job.complete',
             data: JSON.stringify(job.data),
