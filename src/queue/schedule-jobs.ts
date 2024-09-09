@@ -4,7 +4,6 @@ import { calculateOrganizationComplexityScorePerDay } from '@/queue/jobs/calcula
 import { refreshAsanaTokens } from '@/queue/jobs/refresh-asana-tokens'
 import { refreshGitlabTokens } from '@/queue/jobs/refresh-gitlab-tokens'
 import { sendDailyReports } from '@/queue/jobs/send-daily-reports'
-
 ;(async () => {
   const queues = Object.keys(config.queue.queues)
   for (const name of queues) {

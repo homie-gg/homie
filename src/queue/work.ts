@@ -5,8 +5,6 @@ import { Job as BullMQJob } from 'bullmq'
 import { getQueueOptions } from '@/queue/get-queue-options'
 import { config } from '@/config'
 import { getJobs } from '@/queue/get-jobs'
-
-
 ;(async () => {
   const jobs = await getJobs()
 
