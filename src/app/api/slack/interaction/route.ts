@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifySlackRequest } from '@/lib/slack/verify-slack-request'
 import { SlackShortcut, ViewSubmitAction } from '@slack/bolt'
-import { CreateGithubIssueSelectedRepoMetadata } from '@/queue/jobs/ask-slack-select-github-repo-for-issue'
+import {
+  askSlackSelectGithubRepoForIssue,
+  CreateGithubIssueSelectedRepoMetadata,
+} from '@/queue/jobs/ask-slack-select-github-repo-for-issue'
 import {
   askSlackSelectAsanaProjectForTask,
   CreateAsanaTaskSelectedRepoMetadata,
@@ -58,7 +61,7 @@ export const POST = async (request: NextRequest) => {
     shortcut.type === 'message_action' &&
     shortcut.callback_id === 'gh_issue_create:start'
   ) {
-    await askSlackSelectAsanaProjectForTask.dispatch({
+    await askSlackSelectGithubRepoForIssue.dispatch({
       team_id: shortcut.team.id,
       trigger_id: shortcut.trigger_id,
       channel_id: shortcut.channel.id,
