@@ -1,6 +1,7 @@
 import { dbClient } from '@/database/client'
 import { PageProps } from '@/lib/next-js/page-props'
-import { dispatch } from '@/queue/dispatch'
+import { importGithubIssues } from '@/queue/jobs/import-github-issues'
+import { importPullRequests } from '@/queue/jobs/import-pull-requests'
 import { auth } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 
@@ -51,11 +52,11 @@ export default async function GithubSetup(
     .returningAll()
     .executeTakeFirstOrThrow()
 
-  await dispatch('import_pull_requests', {
+  await importPullRequests.dispatch({
     github_organization: githubOrganization,
   })
 
-  await dispatch('import_github_issues', {
+  await importGithubIssues.dispatch({
     github_organization: githubOrganization,
   })
 

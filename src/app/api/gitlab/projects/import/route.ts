@@ -4,7 +4,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@/lib/http/server/exceptions'
-import { dispatch } from '@/queue/dispatch'
+import { importGitlabProjects } from '@/queue/jobs/import-gitlab-projects'
 import { auth } from '@clerk/nextjs'
 import { NextResponse } from 'next/server'
 
@@ -37,7 +37,7 @@ export const POST = createRoute({}, async () => {
     })
   }
 
-  await dispatch('import_gitlab_projects', {
+  await importGitlabProjects.dispatch({
     organization: {
       id: organization.id,
       gitlab_access_token: organization.gitlab_access_token,

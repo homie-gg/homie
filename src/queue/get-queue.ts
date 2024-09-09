@@ -3,10 +3,7 @@ import { Job } from '@/queue/jobs'
 import { Queue } from 'bullmq'
 import Redis from 'ioredis'
 
-const queues: Record<
-  string,
-  Queue<Job['data'], Job['returnvalue'], Job['name']>
-> = {}
+const queues: Record<string, Queue> = {}
 
 export const getQueue = (name: string) => {
   // Assert queue is defined

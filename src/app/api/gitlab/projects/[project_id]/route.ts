@@ -6,7 +6,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@/lib/http/server/exceptions'
-import { dispatch } from '@/queue/dispatch'
+import { importGitlabMergeRequests } from '@/queue/jobs/import-gitlab-merge-requests'
 import { auth } from '@clerk/nextjs'
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
@@ -88,7 +88,7 @@ export const PATCH = createRoute(
         .executeTakeFirstOrThrow()
 
       if (project.enabled && !project.has_completed_setup) {
-        await dispatch('import_gitlab_merge_requests', {
+        await importGitlabMergeRequests.dispatch({
           organization,
           project,
         })

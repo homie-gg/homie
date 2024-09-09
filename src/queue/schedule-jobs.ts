@@ -1,6 +1,9 @@
 import { config } from '@/config'
-import { dispatch } from '@/queue/dispatch'
 import { getQueue } from '@/queue/get-queue'
+import { calculateOrganizationComplexityScorePerDay } from '@/queue/jobs/calculate-organization-complexity-score-per-day'
+import { refreshAsanaTokens } from '@/queue/jobs/refresh-asana-tokens'
+import { refreshGitlabTokens } from '@/queue/jobs/refresh-gitlab-tokens'
+import { sendDailyReports } from '@/queue/jobs/send-daily-reports'
 ;(async () => {
   const queues = Object.keys(config.queue.queues)
   for (const name of queues) {
@@ -16,13 +19,13 @@ import { getQueue } from '@/queue/get-queue'
     }
   }
 
-  await dispatch('send_daily_reports', null, {
+  await sendDailyReports.dispatch(null, {
     repeat: {
       pattern: '* * * * *', // send every minute
     },
   })
 
-  await dispatch('refresh_gitlab_tokens', null, {
+  await refreshGitlabTokens.dispatch(null, {
     queue: 'high',
     repeat: {
       // refresh every 30 mins as gitlab has a 2 hour expiry
@@ -30,7 +33,7 @@ import { getQueue } from '@/queue/get-queue'
     },
   })
 
-  await dispatch('refresh_asana_tokens', null, {
+  await refreshAsanaTokens.dispatch(null, {
     queue: 'high',
     repeat: {
       // refresh every 20 mins as Asana has a 1 hour expiry
@@ -38,7 +41,7 @@ import { getQueue } from '@/queue/get-queue'
     },
   })
 
-  await dispatch('calculate_organization_complexity_score_per_day', null, {
+  calculateOrganizationComplexityScorePerDay.dispatch(null, {
     repeat: {
       // weekly at 00:00 Sunday
       // Must update cut-off date in job handler if this

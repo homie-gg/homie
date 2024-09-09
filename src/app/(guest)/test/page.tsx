@@ -1,5 +1,5 @@
 import { dbClient } from '@/database/client'
-import { dispatch } from '@/queue/dispatch'
+import { sendOrganizationDailyReport } from '@/queue/jobs/send-organization-daily-report'
 
 interface TestPageProps {}
 
@@ -21,7 +21,7 @@ export default async function TestPage(props: TestPageProps) {
     ])
     .executeTakeFirstOrThrow()
 
-  await dispatch('send_organization_daily_report', {
+  await sendOrganizationDailyReport.dispatch({
     organization,
   })
 

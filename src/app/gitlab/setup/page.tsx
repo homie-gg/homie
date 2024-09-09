@@ -3,7 +3,7 @@ import { generateRandomToken } from '@/lib/crypto/generate-random-token'
 import { GitlabOAuthTokenResponse } from '@/lib/gitlab/types'
 import { http } from '@/lib/http/client/http'
 import { PageProps } from '@/lib/next-js/page-props'
-import { dispatch } from '@/queue/dispatch'
+import { importGitlabProjects } from '@/queue/jobs/import-gitlab-projects'
 import { auth } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 
@@ -64,7 +64,7 @@ export default async function GitlabSetupPage(props: GitlabSetupPageProps) {
     ])
     .executeTakeFirstOrThrow()
 
-  await dispatch('import_gitlab_projects', {
+  await importGitlabProjects.dispatch({
     organization: {
       id: organization.id,
       gitlab_access_token: gitlabAppUser.gitlab_access_token,

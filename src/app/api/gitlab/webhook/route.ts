@@ -1,8 +1,13 @@
 import { dbClient } from '@/database/client'
 import { NextRequest, NextResponse } from 'next/server'
 import { WebhookMergeRequestEventSchema } from '@gitbeaker/rest'
-import { summaryKey } from '@/queue/handlers/handle-generate-open-pull-request-summary'
-import { dispatch } from '@/queue/dispatch'
+import { summaryKey } from '@/queue/jobs/generate-open-pull-request-summary'
+import { reopenMergeRequest } from '@/queue/jobs/reopen-merge-request'
+import { closeMergeRequest } from '@/queue/jobs/close-merge-request'
+import { saveMergedMergeRequest } from '@/queue/jobs/save-merged-merge-request'
+import { closeLinkedTasks } from '@/queue/jobs/close-linked-tasks'
+import { generateOpenMergeRequestSummary } from '@/queue/jobs/generate-open-merge-request-summary'
+import { saveOpenedMergeRequest } from '@/queue/jobs/save-opened-merge-request'
 
 export const POST = async (request: NextRequest) => {
   const webhook_secret = request.headers.get('X-Gitlab-Token')
@@ -62,14 +67,14 @@ export const POST = async (request: NextRequest) => {
   const shouldGenerateSummary = mergeRequest.description?.includes(summaryKey)
 
   if (mergeRequest.action === 'reopen') {
-    await dispatch('reopen_merge_request', {
+    await reopenMergeRequest.dispatch({
       merge_request: mergeRequest,
       organization,
     })
   }
 
   if (mergeRequest.action === 'close') {
-    await dispatch('close_merge_request', {
+    await closeMergeRequest.dispatch({
       merge_request: mergeRequest,
       organization,
       project: {
@@ -79,7 +84,7 @@ export const POST = async (request: NextRequest) => {
   }
 
   if (mergeRequest.action === 'merge') {
-    await dispatch('save_merged_merge_request', {
+    await saveMergedMergeRequest.dispatch({
       merge_request: mergeRequest,
       organization,
       project: {
@@ -87,7 +92,7 @@ export const POST = async (request: NextRequest) => {
       },
     })
 
-    await dispatch('close_linked_tasks', {
+    await closeLinkedTasks.dispatch({
       pull_request: {
         body: mergeRequest.description,
         title: mergeRequest.title,
@@ -98,21 +103,21 @@ export const POST = async (request: NextRequest) => {
   }
 
   if (mergeRequest.action === 'update' && shouldGenerateSummary) {
-    await dispatch('generate_open_merge_request_summary', {
+    await generateOpenMergeRequestSummary.dispatch({
       merge_request: mergeRequest,
       organization,
     })
   }
 
   if (mergeRequest.action === 'open') {
-    await dispatch('save_opened_merge_request', {
+    await saveOpenedMergeRequest.dispatch({
       merge_request: mergeRequest,
       organization,
     })
   }
 
   if (mergeRequest.action === 'open' && shouldGenerateSummary) {
-    await dispatch('generate_open_merge_request_summary', {
+    await generateOpenMergeRequestSummary.dispatch({
       merge_request: mergeRequest,
       organization,
     })

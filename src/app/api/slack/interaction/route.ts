@@ -1,9 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifySlackRequest } from '@/lib/slack/verify-slack-request'
 import { SlackShortcut, ViewSubmitAction } from '@slack/bolt'
-import { dispatch } from '@/queue/dispatch'
-import { CreateGithubIssueSelectedRepoMetadata } from '@/queue/handlers/handle-ask-slack-select-github-repo-for-issue'
-import { CreateAsanaTaskSelectedRepoMetadata } from '@/queue/handlers/handle-ask-slack-select-asana-project-for-task'
+import {
+  askSlackSelectGithubRepoForIssue,
+  CreateGithubIssueSelectedRepoMetadata,
+} from '@/queue/jobs/ask-slack-select-github-repo-for-issue'
+import {
+  askSlackSelectAsanaProjectForTask,
+  CreateAsanaTaskSelectedRepoMetadata,
+} from '@/queue/jobs/ask-slack-select-asana-project-for-task'
+import { createGithubIssueFromSlack } from '@/queue/jobs/create-github-issue-from-slack'
+import { createTrelloTaskFromSlack } from '@/queue/jobs/create-trello-task-from-slack'
+import { createAsanaTaskFromSlack } from '@/queue/jobs/create-asana-task-from-slack'
 
 export const POST = async (request: NextRequest) => {
   const isValidRequest = verifySlackRequest({
@@ -40,7 +48,7 @@ export const POST = async (request: NextRequest) => {
       shortcut.view.state.values['select_repo_block']['github_repo']
         .selected_option?.value ?? null
 
-    await dispatch('create_github_issue_from_slack', {
+    await createGithubIssueFromSlack.dispatch({
       team_id: data.team_id,
       target_message_ts: data.target_message_ts,
       channel_id: data.channel_id,
@@ -53,7 +61,7 @@ export const POST = async (request: NextRequest) => {
     shortcut.type === 'message_action' &&
     shortcut.callback_id === 'gh_issue_create:start'
   ) {
-    await dispatch('ask_slack_select_github_repo_for_issue', {
+    await askSlackSelectGithubRepoForIssue.dispatch({
       team_id: shortcut.team.id,
       trigger_id: shortcut.trigger_id,
       channel_id: shortcut.channel.id,
@@ -66,7 +74,7 @@ export const POST = async (request: NextRequest) => {
     shortcut.type === 'message_action' &&
     shortcut.callback_id === 'trello_task_create'
   ) {
-    await dispatch('create_trello_task_from_slack', {
+    await createTrelloTaskFromSlack.dispatch({
       team_id: shortcut.team.id,
       channel_id: shortcut.channel.id,
       target_message_ts: shortcut.message.ts,
@@ -78,7 +86,7 @@ export const POST = async (request: NextRequest) => {
     shortcut.type === 'message_action' &&
     shortcut.callback_id === 'asana_task_create:start'
   ) {
-    await dispatch('ask_slack_select_asana_project_for_task', {
+    await askSlackSelectAsanaProjectForTask.dispatch({
       team_id: shortcut.team.id,
       trigger_id: shortcut.trigger_id,
       channel_id: shortcut.channel.id,
@@ -99,7 +107,7 @@ export const POST = async (request: NextRequest) => {
       shortcut.view.state.values['select_project_block']['project_id']
         .selected_option?.value ?? null
 
-    await dispatch('create_asana_task_from_slack', {
+    await createAsanaTaskFromSlack.dispatch({
       team_id: data.team_id,
       target_message_ts: data.target_message_ts,
       channel_id: data.channel_id,
