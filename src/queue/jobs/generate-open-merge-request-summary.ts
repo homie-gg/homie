@@ -9,7 +9,7 @@ import { summarizeGitlabMergeRequest } from '@/lib/gitlab/summarize-gitlab-merge
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { getReferencedSlackMessages } from '@/lib/slack/get-referenced-slack-messages'
-import { summaryKey } from '@/queue/handlers/handle-generate-open-pull-request-summary'
+import { summaryKey } from '@/queue/jobs/generate-open-pull-request-summary'
 
 export const generateOpenMergeRequestSummary = createJob({
   id: 'generate_open_merge_request_summary',

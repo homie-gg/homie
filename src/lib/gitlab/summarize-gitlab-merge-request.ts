@@ -1,5 +1,5 @@
 import { summarizeCodeChange } from '@/lib/ai/summarize-code-change'
-import { summaryKey } from '@/queue/handlers/handle-generate-open-pull-request-summary'
+import { summaryKey } from '@/queue/jobs/generate-open-pull-request-summary'
 import { Gitlab } from '@gitbeaker/core'
 
 interface SummarizeGitlabMergeRequestParams {

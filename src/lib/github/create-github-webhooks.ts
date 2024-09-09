@@ -1,11 +1,11 @@
 import { dispatch } from '@/queue/dispatch'
-import { summaryKey } from '@/queue/handlers/handle-generate-open-pull-request-summary'
 import { createGithubApp } from '@/lib/github/create-github-app'
 import { assignContributorFromGithubIssue } from '@/lib/github/assign-contributor-from-github-issue'
 import { unassignContributorFromGithubIssue } from '@/lib/github/unassign-contributor-from-github-issue'
 import { closeTaskFromGithubIssue } from '@/lib/github/close-task-from-github-issue'
 import { deleteTaskFromGithubIssue } from '@/lib/github/delete-task-from-github-issue'
 import { reopenTaskFromGithubIssue } from '@/lib/github/reopen-task-from-github-issue'
+import { summaryKey } from '@/queue/jobs/generate-open-pull-request-summary'
 
 let webhooks: ReturnType<typeof createGithubApp>['webhooks'] | null = null
 

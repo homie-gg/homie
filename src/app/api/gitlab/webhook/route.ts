@@ -1,8 +1,8 @@
 import { dbClient } from '@/database/client'
 import { NextRequest, NextResponse } from 'next/server'
 import { WebhookMergeRequestEventSchema } from '@gitbeaker/rest'
-import { summaryKey } from '@/queue/handlers/handle-generate-open-pull-request-summary'
 import { dispatch } from '@/queue/dispatch'
+import { summaryKey } from '@/queue/jobs/generate-open-pull-request-summary'
 
 export const POST = async (request: NextRequest) => {
   const webhook_secret = request.headers.get('X-Gitlab-Token')
