@@ -1,0 +1,15 @@
+.root {
+  @apply w-full flex flex-col gap-y-8;
+
+  .form-fields {
+    @apply w-full grid grid-cols-2 gap-x-4 sm:gap-x-8 gap-y-4;
+  }
+
+  .submit {
+    @apply gap-x-1.5 mx-auto font-semibold text-sm rounded-full;
+
+    svg {
+      @apply w-[11.67px] h-auto;
+    }
+  }
+}

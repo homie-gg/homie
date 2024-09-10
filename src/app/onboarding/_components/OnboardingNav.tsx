@@ -1,6 +1,6 @@
-type OnboardingStep = 'fill_details' | 'connect_repo' | 'connect_slack'
 import OnboardingNavStep from '@/app/onboarding/_components/OnboardingNavStep'
 import styles from './OnboardingNav.module.scss'
+import { OnboardingStep } from '@/app/onboarding/_components/onboarding-step'
 
 interface OnboardingNavProps {
   activeStep: OnboardingStep
