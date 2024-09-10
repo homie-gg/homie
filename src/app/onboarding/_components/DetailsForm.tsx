@@ -98,6 +98,7 @@ export default function DetailsForm() {
                 <FormLabel>How big is your team?</FormLabel>
                 <FormControl>
                   <Select
+                    instanceId="1"
                     options={teamSizes.map((size) => ({
                       value: size,
                       label: `${size[0].toUpperCase()}${size.slice(1)}`,
@@ -118,6 +119,7 @@ export default function DetailsForm() {
                 <FormLabel>What features stood out?</FormLabel>
                 <FormControl>
                   <Select
+                    instanceId="2"
                     isMulti
                     options={standOutFeatures.map((feature) => ({
                       value: feature,
@@ -139,6 +141,7 @@ export default function DetailsForm() {
                 <FormLabel>How did you hear about us?</FormLabel>
                 <FormControl>
                   <Select
+                    instanceId="3"
                     options={referralSources.map((source) => ({
                       value: source,
                       label: `${source[0].toUpperCase()}${source.slice(1)}`,

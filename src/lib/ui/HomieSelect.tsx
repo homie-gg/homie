@@ -7,6 +7,7 @@ import ReactSelect, {
   SingleValueProps,
   MenuProps,
   Props as ReactSelectProps,
+  SelectInstance,
 } from 'react-select'
 import clsx from 'clsx'
 import { XIcon } from 'lucide-react'
@@ -103,58 +104,68 @@ const MultiValueRemove = ({
   </components.MultiValueRemove>
 )
 
-const Select: React.FC<Props> = ({
-  id,
-  className,
-  controlClassName = '',
-  icon,
-  showIndicator = true,
-  ...props
-}) => {
-  return (
-    <ReactSelect
-      components={{
-        Menu,
-        Control,
-        Placeholder,
-        IndicatorsContainer: showIndicator ? IndicatorsContainer : () => <></>,
-        SingleValue,
-        MultiValueRemove,
-      }}
-      styles={{
-        multiValueLabel: (base) => ({
-          ...base,
-          color: 'hsl(var(--primary))',
-          fontSize: '14px',
-          backgroundColor: 'hsl(var(--primary-light))',
-        }),
-        multiValueRemove: (base) => ({
-          ...base,
-          padding: '0px',
-        }),
-        noOptionsMessage: (base) => ({
-          ...base,
-          color: 'hsl(var(--primary))',
-          fontSize: '16px',
-          lineHeight: '20px',
-        }),
-      }}
-      theme={(theme) => ({
-        ...theme,
-        borderRadius: 8,
-        colors: {
-          ...theme.colors,
-          primary: 'hsl(var(--secondary))',
-        },
-      })}
-      {...(id ? { inputId: id } : {})}
-      className={clsx(styles.select, className)}
-      // @ts-ignore
-      icon={icon}
-      controlClassName={controlClassName}
-      {...props}
-    />
-  )
-}
+const Select = React.forwardRef<SelectInstance<Option, boolean, any>, Props>(
+  (
+    {
+      id,
+      className,
+      controlClassName = '',
+      icon,
+      showIndicator = true,
+      ...props
+    },
+    ref,
+  ) => {
+    return (
+      <ReactSelect
+        ref={ref}
+        components={{
+          Menu,
+          Control,
+          Placeholder,
+          IndicatorsContainer: showIndicator
+            ? IndicatorsContainer
+            : () => <></>,
+          SingleValue,
+          MultiValueRemove,
+        }}
+        styles={{
+          multiValueLabel: (base) => ({
+            ...base,
+            color: 'hsl(var(--primary))',
+            fontSize: '14px',
+            backgroundColor: 'hsl(var(--primary-light))',
+          }),
+          multiValueRemove: (base) => ({
+            ...base,
+            padding: '0px',
+          }),
+          noOptionsMessage: (base) => ({
+            ...base,
+            color: 'hsl(var(--primary))',
+            fontSize: '16px',
+            lineHeight: '20px',
+          }),
+        }}
+        theme={(theme) => ({
+          ...theme,
+          borderRadius: 8,
+          colors: {
+            ...theme.colors,
+            primary: 'hsl(var(--secondary))',
+          },
+        })}
+        {...(id ? { inputId: id } : {})}
+        className={clsx(styles.select, className)}
+        // @ts-ignore
+        icon={icon}
+        controlClassName={controlClassName}
+        {...props}
+      />
+    )
+  },
+)
+
+Select.displayName = 'Select'
 
 export default Select

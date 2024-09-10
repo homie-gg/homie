@@ -58,10 +58,7 @@ export default function RootLayout({
               </Script>
             </head>
           )}
-          <body
-            suppressHydrationWarning
-            className={clsx(onest.variable, excon.variable)}
-          >
+          <body className={clsx(onest.variable, excon.variable)}>
             <main className="h-screen">{children}</main>
             <Toaster />
           </body>
