@@ -7,12 +7,14 @@ import ContributorsTable from '@/app/(user)/review/_components/ContributorsTable
 import ReviewTabs from '@/app/(user)/review/_components/ReviewTabs'
 import PullRequestsTable from '@/app/(user)/review/_components/PullRequestsTable'
 import { getPullRequests } from '@/app/(user)/review/_utils/get-pull-requests'
+import SetupCompleteConfetti from '@/app/(user)/review/_components/SetupCompleteConfetti'
 
 interface ReviewPageProps {
   searchParams: {
     from?: string
     to?: string
     tab?: string
+    confetti?: string
   }
 }
 
@@ -42,6 +44,7 @@ export default async function ReviewPage(props: ReviewPageProps) {
 
   return (
     <>
+      <SetupCompleteConfetti />
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">Review</h2>
         <div className="flex items-center space-x-2">
