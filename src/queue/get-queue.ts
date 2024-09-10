@@ -1,5 +1,4 @@
 import { getQueueOptions } from '@/queue/get-queue-options'
-import { Job } from '@/queue/jobs'
 import { Queue } from 'bullmq'
 import Redis from 'ioredis'
 
@@ -18,7 +17,7 @@ export const getQueue = (name: string) => {
     maxRetriesPerRequest: null,
   })
 
-  const queue = new Queue<Job['data'], Job['returnvalue'], Job['name']>(name, {
+  const queue = new Queue(name, {
     connection,
     defaultJobOptions: {
       attempts: 3,
@@ -33,13 +32,3 @@ export const getQueue = (name: string) => {
 
   return queue
 }
-
-export type GetDataType<
-  SomeJob extends Job,
-  Name extends SomeJob['name'],
-> = SomeJob extends {
-  name: Name
-  data: infer InferredData
-}
-  ? InferredData
-  : never
