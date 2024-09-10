@@ -99,6 +99,7 @@
     "redis": "^4.6.13",
     "rehype-highlight": "^7.0.0",
     "rimraf": "^6.0.1",
+    "sass": "^1.78.0",
     "stripe": "^15.0.0",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",

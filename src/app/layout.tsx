@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
-import './globals.css'
+import './globals.scss'
 import { cn } from '@/lib/utils'
 import { TooltipProvider } from '@/lib/ui/Tooltip'
 import Script from 'next/script'

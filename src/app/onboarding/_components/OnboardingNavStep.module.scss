@@ -1,0 +1,80 @@
+.root {
+  @apply relative w-full flex flex-col gap-y-2 items-center;
+
+  &:nth-of-type(2) {
+    @apply justify-self-center col-start-3;
+  }
+
+  &:nth-of-type(3) {
+    @apply justify-self-end col-start-5;
+  }
+
+  &:not(:first-of-type)::before {
+    @apply content-[''] absolute right-1/2 top-[15px] w-[200%] h-0.5 bg-primary/50 row-span-2 z-[4] -translate-y-1/2 transition-colors duration-200;
+  }
+
+  .item-label {
+    @apply w-full sm:w-max text-primary/50 text-sm text-center font-semibold leading-5 overflow-hidden text-ellipsis transition-colors duration-300;
+  }
+
+  // inactive
+  .item-tag {
+    @apply relative w-[30px] h-[30px] grid items-center justify-center bg-primary-foreground rounded-full shadow-[0px_0px_0px_2px_transparent] transition-[background-color] duration-75;
+
+    .check {
+      @apply row-start-1 col-start-1 row-span-1 col-span-1 inline-flex items-center justify-center text-transparent z-[6] transition-colors duration-300;
+
+      svg {
+        @apply w-3 h-auto;
+      }
+    }
+
+    .tag-center {
+      @apply relative row-start-1 col-start-1 row-span-1 col-span-1 w-6 h-6 grid items-center justify-center bg-primary-foreground rounded-full z-[5];
+
+      .tag-ring {
+        @apply absolute left-1/2 top-1/2 w-5 h-5 bg-primary/50 border-[6px] border-primary-foreground rounded-full shadow-[0px_0px_0px_2px_hsl(var(--primary)/0.5)] z-[6] -translate-x-1/2 -translate-y-1/2 transition-all duration-200;
+      }
+    }
+  }
+
+  // active
+  &.item--active {
+    &:not(:first-of-type)::before {
+      @apply bg-primary;
+    }
+
+    .item-tag {
+      @apply z-[5] bg-background shadow-[0px_0px_0px_2px_hsl(var(--primary))];
+
+      .tag-center .tag-ring {
+        @apply bg-background border-primary shadow-[0px_0px_0px_2px_hsl(var(--primary))];
+      }
+    }
+
+    .item-label {
+      @apply text-primary;
+    }
+  }
+
+  // done
+  &.item--done {
+    &:not(:first-of-type)::before {
+      @apply bg-primary;
+    }
+
+    .item-tag {
+      .check {
+        @apply text-background;
+      }
+
+      .tag-center .tag-ring {
+        @apply bg-primary border-primary shadow-[0px_0px_0px_2px_hsl(var(--primary))];
+      }
+    }
+
+    .item-label {
+      @apply text-primary;
+    }
+  }
+}
