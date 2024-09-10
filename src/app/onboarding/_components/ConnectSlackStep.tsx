@@ -3,8 +3,17 @@ import Image from 'next/image'
 import { Button } from '@/lib/ui/HomieButton'
 import SlackIcon from '@/app/onboarding/_components/SlackIcon'
 import homieImage from './homie-down.svg'
+import { useEffect } from 'react'
+import confetti from 'canvas-confetti'
 
 export default function ConnectSlackStep() {
+  useEffect(() => {
+    confetti({
+      particleCount: 200,
+      spread: 400,
+      origin: { y: 1.1 },
+    })
+  }, [])
   return (
     <div className={styles['container']}>
       <div className={styles['content']}>

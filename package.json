@@ -65,6 +65,7 @@
     "@tryfabric/mack": "^1.2.1",
     "asana": "^3.0.7",
     "bullmq": "^5.4.6",
+    "canvas-confetti": "^1.9.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "cohere-ai": "^7.9.0",
@@ -111,6 +112,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
+    "@types/canvas-confetti": "^1.6.4",
     "@types/he": "^1.2.3",
     "@types/jest": "^29.5.12",
     "@types/lodash": "^4.17.7",
