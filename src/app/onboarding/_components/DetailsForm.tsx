@@ -49,7 +49,7 @@ const details = z.object({
     },
     { required_error: 'Please select one' },
   ),
-  expectations: z.string(),
+  expectations: z.string().optional(),
 })
 
 type Details = z.infer<typeof details>
