@@ -3,15 +3,7 @@ import Image from 'next/image'
 import homieImage from './homie-right.svg'
 import DetailsForm from '@/app/onboarding/_components/DetailsForm'
 
-interface DetailsStepProps {
-  showing: boolean
-}
-
-export default function DetailsStep(props: DetailsStepProps) {
-  const { showing } = props
-  if (!showing) {
-    return null
-  }
+export default function DetailsStep() {
   return (
     <div className={styles['root']}>
       <div className={styles['form-container']}>
