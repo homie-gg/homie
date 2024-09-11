@@ -39,7 +39,7 @@ export async function checkPullRequestIsForTask(
 
   const openAI = new OpenAI()
 
-  const prompt = `Determine whether the follow PULL REQUEST closes all the requirements mentioned in the TASK. Answer must be TRUE/FALSE only.
+  const prompt = `Does the following PULL REQUEST address the TASK? Answer with TRUE/FALSE only.
 TASK:
 ${task.name} - ${task.description}
 PULL REQUEST:
