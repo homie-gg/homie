@@ -15,14 +15,23 @@ import Select from '@/lib/ui/HomieSelect'
 import { Textarea } from '@/lib/ui/HomieTextarea'
 import { Button } from '@/lib/ui/HomieButton'
 import ArrowRightIcon from '@/app/(user)/_components/Onboarding/ArrowRightIcon'
-import { http } from '@/lib/http/client/http'
-import { OrganizationResponse } from '@/app/api/organizations/[organization_id]/types'
 
 export const teamSizes = ['1-9', '10-99', '100+']
 
-export const standOutFeatures = ['feature 1', 'feature 2', 'feature 3']
+export const standOutFeatures = [
+  'Project search',
+  'Dev automations',
+  'Team insights & reporting',
+]
 
-export const referralSources = ['source 1', 'source 2', 'source 3']
+export const referralSources = [
+  'Google Search',
+  'Reddit',
+  'X',
+  'LinkedIn',
+  'Ad',
+  'Friend',
+]
 
 const details = z.object({
   ownerName: z.string({ required_error: 'Please enter a name' }),
