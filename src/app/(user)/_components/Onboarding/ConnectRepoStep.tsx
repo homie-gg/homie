@@ -20,7 +20,7 @@ export default function ConnectRepoStep(props: ConnectRepoStepProps) {
       <div className={styles['content']}>
         <h1 className={styles['heading']}>Now let’s link your repository</h1>
         <div className={styles['action']}>
-          <a href={getGithubInstallUrl({ organization })}>
+          <a href={getGithubInstallUrl({ organization })} className="w-full">
             <Button variant="outline" className={styles.button}>
               <span>
                 <GithubIcon />
@@ -29,7 +29,7 @@ export default function ConnectRepoStep(props: ConnectRepoStepProps) {
             </Button>
           </a>
           <span>or</span>
-          <a href={getGitlabInstallUrl({ organization })}>
+          <a href={getGitlabInstallUrl({ organization })} className="w-full">
             <Button variant="outline" className={styles.button}>
               <span>
                 <GitlabIcon />

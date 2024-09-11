@@ -28,8 +28,12 @@ export default function Onboarding(props: OnboardingProps) {
             onUpdateOrganization={setOrganization}
           />
         )}
-        {step === 'connect_repo' && <ConnectRepoStep organization={organization} />}
-        {step === 'connect_slack' && <ConnectSlackStep organization={organization} />}
+        {step === 'connect_repo' && (
+          <ConnectRepoStep organization={organization} />
+        )}
+        {step === 'connect_slack' && (
+          <ConnectSlackStep organization={organization} />
+        )}
       </div>
     </div>
   )
@@ -42,7 +46,7 @@ function getStep(
     return 'fill_details'
   }
 
-  if (!organization.ext_gh_install_id || !organization.gitlab_access_token) {
+  if (!organization.ext_gh_install_id && !organization.gitlab_access_token) {
     return 'connect_repo'
   }
 

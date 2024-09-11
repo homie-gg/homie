@@ -5,7 +5,7 @@ import { parseAsBoolean, useQueryState } from 'nuqs'
 import { useEffect } from 'react'
 
 export default function SetupCompleteConfetti() {
-  const [showConfetti] = useQueryState(
+  const [showConfetti, setConfetti] = useQueryState(
     'confetti',
     parseAsBoolean.withDefault(false),
   )
@@ -17,7 +17,9 @@ export default function SetupCompleteConfetti() {
         spread: 400,
         origin: { y: 1.1 },
       })
+
+      setConfetti(null)
     }
-  }, [showConfetti])
+  }, [showConfetti, setConfetti])
   return null
 }

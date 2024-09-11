@@ -18,7 +18,7 @@ export default function ConnectSlackStep(props: ConnectSlackStep) {
       <div className={styles['content']}>
         <h1 className={styles['heading']}>Now let’s link to your Slack</h1>
         <div className={styles['action']}>
-          <a href={getSlackInstallUrl({ organization })}>
+          <a href={getSlackInstallUrl({ organization })} className="w-full">
             <Button variant="outline" className={styles.button}>
               <span>
                 <SlackIcon />
