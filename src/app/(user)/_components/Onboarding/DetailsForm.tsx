@@ -14,7 +14,7 @@ import { Input } from '@/lib/ui/HomieInput'
 import Select from '@/lib/ui/HomieSelect'
 import { Textarea } from '@/lib/ui/HomieTextarea'
 import { Button } from '@/lib/ui/HomieButton'
-import ArrowRightIcon from '@/app/onboarding/_components/ArrowRightIcon'
+import ArrowRightIcon from '@/app/(user)/_components/Onboarding/ArrowRightIcon'
 import { http } from '@/lib/http/client/http'
 import { OrganizationResponse } from '@/app/api/organizations/[organization_id]/types'
 

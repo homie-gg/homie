@@ -3,9 +3,9 @@ import Image from 'next/image'
 import homieImage from './homie-right.svg'
 import DetailsForm, {
   OrganizationDetails,
-} from '@/app/onboarding/_components/DetailsForm'
+} from '@/app/(user)/_components/Onboarding/DetailsForm'
 import { OrganizationResponse } from '@/app/api/organizations/[organization_id]/types'
-import { OnboardingOrganization } from '@/app/onboarding/types'
+import { OnboardingOrganization } from '@/app/(user)/_components/Onboarding/types'
 import { http } from '@/lib/http/client/http'
 
 interface DetailsStepProps {

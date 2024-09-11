@@ -2,13 +2,13 @@
 
 import clsx from 'clsx'
 import styles from './OnboardingSteps.module.scss'
-import OnboardingNav from '@/app/onboarding/_components/OnboardingNav'
+import OnboardingNav from '@/app/(user)/_components/Onboarding/OnboardingNav'
 import { useState } from 'react'
-import { OnboardingStep } from '@/app/onboarding/_components/onboarding-step'
-import DetailsStep from '@/app/onboarding/_components/DetailsStep'
-import ConnectRepoStep from '@/app/onboarding/_components/ConnectRepoStep'
-import ConnectSlackStep from '@/app/onboarding/_components/ConnectSlackStep'
-import { OnboardingOrganization } from '@/app/onboarding/types'
+import { OnboardingStep } from '@/app/(user)/_components/Onboarding/onboarding-step'
+import DetailsStep from '@/app/(user)/_components/Onboarding/DetailsStep'
+import ConnectRepoStep from '@/app/(user)/_components/Onboarding/ConnectRepoStep'
+import ConnectSlackStep from '@/app/(user)/_components/Onboarding/ConnectSlackStep'
+import { OnboardingOrganization } from '@/app/(user)/_components/Onboarding/types'
 
 interface OnboardingProps {
   organization: OnboardingOrganization
@@ -28,8 +28,8 @@ export default function Onboarding(props: OnboardingProps) {
             onUpdateOrganization={setOrganization}
           />
         )}
-        {step === 'connect_repo' && <ConnectRepoStep />}
-        {step === 'connect_slack' && <ConnectSlackStep />}
+        {step === 'connect_repo' && <ConnectRepoStep organization={organization} />}
+        {step === 'connect_slack' && <ConnectSlackStep organization={organization} />}
       </div>
     </div>
   )

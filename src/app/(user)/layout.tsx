@@ -1,6 +1,5 @@
 import AppBar from '@/app/(user)/AppBar'
 import Page from '@/app/(user)/_components/Page'
-import Onboarding from '@/app/onboarding/_components/Onboarding'
 import Content from '@/app/(user)/Content'
 import SetupPage from '@/app/(user)/_components/SetupPage'
 import { MainNav } from '@/app/(user)/_components/MainNav'
@@ -11,6 +10,7 @@ import { mailchimp } from '@/lib/mailchimp'
 import { config } from '@/config'
 import Script from 'next/script'
 import { findOrCreateOrganization } from '@/lib/organization/find-or-create-orgainzation'
+import Onboarding from '@/app/(user)/_components/Onboarding'
 
 interface UserLayoutProps {
   children: React.ReactNode

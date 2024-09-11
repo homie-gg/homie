@@ -1,10 +1,10 @@
 import styles from './ConnectSlackStep.module.scss'
 import Image from 'next/image'
 import { Button } from '@/lib/ui/HomieButton'
-import SlackIcon from '@/app/onboarding/_components/SlackIcon'
+import SlackIcon from '@/app/(user)/_components/Onboarding/SlackIcon'
 import homieImage from './homie-down.svg'
 import { getSlackInstallUrl } from '@/lib/slack/get-slack-install-url'
-import { OnboardingOrganization } from '@/app/onboarding/types'
+import { OnboardingOrganization } from '@/app/(user)/_components/Onboarding/types'
 
 interface ConnectSlackStep {
   organization: OnboardingOrganization

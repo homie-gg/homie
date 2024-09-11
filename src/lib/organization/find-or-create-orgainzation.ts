@@ -59,5 +59,13 @@ export async function findOrCreateOrganization(
     .returningAll()
     .executeTakeFirstOrThrow()
 
-  return { organization: newOrganization, isNew: true }
+  return {
+    organization: {
+      ...newOrganization,
+      ext_slack_team_id: null,
+      gitlab_access_token: null,
+      ext_gh_install_id: null,
+    },
+    isNew: true,
+  }
 }

@@ -1179,6 +1179,12 @@ declare module 'zapatos/schema' {
          */
         has_unlimited_usage: boolean | null
         /**
+         * **homie.organization.homie_expectation**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        homie_expectation: string | null
+        /**
          * **homie.organization.id**
          * - `int4` in database
          * - `NOT NULL`, default: `nextval('homie.organization_id_seq'::regclass)`
@@ -1196,6 +1202,12 @@ declare module 'zapatos/schema' {
          * - Nullable, no default
          */
         mailchimp_subscriber_hash: string | null
+        /**
+         * **homie.organization.owner_name**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        owner_name: string | null
         /**
          * **homie.organization.persona_affection_level**
          * - `int4` in database
@@ -1221,6 +1233,12 @@ declare module 'zapatos/schema' {
          */
         persona_positivity_level: number
         /**
+         * **homie.organization.referral_source**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        referral_source: string | null
+        /**
          * **homie.organization.send_daily_report_enabled**
          * - `bool` in database
          * - `NOT NULL`, default: `true`
@@ -1232,6 +1250,18 @@ declare module 'zapatos/schema' {
          * - `NOT NULL`, default: `'12:00'::text`
          */
         send_daily_report_time: string
+        /**
+         * **homie.organization.target_features**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        target_features: string | null
+        /**
+         * **homie.organization.team_size**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        team_size: string | null
         /**
          * **homie.organization.trial_ends_at**
          * - `timestamptz` in database
@@ -1283,6 +1313,12 @@ declare module 'zapatos/schema' {
          */
         has_unlimited_usage: boolean | null
         /**
+         * **homie.organization.homie_expectation**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        homie_expectation: string | null
+        /**
          * **homie.organization.id**
          * - `int4` in database
          * - `NOT NULL`, default: `nextval('homie.organization_id_seq'::regclass)`
@@ -1300,6 +1336,12 @@ declare module 'zapatos/schema' {
          * - Nullable, no default
          */
         mailchimp_subscriber_hash: string | null
+        /**
+         * **homie.organization.owner_name**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        owner_name: string | null
         /**
          * **homie.organization.persona_affection_level**
          * - `int4` in database
@@ -1325,6 +1367,12 @@ declare module 'zapatos/schema' {
          */
         persona_positivity_level: number
         /**
+         * **homie.organization.referral_source**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        referral_source: string | null
+        /**
          * **homie.organization.send_daily_report_enabled**
          * - `bool` in database
          * - `NOT NULL`, default: `true`
@@ -1336,6 +1384,18 @@ declare module 'zapatos/schema' {
          * - `NOT NULL`, default: `'12:00'::text`
          */
         send_daily_report_time: string
+        /**
+         * **homie.organization.target_features**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        target_features: string | null
+        /**
+         * **homie.organization.team_size**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        team_size: string | null
         /**
          * **homie.organization.trial_ends_at**
          * - `timestamptz` in database
@@ -1438,6 +1498,20 @@ declare module 'zapatos/schema' {
               boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn
             >
         /**
+         * **homie.organization.homie_expectation**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        homie_expectation?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
          * **homie.organization.id**
          * - `int4` in database
          * - `NOT NULL`, default: `nextval('homie.organization_id_seq'::regclass)`
@@ -1471,6 +1545,20 @@ declare module 'zapatos/schema' {
          * - Nullable, no default
          */
         mailchimp_subscriber_hash?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.organization.owner_name**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        owner_name?:
           | string
           | db.Parameter<string>
           | db.SQLFragment
@@ -1536,6 +1624,20 @@ declare module 'zapatos/schema' {
               number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
             >
         /**
+         * **homie.organization.referral_source**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        referral_source?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
          * **homie.organization.send_daily_report_enabled**
          * - `bool` in database
          * - `NOT NULL`, default: `true`
@@ -1555,6 +1657,34 @@ declare module 'zapatos/schema' {
          * - `NOT NULL`, default: `'12:00'::text`
          */
         send_daily_report_time?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.organization.target_features**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        target_features?:
+          | string
+          | db.Parameter<string>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.organization.team_size**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        team_size?:
           | string
           | db.Parameter<string>
           | db.SQLFragment
@@ -1659,6 +1789,17 @@ declare module 'zapatos/schema' {
           | db.DefaultType
           | db.SQLFragment
         /**
+         * **homie.organization.homie_expectation**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        homie_expectation?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
          * **homie.organization.id**
          * - `int4` in database
          * - `NOT NULL`, default: `nextval('homie.organization_id_seq'::regclass)`
@@ -1680,6 +1821,17 @@ declare module 'zapatos/schema' {
          * - Nullable, no default
          */
         mailchimp_subscriber_hash?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **homie.organization.owner_name**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        owner_name?:
           | string
           | db.Parameter<string>
           | null
@@ -1726,6 +1878,17 @@ declare module 'zapatos/schema' {
           | db.DefaultType
           | db.SQLFragment
         /**
+         * **homie.organization.referral_source**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        referral_source?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
          * **homie.organization.send_daily_report_enabled**
          * - `bool` in database
          * - `NOT NULL`, default: `true`
@@ -1743,6 +1906,28 @@ declare module 'zapatos/schema' {
         send_daily_report_time?:
           | string
           | db.Parameter<string>
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **homie.organization.target_features**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        target_features?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
+         * **homie.organization.team_size**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        team_size?:
+          | string
+          | db.Parameter<string>
+          | null
           | db.DefaultType
           | db.SQLFragment
         /**
@@ -1867,6 +2052,25 @@ declare module 'zapatos/schema' {
               | db.SQLFragment
             >
         /**
+         * **homie.organization.homie_expectation**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        homie_expectation?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | string
+              | db.Parameter<string>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
          * **homie.organization.id**
          * - `int4` in database
          * - `NOT NULL`, default: `nextval('homie.organization_id_seq'::regclass)`
@@ -1900,6 +2104,25 @@ declare module 'zapatos/schema' {
          * - Nullable, no default
          */
         mailchimp_subscriber_hash?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | string
+              | db.Parameter<string>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **homie.organization.owner_name**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        owner_name?:
           | string
           | db.Parameter<string>
           | null
@@ -1970,6 +2193,25 @@ declare module 'zapatos/schema' {
               number | db.Parameter<number> | db.DefaultType | db.SQLFragment
             >
         /**
+         * **homie.organization.referral_source**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        referral_source?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | string
+              | db.Parameter<string>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
          * **homie.organization.send_daily_report_enabled**
          * - `bool` in database
          * - `NOT NULL`, default: `true`
@@ -1996,6 +2238,44 @@ declare module 'zapatos/schema' {
           | db.SQLFragment<
               any,
               string | db.Parameter<string> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **homie.organization.target_features**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        target_features?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | string
+              | db.Parameter<string>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **homie.organization.team_size**
+         * - `text` in database
+         * - Nullable, no default
+         */
+        team_size?:
+          | string
+          | db.Parameter<string>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | string
+              | db.Parameter<string>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
             >
         /**
          * **homie.organization.trial_ends_at**

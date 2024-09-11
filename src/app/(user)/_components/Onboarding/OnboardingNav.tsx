@@ -1,6 +1,6 @@
-import OnboardingNavStep from '@/app/onboarding/_components/OnboardingNavStep'
+import OnboardingNavStep from '@/app/(user)/_components/Onboarding/OnboardingNavStep'
 import styles from './OnboardingNav.module.scss'
-import { OnboardingStep } from '@/app/onboarding/_components/onboarding-step'
+import { OnboardingStep } from '@/app/(user)/_components/Onboarding/onboarding-step'
 
 interface OnboardingNavProps {
   activeStep: OnboardingStep

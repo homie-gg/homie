@@ -1,11 +1,11 @@
 import styles from './ConnectRepoStep.module.scss'
 import Image from 'next/image'
 import { Button } from '@/lib/ui/HomieButton'
-import GithubIcon from '@/app/onboarding/_components/GithubIcon'
-import GitlabIcon from '@/app/onboarding/_components/GitlabIcon'
+import GithubIcon from '@/app/(user)/_components/Onboarding/GithubIcon'
+import GitlabIcon from '@/app/(user)/_components/Onboarding/GitlabIcon'
 import homieLeft from './homie-left.svg'
 import { getGithubInstallUrl } from '@/lib/github/get-github-install-url'
-import { OnboardingOrganization } from '@/app/onboarding/types'
+import { OnboardingOrganization } from '@/app/(user)/_components/Onboarding/types'
 import { getGitlabInstallUrl } from '@/lib/gitlab/get-install-gitlab-url'
 
 interface ConnectRepoStepProps {

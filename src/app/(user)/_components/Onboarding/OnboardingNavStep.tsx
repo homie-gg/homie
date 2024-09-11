@@ -1,6 +1,6 @@
 import clsx from 'clsx'
-import styles from '@/app/onboarding/_components/OnboardingNavStep.module.scss'
-import CheckMarkIcon from '@/app/onboarding/_components/CheckMarkIcon'
+import styles from '@/app/(user)/_components/Onboarding/OnboardingNavStep.module.scss'
+import CheckMarkIcon from '@/app/(user)/_components/Onboarding/CheckMarkIcon'
 
 interface OnboardingNavStepProps {
   state: 'pending' | 'active' | 'done'
