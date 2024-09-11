@@ -1,0 +1,60 @@
+.select {
+  @apply text-base;
+
+  .select-menu {
+    @apply border border-primary-light p-1 rounded-lg;
+    box-shadow:
+      0px 4px 6px -2px #10182808,
+      0px 12px 16px -4px #10182814 !important;
+
+    & > div {
+      @apply flex flex-col gap-y-0.5 p-0;
+
+      & > div {
+        @apply inline-flex items-center justify-between gap-x-1 rounded-md bg-background hover:bg-gray-foreground text-primary cursor-pointer;
+
+        &[aria-selected='true'] {
+          @apply bg-gray-foreground text-primary;
+
+          &::after {
+            content: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M16.6663 5L7.49967 14.1667L3.33301 10' stroke='%2322277A' stroke-width='1.66667' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            @apply inline-flex items-center justify-center w-5 h-5;
+          }
+        }
+      }
+    }
+  }
+
+  .select-control {
+    @apply min-h-11 flex items-center justify-center gap-x-2 border border-primary text-primary rounded-lg cursor-pointer py-1 px-3;
+    border: 1px solid hsl(var(--primary-light));
+    outline: 2px solid transparent !important;
+    outline-offset: 0 !important;
+
+    &:focus,
+    &:hover {
+      border-color: hsl(var(--primary-light)) !important;
+      outline-color: transparent !important;
+    }
+
+    & > div {
+      @apply p-0;
+    }
+
+    .select-placeholder {
+      @apply text-primary/50 leading-5;
+    }
+
+    .select-indicator {
+      @apply text-primary;
+
+      svg {
+        @apply w-4 h-auto;
+      }
+    }
+  }
+
+  .single-value {
+    @apply text-primary leading-5;
+  }
+}

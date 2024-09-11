@@ -1,0 +1,7 @@
+.root {
+  @apply w-full bg-primary-foreground;
+
+  .content {
+    @apply w-full flex flex-col items-center gap-y-12;
+  }
+}

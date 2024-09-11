@@ -1,0 +1,26 @@
+.container {
+  @apply relative w-full max-w-[592px] min-h-[308px] flex-col items-stretch mx-auto bg-background border border-primary-light rounded-[10px] overflow-hidden px-8 py-16;
+  box-shadow:
+    0px 2px 4px -2px #1018280f,
+    0px 4px 8px -2px #1018281a;
+
+  .content {
+    @apply relative flex flex-col gap-y-8 items-center z-[5];
+
+    .heading {
+      @apply w-fit text-center font-bold font-sans-alt text-2xl leading-6 mx-auto;
+    }
+
+    .action {
+      @apply w-full flex flex-col gap-y-8 items-center;
+
+      .button {
+        @apply w-full min-h-[60px] gap-x-2.5 font-bold text-lg leading-7;
+      }
+    }
+  }
+
+  .container-bg {
+    @apply absolute bottom-0 left-0 w-full flex justify-center;
+  }
+}

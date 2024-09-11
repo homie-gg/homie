@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+
+  --primary: 237 56% 31%;
+  --primary-foreground: 228 100% 99%;
+  --primary-alt: 216 18% 34%;
+  --primary-light: 224 54% 93%;
+
+  --secondary: 137 100% 69%;
+  --secondary-foreground: 130 100% 96%;
+
+  --muted: 0 0% 87%;
+  --muted-foreground: 4 0% 37%;
+
+  --accent: 210, 20%, 98%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+
+  --amber: 33 60% 47%;
+  --amber-foreground: 53 100% 97%;
+  --amber-alt: 44 98% 77%;
+
+  --green: 141 55% 51%;
+  --green-foreground: 130 100% 96%;
+  --green-alt: 218 17% 91%;
+
+  --violet: 247 100% 70%;
+  --violet-foreground: 223 100% 96%;
+  --violet-alt: 218 17% 91%;
+
+  --orchid: 326 60% 63%;
+  --orchid-foreground: 328 100% 97%;
+  --orchid-alt: 218 17% 91%;
+
+  --blue: 218 80% 46%;
+  --blue-foreground: 206 100% 97%;
+  --blue-alt: 206 100% 85%;
+
+  --gray-foreground: 210 20% 98%;
+
+  --destructive: 0 82% 54%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 218 17% 91%;
+  --input: 0 0% 92%;
+  --ring: 222.2 84% 4.9%;
+
+  --radius: 0.5rem;
+
+  // chart
+  --chart-1: hsla(247, 100%, 70%, 1);
+  --chart-2: hsla(51, 100%, 82%, 1);
+  --chart-3: hsla(327, 100%, 73%, 1);
+  --chart-4: hsla(137, 100%, 69%, 1);
+  --chart-5: hsla(200, 92%, 75%, 1);
+}
+
+@layer base {
+  body {
+    @apply text-primary font-sans;
+  }
+}
+
+@layer components {
+  .container {
+    @apply w-full lg:max-w-7xl py-14 px-4 lg:px-8;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
