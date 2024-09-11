@@ -13,7 +13,7 @@ export async function GetAccessToken(
   const data = new FormData()
 
   data.append('code', code)
-  data.append('client_id', process.env.SLACK_CLIENT_ID!)
+  data.append('client_id', process.env.NEXT_PUBLIC_SLACK_CLIENT_ID!)
   data.append('client_secret', process.env.SLACK_CLIENT_SECRET!)
 
   return http.post<OauthV2AccessResponse>(

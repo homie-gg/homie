@@ -22,7 +22,7 @@ export function getSlackInstallUrl(params: GetSlackInstallUrlParams) {
   const { organization } = params
 
   const searchParams = [
-    `client_id=${process.env.SLACK_CLIENT_ID}`,
+    `client_id=${process.env.NEXT_PUBLIC_SLACK_CLIENT_ID}`,
     `scope=${appScopes.join(',')}`,
     `user_scope=${userScopes.join(',')}`,
     `state=${organization.id}`,
