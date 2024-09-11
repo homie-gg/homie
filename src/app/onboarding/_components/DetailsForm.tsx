@@ -15,6 +15,8 @@ import Select from '@/lib/ui/HomieSelect'
 import { Textarea } from '@/lib/ui/HomieTextarea'
 import { Button } from '@/lib/ui/HomieButton'
 import ArrowRightIcon from '@/app/onboarding/_components/ArrowRightIcon'
+import { http } from '@/lib/http/client/http'
+import { OrganizationResponse } from '@/app/api/organizations/[organization_id]/types'
 
 export const teamSizes = ['1-9', '10-99', '100+']
 
@@ -23,8 +25,8 @@ export const standOutFeatures = ['feature 1', 'feature 2', 'feature 3']
 export const referralSources = ['source 1', 'source 2', 'source 3']
 
 const details = z.object({
-  name: z.string({ required_error: 'Please enter a name' }),
-  standOutFeatures: z.array(
+  ownerName: z.string({ required_error: 'Please enter a name' }),
+  targetFeatures: z.array(
     z.object({
       value: z.string(),
       label: z.string(),
@@ -49,23 +51,24 @@ const details = z.object({
     },
     { required_error: 'Please select one' },
   ),
-  expectations: z.string().optional(),
+  homieExpectation: z.string().optional(),
 })
 
-type Details = z.infer<typeof details>
+export type OrganizationDetails = z.infer<typeof details>
 
-export default function DetailsForm() {
-  const form = useForm<Details>({
+interface DetailsFormProps {
+  onSubmit: (data: OrganizationDetails) => Promise<void>
+}
+
+export default function DetailsForm(props: DetailsFormProps) {
+  const { onSubmit } = props
+  const form = useForm<OrganizationDetails>({
     resolver: zodResolver(details),
     mode: 'onSubmit',
     shouldFocusError: false,
   })
 
-  const onFormSubmit = async (value: z.infer<typeof details>) => {
-    console.log(value)
-  }
-
-  const onFormError = (errors: any) => {
+  const onError = (errors: any) => {
     // eslint-disable-next-line no-console
     console.error('error: ', errors)
   }
@@ -74,17 +77,17 @@ export default function DetailsForm() {
     <Form {...form}>
       <form
         className={styles.root}
-        onSubmit={form.handleSubmit(onFormSubmit, onFormError)}
+        onSubmit={form.handleSubmit(onSubmit, onError)}
       >
         <div className={styles['form-fields']}>
           <FormField
             control={form.control}
-            name="name"
+            name="ownerName"
             render={({ field }) => (
               <FormItem className="col-span-1">
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Mike Wu" {...field} />
+                  <Input placeholder="Rick Sanchez" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -113,7 +116,7 @@ export default function DetailsForm() {
           />
           <FormField
             control={form.control}
-            name="standOutFeatures"
+            name="targetFeatures"
             render={({ field }) => (
               <FormItem className="col-span-2">
                 <FormLabel>What features stood out?</FormLabel>
@@ -156,7 +159,7 @@ export default function DetailsForm() {
           />
           <FormField
             control={form.control}
-            name="expectations"
+            name="homieExpectation"
             render={({ field }) => (
               <FormItem className="col-span-2">
                 <FormLabel>What are you hoping Homie will improve?</FormLabel>

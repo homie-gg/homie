@@ -3,23 +3,29 @@ import Image from 'next/image'
 import { Button } from '@/lib/ui/HomieButton'
 import SlackIcon from '@/app/onboarding/_components/SlackIcon'
 import homieImage from './homie-down.svg'
+import { getSlackInstallUrl } from '@/lib/slack/get-slack-install-url'
+import { OnboardingOrganization } from '@/app/onboarding/types'
 
-export default function ConnectSlackStep() {
+interface ConnectSlackStep {
+  organization: OnboardingOrganization
+}
+
+export default function ConnectSlackStep(props: ConnectSlackStep) {
+  const { organization } = props
+
   return (
     <div className={styles['container']}>
       <div className={styles['content']}>
         <h1 className={styles['heading']}>Now let’s link to your Slack</h1>
         <div className={styles['action']}>
-          <Button
-            variant="outline"
-            className={styles.button}
-            onClick={() => {}}
-          >
-            <span>
-              <SlackIcon />
-            </span>
-            <span>Connect Slack</span>
-          </Button>
+          <a href={getSlackInstallUrl({ organization })}>
+            <Button variant="outline" className={styles.button}>
+              <span>
+                <SlackIcon />
+              </span>
+              <span>Connect Slack</span>
+            </Button>
+          </a>
         </div>
       </div>
 

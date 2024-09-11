@@ -1,4 +1,6 @@
 import AppBar from '@/app/(user)/AppBar'
+import Page from '@/app/(user)/_components/Page'
+import Onboarding from '@/app/onboarding/_components/Onboarding'
 import Content from '@/app/(user)/Content'
 import SetupPage from '@/app/(user)/_components/SetupPage'
 import { MainNav } from '@/app/(user)/_components/MainNav'
@@ -8,6 +10,7 @@ import { redirect } from 'next/navigation'
 import { mailchimp } from '@/lib/mailchimp'
 import { config } from '@/config'
 import Script from 'next/script'
+import { findOrCreateOrganization } from '@/lib/organization/find-or-create-orgainzation'
 
 interface UserLayoutProps {
   children: React.ReactNode
@@ -23,70 +26,30 @@ export default async function UserLayout(props: UserLayoutProps) {
 
   const user = await clerkClient.users.getUser(userId)
 
-  const organization = await dbClient
-    .selectFrom('homie.organization')
-    .leftJoin(
-      'github.organization',
-      'github.organization.organization_id',
-      'homie.organization.id',
-    )
-    .leftJoin(
-      'slack.workspace',
-      'slack.workspace.organization_id',
-      'homie.organization.id',
-    )
-    .leftJoin(
-      'gitlab.app_user',
-      'gitlab.app_user.organization_id',
-      'homie.organization.id',
-    )
-    .selectAll('homie.organization')
-    .select([
-      'github.organization.ext_gh_install_id',
-      'slack.workspace.ext_slack_team_id',
-      'gitlab_access_token',
-      'has_completed_setup',
-    ])
-    .where('ext_clerk_user_id', '=', userId)
-    .executeTakeFirst()
+  const { organization, isNew: isNewOrganization } =
+    await findOrCreateOrganization({
+      extClerkUserId: userId,
+      email: user.emailAddresses[0].emailAddress,
+    })
 
-  if (!organization) {
-    const mailchimpSubscriberHash = config.app.isProduction
-      ? await mailchimp.subscribeUser({
-          email: user.emailAddresses[0].emailAddress,
-        })
-      : null
-
-    const newOrganization = await dbClient
-      .insertInto('homie.organization')
-      .values({
-        ext_clerk_user_id: userId,
-        mailchimp_subscriber_hash: mailchimpSubscriberHash,
-      })
-      .returningAll()
-      .executeTakeFirstOrThrow()
-
+  if (
+    !organization.owner_name ||
+    !organization.ext_slack_team_id ||
+    (!organization.ext_gh_install_id && !organization.gitlab_access_token)
+  ) {
     return (
       <>
-        {config.app.isProduction && (
+        {isNewOrganization && config.app.isProduction && (
           <Script id="google-analytics-signed-up">
             {`gtag('event', 'signed_up')`}
           </Script>
         )}
-        <div className="flex flex-col">
-          <AppBar user={user} />
-          <Content>
-            <SetupPage organization={newOrganization} />
-          </Content>
-        </div>
+        <Page>
+          <Onboarding organization={organization} />
+        </Page>
       </>
     )
-  }
 
-  if (
-    !organization.ext_slack_team_id ||
-    (!organization.ext_gh_install_id && !organization.gitlab_access_token)
-  ) {
     return (
       <div className="flex flex-col">
         <AppBar user={user} />

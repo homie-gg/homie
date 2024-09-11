@@ -27,6 +27,11 @@ export const organizationData = z.object({
   persona_g_level: z.number(),
   persona_affection_level: z.number(),
   persona_emoji_level: z.number(),
+  owner_name: z.string(),
+  team_size: z.string(),
+  target_features: z.string(),
+  referral_source: z.string(),
+  hoime_expectation: z.string(),
 })
 
 export type OrganizationData = z.infer<typeof organizationData>
@@ -40,6 +45,11 @@ export const organizationResponse = z.object({
   persona_g_level: z.number(),
   persona_affection_level: z.number(),
   persona_emoji_level: z.number(),
+  owner_name: z.string().nullable(),
+  team_size: z.string().nullable(),
+  target_features: z.string().nullable(),
+  referral_source: z.string().nullable(),
+  homie_expectation: z.string().nullable(),
 })
 
 export type OrganizationResponse = z.infer<typeof organizationResponse>
