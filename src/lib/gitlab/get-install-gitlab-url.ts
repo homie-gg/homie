@@ -12,7 +12,7 @@ export function getGitlabInstallUrl(params: getGitlabInstallUrlParams) {
   const { organization } = params
 
   const searchParams = [
-    `client_id=${process.env.GITLAB_APP_ID}`,
+    `client_id=${process.env.NEXT_PUBLIC_GITLAB_APP_ID}`,
     `redirect_uri=${redirectUrl}`,
     `response_type=code`,
     `state=${organization.id}`,

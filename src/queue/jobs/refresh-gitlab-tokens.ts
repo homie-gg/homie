@@ -24,7 +24,7 @@ export const refreshGitlabTokens = createJob({
         const data = await http.post<GitlabOAuthTokenResponse>(
           'https://gitlab.com/oauth/token',
           {
-            client_id: process.env.GITLAB_APP_ID,
+            client_id: process.env.NEXT_PUBLIC_GITLAB_APP_ID,
             refresh_token: gitlabAppUser.gitlab_refresh_token,
             grant_type: 'refresh_token',
             redirect_uri: encodeURI(

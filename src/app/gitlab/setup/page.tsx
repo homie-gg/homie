@@ -40,7 +40,7 @@ export default async function GitlabSetupPage(props: GitlabSetupPageProps) {
   const data = await http.post<GitlabOAuthTokenResponse>(
     'https://gitlab.com/oauth/token',
     {
-      client_id: process.env.GITLAB_APP_ID,
+      client_id: process.env.NEXT_PUBLIC_GITLAB_APP_ID,
       code,
       grant_type: 'authorization_code',
       redirect_uri: encodeURI(
