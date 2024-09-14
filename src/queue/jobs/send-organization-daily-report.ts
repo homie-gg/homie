@@ -9,6 +9,8 @@ import { getDailyReportPullRequestBlocks } from '@/lib/daily-report/get-daily-re
 import { getDailyReportTaskBlocks } from '@/lib/daily-report/get-daily-report-task-blocks'
 import { getDailyReportHomieHintsBlocks } from '@/lib/daily-report/get-daily-report-homie-hints-blocks'
 import { subHours } from 'date-fns'
+import { logger } from '@/lib/log/logger'
+import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 
 export const sendOrganizationDailyReport = createJob({
   id: 'send_organization_daily_report',
@@ -22,6 +24,10 @@ export const sendOrganizationDailyReport = createJob({
   }) => {
     {
       const { organization } = payload
+      logger.debug('Send organization daily report', {
+        event: 'send_orgainzation_daily_report:start',
+        organization: getOrganizationLogData(organization),
+      })
 
       const yesterday = subHours(new Date(), 24)
 
@@ -177,6 +183,16 @@ export const sendOrganizationDailyReport = createJob({
 
       const slackClient = createSlackClient(organization.slack_access_token)
 
+      logger.debug('Sending summaries', {
+        event: 'send_orgainzation_daily_report:sending_summaries',
+        organization: getOrganizationLogData(organization),
+        num_pull_requests: numPullRequests,
+        repo_chart: repositoryContributionChartFile,
+        num_added_tasks: addedTasks.length,
+        num_completed_tasks: completedTasks.length,
+        num_assigned_tasks: Object.values(assignedTasks).length,
+      })
+
       // Summary
       const res = await slackClient.post<{
         ts: string
@@ -205,6 +221,16 @@ export const sendOrganizationDailyReport = createJob({
             repos: reposWithPullRequests,
           }),
         })
+
+        logger.debug('Sent PR summary', {
+          event: 'send_orgainzation_daily_report:sent_pr_summary',
+          organization: getOrganizationLogData(organization),
+          num_pull_requests: numPullRequests,
+          repo_chart: repositoryContributionChartFile,
+          num_added_tasks: addedTasks.length,
+          num_completed_tasks: completedTasks.length,
+          num_assigned_tasks: Object.values(assignedTasks).length,
+        })
       }
 
       if (
@@ -223,6 +249,16 @@ export const sendOrganizationDailyReport = createJob({
             completedTasks,
             assignedTasks,
           }),
+        })
+
+        logger.debug('Sent Tasks summary', {
+          event: 'send_orgainzation_daily_report:sent_tasks_summary',
+          organization: getOrganizationLogData(organization),
+          num_pull_requests: numPullRequests,
+          repo_chart: repositoryContributionChartFile,
+          num_added_tasks: addedTasks.length,
+          num_completed_tasks: completedTasks.length,
+          num_assigned_tasks: Object.values(assignedTasks).length,
         })
       }
 
