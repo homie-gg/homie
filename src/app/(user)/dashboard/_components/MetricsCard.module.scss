@@ -1,0 +1,61 @@
+.root {
+  @apply flex flex-col gap-y-4 border border-primary-light rounded-xl p-6;
+
+  &.amber {
+    @apply bg-amber-foreground;
+
+    .icon {
+      @apply text-amber border-amber;
+    }
+  }
+
+  &.green {
+    @apply bg-green-foreground;
+
+    .icon {
+      @apply text-green border-green;
+    }
+  }
+
+  &.violet {
+    @apply bg-violet-foreground;
+
+    .icon {
+      @apply text-violet border-violet;
+    }
+  }
+
+  &.orchid {
+    @apply bg-orchid-foreground;
+
+    .icon {
+      @apply text-orchid border-orchid;
+    }
+  }
+
+  &.blue {
+    .table-tag {
+      @apply text-blue border-blue;
+    }
+  }
+
+  .icon {
+    @apply w-8 h-8 flex items-center justify-center bg-background border rounded-md;
+
+    svg {
+      @apply w-4 h-auto;
+    }
+  }
+
+  .data {
+    @apply flex flex-col gap-y-5;
+
+    .data-label {
+      @apply font-bold text-sm leading-5;
+    }
+
+    .data-text {
+      @apply font-semibold text-4xl leading-[44px];
+    }
+  }
+}
