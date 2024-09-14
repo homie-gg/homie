@@ -1,6 +1,6 @@
 'use client'
 
-import { getReviewUrl } from '@/app/(user)/review/_utils/set-review-url'
+import { getDashboardUrl } from '@/app/(user)/dashboard/_utils/get-dashboard-url'
 import { TabsProps, Root } from '@radix-ui/react-tabs'
 import { useRouter } from 'next/navigation'
 
@@ -9,14 +9,14 @@ type ReviewTabsProps = TabsProps & {
   endDate: Date
 }
 
-export default function ReviewTabs(props: ReviewTabsProps) {
+export default function DashboardTabs(props: ReviewTabsProps) {
   const { startDate, endDate, ...tabProps } = props
 
   const router = useRouter()
 
   const goToTab = (tab: string) => {
     router.push(
-      getReviewUrl({
+      getDashboardUrl({
         tab,
         startDate,
         endDate,

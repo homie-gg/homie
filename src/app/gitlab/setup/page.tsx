@@ -72,5 +72,5 @@ export default async function GitlabSetupPage(props: GitlabSetupPageProps) {
     },
   })
 
-  return redirect('/review')
+  return redirect('/dashboard')
 }

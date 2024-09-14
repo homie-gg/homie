@@ -1,6 +1,6 @@
 'use client'
 
-import { PullRequest } from '@/app/(user)/review/_utils/get-pull-requests'
+import { PullRequest } from '@/app/(user)/dashboard/_utils/get-pull-requests'
 import { addDays, differenceInDays, format, isSameDay } from 'date-fns'
 import { useEffect, useState } from 'react'
 import {

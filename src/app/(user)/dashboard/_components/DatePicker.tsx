@@ -1,6 +1,6 @@
 'use client'
 
-import { getReviewUrl } from '@/app/(user)/review/_utils/set-review-url'
+import { getDashboardUrl } from '@/app/(user)/dashboard/_utils/get-dashboard-url'
 import { DateRangePicker } from '@/lib/ui/DateRangePicker'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
@@ -41,7 +41,7 @@ export default function DatePicker(props: DatePickerProps) {
     }
 
     router.push(
-      getReviewUrl({
+      getDashboardUrl({
         startDate: date.from,
         endDate: date.to,
         tab,

@@ -6,11 +6,11 @@ interface GetReviewUrlParams {
   tab: string
 }
 
-export function getReviewUrl(params: GetReviewUrlParams) {
+export function getDashboardUrl(params: GetReviewUrlParams) {
   const { startDate, endDate, tab } = params
 
   const formattedFrom = format(startDate, 'yyyy-MM-dd')
   const formattedTo = format(endDate, 'yyyy-MM-dd')
 
-  return `/review?tab=${tab}&from=${formattedFrom}&to=${formattedTo}`
+  return `/dashboard?tab=${tab}&from=${formattedFrom}&to=${formattedTo}`
 }

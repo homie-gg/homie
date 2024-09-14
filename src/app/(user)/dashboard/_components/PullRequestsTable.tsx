@@ -3,7 +3,7 @@
 import DataTable from '@/lib/ui/DataTable'
 import { ArrowUpDown } from 'lucide-react'
 import { Column, ColumnDef, getSortedRowModel } from '@tanstack/react-table'
-import { PullRequest } from '@/app/(user)/review/_utils/get-pull-requests'
+import { PullRequest } from '@/app/(user)/dashboard/_utils/get-pull-requests'
 import { format } from 'date-fns'
 import DataTableSortableHeader from '@/lib/ui/DataTableSortableHeader'
 

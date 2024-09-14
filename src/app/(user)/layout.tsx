@@ -10,6 +10,8 @@ import { config } from '@/config'
 import Script from 'next/script'
 import { findOrCreateOrganization } from '@/lib/organization/find-or-create-orgainzation'
 import Onboarding from '@/app/(user)/_components/Onboarding'
+import NavBar from '@/app/(user)/_components/NavBar'
+import NavLinks from '@/app/(user)/_components/NavLinks'
 
 interface UserLayoutProps {
   children: React.ReactNode
@@ -71,12 +73,15 @@ export default async function UserLayout(props: UserLayoutProps) {
   }
 
   return (
-    <div className="flex flex-col">
-      <AppBar user={user}>
-        <MainNav className="mx-6" />
-      </AppBar>
+    <div className="relative w-full">
+      <NavBar user={user}>
+        <NavLinks />
+      </NavBar>
+      {/* <AppBar user={user}>
+        MainNav className="mx-6" />
+      </AppBar> */}
 
-      <Content>{children}</Content>
+      <Page>{children}</Page>
     </div>
   )
 }

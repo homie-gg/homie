@@ -1,11 +1,11 @@
-import { OpenedPRsChart } from '@/app/(user)/review/_components/OpenedPRsChart'
-import { TopContributorsList } from '@/app/(user)/review/_components/TopContributorsList'
-import { getAverageDaysToMerge } from '@/app/(user)/review/_utils/get-average-days-to-merge'
-import { getNumContributors } from '@/app/(user)/review/_utils/get-num-contributors'
-import { getNumMergedPRs } from '@/app/(user)/review/_utils/get-num-merged-prs'
-import { getNumPendingPRs } from '@/app/(user)/review/_utils/get-num-pending-prs'
-import { getPercentTopContributors } from '@/app/(user)/review/_utils/get-percent-top-contributors'
-import { PullRequest } from '@/app/(user)/review/_utils/get-pull-requests'
+import { OpenedPRsChart } from '@/app/(user)/dashboard/_components/OpenedPRsChart'
+import { TopContributorsList } from '@/app/(user)/dashboard/_components/TopContributorsList'
+import { getAverageDaysToMerge } from '@/app/(user)/dashboard/_utils/get-average-days-to-merge'
+import { getNumContributors } from '@/app/(user)/dashboard/_utils/get-num-contributors'
+import { getNumMergedPRs } from '@/app/(user)/dashboard/_utils/get-num-merged-prs'
+import { getNumPendingPRs } from '@/app/(user)/dashboard/_utils/get-num-pending-prs'
+import { getPercentTopContributors } from '@/app/(user)/dashboard/_utils/get-percent-top-contributors'
+import { PullRequest } from '@/app/(user)/dashboard/_utils/get-pull-requests'
 import {
   Card,
   CardContent,

@@ -1,0 +1,7 @@
+.container {
+  @apply inline-flex items-center justify-center;
+
+  .logo {
+    @apply font-sans-alt font-black text-2xl text-primary leading-6;
+  }
+}

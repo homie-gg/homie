@@ -1,5 +1,5 @@
-import { PullRequest } from '@/app/(user)/review/_utils/get-pull-requests'
-import { getTopContributors } from '@/app/(user)/review/_utils/get-top-contributors'
+import { PullRequest } from '@/app/(user)/dashboard/_utils/get-pull-requests'
+import { getTopContributors } from '@/app/(user)/dashboard/_utils/get-top-contributors'
 
 interface TopContributorsListProps {
   pullRequests: PullRequest[]

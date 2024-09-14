@@ -15,6 +15,7 @@ import {
 import { useClerk } from '@clerk/nextjs'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import ProfileIcon from '@/app/(user)/_components/ProfileIcon'
 
 interface UserNavParams {
   email: string
@@ -31,10 +32,8 @@ export function UserNav(params: UserNavParams) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-          <Avatar className="h-8 w-8 flex items-center justify-center">
-            <PersonIcon />
-          </Avatar>
+        <Button variant="ghost" size="icon">
+          <ProfileIcon />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
