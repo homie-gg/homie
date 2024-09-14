@@ -14,6 +14,7 @@ import PageHeader from '@/app/(user)/_components/PageHeader'
 import PageTitle from '@/app/(user)/_components/PageTitle'
 import DateSelect from '@/app/(user)/dashboard/_components/DateSelect'
 import Metrics from '@/app/(user)/dashboard/_components/Metrics'
+import PullRequestsChart from '@/app/(user)/dashboard/_components/PullRequestsChart'
 
 interface ReviewPageProps {
   searchParams: {
@@ -58,7 +59,7 @@ export default async function DashboardPage(props: ReviewPageProps) {
         </PageHeader>
         <div className={styles.body}>
           <Metrics pullRequests={pullRequests} />
-          {/* <PullRequestsChart /> */}
+          <PullRequestsChart />
         </div>
       </div>
       {/* <div className="flex items-center justify-between space-y-2">
