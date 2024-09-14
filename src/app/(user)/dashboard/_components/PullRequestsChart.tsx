@@ -9,6 +9,9 @@ import {
   ChartTooltipContent,
 } from '@/lib/ui/Chart'
 import styles from './PullRequestCharts.module.scss'
+import { useEffect, useState } from 'react'
+import { addDays, differenceInDays, format, isSameDay } from 'date-fns'
+import { PullRequest } from '@/app/(user)/dashboard/_utils/get-pull-requests'
 
 const chartConfig = {
   data: {
@@ -17,44 +20,43 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export const pullRequestsData = [
-  {
-    day: 'Aug 17',
-    data: 15,
-  },
-  {
-    day: 'Aug 18',
-    data: 17,
-  },
-  {
-    day: 'Aug 19',
-    data: 21,
-  },
-  {
-    day: 'Aug 20',
-    data: 25,
-  },
-  {
-    day: 'Aug 21',
-    data: 23,
-  },
-  {
-    day: 'Aug 22',
-    data: 28,
-  },
-  {
-    day: 'Aug 23',
-    data: 29,
-  },
-]
+interface PullRequestChartsProps {
+  pullRequests: PullRequest[]
+  startDate: Date
+  endDate: Date
+}
 
-export default function PullRequestsChart() {
+type Entry = { date: string; count: number }
+
+export default function PullRequestsChart(props: PullRequestChartsProps) {
+  const { pullRequests, startDate, endDate } = props
+  const [data, setData] = useState<Entry[]>([])
+
+  useEffect(() => {
+    if (!startDate || !endDate) {
+      return
+    }
+
+    const numDays = differenceInDays(endDate, startDate)
+
+    const dates = Array.from({ length: numDays }).map((_, index) => {
+      return addDays(startDate, index)
+    })
+
+    const current: Entry[] = dates.map((date) => ({
+      date: format(date, 'MMM dd'),
+      count: pullRequests.filter((pr) => isSameDay(pr.created_at, date)).length,
+    }))
+
+    setData(current)
+  }, [startDate, endDate, pullRequests])
+
   return (
     <div className={styles.main}>
       <p className={styles.heading}>Pull Requests</p>
       <div>
         <ChartContainer config={chartConfig} className={styles.container}>
-          <AreaChart accessibilityLayer data={pullRequestsData}>
+          <AreaChart accessibilityLayer data={data}>
             <CartesianGrid vertical={false} strokeDasharray="12 12" />
             <defs>
               <linearGradient id="color" x1="0" y1="0" x2="0" y2="1">
@@ -63,22 +65,13 @@ export default function PullRequestsChart() {
               </linearGradient>
             </defs>
             <XAxis
-              dataKey="day"
+              dataKey="date"
               tickLine={false}
               axisLine={false}
               tickMargin={12}
               fontSize={12}
             />
             <YAxis
-              width={
-                pullRequestsData
-                  .map((c) => c.data)
-                  .reduce(
-                    (acc, cur) =>
-                      cur.toString().length > acc ? cur.toString().length : acc,
-                    0,
-                  ) * 16
-              }
               tickLine={false}
               axisLine={false}
               tickMargin={12}
@@ -90,7 +83,7 @@ export default function PullRequestsChart() {
             />
             <Area
               type="monotone"
-              dataKey="data"
+              dataKey="count"
               stroke="var(--color-data)"
               strokeWidth={2}
               fillOpacity={1}

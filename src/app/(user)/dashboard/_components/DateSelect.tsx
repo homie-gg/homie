@@ -1,37 +1,37 @@
 'use client'
 
 import CalendarIcon from '@/app/(user)/dashboard/_components/CalendarIcon'
-import Select, { Option } from '@/lib/ui/HomieSelect'
-import { useState } from 'react'
+import Select from '@/lib/ui/HomieSelect'
 import styles from './DateSelect.module.scss'
+import { useRouter } from 'next/navigation'
+import { Days, daysLabels } from '@/app/(user)/dashboard/_components/dates'
 
-export const timeOptions: Option[] = [
-  {
-    label: 'Past 7 days',
-    value: '7',
-  },
-  {
-    label: 'Past 4 weeks',
-    value: '28',
-  },
-  {
-    label: 'Past 3 months',
-    value: '90',
-  },
-]
+interface DateSelectProps {
+  days: Days
+}
 
-export default function DateSelect() {
-  const [time, setTime] = useState<Option | null>(timeOptions[0])
+export default function DateSelect(props: DateSelectProps) {
+  const { days } = props
+  const router = useRouter()
+
   return (
     <Select
       instanceId="1"
-      value={time}
-      options={timeOptions}
+      value={{
+        value: days,
+        label: daysLabels[days],
+      }}
+      options={Object.entries(daysLabels).map(([days, label]) => ({
+        value: days,
+        label,
+      }))}
       icon={<CalendarIcon />}
       showIndicator={false}
       className={styles.root}
       controlClassName={styles['select-control']}
-      onChange={(value: any) => setTime(value)}
+      onChange={({ value }: any) => {
+        router.push(`/dashboard?days=${value}`)
+      }}
     />
   )
 }

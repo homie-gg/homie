@@ -1,11 +1,13 @@
 import { TabsContent, TabsList, TabsTrigger } from '@/lib/ui/Tabs'
-import { endOfDay, endOfWeek, parse, startOfDay, startOfWeek } from 'date-fns'
-import OverviewsTab from '@/app/(user)/dashboard/_components/OverviewsTab'
+import {
+  endOfDay,
+  endOfWeek,
+  parse,
+  startOfDay,
+  startOfWeek,
+  subDays,
+} from 'date-fns'
 import { getUserOrganization } from '@/lib/auth/get-user-organization'
-import DatePicker from '@/app/(user)/dashboard/_components/DatePicker'
-import ContributorsTable from '@/app/(user)/dashboard/_components/ContributorsTable'
-import DashboardTabs from '@/app/(user)/dashboard/_components/DashboardTabs'
-import PullRequestsTable from '@/app/(user)/dashboard/_components/PullRequestsTable'
 import { getPullRequests } from '@/app/(user)/dashboard/_utils/get-pull-requests'
 import SetupCompleteConfetti from '@/app/(user)/dashboard/_components/SetupCompleteConfetti'
 import styles from './_components/DashboardPage.module.scss'
@@ -15,26 +17,25 @@ import PageTitle from '@/app/(user)/_components/PageTitle'
 import DateSelect from '@/app/(user)/dashboard/_components/DateSelect'
 import Metrics from '@/app/(user)/dashboard/_components/Metrics'
 import PullRequestsChart from '@/app/(user)/dashboard/_components/PullRequestsChart'
+import { Days, daysFilter } from '@/app/(user)/dashboard/_components/dates'
 
-interface ReviewPageProps {
+interface DashboardPageProps {
   searchParams: {
-    from?: string
-    to?: string
-    tab?: string
+    days?: Days
     confetti?: string
   }
 }
 
-export default async function DashboardPage(props: ReviewPageProps) {
-  const { searchParams = {} } = props
+export default async function DashboardPage(props: DashboardPageProps) {
+  const { searchParams } = props
 
-  const startDate = searchParams.from
-    ? parse(searchParams.from, 'yyyy-MM-dd', new Date())
-    : startOfWeek(new Date(), { weekStartsOn: 1 }) // Mon start
+  const days =
+    searchParams.days && daysFilter.includes(searchParams.days)
+      ? searchParams.days
+      : '7'
 
-  const endDate = searchParams.to
-    ? parse(searchParams.to, 'yyyy-MM-dd', new Date())
-    : endOfWeek(startDate, { weekStartsOn: 1 })
+  const startDate = subDays(new Date(), parseInt(days))
+  const endDate = endOfDay(new Date())
 
   const organization = await getUserOrganization()
   if (!organization) {
@@ -47,19 +48,21 @@ export default async function DashboardPage(props: ReviewPageProps) {
     organization,
   })
 
-  const tab = searchParams.tab ?? 'overview'
-
   return (
     <div className={styles.root}>
       <SetupCompleteConfetti />
       <div className={clsx('container', styles.content)}>
         <PageHeader>
           <PageTitle>Dashboard</PageTitle>
-          <DateSelect />
+          <DateSelect days={days} />
         </PageHeader>
         <div className={styles.body}>
           <Metrics pullRequests={pullRequests} />
-          <PullRequestsChart />
+          <PullRequestsChart
+            pullRequests={pullRequests}
+            startDate={startDate}
+            endDate={endDate}
+          />
         </div>
       </div>
       {/* <div className="flex items-center justify-between space-y-2">
