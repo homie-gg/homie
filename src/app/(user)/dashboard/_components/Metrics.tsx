@@ -4,35 +4,41 @@ import LightningIcon from '@/app/(user)/dashboard/_components/LightningIcon'
 import RocketIcon from '@/app/(user)/dashboard/_components/RocketIcon'
 import ActivityIcon from '@/app/(user)/dashboard/_components/ActivityIcon'
 import { User } from 'lucide-react'
+import { PullRequest } from '@/app/(user)/dashboard/_utils/get-pull-requests'
+import { getNumMergedPRs } from '@/app/(user)/dashboard/_utils/get-num-merged-prs'
+import { getNumPendingPRs } from '@/app/(user)/dashboard/_utils/get-num-pending-prs'
+import { getNumContributors } from '@/app/(user)/dashboard/_utils/get-num-contributors'
 
-interface MetricsProps {}
+interface MetricsProps {
+  pullRequests: PullRequest[]
+}
 
 export default function Metrics(props: MetricsProps) {
-  const {} = props
+  const { pullRequests } = props
   return (
     <div className={styles.root}>
       <MetricsCard
         color="amber"
         label="Opened PRs"
-        body="6"
+        value={pullRequests.length}
         icon={<LightningIcon />}
       />
       <MetricsCard
         color="green"
         label="Merged PRs"
-        body="25"
+        value={getNumMergedPRs(pullRequests)}
         icon={<RocketIcon />}
       />
       <MetricsCard
         color="orchid"
         label="Pending PRs"
-        body="3"
+        value={getNumPendingPRs(pullRequests)}
         icon={<ActivityIcon />}
       />
       <MetricsCard
         color="violet"
         label="Contributors"
-        body="3"
+        value={getNumContributors(pullRequests)}
         icon={<User />}
       />
     </div>

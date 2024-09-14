@@ -4,12 +4,12 @@ import styles from './MetricsCard.module.scss'
 interface MetricsProps {
   color: 'amber' | 'green' | 'orchid' | 'violet'
   label: string
-  body: string
+  value: number
   icon: JSX.Element
 }
 
 export default function Metrics(props: MetricsProps) {
-  const { color, label, body, icon } = props
+  const { color, label, value: body, icon } = props
   return (
     <div className={clsx(styles.root, styles[color])}>
       <div className={styles.icon}>{icon}</div>

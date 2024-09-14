@@ -57,7 +57,7 @@ export default async function DashboardPage(props: ReviewPageProps) {
           <DateSelect />
         </PageHeader>
         <div className={styles.body}>
-          <Metrics />
+          <Metrics pullRequests={pullRequests} />
           {/* <PullRequestsChart /> */}
         </div>
       </div>
