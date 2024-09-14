@@ -1,7 +1,4 @@
-import AppBar from '@/app/(user)/AppBar'
 import Page from '@/app/(user)/_components/Page'
-import Content from '@/app/(user)/Content'
-import { MainNav } from '@/app/(user)/_components/MainNav'
 import { dbClient } from '@/database/client'
 import { auth, clerkClient } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'

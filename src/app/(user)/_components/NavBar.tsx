@@ -4,6 +4,7 @@ import styles from './NavBar.module.scss'
 import Logo from '@/app/_components/Logo'
 import { UserNav } from '@/app/(user)/_components/UserNav'
 import { User } from '@clerk/nextjs/server'
+import PlanBadge from '@/app/(user)/_components/PlanBadge'
 
 export const links = [
   {
@@ -31,6 +32,7 @@ export default function NavBar(props: NavBarProps) {
           <div className={styles.menu}>{children}</div>
         </div>
         <div className={styles['content-end']}>
+          <PlanBadge />
           <UserNav
             firstName={user.firstName}
             lastName={user.lastName}
