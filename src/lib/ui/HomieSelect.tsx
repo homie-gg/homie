@@ -23,6 +23,7 @@ type Props = {
   controlClassName?: string
   icon?: React.ReactNode
   showIndicator?: boolean
+  isSearchable?: boolean
 } & ReactSelectProps<
   {
     value?: string | undefined
@@ -112,6 +113,7 @@ const Select = React.forwardRef<SelectInstance<Option, boolean, any>, Props>(
       controlClassName = '',
       icon,
       showIndicator = true,
+      isSearchable = false,
       ...props
     },
     ref,
@@ -160,6 +162,7 @@ const Select = React.forwardRef<SelectInstance<Option, boolean, any>, Props>(
         // @ts-ignore
         icon={icon}
         controlClassName={controlClassName}
+        isSearchable={isSearchable}
         {...props}
       />
     )

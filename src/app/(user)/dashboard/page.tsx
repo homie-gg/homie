@@ -9,6 +9,10 @@ import PullRequestsTable from '@/app/(user)/dashboard/_components/PullRequestsTa
 import { getPullRequests } from '@/app/(user)/dashboard/_utils/get-pull-requests'
 import SetupCompleteConfetti from '@/app/(user)/dashboard/_components/SetupCompleteConfetti'
 import styles from './_components/DashboardPage.module.scss'
+import clsx from 'clsx'
+import PageHeader from '@/app/(user)/_components/PageHeader'
+import PageTitle from '@/app/(user)/_components/PageTitle'
+import DateSelect from '@/app/(user)/dashboard/_components/DateSelect'
 
 interface ReviewPageProps {
   searchParams: {
@@ -44,9 +48,15 @@ export default async function DashboardPage(props: ReviewPageProps) {
   const tab = searchParams.tab ?? 'overview'
 
   return (
-    <div className={styles.main}>
+    <div className={styles.root}>
       <SetupCompleteConfetti />
-      <div className="flex items-center justify-between space-y-2">
+      <div className={clsx('container', styles.content)}>
+        <PageHeader>
+          <PageTitle>Dashboard</PageTitle>
+          <DateSelect />
+        </PageHeader>
+      </div>
+      {/* <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">Review</h2>
         <div className="flex items-center space-x-2">
           <DatePicker from={startDate} to={endDate} tab={tab} />
@@ -76,7 +86,7 @@ export default async function DashboardPage(props: ReviewPageProps) {
         <TabsContent value="pull_requests" className="space-y-4">
           <PullRequestsTable pullRequests={pullRequests} />
         </TabsContent>
-      </DashboardTabs>
+      </DashboardTabs> */}
     </div>
   )
 }
