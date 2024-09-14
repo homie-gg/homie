@@ -30,6 +30,8 @@
     }
 
     .content-end {
+      @apply flex items-center;
+
       svg {
         @apply w-5 h-auto text-primary;
       }

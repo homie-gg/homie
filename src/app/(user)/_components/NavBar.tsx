@@ -32,7 +32,9 @@ export default function NavBar(props: NavBarProps) {
           <div className={styles.menu}>{children}</div>
         </div>
         <div className={styles['content-end']}>
-          <PlanBadge />
+          <div className="mr-2">
+            <PlanBadge />
+          </div>
           <UserNav
             firstName={user.firstName}
             lastName={user.lastName}
