@@ -45,50 +45,52 @@ export const sendOrganizationDailyReport = createJob({
 
       const repos = [...githubRepos, ...gitlabProjects]
 
-      const reposWithPullRequests = await Promise.all(
-        repos.map(async (repo) => {
-          let pullRequestsQuery = dbClient
-            .selectFrom('homie.pull_request')
-            .where('merged_at', 'is not', null)
-            .where('merged_at', '>', yesterday)
-            // Only send PRs merged to default branch
-            .where((eb) =>
-              eb('homie.pull_request.was_merged_to_default_branch', '=', true)
-                // Assume no target_branch (legacy) to be default branch, which were the only PRs saved.
-                .or('homie.pull_request.target_branch', 'is', null),
-            )
-            .select([
-              'homie.pull_request.html_url',
-              'homie.pull_request.title',
-              'homie.pull_request.contributor_id',
-            ])
-            .orderBy('merged_at')
+      const reposWithPullRequests = (
+        await Promise.all(
+          repos.map(async (repo) => {
+            let pullRequestsQuery = dbClient
+              .selectFrom('homie.pull_request')
+              .where('merged_at', 'is not', null)
+              .where('merged_at', '>', yesterday)
+              // Only send PRs merged to default branch
+              .where((eb) =>
+                eb('homie.pull_request.was_merged_to_default_branch', '=', true)
+                  // Assume no target_branch (legacy) to be default branch, which were the only PRs saved.
+                  .or('homie.pull_request.target_branch', 'is', null),
+              )
+              .select([
+                'homie.pull_request.html_url',
+                'homie.pull_request.title',
+                'homie.pull_request.contributor_id',
+              ])
+              .orderBy('merged_at')
 
-          if ('github_repo_id' in repo) {
-            pullRequestsQuery = pullRequestsQuery.where(
-              'github_repo_id',
-              '=',
-              repo.github_repo_id,
-            )
-          }
+            if ('github_repo_id' in repo) {
+              pullRequestsQuery = pullRequestsQuery.where(
+                'github_repo_id',
+                '=',
+                repo.github_repo_id,
+              )
+            }
 
-          if ('gitlab_project_id' in repo) {
-            pullRequestsQuery = pullRequestsQuery.where(
-              'gitlab_project_id',
-              '=',
-              repo.gitlab_project_id,
-            )
-          }
+            if ('gitlab_project_id' in repo) {
+              pullRequestsQuery = pullRequestsQuery.where(
+                'gitlab_project_id',
+                '=',
+                repo.gitlab_project_id,
+              )
+            }
 
-          const pullRequests = await pullRequestsQuery.execute()
+            const pullRequests = await pullRequestsQuery.execute()
 
-          return {
-            name: repo.name,
-            url: repo.url,
-            pullRequests,
-          }
-        }),
-      )
+            return {
+              name: repo.name,
+              url: repo.url,
+              pullRequests,
+            }
+          }),
+        )
+      ).filter((repo) => repo.pullRequests.length > 0)
 
       const pullRequests = reposWithPullRequests.flatMap(
         (repo) => repo.pullRequests,
