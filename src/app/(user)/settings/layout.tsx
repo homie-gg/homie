@@ -9,7 +9,7 @@ export default function SettingsPage(props: SettingsPageProps) {
   const { children } = props
 
   return (
-    <div>
+    <div className="w-full container">
       <div className="space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">Settings</h2>
         <p className="text-muted-foreground">

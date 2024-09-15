@@ -1,12 +1,5 @@
 import { TabsContent, TabsList, TabsTrigger } from '@/lib/ui/Tabs'
-import {
-  endOfDay,
-  endOfWeek,
-  parse,
-  startOfDay,
-  startOfWeek,
-  subDays,
-} from 'date-fns'
+import { endOfDay, startOfDay, subDays } from 'date-fns'
 import { getUserOrganization } from '@/lib/auth/get-user-organization'
 import { getPullRequests } from '@/app/(user)/dashboard/_utils/get-pull-requests'
 import SetupCompleteConfetti from '@/app/(user)/dashboard/_components/SetupCompleteConfetti'
@@ -65,37 +58,6 @@ export default async function DashboardPage(props: DashboardPageProps) {
           />
         </div>
       </div>
-      {/* <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Review</h2>
-        <div className="flex items-center space-x-2">
-          <DatePicker from={startDate} to={endDate} tab={tab} />
-        </div>
-      </div>
-      <DashboardTabs
-        value={tab}
-        className="space-y-4"
-        startDate={startDate}
-        endDate={endDate}
-      >
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="contributors">Contributors</TabsTrigger>
-          <TabsTrigger value="pull_requests">Pull Requests</TabsTrigger>
-        </TabsList>
-        <TabsContent value="overview" className="space-y-4">
-          <OverviewsTab
-            pullRequests={pullRequests}
-            startDate={startDate}
-            endDate={endDate}
-          />
-        </TabsContent>
-        <TabsContent value="contributors" className="space-y-4">
-          <ContributorsTable pullRequests={pullRequests} />
-        </TabsContent>
-        <TabsContent value="pull_requests" className="space-y-4">
-          <PullRequestsTable pullRequests={pullRequests} />
-        </TabsContent>
-      </DashboardTabs> */}
     </div>
   )
 }
