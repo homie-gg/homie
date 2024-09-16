@@ -51,6 +51,7 @@ export async function getPullRequests(
         'gitlab.project.id',
         'homie.pull_request.gitlab_project_id',
       )
+      .orderBy('homie.pull_request.created_at', 'desc')
       .select([
         'homie.pull_request.id',
         'homie.pull_request.created_at',

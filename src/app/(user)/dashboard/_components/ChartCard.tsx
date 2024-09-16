@@ -17,10 +17,7 @@ interface ChartCardProps extends PropsWithChildren {
 export default function ChartCard(props: ChartCardProps) {
   const { color = 'amber', title, tag, action, className, children } = props
   return (
-    <div
-      data-theme={color}
-      className={clsx(styles.container, styles[color], className)}
-    >
+    <div className={clsx(styles.container, styles[color], className)}>
       <div className={styles.header}>
         <div className={styles['header-main']}>
           <p className={styles.title}>{title}</p>

@@ -12,6 +12,7 @@ import Metrics from '@/app/(user)/dashboard/_components/Metrics'
 import { Days, daysFilter } from '@/app/(user)/dashboard/_components/dates'
 import PullRequestsCountsChart from '@/app/(user)/dashboard/_components/PullRequestsCountsChart'
 import PullRequestsDistributionsChart from '@/app/(user)/dashboard/_components/PullRequestsDistributionChart'
+import RecentPullRequestsTable from '@/app/(user)/dashboard/_components/RecentPullRequestsTable'
 
 interface DashboardPageProps {
   searchParams: {
@@ -62,7 +63,7 @@ export default async function DashboardPage(props: DashboardPageProps) {
               <PullRequestsDistributionsChart pullRequests={pullRequests} />
             </div>
             <div className="lg:basis-1/2">
-              {/* TODO: add recent PRs table */}
+              <RecentPullRequestsTable pullRequests={pullRequests} />
             </div>
           </div>
         </div>
