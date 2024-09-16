@@ -1,5 +1,5 @@
-import ChartCard from '@/app/(user)/dashboard/_components/ChartCard'
-import { PullRequest } from '@/app/(user)/dashboard/_utils/get-pull-requests'
+import ChartCard from '@/app/(user)/pull_requests/_components/ChartCard'
+import { PullRequest } from '@/app/(user)/pull_requests/_utils/get-pull-requests'
 import DataTable from '@/lib/ui/HomieDataTable'
 
 interface RecentPullRequestsTableProps {

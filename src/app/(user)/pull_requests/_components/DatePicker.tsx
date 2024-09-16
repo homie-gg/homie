@@ -1,6 +1,6 @@
 'use client'
 
-import { getDashboardUrl } from '@/app/(user)/dashboard/_utils/get-dashboard-url'
+import { getDashboardUrl } from '@/app/(user)/pull_requests/_utils/get-dashboard-url'
 import { DateRangePicker } from '@/lib/ui/DateRangePicker'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'

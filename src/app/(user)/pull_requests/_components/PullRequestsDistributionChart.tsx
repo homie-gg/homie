@@ -1,8 +1,8 @@
 'use client'
 
-import { PullRequest } from '@/app/(user)/dashboard/_utils/get-pull-requests'
+import { PullRequest } from '@/app/(user)/pull_requests/_utils/get-pull-requests'
 import PieChart from '@/lib/ui/PieChart'
-import ChartCard from '@/app/(user)/dashboard/_components/ChartCard'
+import ChartCard from '@/app/(user)/pull_requests/_components/ChartCard'
 
 const chartConfig = {
   repo1: {

@@ -72,5 +72,5 @@ export default async function GitlabSetupPage(props: GitlabSetupPageProps) {
     },
   })
 
-  return redirect('/dashboard')
+  return redirect('/pull_requests')
 }

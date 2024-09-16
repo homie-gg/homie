@@ -1,13 +1,13 @@
-import MetricsCard from '@/app/(user)/dashboard/_components/MetricsCard'
+import MetricsCard from '@/app/(user)/pull_requests/_components/MetricsCard'
 import styles from './Metrics.module.scss'
-import LightningIcon from '@/app/(user)/dashboard/_components/LightningIcon'
-import RocketIcon from '@/app/(user)/dashboard/_components/RocketIcon'
-import ActivityIcon from '@/app/(user)/dashboard/_components/ActivityIcon'
+import LightningIcon from '@/app/(user)/pull_requests/_components/LightningIcon'
+import RocketIcon from '@/app/(user)/pull_requests/_components/RocketIcon'
+import ActivityIcon from '@/app/(user)/pull_requests/_components/ActivityIcon'
 import { User } from 'lucide-react'
-import { PullRequest } from '@/app/(user)/dashboard/_utils/get-pull-requests'
-import { getNumMergedPRs } from '@/app/(user)/dashboard/_utils/get-num-merged-prs'
-import { getNumPendingPRs } from '@/app/(user)/dashboard/_utils/get-num-pending-prs'
-import { getNumContributors } from '@/app/(user)/dashboard/_utils/get-num-contributors'
+import { PullRequest } from '@/app/(user)/pull_requests/_utils/get-pull-requests'
+import { getNumMergedPRs } from '@/app/(user)/pull_requests/_utils/get-num-merged-prs'
+import { getNumPendingPRs } from '@/app/(user)/pull_requests/_utils/get-num-pending-prs'
+import { getNumContributors } from '@/app/(user)/pull_requests/_utils/get-num-contributors'
 
 interface MetricsProps {
   pullRequests: PullRequest[]

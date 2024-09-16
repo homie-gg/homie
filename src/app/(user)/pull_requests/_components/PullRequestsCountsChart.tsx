@@ -11,7 +11,7 @@ import {
 import styles from './PullRequestsCountsCharts.module.scss'
 import { useEffect, useState } from 'react'
 import { addDays, differenceInDays, format, isSameDay } from 'date-fns'
-import { PullRequest } from '@/app/(user)/dashboard/_utils/get-pull-requests'
+import { PullRequest } from '@/app/(user)/pull_requests/_utils/get-pull-requests'
 
 const chartConfig = {
   data: {

@@ -1,4 +1,4 @@
-import { PullRequest } from '@/app/(user)/dashboard/_utils/get-pull-requests'
+import { PullRequest } from '@/app/(user)/pull_requests/_utils/get-pull-requests'
 import { differenceInDays } from 'date-fns'
 
 export function getAverageDaysToMerge(pullRequests: PullRequest[]) {

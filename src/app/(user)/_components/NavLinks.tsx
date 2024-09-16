@@ -8,8 +8,8 @@ import styles from './NavBar.module.scss'
 
 export const links = [
   {
-    label: 'Dashboard',
-    href: '/dashboard',
+    label: 'Pull Requests',
+    href: '/pull_requests',
   },
   {
     label: 'Settings',

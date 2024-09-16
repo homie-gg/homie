@@ -1,6 +1,6 @@
 'use client'
 
-import { getDashboardUrl } from '@/app/(user)/dashboard/_utils/get-dashboard-url'
+import { getDashboardUrl } from '@/app/(user)/pull_requests/_utils/get-dashboard-url'
 import { TabsProps, Root } from '@radix-ui/react-tabs'
 import { useRouter } from 'next/navigation'
 

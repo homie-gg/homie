@@ -1,8 +1,8 @@
 import {
   Contributor,
   getContributors,
-} from '@/app/(user)/dashboard/_utils/get-contributors'
-import { PullRequest } from '@/app/(user)/dashboard/_utils/get-pull-requests'
+} from '@/app/(user)/pull_requests/_utils/get-contributors'
+import { PullRequest } from '@/app/(user)/pull_requests/_utils/get-pull-requests'
 import DataTable from '@/lib/ui/DataTable'
 
 import { ColumnDef } from '@tanstack/react-table'

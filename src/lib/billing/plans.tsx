@@ -24,7 +24,7 @@ export const plans: Plan[] = [
       'Auto-generate PR summaries',
       'PR & Contributor statistics',
     ],
-    afterSignUpUrl: '/dashboard',
+    afterSignUpUrl: '/pull_requests',
   },
   {
     title: 'Team',

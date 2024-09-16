@@ -12,5 +12,5 @@ export function getDashboardUrl(params: GetReviewUrlParams) {
   const formattedFrom = format(startDate, 'yyyy-MM-dd')
   const formattedTo = format(endDate, 'yyyy-MM-dd')
 
-  return `/dashboard?tab=${tab}&from=${formattedFrom}&to=${formattedTo}`
+  return `/pull_requests?tab=${tab}&from=${formattedFrom}&to=${formattedTo}`
 }

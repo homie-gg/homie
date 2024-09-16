@@ -1,8 +1,8 @@
 import {
   Contributor,
   getContributors,
-} from '@/app/(user)/dashboard/_utils/get-contributors'
-import { PullRequest } from '@/app/(user)/dashboard/_utils/get-pull-requests'
+} from '@/app/(user)/pull_requests/_utils/get-contributors'
+import { PullRequest } from '@/app/(user)/pull_requests/_utils/get-pull-requests'
 
 export const numTopContributors = 5
 

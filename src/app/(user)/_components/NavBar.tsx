@@ -8,8 +8,8 @@ import PlanBadge from '@/app/(user)/_components/PlanBadge'
 
 export const links = [
   {
-    label: 'Dashboard',
-    href: '/dashboard',
+    label: 'Pull Requests',
+    href: '/pull_requests',
   },
   {
     label: 'Settings',

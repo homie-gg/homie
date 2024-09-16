@@ -60,5 +60,5 @@ export default async function GithubSetup(
     github_organization: githubOrganization,
   })
 
-  return redirect('/dashboard')
+  return redirect('/pull_requests')
 }
