@@ -1,6 +1,5 @@
 'use client'
 
-import styles from './PullRequestsCountsCharts.module.scss'
 import { PullRequest } from '@/app/(user)/dashboard/_utils/get-pull-requests'
 import PieChart from '@/lib/ui/PieChart'
 import ChartCard from '@/app/(user)/dashboard/_components/ChartCard'
@@ -72,10 +71,7 @@ export default function PullRequestsDistributionsChart(
   }))
 
   return (
-    <ChartCard
-      title="PR Contribution per Repository"
-      className={styles['data-container']}
-    >
+    <ChartCard title="Repository Contribution">
       <PieChart data={data.length > 0 ? data : emptyData} />
     </ChartCard>
   )

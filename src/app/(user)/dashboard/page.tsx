@@ -57,7 +57,14 @@ export default async function DashboardPage(props: DashboardPageProps) {
             startDate={startDate}
             endDate={endDate}
           />
-          <PullRequestsDistributionsChart pullRequests={pullRequests} />
+          <div className="w-full grid lg:flex grid-cols-1 gap-6 py-3">
+            <div className="lg:basis-1/2">
+              <PullRequestsDistributionsChart pullRequests={pullRequests} />
+            </div>
+            <div className="lg:basis-1/2">
+              {/* TODO: add recent PRs table */}
+            </div>
+          </div>
         </div>
       </div>
     </div>
