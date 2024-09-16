@@ -74,10 +74,6 @@ export default async function UserLayout(props: UserLayoutProps) {
       <NavBar user={user}>
         <NavLinks />
       </NavBar>
-      {/* <AppBar user={user}>
-        MainNav className="mx-6" />
-      </AppBar> */}
-
       <Page>{children}</Page>
     </div>
   )

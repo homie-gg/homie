@@ -6,17 +6,6 @@ import { UserNav } from '@/app/(user)/_components/UserNav'
 import { User } from '@clerk/nextjs/server'
 import PlanBadge from '@/app/(user)/_components/PlanBadge'
 
-export const links = [
-  {
-    label: 'Pull Requests',
-    href: '/pull_requests',
-  },
-  {
-    label: 'Settings',
-    href: '/settings/contributors',
-  },
-]
-
 interface NavBarProps extends PropsWithChildren {
   user: User
 }
