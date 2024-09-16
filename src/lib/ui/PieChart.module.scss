@@ -1,0 +1,11 @@
+.main {
+  @apply w-full flex items-center justify-center;
+
+  .container {
+    @apply flex-1 mx-auto aspect-square max-h-[412px];
+
+    .legend {
+      @apply -translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center;
+    }
+  }
+}

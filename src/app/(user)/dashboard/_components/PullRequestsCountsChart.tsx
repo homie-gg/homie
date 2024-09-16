@@ -8,7 +8,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/lib/ui/Chart'
-import styles from './PullRequestCharts.module.scss'
+import styles from './PullRequestsCountsCharts.module.scss'
 import { useEffect, useState } from 'react'
 import { addDays, differenceInDays, format, isSameDay } from 'date-fns'
 import { PullRequest } from '@/app/(user)/dashboard/_utils/get-pull-requests'
@@ -20,7 +20,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-interface PullRequestChartsProps {
+interface PullRequestsCountsChartsProps {
   pullRequests: PullRequest[]
   startDate: Date
   endDate: Date
@@ -28,7 +28,9 @@ interface PullRequestChartsProps {
 
 type Entry = { date: string; count: number }
 
-export default function PullRequestsChart(props: PullRequestChartsProps) {
+export default function PullRequestsCountsChart(
+  props: PullRequestsCountsChartsProps,
+) {
   const { pullRequests, startDate, endDate } = props
   const [data, setData] = useState<Entry[]>([])
 

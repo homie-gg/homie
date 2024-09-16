@@ -9,8 +9,9 @@ import PageHeader from '@/app/(user)/_components/PageHeader'
 import PageTitle from '@/app/(user)/_components/PageTitle'
 import DateSelect from '@/app/(user)/dashboard/_components/DateSelect'
 import Metrics from '@/app/(user)/dashboard/_components/Metrics'
-import PullRequestsChart from '@/app/(user)/dashboard/_components/PullRequestsChart'
 import { Days, daysFilter } from '@/app/(user)/dashboard/_components/dates'
+import PullRequestsCountsChart from '@/app/(user)/dashboard/_components/PullRequestsCountsChart'
+import PullRequestsDistributionsChart from '@/app/(user)/dashboard/_components/PullRequestsDistributionChart'
 
 interface DashboardPageProps {
   searchParams: {
@@ -51,11 +52,12 @@ export default async function DashboardPage(props: DashboardPageProps) {
         </PageHeader>
         <div className={styles.body}>
           <Metrics pullRequests={pullRequests} />
-          <PullRequestsChart
+          <PullRequestsCountsChart
             pullRequests={pullRequests}
             startDate={startDate}
             endDate={endDate}
           />
+          <PullRequestsDistributionsChart pullRequests={pullRequests} />
         </div>
       </div>
     </div>

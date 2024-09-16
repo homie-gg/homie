@@ -1,0 +1,82 @@
+'use client'
+
+import styles from './PullRequestsCountsCharts.module.scss'
+import { PullRequest } from '@/app/(user)/dashboard/_utils/get-pull-requests'
+import PieChart from '@/lib/ui/PieChart'
+import ChartCard from '@/app/(user)/dashboard/_components/ChartCard'
+
+const chartConfig = {
+  repo1: {
+    label: 'Repo 1',
+  },
+  repo2: {
+    label: 'Repo 2',
+  },
+  repo3: {
+    label: 'Repo 2',
+  },
+  repo4: {
+    label: 'Repo 4',
+  },
+}
+
+export const prPerRepoData = [
+  {
+    label: 'Repo 1',
+    count: 40,
+  },
+  {
+    label: 'Repo 2',
+    count: 20,
+  },
+  {
+    label: 'Repo 3',
+    count: 15,
+  },
+  {
+    label: 'Repo 4',
+    count: 25,
+  },
+]
+
+const emptyData = [
+  {
+    label: 'None',
+    count: 100,
+  },
+]
+
+interface PullRequestsDistributionsChartsProps {
+  pullRequests: PullRequest[]
+}
+
+export default function PullRequestsDistributionsChart(
+  props: PullRequestsDistributionsChartsProps,
+) {
+  const { pullRequests } = props
+
+  const repoCounts: Record<string, number> = {}
+  for (const pullRequest of pullRequests) {
+    const repo = pullRequest.github_repo_name ?? pullRequest.gitlab_project_name
+    if (!repo) {
+      continue
+    }
+
+    const existingCount = repoCounts[repo] ?? 0
+    repoCounts[repo] = existingCount + 1
+  }
+
+  const data = Object.entries(repoCounts).map(([repo, count]) => ({
+    label: repo,
+    count,
+  }))
+
+  return (
+    <ChartCard
+      title="PR Contribution per Repository"
+      className={styles['data-container']}
+    >
+      <PieChart data={data.length > 0 ? data : emptyData} />
+    </ChartCard>
+  )
+}
