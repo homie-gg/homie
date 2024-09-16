@@ -1,11 +1,11 @@
 .nav {
   @apply w-full min-h-[4.5rem] flex items-stretch justify-center border-b border-b-border;
 
-  &[data-theme="primary"] {
+  &[data-theme='primary'] {
     @apply bg-primary-foreground;
   }
 
-  &[data-theme="light"] {
+  &[data-theme='light'] {
     @apply bg-background;
   }
 
