@@ -1,0 +1,15 @@
+.main {
+  @apply w-full flex flex-col gap-y-4 bg-background border border-primary-light rounded-xl p-6;
+
+  .heading {
+    @apply font-bold text-primary text-sm leading-5;
+  }
+
+  .container {
+    @apply w-full h-[276px];
+  }
+
+  .axis-label {
+    @apply font-medium text-primary text-xs text-center leading-[18px] p-2;
+  }
+}

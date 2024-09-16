@@ -1,7 +1,4 @@
-import AppBar from '@/app/(user)/AppBar'
 import Page from '@/app/(user)/_components/Page'
-import Content from '@/app/(user)/Content'
-import { MainNav } from '@/app/(user)/_components/MainNav'
 import { dbClient } from '@/database/client'
 import { auth, clerkClient } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
@@ -10,6 +7,8 @@ import { config } from '@/config'
 import Script from 'next/script'
 import { findOrCreateOrganization } from '@/lib/organization/find-or-create-orgainzation'
 import Onboarding from '@/app/(user)/_components/Onboarding'
+import NavBar from '@/app/(user)/_components/NavBar'
+import NavLinks from '@/app/(user)/_components/NavLinks'
 
 interface UserLayoutProps {
   children: React.ReactNode
@@ -71,12 +70,11 @@ export default async function UserLayout(props: UserLayoutProps) {
   }
 
   return (
-    <div className="flex flex-col">
-      <AppBar user={user}>
-        <MainNav className="mx-6" />
-      </AppBar>
-
-      <Content>{children}</Content>
+    <div className="relative w-full">
+      <NavBar user={user}>
+        <NavLinks />
+      </NavBar>
+      <Page>{children}</Page>
     </div>
   )
 }

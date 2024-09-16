@@ -56,5 +56,5 @@ export default async function SlackSetup(
     )
     .executeTakeFirstOrThrow()
 
-  return redirect('/review?confetti=true')
+  return redirect('/pull_requests?confetti=true')
 }

@@ -1,0 +1,13 @@
+.root {
+  @apply text-sm;
+
+  .select-control {
+    @apply min-h-10 gap-x-1.5 font-medium border-primary shadow-[0px_1px_2px_0px_#1018280d,0px_-2px_0px_0px_#1018280d_inset,0px_0px_0px_1px_#1018282e_inset] rounded-full px-3.5;
+
+    &:focus,
+    &:hover {
+      border-color: hsl(var(--primary)) !important;
+      outline-color: transparent !important;
+    }
+  }
+}

@@ -1,0 +1,57 @@
+.container {
+  @apply flex flex-col bg-background border border-primary-light shadow-[0px_1px_2px_0px_hsl(220_43%_11%_/_0.05)] rounded-xl pb-[4.25rem];
+
+  .amber {
+    .tag {
+      @apply text-amber bg-amber-foreground border-amber-alt;
+    }
+  }
+
+  .green {
+    .tag {
+      @apply text-green bg-green-foreground border-green-alt;
+    }
+  }
+
+  .violet {
+    .tag {
+      @apply text-violet bg-violet-foreground border-violet-alt;
+    }
+  }
+
+  .orchid {
+    .tag {
+      @apply text-orchid bg-orchid-foreground border-orchid-alt;
+    }
+  }
+
+  .blue {
+    .tag {
+      @apply text-blue bg-blue-foreground border-blue-alt;
+    }
+  }
+
+  .header {
+    @apply min-h-[5.8125rem] w-full flex flex-wrap items-center justify-between gap-4 border-b border-b-border p-6;
+
+    .header-main {
+      @apply flex items-center gap-x-2;
+
+      .title {
+        @apply font-semibold text-primary text-lg leading-7;
+      }
+
+      .tag {
+        @apply font-medium text-xs leading-[18px] border rounded-full p-2;
+      }
+    }
+
+    .header-action {
+      @apply font-bold text-sm leading-5 rounded-full shadow-none;
+    }
+  }
+
+  .body {
+    @apply w-full flex-1 flex items-stretch;
+  }
+}

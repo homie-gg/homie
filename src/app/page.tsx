@@ -5,7 +5,7 @@ export default async function Home() {
   const { userId } = auth()
 
   if (userId) {
-    return redirect('/review')
+    return redirect('/pull_requests')
   }
 
   return redirect('https://homie.gg')

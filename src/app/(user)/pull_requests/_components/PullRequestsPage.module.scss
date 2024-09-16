@@ -1,0 +1,11 @@
+.root {
+  @apply w-full;
+
+  .content {
+    @apply w-full flex flex-col gap-y-8;
+
+    .body {
+      @apply w-full flex flex-col gap-y-6;
+    }
+  }
+}
