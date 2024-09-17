@@ -2,6 +2,7 @@ import { createJob } from '@/queue/create-job'
 import { dbClient } from '@/database/client'
 import { formatInTimeZone } from 'date-fns-tz'
 import { dispatch } from '@/queue/dispatch'
+import { sendOrganizationDailyReport } from '@/queue/jobs/send-organization-daily-report'
 
 export const sendDailyReports = createJob({
   id: 'send_daily_reports',
@@ -25,7 +26,7 @@ export const sendDailyReports = createJob({
       .execute()
 
     for (const organization of organizations) {
-      dispatch('send_organization_daily_report', {
+      sendOrganizationDailyReport.dispatch({
         organization,
       })
     }
