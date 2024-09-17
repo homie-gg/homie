@@ -51,6 +51,16 @@ export async function getDailyReportPullRequestBlocks(
   ]
 
   for (const contributor of Object.values(contributors)) {
+    const contributorRepos = repos.filter((repo) =>
+      repo.pullRequests.some(
+        (pullRequest) => pullRequest.contributor_id === contributor.id,
+      ),
+    )
+
+    if (contributorRepos.length === 0) {
+      continue
+    }
+
     pullRequestBlocks.push({
       type: 'section',
       text: {
@@ -61,7 +71,7 @@ export async function getDailyReportPullRequestBlocks(
       },
     })
 
-    for (const repo of repos) {
+    for (const repo of contributorRepos) {
       const elements: RichTextBlock['elements'] = []
 
       // Repo header
@@ -93,16 +103,21 @@ export async function getDailyReportPullRequestBlocks(
         style: 'bullet',
         indent: 1,
         border: 0,
-        elements: repo.pullRequests.map((pullRequest) => ({
-          type: 'rich_text_section',
-          elements: [
-            {
-              type: 'link',
-              url: pullRequest.html_url,
-              text: pullRequest.title,
-            },
-          ],
-        })),
+        elements: repo.pullRequests
+          // Belongs to user
+          .filter(
+            (pullRequest) => pullRequest.contributor_id === contributor.id,
+          )
+          .map((pullRequest) => ({
+            type: 'rich_text_section',
+            elements: [
+              {
+                type: 'link',
+                url: pullRequest.html_url,
+                text: pullRequest.title,
+              },
+            ],
+          })),
       })
 
       pullRequestBlocks.push({
