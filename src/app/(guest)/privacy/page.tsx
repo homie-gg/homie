@@ -52,6 +52,10 @@ Data Sharing
 
 We do not share your personal information with any third parties. Your data is securely stored and used only for the purposes outlined in this Privacy Policy.
 
+Data Retention
+
+Homie will keep data required to provide services for your account as long as your account is active. This includes pull request summaries, task descriptions, AI prompts, and results, and log data.
+
 Data Deletion and De-identification
 
 If you wish to have your data deleted, and removed from our system, please send an email to yo@homie.gg requesting to have your account, and all data to be deleted permanently.
