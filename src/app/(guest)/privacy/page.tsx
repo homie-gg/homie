@@ -32,7 +32,7 @@ export default function PrivacyPolicy() {
           className="leading-relaxed whitespace-pre-wrap"
           style={{ fontFamily: 'sans-serif' }}
         >
-          {`Last Updated: 2024-04-10
+          {`Last Updated: 2024-09-18
 
 Thank you for choosing homie PM ("homie," "we," "us," "our"). This Privacy Policy outlines how homie collects, uses, and protects your information when you use our website (https://homie.gg) and services.
 
@@ -51,6 +51,10 @@ We collect your information solely for the purpose of order processing and provi
 Data Sharing
 
 We do not share your personal information with any third parties. Your data is securely stored and used only for the purposes outlined in this Privacy Policy.
+
+Data Deletion and De-identification
+
+If you wish to have your data deleted, and removed from our system, please send an email to yo@homie.gg requesting to have your account, and all data to be deleted permanently.
 
 Children's Privacy
 
