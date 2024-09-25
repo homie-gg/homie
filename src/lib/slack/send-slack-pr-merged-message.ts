@@ -24,11 +24,10 @@ export async function sendSlackPRMergedMessage(
     thread_ts: slackLink.threadTS || slackLink.messageTS,
     blocks: [
       {
-        type: 'header',
+        type: 'section',
         text: {
-          type: 'plain_text',
-          text: 'Pull Request referencing this message has been merged 🍕.',
-          emoji: true,
+          type: 'mrkdwn',
+          text: 'Pull Request referencing this message has been merged:',
         },
       },
       {
