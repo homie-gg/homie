@@ -10,6 +10,16 @@ ENV WATCH_MODE $WATCH_MODE
 RUN apt-get update && apt-get install -y chromium 
 ENV CHROME_BIN="/usr/bin/chromium"
 
+# Install python & pip
+RUN apt-get install -y python3 python3-pip python3-venv
+
+# Install Aider
+RUN python3 -m pip install pipx --break-system-packages
+RUN python3 -m pipx ensurepath --force 
+RUN pipx install aider-chat
+RUN ln -sf /root/.local/bin/aider /usr/local/bin/aider
+
+
 # Setting working directory. All the path will be relative to WORKDIR
 WORKDIR /app
 
