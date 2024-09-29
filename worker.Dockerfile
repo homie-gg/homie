@@ -20,6 +20,11 @@ RUN pipx install aider-chat
 RUN ln -sf /root/.local/bin/aider /usr/local/bin/aider
 
 
+# Set git user for any commits
+RUN git config --global user.name "Homie Bot"
+RUN git config --global user.email "bot@homie.gg"
+
+
 # Setting working directory. All the path will be relative to WORKDIR
 WORKDIR /app
 

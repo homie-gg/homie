@@ -1,5 +1,7 @@
 import { dbClient } from '@/database/client'
 import { createGithubClient } from '@/lib/github/create-github-client'
+import { getGithubAccessToken } from '@/lib/github/get-github-access-token'
+import { writeCodeForGithub } from '@/lib/github/write-code-for-github'
 import { logger } from '@/lib/log/logger'
 import { escapeShellCommand } from '@/lib/shell/escape-shell-command'
 import { createJob } from '@/queue/create-job'
@@ -11,12 +13,14 @@ export const writeCode = createJob({
   handle: async (
     payload:
       | {
+          id: string
           organization_id: number
           instructions: string
           github_repo_id: number
           gitlab_project_id?: never
         }
       | {
+          id: string
           organization_id: number
           instructions: string
           gitlab_project_id: number
@@ -48,50 +52,56 @@ export const writeCode = createJob({
       return
     }
 
-    if (!organization.ext_gh_install_id) {
-      return
+    if (payload.github_repo_id) {
+      if (!organization.ext_gh_install_id) {
+        logger.debug('Github not Installed', {
+          event: 'write_code:github_not_installed',
+        })
+
+        return
+      }
+
+      await writeCodeForGithub({
+        id: payload.id,
+        instructions,
+        githubRepoId: payload.github_repo_id,
+        organization: {
+          id: organization.id,
+          ext_gh_install_id: organization.ext_gh_install_id,
+        },
+      })
     }
 
-    const github = await createGithubClient({
-      installationId: organization.ext_gh_install_id,
-    })
+    // const branch = 'fixes'
 
-    const { token } = (await github.auth({ type: 'installation' })) as any
-    const command = `aider --yes --message ${escapeShellCommand({
-      command: instructions,
-    })} "/app/src\/app\/\(user\)\/_components\/NavBar.module.scss"`
+    // const gitlabProject = await getGitlabProject({
+    //   organizationId: organization.id,
+    //   gitlabProjectId: payload.gitlab_project_id,
+    // })
 
-    const branch = 'fixes'
+    // TODO
+    // - update aider git to use Homie user (Homie bot@homie.gg)
+    // - update clone to get repo dynamically
+    // - Generate the instructions by:
+    //   1. fetch relevant PRs
+    //   2. send to LLM and ask LLM to generate a prompt
+    // - Clean up /tmp dir after each PR
+    // - Fetch default branch dynamically, and set in base
 
-    execSync(
-      [
-        'cd /tmp',
-        'rm -rf foo',
-        'mkdir foo',
-        'cd foo',
-        `git clone https://x-access-token:${token}@github.com/nextastic/nextastic.git`,
-        // `git checkout -b ${branch}`,
-        // `git push -f origin ${branch}`,
-      ].join(' && '),
-      {
-        stdio: 'inherit', // output to console
-      },
-    )
-
-    spawnSync(
-      [
-        'whoami',
-        'git checkout main',
-        // command,
-        // `git checkout -b ${branch}`,
-        // `git push -f origin ${branch}`,
-      ].join(' && '),
-      {
-        cwd: '/tmp/foo/nextastic',
-        stdio: 'inherit', // output to console
-        env: process.env,
-      },
-    )
+    // execSync(
+    //   [
+    //     'cd /tmp',
+    //     'rm -rf foo',
+    //     'mkdir foo',
+    //     'cd foo',
+    //     `git clone https://x-access-token:${accessToken}@github.com/mikewuu/homie-dev-mike.git`,
+    //     'cd homie-dev-mike',
+    //     command,
+    //   ].join(' && '),
+    //   {
+    //     stdio: 'inherit', // output to console
+    //   },
+    // )
 
     // await github.rest.pulls.create({
     //   owner: 'mikewuu',
@@ -103,3 +113,21 @@ export const writeCode = createJob({
     // })
   },
 })
+
+interface GetGitlabProjectParams {
+  organizationId: number
+  gitlabProjectId: number | undefined
+}
+
+async function getGitlabProject(params: GetGitlabProjectParams) {
+  const { gitlabProjectId, organizationId } = params
+
+  if (!gitlabProjectId) {
+    return undefined
+  }
+  await dbClient
+    .selectFrom('gitlab.project')
+    .where('organization_id', '=', organizationId)
+    .where('id', '=', gitlabProjectId)
+    .executeTakeFirst()
+}

@@ -3,6 +3,7 @@ import { writeCode } from '@/queue/jobs/write-code'
 export default async function TestPage() {
   await writeCode.dispatch(
     {
+      id: 'some_job',
       organization_id: 1,
       instructions: `{
       update nav color to blue
