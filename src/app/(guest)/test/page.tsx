@@ -1,12 +1,12 @@
 import { writeCode } from '@/queue/jobs/write-code'
+import crypto from 'node:crypto'
 
 export default async function TestPage() {
   await writeCode.dispatch(
     {
-      id: 'some_job',
       organization_id: 1,
       instructions: `{
-      update nav color to blue
+      update navbar color to blue
     }`,
       github_repo_id: 1,
     },

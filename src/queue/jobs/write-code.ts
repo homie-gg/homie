@@ -7,25 +7,25 @@ import { escapeShellCommand } from '@/lib/shell/escape-shell-command'
 import { createJob } from '@/queue/create-job'
 import { execSync, spawnSync } from 'node:child_process'
 import { comma } from 'postcss/lib/list'
+import crypto from 'node:crypto'
 
 export const writeCode = createJob({
   id: 'write_code',
   handle: async (
     payload:
       | {
-          id: string
           organization_id: number
           instructions: string
           github_repo_id: number
           gitlab_project_id?: never
         }
       | {
-          id: string
           organization_id: number
           instructions: string
           gitlab_project_id: number
           github_repo_id?: never
         },
+    context,
   ) => {
     const { instructions, organization_id } = payload
 
@@ -52,6 +52,20 @@ export const writeCode = createJob({
       return
     }
 
+    // Generate unique code job id
+    const id = crypto
+      .createHash('sha1')
+      .update(
+        [
+          new Date().valueOf(), // timestamp
+          context.id ?? '', // job id
+          organization.id,
+          instructions,
+        ].join(' '),
+      )
+      .digest('hex')
+      .substring(0, 7) // get first 7 chars, same as git commits
+
     if (payload.github_repo_id) {
       if (!organization.ext_gh_install_id) {
         logger.debug('Github not Installed', {
@@ -62,7 +76,7 @@ export const writeCode = createJob({
       }
 
       await writeCodeForGithub({
-        id: payload.id,
+        id,
         instructions,
         githubRepoId: payload.github_repo_id,
         organization: {
@@ -71,63 +85,5 @@ export const writeCode = createJob({
         },
       })
     }
-
-    // const branch = 'fixes'
-
-    // const gitlabProject = await getGitlabProject({
-    //   organizationId: organization.id,
-    //   gitlabProjectId: payload.gitlab_project_id,
-    // })
-
-    // TODO
-    // - update aider git to use Homie user (Homie bot@homie.gg)
-    // - update clone to get repo dynamically
-    // - Generate the instructions by:
-    //   1. fetch relevant PRs
-    //   2. send to LLM and ask LLM to generate a prompt
-    // - Clean up /tmp dir after each PR
-    // - Fetch default branch dynamically, and set in base
-
-    // execSync(
-    //   [
-    //     'cd /tmp',
-    //     'rm -rf foo',
-    //     'mkdir foo',
-    //     'cd foo',
-    //     `git clone https://x-access-token:${accessToken}@github.com/mikewuu/homie-dev-mike.git`,
-    //     'cd homie-dev-mike',
-    //     command,
-    //   ].join(' && '),
-    //   {
-    //     stdio: 'inherit', // output to console
-    //   },
-    // )
-
-    // await github.rest.pulls.create({
-    //   owner: 'mikewuu',
-    //   repo: 'homie-dev-mike',
-    //   title: 'First issue fix',
-    //   body: 'This PR does something for your',
-    //   base: 'main',
-    //   head: branch,
-    // })
   },
 })
-
-interface GetGitlabProjectParams {
-  organizationId: number
-  gitlabProjectId: number | undefined
-}
-
-async function getGitlabProject(params: GetGitlabProjectParams) {
-  const { gitlabProjectId, organizationId } = params
-
-  if (!gitlabProjectId) {
-    return undefined
-  }
-  await dbClient
-    .selectFrom('gitlab.project')
-    .where('organization_id', '=', organizationId)
-    .where('id', '=', gitlabProjectId)
-    .executeTakeFirst()
-}

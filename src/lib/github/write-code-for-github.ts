@@ -2,9 +2,10 @@ import { dbClient } from '@/database/client'
 import { getWriteCodeCommand } from '@/lib/ai/get-write-code-command'
 import { cloneRepository } from '@/lib/git/clone-repository'
 import { deleteRepository } from '@/lib/git/delete-repository'
+import { createGithubClient } from '@/lib/github/create-github-client'
+import { getGithubDefaultBranch } from '@/lib/github/get-default-branch'
 import { getGithubAccessToken } from '@/lib/github/get-github-access-token'
 import { execSync } from 'child_process'
-import { cwd } from 'process'
 
 interface WriteCodeForGithubParams {
   id: string
@@ -16,13 +17,24 @@ interface WriteCodeForGithubParams {
   }
 }
 
+// TODO
+// - Generate the instructions by:
+//   1. fetch relevant PRs
+//   2. send to LLM and ask LLM to generate a prompt
+// - ask LLM for an array of files to search
+// - skip if no files were found
+// - write PR title & body
+// - handle gitlab
+
 export async function writeCodeForGithub(params: WriteCodeForGithubParams) {
   const { id, instructions, githubRepoId, organization } = params
 
+  const github = await createGithubClient({
+    installationId: organization.ext_gh_install_id,
+  })
+
   const accessToken = await getGithubAccessToken({
-    organization: {
-      ext_gh_install_id: organization.ext_gh_install_id,
-    },
+    github,
   })
 
   const repo = await dbClient
@@ -45,18 +57,72 @@ export async function writeCodeForGithub(params: WriteCodeForGithubParams) {
   })
 
   try {
-    execSync(getWriteCodeCommand({ instructions }), {
-      stdio: 'inherit', // output to console
+    execSync(
+      getWriteCodeCommand({
+        instructions,
+        files: [
+          'src/app/(guest)/_components/Navbar.tsx',
+          'src/app/globals.css',
+        ],
+      }),
+      {
+        stdio: 'inherit', // output to console
+        cwd: directory,
+      },
+    )
+
+    const branch = `homie-${id}`
+
+    try {
+      execSync(`git branch -D ${branch}`, { cwd: directory })
+    } catch {
+      // ignore errors
+    }
+
+    try {
+      execSync(`git checkout -b ${branch}`, { cwd: directory })
+    } catch {
+      // ignore erorrs
+    }
+
+    const currentBranch = execSync('git rev-parse --abbrev-ref HEAD', {
       cwd: directory,
     })
+      .toString()
+      .trim()
+
+    if (currentBranch !== branch) {
+      throw new Error(`Could not checkout git branch: ${branch}`)
+    }
+
+    // Push the branch to remote
+    execSync(`git push origin ${branch}`, {
+      cwd: directory,
+    })
+
+    const defaultBranch = await getGithubDefaultBranch({
+      github,
+      repo: {
+        name: repo.name,
+        owner: repo.owner,
+      },
+    })
+
+    // Open PR
+    const res = await github.rest.pulls.create({
+      owner: repo.owner,
+      repo: repo.name,
+      title: 'First issue fix',
+      body: 'This PR does something for your',
+      base: defaultBranch,
+      head: branch,
+    })
+
+    console.log('PR URL: ', res.data.html_url)
+    deleteRepository({ path: directory })
   } catch (error) {
     console.error('ERROR: ', error)
     deleteRepository({ path: directory })
     throw error
   }
-
-  // TODO: create new branch
-
-  console.log('wrote some code...')
-  // deleteRepository({ path: directory })
 }
