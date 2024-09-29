@@ -1,5 +1,5 @@
 .nav {
-  @apply w-full min-h-[4.5rem] flex items-stretch justify-center border-b border-b-border bg-blue-600;
+  @apply w-full min-h-[4.5rem] flex items-stretch justify-center border-b border-b-border bg-blue-600 text-white;
 
   .content {
     @apply flex items-center justify-between gap-x-4 py-4;
