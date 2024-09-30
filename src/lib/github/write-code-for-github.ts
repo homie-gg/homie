@@ -18,10 +18,10 @@ interface WriteCodeForGithubParams {
 }
 
 // TODO
-// - Generate the instructions by:
-//   1. fetch relevant PRs
-//   2. send to LLM and ask LLM to generate a prompt
-// - ask LLM for an array of files to search
+// - create AI tool to write code. Respond with link to PR
+// - may need to create tools to list repos to help AI figure out which to use
+// - ask LLM for an array of files to search (general context) based on instructions
+// - should scope file search to repo. May need to update embed to include repo/project id
 // - skip if no files were found
 // - write PR title & body
 // - handle gitlab
