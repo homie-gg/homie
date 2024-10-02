@@ -151,9 +151,10 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       answerId,
     }),
     getWriteCodeTool({
+      slackTargetMessageTS: currentMessage.ts,
       organization,
-      answerId
-    })
+      answerId,
+    }),
   ]
 
   const model = createOpenAIChatClient({ model: 'gpt-4o-2024-05-13' })

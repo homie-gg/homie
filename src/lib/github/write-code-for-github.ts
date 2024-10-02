@@ -25,6 +25,7 @@ interface WriteCodeForGithubParams {
 // - skip if no files were found
 // - write PR title & body
 // - handle gitlab
+// - include diff as context?
 
 export async function writeCodeForGithub(params: WriteCodeForGithubParams) {
   const { id, instructions, githubRepoId, organization } = params
@@ -48,6 +49,10 @@ export async function writeCodeForGithub(params: WriteCodeForGithubParams) {
     throw new Error('Missing repo info')
   }
 
+  // TODO:
+  // Find similar diffs for given repo/project id
+  // concat all the diffs into a single string
+
   const gitCloneUrl = `https://x-access-token:${accessToken}@github.com/${repo.owner}/${repo.name}.git`
 
   const directory = cloneRepository({
@@ -60,10 +65,7 @@ export async function writeCodeForGithub(params: WriteCodeForGithubParams) {
     execSync(
       getWriteCodeCommand({
         instructions,
-        files: [
-          'src/app/(guest)/_components/Navbar.tsx',
-          'src/app/globals.css',
-        ],
+        files: [],
       }),
       {
         stdio: 'inherit', // output to console
@@ -119,7 +121,13 @@ export async function writeCodeForGithub(params: WriteCodeForGithubParams) {
     })
 
     console.log('PR URL: ', res.data.html_url)
+
     deleteRepository({ path: directory })
+
+    return {
+      title: res.data.title,
+      html_url: res.data.html_url,
+    }
   } catch (error) {
     console.error('ERROR: ', error)
     deleteRepository({ path: directory })
