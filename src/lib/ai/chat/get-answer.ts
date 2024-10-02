@@ -36,6 +36,7 @@ import { getListAsanaProjectsTool } from '@/lib/ai/chat/tools/get-list-asana-pro
 import { getSearchPullRequestsTool } from '@/lib/ai/chat/tools/get-search-pull-requests-tool'
 import { getSearchGeneralContextTool } from '@/lib/ai/chat/tools/get-search-general-context-tool'
 import { getFindContributorTool } from '@/lib/ai/chat/tools/get-find-contributor-tool'
+import { getWriteCodeTool } from '@/lib/ai/chat/tools/get-write-code-tool'
 
 interface GetAnswerParams {
   organization: {
@@ -149,6 +150,10 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       organization,
       answerId,
     }),
+    getWriteCodeTool({
+      organization,
+      answerId
+    })
   ]
 
   const model = createOpenAIChatClient({ model: 'gpt-4o-2024-05-13' })

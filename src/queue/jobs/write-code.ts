@@ -1,12 +1,7 @@
 import { dbClient } from '@/database/client'
-import { createGithubClient } from '@/lib/github/create-github-client'
-import { getGithubAccessToken } from '@/lib/github/get-github-access-token'
 import { writeCodeForGithub } from '@/lib/github/write-code-for-github'
 import { logger } from '@/lib/log/logger'
-import { escapeShellCommand } from '@/lib/shell/escape-shell-command'
 import { createJob } from '@/queue/create-job'
-import { execSync, spawnSync } from 'node:child_process'
-import { comma } from 'postcss/lib/list'
 import crypto from 'node:crypto'
 
 export const writeCode = createJob({
