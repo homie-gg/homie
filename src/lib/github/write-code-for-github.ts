@@ -21,6 +21,7 @@ interface WriteCodeForGithubParams {
 
 // TODO
 // - may need to create tools to list repos to help AI figure out which to use
+// - add list gitlab projects tool
 // - write PR title & body, maybe from anthropic output?
 // - handle gitlab
 // - include diff as context?
