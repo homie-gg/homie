@@ -1,4 +1,5 @@
 import { dbClient } from '@/database/client'
+import { findWriteCodeTargetFiles } from '@/lib/ai/find-write-code-target-files'
 import { getWriteCodeCommand } from '@/lib/ai/get-write-code-command'
 import { cloneRepository } from '@/lib/git/clone-repository'
 import { deleteRepository } from '@/lib/git/delete-repository'
@@ -15,20 +16,17 @@ interface WriteCodeForGithubParams {
     id: number
     ext_gh_install_id: number
   }
+  files: string[]
 }
 
 // TODO
-// - create AI tool to write code. Respond with link to PR
 // - may need to create tools to list repos to help AI figure out which to use
-// - ask LLM for an array of files to search (general context) based on instructions
-// - should scope file search to repo. May need to update embed to include repo/project id
-// - skip if no files were found
-// - write PR title & body
+// - write PR title & body, maybe from anthropic output?
 // - handle gitlab
 // - include diff as context?
 
 export async function writeCodeForGithub(params: WriteCodeForGithubParams) {
-  const { id, instructions, githubRepoId, organization } = params
+  const { id, instructions, githubRepoId, organization, files } = params
 
   const github = await createGithubClient({
     installationId: organization.ext_gh_install_id,
@@ -42,16 +40,12 @@ export async function writeCodeForGithub(params: WriteCodeForGithubParams) {
     .selectFrom('github.repo')
     .where('organization_id', '=', organization.id)
     .where('id', '=', githubRepoId)
-    .select(['owner', 'github.repo.name'])
+    .select(['owner', 'github.repo.name', 'id'])
     .executeTakeFirst()
 
   if (!repo || !repo.owner) {
     throw new Error('Missing repo info')
   }
-
-  // TODO:
-  // Find similar diffs for given repo/project id
-  // concat all the diffs into a single string
 
   const gitCloneUrl = `https://x-access-token:${accessToken}@github.com/${repo.owner}/${repo.name}.git`
 
@@ -65,7 +59,7 @@ export async function writeCodeForGithub(params: WriteCodeForGithubParams) {
     execSync(
       getWriteCodeCommand({
         instructions,
-        files: [],
+        files,
       }),
       {
         stdio: 'inherit', // output to console

@@ -1,3 +1,4 @@
+import { findWriteCodeTargetFiles } from '@/lib/ai/find-write-code-target-files'
 import { writeCodeForGithub } from '@/lib/github/write-code-for-github'
 import { createSlackClient } from '@/lib/slack/create-slack-client'
 import { sendPullRequestCreatedMessageToSlack } from '@/lib/slack/send-pull-request-created-message-to-slack'
@@ -11,7 +12,6 @@ interface WriteCodeBasePayload {
     slack_access_token: string
   }
   instructions: string
-  files: string[]
   slack_target_message_ts: string
   slack_channel_id: string
 }
@@ -33,12 +33,18 @@ export const writeCode = createJob({
     const {
       instructions,
       organization,
-      files,
       slack_channel_id,
       slack_target_message_ts,
     } = payload
 
     const slackClient = createSlackClient(organization.slack_access_token)
+
+    const files = await findWriteCodeTargetFiles({
+      github_repo_id: payload.github_repo_id,
+      gitlab_project_id: payload.gitlab_project_id,
+      instructions,
+      organization_id: organization.id,
+    })
 
     // Generate unique code job id
     const id = crypto
@@ -58,6 +64,7 @@ export const writeCode = createJob({
       const pullRequest = await writeCodeForGithub({
         id,
         instructions,
+        files,
         githubRepoId: payload.github_repo_id,
         organization: {
           id: organization.id,

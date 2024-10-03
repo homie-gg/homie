@@ -1,7 +1,7 @@
 import { extractCodeSnippets, prompt } from '@/lib/ai/extract-code-snippets'
 import { v4 as uuid } from 'uuid'
 import { chatGPTCharLimit, chunkDiff } from '@/lib/ai/summarize-diff'
-import { PineconeRecord } from '@pinecone-database/pinecone'
+import { PineconeRecord, RecordMetadata } from '@pinecone-database/pinecone'
 import { createOpenAIEmbedder } from '@/lib/open-ai/create-open-ai-embedder'
 import { getOrganizationVectorDB } from '@/lib/ai/get-organization-vector-db'
 
@@ -16,7 +16,24 @@ interface EmbedPullRequestDiffParams {
     contributor_id: number
     organization_id: number
     merged_at: Date | null
+    gitlab_project_id: number | null
+    github_repo_id: number | null
   }
+}
+
+export interface PullRequestDiffMetadata extends RecordMetadata {
+  type: 'pull_request_diff'
+  text: string
+  code_snippet: string
+  pull_request_title: string
+  pull_request_description: string
+  pull_request_url: string
+  pull_request_summary: string
+  contributor_id: number
+  organization_id: number
+  merged_at: string
+  github_repo_id: number | string
+  gitlab_project_id: number | string
 }
 
 export async function embedPullRequestDiff(params: EmbedPullRequestDiffParams) {
@@ -52,6 +69,8 @@ export async function embedPullRequestDiff(params: EmbedPullRequestDiffParams) {
           contributor_id: pullRequest.contributor_id,
           organization_id: pullRequest.organization_id,
           merged_at: pullRequest.merged_at?.toISOString() ?? '',
+          github_repo_id: pullRequest.github_repo_id ?? '',
+          gitlab_project_id: pullRequest.gitlab_project_id ?? '',
         },
       }
 

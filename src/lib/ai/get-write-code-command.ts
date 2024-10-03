@@ -8,13 +8,18 @@ interface GetWriteCodeCommandParams {
 export function getWriteCodeCommand(params: GetWriteCodeCommandParams) {
   const { instructions, files } = params
 
-  return [
+  const args = [
     'aider',
     '--yes', // confirm
     '--no-attribute-author', // remove 'aider' from git author
     `--message ${escapeShellCommand({
       command: instructions,
     })}`,
-    ...files.map((file) => escapeShellCommand({ command: file })),
-  ].join(' ')
+  ]
+
+  if (files.length > 0) {
+    args.push(...files.map((file) => escapeShellCommand({ command: file })))
+  }
+
+  return args.join(' ')
 }

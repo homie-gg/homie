@@ -71,7 +71,6 @@ export function getWriteCodeTool(params: GetWriteCodeToolParams) {
           organization,
           instructions,
           github_repo_id,
-          files: [],
           slack_target_message_ts: slackTargetMessageTS,
           slack_channel_id: slackChannelID,
         })
@@ -84,7 +83,6 @@ export function getWriteCodeTool(params: GetWriteCodeToolParams) {
           organization,
           instructions,
           gitlab_project_id,
-          files: [],
           slack_target_message_ts: slackTargetMessageTS,
           slack_channel_id: slackChannelID,
         })

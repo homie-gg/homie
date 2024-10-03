@@ -154,6 +154,7 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       slackTargetMessageTS: currentMessage.ts,
       organization,
       answerId,
+      slackChannelID: channelID,
     }),
   ]
 
