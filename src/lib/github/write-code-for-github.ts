@@ -1,6 +1,6 @@
 import { dbClient } from '@/database/client'
-import { findWriteCodeTargetFiles } from '@/lib/ai/find-write-code-target-files'
 import { getWriteCodeCommand } from '@/lib/ai/get-write-code-command'
+import { parseWriteCodeResult } from '@/lib/ai/parse-write-code-result'
 import { cloneRepository } from '@/lib/git/clone-repository'
 import { deleteRepository } from '@/lib/git/delete-repository'
 import { createGithubClient } from '@/lib/github/create-github-client'
@@ -19,12 +19,25 @@ interface WriteCodeForGithubParams {
   files: string[]
 }
 
+type WriteCodeResult =
+  | {
+      failed: true
+      error: string
+    }
+  | {
+      failed: false
+      title: string
+      html_url: string
+    }
+
 // TODO
 // - add list gitlab projects tool
 // - handle gitlab code gen
 // - include helpful general context (already includes slack convos, pull requests, diffs)
 
-export async function writeCodeForGithub(params: WriteCodeForGithubParams) {
+export async function writeCodeForGithub(
+  params: WriteCodeForGithubParams,
+): Promise<WriteCodeResult> {
   const { id, instructions, githubRepoId, organization, files } = params
 
   const github = await createGithubClient({
@@ -55,7 +68,7 @@ export async function writeCodeForGithub(params: WriteCodeForGithubParams) {
   })
 
   try {
-    const result = execSync(
+    const output = execSync(
       getWriteCodeCommand({
         instructions,
         files,
@@ -65,13 +78,14 @@ export async function writeCodeForGithub(params: WriteCodeForGithubParams) {
       },
     ).toString('utf-8')
 
-    // TODO
-    // Ask LLM to read result and
-    // - generate summary
-    // - generate a title
-    // - determine if writing code was a success
+    const result = await parseWriteCodeResult({ output })
 
-    console.log('RESULT: ', result)
+    if (result.failed) {
+      return {
+        failed: true,
+        error: result.error,
+      }
+    }
 
     const branch = `homie-${id}`
 
@@ -114,8 +128,8 @@ export async function writeCodeForGithub(params: WriteCodeForGithubParams) {
     const res = await github.rest.pulls.create({
       owner: repo.owner,
       repo: repo.name,
-      title: 'First issue fix',
-      body: 'This PR does something for your',
+      title: result.title,
+      body: result.description,
       base: defaultBranch,
       head: branch,
     })
@@ -123,6 +137,7 @@ export async function writeCodeForGithub(params: WriteCodeForGithubParams) {
     deleteRepository({ path: directory })
 
     return {
+      failed: false,
       title: res.data.title,
       html_url: res.data.html_url,
     }
