@@ -67,6 +67,7 @@ import { getJobs } from '@/queue/get-jobs'
         concurrency: options.concurrency,
         removeOnComplete: { count: 1000 },
         removeOnFail: { count: 5000 },
+        lockDuration: 600000, // 10 mins job timeout. Increased as code-gen (writing code) takes a while.
       },
     ) as any
 

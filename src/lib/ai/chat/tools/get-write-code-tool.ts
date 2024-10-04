@@ -22,12 +22,13 @@ export function getWriteCodeTool(params: GetWriteCodeToolParams) {
     params
   return new DynamicStructuredTool({
     name: 'write_code',
-    description:
-      'Write some code to a given GitHub Repository or Gitlab Project.',
+    description: 'Write code to implement a feature or bug fix.',
     schema: z.object({
-      instructions: z
+      requirements: z
         .string()
-        .describe('The bug fix or feature that code should implement'),
+        .describe(
+          'Requirements that describe the bug fix or feature that the code should do.',
+        ),
       github_repo_id: z
         .number()
         .optional()
@@ -38,7 +39,11 @@ export function getWriteCodeTool(params: GetWriteCodeToolParams) {
         .describe('ID of the Gitalb project to push changes to.'),
     }),
     func: async (params) => {
-      const { instructions, github_repo_id, gitlab_project_id } = params
+      const {
+        requirements: instructions,
+        github_repo_id,
+        gitlab_project_id,
+      } = params
 
       if (!github_repo_id && !gitlab_project_id) {
         logger.debug(
@@ -67,13 +72,18 @@ export function getWriteCodeTool(params: GetWriteCodeToolParams) {
       }
 
       if (github_repo_id && organization.ext_gh_install_id) {
-        await writeCode.dispatch({
-          organization,
-          instructions,
-          github_repo_id,
-          slack_target_message_ts: slackTargetMessageTS,
-          slack_channel_id: slackChannelID,
-        })
+        await writeCode.dispatch(
+          {
+            organization,
+            instructions,
+            github_repo_id,
+            slack_target_message_ts: slackTargetMessageTS,
+            slack_channel_id: slackChannelID,
+          },
+          {
+            attempts: 1,
+          },
+        )
 
         return processingMessage
       }

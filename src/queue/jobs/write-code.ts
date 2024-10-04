@@ -38,6 +38,7 @@ export const writeCode = createJob({
     } = payload
 
     const slackClient = createSlackClient(organization.slack_access_token)
+    console.log('INSTRUCTIONS: ', instructions)
 
     const files = await findWriteCodeTargetFiles({
       github_repo_id: payload.github_repo_id,
@@ -45,6 +46,8 @@ export const writeCode = createJob({
       instructions,
       organization_id: organization.id,
     })
+
+    console.log('files: ', files)
 
     // Generate unique code job id
     const id = crypto

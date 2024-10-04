@@ -20,11 +20,9 @@ interface WriteCodeForGithubParams {
 }
 
 // TODO
-// - may need to create tools to list repos to help AI figure out which to use
 // - add list gitlab projects tool
-// - write PR title & body, maybe from anthropic output?
-// - handle gitlab
-// - include diff as context?
+// - handle gitlab code gen
+// - include helpful general context (already includes slack convos, pull requests, diffs)
 
 export async function writeCodeForGithub(params: WriteCodeForGithubParams) {
   const { id, instructions, githubRepoId, organization, files } = params
@@ -57,21 +55,28 @@ export async function writeCodeForGithub(params: WriteCodeForGithubParams) {
   })
 
   try {
-    execSync(
+    const result = execSync(
       getWriteCodeCommand({
         instructions,
         files,
       }),
       {
-        stdio: 'inherit', // output to console
         cwd: directory,
       },
-    )
+    ).toString('utf-8')
+
+    // TODO
+    // Ask LLM to read result and
+    // - generate summary
+    // - generate a title
+    // - determine if writing code was a success
+
+    console.log('RESULT: ', result)
 
     const branch = `homie-${id}`
 
     try {
-      execSync(`git branch -D ${branch}`, { cwd: directory })
+      execSync(`git branch -D ${branch}`, { cwd: directory, stdio: 'ignore' })
     } catch {
       // ignore errors
     }
@@ -114,8 +119,6 @@ export async function writeCodeForGithub(params: WriteCodeForGithubParams) {
       base: defaultBranch,
       head: branch,
     })
-
-    console.log('PR URL: ', res.data.html_url)
 
     deleteRepository({ path: directory })
 

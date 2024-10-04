@@ -63,7 +63,7 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
   const currentMessage = messages.pop()
 
   if (!currentMessage) {
-    return 'Message was provided.'
+    return 'No message was provided.'
   }
 
   const answerId = uuid()
