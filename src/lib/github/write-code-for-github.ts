@@ -17,6 +17,7 @@ interface WriteCodeForGithubParams {
     ext_gh_install_id: number
   }
   files: string[]
+  context: string | null
 }
 
 type WriteCodeResult =
@@ -38,7 +39,8 @@ type WriteCodeResult =
 export async function writeCodeForGithub(
   params: WriteCodeForGithubParams,
 ): Promise<WriteCodeResult> {
-  const { id, instructions, githubRepoId, organization, files } = params
+  const { id, instructions, githubRepoId, organization, files, context } =
+    params
 
   const github = await createGithubClient({
     installationId: organization.ext_gh_install_id,
@@ -71,6 +73,7 @@ export async function writeCodeForGithub(
     const output = execSync(
       getWriteCodeCommand({
         instructions,
+        context,
         files,
       }),
       {

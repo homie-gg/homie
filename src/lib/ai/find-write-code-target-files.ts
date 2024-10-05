@@ -12,7 +12,7 @@ const findCodeFilesResponse = z.object({
     .describe('List of file names included in the diffs.'),
 })
 
-interface findWriteCodeTargetFilesParams {
+interface FindWriteCodeTargetFilesParams {
   instructions: string
   github_repo_id?: number
   gitlab_project_id?: number
@@ -28,7 +28,7 @@ type FindWriteCodeTargetFilesResult = string[]
 const fileMatchesSummaryRelevanceScoreThreshold = 0.5
 
 export async function findWriteCodeTargetFiles(
-  params: findWriteCodeTargetFilesParams,
+  params: FindWriteCodeTargetFilesParams,
 ): Promise<FindWriteCodeTargetFilesResult> {
   const { instructions, organization_id, github_repo_id, gitlab_project_id } =
     params

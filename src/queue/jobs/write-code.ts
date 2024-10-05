@@ -1,4 +1,5 @@
 import { findWriteCodeTargetFiles } from '@/lib/ai/find-write-code-target-files'
+import { getWriteCodeContext } from '@/lib/ai/get-write-code-context'
 import { writeCodeForGithub } from '@/lib/github/write-code-for-github'
 import { createSlackClient } from '@/lib/slack/create-slack-client'
 import { sendPullRequestCreatedMessageToSlack } from '@/lib/slack/send-pull-request-created-message-to-slack'
@@ -28,7 +29,7 @@ export const writeCode = createJob({
           gitlab_project_id: number
           github_repo_id?: never
         }),
-    context,
+    job,
   ) => {
     const {
       instructions,
@@ -46,13 +47,20 @@ export const writeCode = createJob({
       organization_id: organization.id,
     })
 
+    const context = await getWriteCodeContext({
+      github_repo_id: payload.github_repo_id,
+      gitlab_project_id: payload.gitlab_project_id,
+      instructions,
+      organization_id: organization.id,
+    })
+
     // Generate unique code job id
     const id = crypto
       .createHash('sha1')
       .update(
         [
           new Date().valueOf(), // timestamp
-          context.id ?? '', // job id
+          job.id ?? '',
           organization.id,
           instructions,
         ].join(' '),
@@ -64,6 +72,7 @@ export const writeCode = createJob({
       const result = await writeCodeForGithub({
         id,
         instructions,
+        context,
         files,
         githubRepoId: payload.github_repo_id,
         organization: {
