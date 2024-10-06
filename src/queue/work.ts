@@ -32,7 +32,9 @@ import { getJobs } from '@/queue/get-jobs'
         }
 
         try {
-          const result = await definedJob.handle(job.data as any) // Ignore TS, as already type-safe when accessing hadnle
+          const result = await definedJob.handle(job.data as any, {
+            id: job.id,
+          }) // Ignore TS, as already type-safe when accessing hadnle
           logger.debug(`Completed job: ${job.name}`, {
             event: 'job.complete',
             data: JSON.stringify(job.data),
@@ -65,6 +67,7 @@ import { getJobs } from '@/queue/get-jobs'
         concurrency: options.concurrency,
         removeOnComplete: { count: 1000 },
         removeOnFail: { count: 5000 },
+        lockDuration: 600000, // 10 mins job timeout. Increased as code-gen (writing code) takes a while.
       },
     ) as any
 

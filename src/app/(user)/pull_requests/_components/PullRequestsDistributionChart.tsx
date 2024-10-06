@@ -4,21 +4,6 @@ import { PullRequest } from '@/app/(user)/pull_requests/_utils/get-pull-requests
 import PieChart from '@/lib/ui/PieChart'
 import ChartCard from '@/app/(user)/pull_requests/_components/ChartCard'
 
-const chartConfig = {
-  repo1: {
-    label: 'Repo 1',
-  },
-  repo2: {
-    label: 'Repo 2',
-  },
-  repo3: {
-    label: 'Repo 2',
-  },
-  repo4: {
-    label: 'Repo 4',
-  },
-}
-
 export const prPerRepoData = [
   {
     label: 'Repo 1',

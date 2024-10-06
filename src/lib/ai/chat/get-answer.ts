@@ -36,6 +36,8 @@ import { getListAsanaProjectsTool } from '@/lib/ai/chat/tools/get-list-asana-pro
 import { getSearchPullRequestsTool } from '@/lib/ai/chat/tools/get-search-pull-requests-tool'
 import { getSearchGeneralContextTool } from '@/lib/ai/chat/tools/get-search-general-context-tool'
 import { getFindContributorTool } from '@/lib/ai/chat/tools/get-find-contributor-tool'
+import { getWriteCodeTool } from '@/lib/ai/chat/tools/get-write-code-tool'
+import { getListGitlabProjectsTool } from '@/lib/ai/chat/tools/get-list-gitlab-projects-tool'
 
 interface GetAnswerParams {
   organization: {
@@ -47,6 +49,7 @@ interface GetAnswerParams {
     persona_emoji_level: number
     slack_access_token: string
     ext_gh_install_id: number | null
+    gitlab_access_token: string | null
     trello_access_token: string | null
     asana_access_token: string | null
     ext_trello_new_task_list_id: string | null
@@ -62,7 +65,7 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
   const currentMessage = messages.pop()
 
   if (!currentMessage) {
-    return 'Message was provided.'
+    return 'No message was provided.'
   }
 
   const answerId = uuid()
@@ -137,6 +140,10 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       organization,
       answerId,
     }),
+    getListGitlabProjectsTool({
+      organization,
+      answerId,
+    }),
     getListAsanaProjectsTool({
       organization,
       answerId,
@@ -148,6 +155,12 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
     getFindContributorTool({
       organization,
       answerId,
+    }),
+    getWriteCodeTool({
+      slackTargetMessageTS: currentMessage.ts,
+      organization,
+      answerId,
+      slackChannelID: channelID,
     }),
   ]
 

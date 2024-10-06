@@ -1,4 +1,4 @@
-import { getGeneralContext } from '@/lib/ai/chat/get-general-context'
+import { getGeneralContext } from '@/lib/ai/get-general-context'
 import { createOpenAIChatClient } from '@/lib/open-ai/create-open-ai-chat-client'
 import { StringOutputParser } from '@langchain/core/output_parsers'
 import { ChatPromptTemplate } from '@langchain/core/prompts'

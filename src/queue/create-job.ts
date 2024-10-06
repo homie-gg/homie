@@ -1,9 +1,16 @@
 import { dispatch, DispatchOptions } from '@/queue/dispatch'
 import { Job as BullMQJob } from 'bullmq'
 
+type JobContext = {
+  /**
+   * Unique ID for the job
+   */
+  id?: string
+}
+
 export type Job<TData = any, JReturnData = any> = {
   id: string
-  handle: (payload: TData) => Promise<JReturnData>
+  handle: (payload: TData, context: JobContext) => Promise<JReturnData>
   dispatch: (
     payload: TData,
     options?: DispatchOptions,
@@ -12,7 +19,7 @@ export type Job<TData = any, JReturnData = any> = {
 
 export function createJob<TData, JReturnData>(params: {
   id: string
-  handle: (payload: TData) => Promise<JReturnData>
+  handle: (payload: TData, context: JobContext) => Promise<JReturnData>
 }): Job<TData, JReturnData> {
   return {
     id: params.id,

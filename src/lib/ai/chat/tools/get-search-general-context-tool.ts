@@ -1,4 +1,4 @@
-import { searchGeneralContext } from '@/lib/ai/chat/search-general-context'
+import { searchGeneralContext } from '@/lib/ai/search-general-context'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { DynamicTool } from '@langchain/core/tools'

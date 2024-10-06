@@ -2,7 +2,6 @@ import React from 'react'
 import { Pie, PieChart as RechartsPieChart } from 'recharts'
 import clsx from 'clsx'
 import {
-  ChartConfig,
   ChartContainer,
   ChartLegend,
   ChartLegendContent,

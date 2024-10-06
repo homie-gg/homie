@@ -35,6 +35,7 @@
     "@clerk/nextjs": "^4.29.9",
     "@gitbeaker/rest": "^40.0.3",
     "@hookform/resolvers": "^3.3.4",
+    "@langchain/anthropic": "^0.3.3",
     "@langchain/core": "^0.2.12",
     "@langchain/openai": "^0.2.1",
     "@mailchimp/mailchimp_marketing": "^3.0.80",

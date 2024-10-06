@@ -1,3 +1,4 @@
+import { generateUuid } from '@/lib/crypto/generate-uuid'
 import { getJobs } from '@/queue/get-jobs'
 import { JobsOptions } from 'bullmq'
 
@@ -13,7 +14,9 @@ export const syncQueue = {
       throw new Error(`Missing job definition: ${job}`)
     }
 
-    await defined.handle(data)
+    await defined.handle(data, {
+      id: generateUuid(),
+    })
   },
   getRepeatableJobs: () => [],
   removeRepeatableByKey: (_key: string) => {},
