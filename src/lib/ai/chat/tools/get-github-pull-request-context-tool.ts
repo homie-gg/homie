@@ -12,7 +12,9 @@ interface GetGitHubPullRequestContextToolParams {
   channelID: string
 }
 
-export function getGitHubPullRequestContextTool(params: GetGitHubPullRequestContextToolParams) {
+export function getGitHubPullRequestContextTool(
+  params: GetGitHubPullRequestContextToolParams,
+) {
   const { organization, answerID, channelID } = params
   return new DynamicTool({
     name: 'get_github_pull_request_context',
@@ -34,7 +36,9 @@ export function getGitHubPullRequestContextTool(params: GetGitHubPullRequestCont
         })
 
         const [, repoId] = channelID.split('-')
-        const repo = await github.rest.repos.getById({ repo_id: parseInt(repoId) })
+        const repo = await github.rest.repos.getById({
+          repo_id: parseInt(repoId),
+        })
 
         const pulls = await github.rest.pulls.list({
           owner: repo.data.owner.login,
@@ -42,7 +46,7 @@ export function getGitHubPullRequestContextTool(params: GetGitHubPullRequestCont
           state: 'open',
         })
 
-        const prContext = pulls.data.map(pr => ({
+        const prContext = pulls.data.map((pr) => ({
           number: pr.number,
           title: pr.title,
           user: pr.user.login,

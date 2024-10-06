@@ -96,11 +96,13 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       channelID: channelID,
       answerID,
     }),
-    isGitHubContext ? getGitHubPullRequestContextTool({
-      organization,
-      answerID,
-      channelID,
-    }) : null,
+    isGitHubContext
+      ? getGitHubPullRequestContextTool({
+          organization,
+          answerID,
+          channelID,
+        })
+      : null,
     getTodaysDateTool({ answerId: answerID, organization }),
     getFindCompletedTasksTool({
       organization,

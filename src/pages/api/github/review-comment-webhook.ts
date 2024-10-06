@@ -6,7 +6,7 @@ import { logger } from '@/lib/log/logger'
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' })
@@ -14,7 +14,11 @@ export default async function handler(
 
   const { body } = req
 
-  if (body.action !== 'created' || !body.comment || !body.comment.body.includes('@homie')) {
+  if (
+    body.action !== 'created' ||
+    !body.comment ||
+    !body.comment.body.includes('@homie')
+  ) {
     return res.status(200).json({ message: 'No action needed' })
   }
 
@@ -22,7 +26,15 @@ export default async function handler(
     const organization = await dbClient
       .selectFrom('homie.organization')
       .where('ext_gh_install_id', '=', body.installation.id)
-      .select(['id', 'ext_gh_install_id', 'is_persona_enabled', 'persona_positivity_level', 'persona_g_level', 'persona_affection_level', 'persona_emoji_level'])
+      .select([
+        'id',
+        'ext_gh_install_id',
+        'is_persona_enabled',
+        'persona_positivity_level',
+        'persona_g_level',
+        'persona_affection_level',
+        'persona_emoji_level',
+      ])
       .executeTakeFirst()
 
     if (!organization) {
@@ -35,7 +47,9 @@ export default async function handler(
     const message = body.comment.body.replace('@homie', '').trim()
     const answer = await getAnswer({
       organization,
-      messages: [{ type: 'human', text: message, ts: new Date().toISOString() }],
+      messages: [
+        { type: 'human', text: message, ts: new Date().toISOString() },
+      ],
       channelID: `github-${body.repository.id}`,
     })
 
