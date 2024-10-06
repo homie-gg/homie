@@ -18,6 +18,7 @@ interface WriteCodeBasePayload {
   instructions: string
   slack_target_message_ts: string
   slack_channel_id: string
+  answer_id: string
 }
 
 export const writeCode = createJob({
@@ -39,6 +40,7 @@ export const writeCode = createJob({
       organization,
       slack_channel_id,
       slack_target_message_ts,
+      answer_id,
     } = payload
 
     const slackClient = createSlackClient(organization.slack_access_token)
@@ -78,11 +80,12 @@ export const writeCode = createJob({
         instructions,
         context,
         files,
-        githubRepoId: payload.github_repo_id,
+        githubRepoID: payload.github_repo_id,
         organization: {
           id: organization.id,
           ext_gh_install_id: organization.ext_gh_install_id,
         },
+        answerID: answer_id,
       })
 
       if (result.failed) {
@@ -118,6 +121,7 @@ export const writeCode = createJob({
           id: organization.id,
           gitlab_access_token: organization.gitlab_access_token,
         },
+        answerID: answer_id,
       })
 
       if (result.failed) {

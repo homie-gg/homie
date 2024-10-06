@@ -6,18 +6,21 @@ import { deleteRepository } from '@/lib/git/delete-repository'
 import { createGithubClient } from '@/lib/github/create-github-client'
 import { getGithubDefaultBranch } from '@/lib/github/get-default-branch'
 import { getGithubAccessToken } from '@/lib/github/get-github-access-token'
+import { logger } from '@/lib/log/logger'
+import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { execSync } from 'child_process'
 
 interface WriteCodeForGithubParams {
   id: string
   instructions: string
-  githubRepoId: number
+  githubRepoID: number
   organization: {
     id: number
     ext_gh_install_id: number
   }
   files: string[]
   context: string | null
+  answerID: string
 }
 
 type WriteCodeResult =
@@ -34,8 +37,15 @@ type WriteCodeResult =
 export async function writeCodeForGithub(
   params: WriteCodeForGithubParams,
 ): Promise<WriteCodeResult> {
-  const { id, instructions, githubRepoId, organization, files, context } =
-    params
+  const {
+    id,
+    instructions,
+    githubRepoID,
+    answerID,
+    organization,
+    files,
+    context,
+  } = params
 
   const github = await createGithubClient({
     installationId: organization.ext_gh_install_id,
@@ -48,7 +58,7 @@ export async function writeCodeForGithub(
   const repo = await dbClient
     .selectFrom('github.repo')
     .where('organization_id', '=', organization.id)
-    .where('id', '=', githubRepoId)
+    .where('id', '=', githubRepoID)
     .select(['owner', 'github.repo.name', 'id'])
     .executeTakeFirst()
 
@@ -78,7 +88,20 @@ export async function writeCodeForGithub(
 
     const result = await parseWriteCodeResult({ output })
 
+    logger.debug('Got write code result', {
+      event: 'write_code:result',
+      answer_id: answerID,
+      organization: getOrganizationLogData(organization),
+    })
+
     if (result.failed) {
+      logger.debug('Failed to write code', {
+        event: 'write_code:failed',
+        answer_id: answerID,
+        organization: getOrganizationLogData(organization),
+        error: result.error,
+      })
+
       return {
         failed: true,
         error: result.error,
@@ -96,7 +119,7 @@ export async function writeCodeForGithub(
     try {
       execSync(`git checkout -b ${branch}`, { cwd: directory })
     } catch {
-      // ignore erorrs
+      // ignore errors
     }
 
     const currentBranch = execSync('git rev-parse --abbrev-ref HEAD', {
@@ -134,6 +157,14 @@ export async function writeCodeForGithub(
 
     deleteRepository({ path: directory })
 
+    logger.debug('Successfully wrote code & opened PR', {
+      event: 'write_code:success',
+      answer_id: answerID,
+      organization: getOrganizationLogData(organization),
+      pr_title: res.data.title,
+      pr_html_url: res.data.html_url,
+    })
+
     return {
       failed: false,
       title: res.data.title,
@@ -141,6 +172,17 @@ export async function writeCodeForGithub(
     }
   } catch (error) {
     deleteRepository({ path: directory })
-    throw error
+
+    logger.debug('Failed to write code', {
+      event: 'write_code:failed',
+      answer_id: answerID,
+      organization: getOrganizationLogData(organization),
+      error: error instanceof Error ? error.message : 'Unknown error',
+    })
+
+    return {
+      failed: true,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
   }
 }

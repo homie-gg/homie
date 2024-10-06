@@ -17,14 +17,19 @@ interface getRememberConversationToolParams {
   }
   channelID: string
   messages: Message[]
-  answerId: string
+  answerID: string
 }
 
 export function getRememberConversationTool(
   params: getRememberConversationToolParams,
 ) {
-  const { targetMessageTS, organization, messages, channelID, answerId } =
-    params
+  const {
+    targetMessageTS,
+    organization,
+    messages,
+    channelID,
+    answerID: answerId,
+  } = params
   return new DynamicStructuredTool({
     name: 'remember_conversation',
     description: 'Remember or bookmark a conversation',

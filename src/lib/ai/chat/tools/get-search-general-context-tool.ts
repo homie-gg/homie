@@ -7,13 +7,13 @@ interface getSearchGeneralContextToolParams {
   organization: {
     id: number
   }
-  answerId: string
+  answerID: string
 }
 
 export function getSearchGeneralContextTool(
   params: getSearchGeneralContextToolParams,
 ) {
-  const { organization, answerId } = params
+  const { organization, answerID: answerId } = params
   return new DynamicTool({
     name: 'search_general_context',
     description:

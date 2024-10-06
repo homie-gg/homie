@@ -16,13 +16,13 @@ interface GetAssignTaskToContributorTool {
     ext_trello_done_task_list_id: string | null
     asana_access_token: string | null
   }
-  answerId: string
+  answerID: string
 }
 
 export function getAssignTaskToContributorTool(
   params: GetAssignTaskToContributorTool,
 ) {
-  const { organization, answerId } = params
+  const { organization, answerID: answerId } = params
   return new DynamicStructuredTool({
     name: 'assign_task_to_contributor',
     description: 'Assigns a task to a given contributor.',

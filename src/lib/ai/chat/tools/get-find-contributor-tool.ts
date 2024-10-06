@@ -9,11 +9,11 @@ interface getFindContributorTool {
     id: number
     ext_gh_install_id: number | null
   }
-  answerId: string
+  answerID: string
 }
 
 export function getFindContributorTool(params: getFindContributorTool) {
-  const { organization, answerId } = params
+  const { organization, answerID: answerId } = params
   return new DynamicStructuredTool({
     name: 'find_contributor',
     description: 'Finds a given contributor.',

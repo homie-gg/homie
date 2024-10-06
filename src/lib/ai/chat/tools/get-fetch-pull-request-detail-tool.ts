@@ -12,13 +12,13 @@ interface getFetchPullRequestDetailToolParams {
   organization: {
     id: number
   }
-  answerId: string
+  answerID: string
 }
 
 export function getFetchPullRequestDetailTool(
   params: getFetchPullRequestDetailToolParams,
 ) {
-  const { organization, answerId } = params
+  const { organization, answerID: answerId } = params
 
   const { id: orgId } = organization
   return new DynamicStructuredTool({

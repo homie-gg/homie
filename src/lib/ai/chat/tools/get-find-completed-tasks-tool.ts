@@ -9,13 +9,13 @@ interface GetFindCompletedTasksToolParams {
   organization: {
     id: number
   }
-  answerId: string
+  answerID: string
 }
 
 export function getFindCompletedTasksTool(
   params: GetFindCompletedTasksToolParams,
 ) {
-  const { organization, answerId } = params
+  const { organization, answerID: answerId } = params
   return new DynamicStructuredTool({
     name: 'find_completed_tasks',
     description: 'Find tasks that were completed since the given date',
