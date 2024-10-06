@@ -1,6 +1,4 @@
-import {
-  GithubClient,
-} from '@/lib/github/create-github-client'
+import { GithubClient } from '@/lib/github/create-github-client'
 
 interface GetGithubAccessTokenParams {
   github: GithubClient
