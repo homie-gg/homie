@@ -7,7 +7,7 @@ export async function addOrUpdatePRComment(
   owner: string,
   repo: string,
   pullNumber: number,
-  summary: string
+  summary: string,
 ): Promise<void> {
   const existingComments = await client.rest.issues.listComments({
     owner,
@@ -15,8 +15,8 @@ export async function addOrUpdatePRComment(
     issue_number: pullNumber,
   })
 
-  const homieSummaryComment = existingComments.data.find(comment =>
-    comment.body?.includes(HOMIE_SUMMARY_MARKER)
+  const homieSummaryComment = existingComments.data.find((comment) =>
+    comment.body?.includes(HOMIE_SUMMARY_MARKER),
   )
 
   const commentBody = `## ${HOMIE_SUMMARY_MARKER}\n\n${summary}`

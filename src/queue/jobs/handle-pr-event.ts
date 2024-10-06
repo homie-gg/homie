@@ -8,7 +8,9 @@ interface HandlePREventParams {
   pullNumber: number
 }
 
-export async function handlePREvent(params: HandlePREventParams): Promise<void> {
+export async function handlePREvent(
+  params: HandlePREventParams,
+): Promise<void> {
   const { installationId, owner, repo, pullNumber } = params
 
   const client = await createGithubClient({ installationId })

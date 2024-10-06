@@ -23,7 +23,9 @@ export const getPrivateKey = () => {
 
 export type GithubClient = Octokit
 
-export async function createGithubClient(params: CreateGithubClientParams): Promise<GithubClient> {
+export async function createGithubClient(
+  params: CreateGithubClientParams,
+): Promise<GithubClient> {
   const { installationId } = params
 
   const app = new App({
