@@ -55,7 +55,10 @@ export async function writeCodeForGitlab(
     .executeTakeFirst()
 
   if (!project) {
-    throw new Error('Missing repo info')
+    return {
+      failed: true,
+      error: 'Missing project info',
+    }
   }
 
   const gitCloneUrl = `https://oauth2:${organization.gitlab_access_token}@gitlab.com/${project.name.replaceAll(' ', '')}.git`

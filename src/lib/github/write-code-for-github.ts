@@ -63,7 +63,10 @@ export async function writeCodeForGithub(
     .executeTakeFirst()
 
   if (!repo || !repo.owner) {
-    throw new Error('Missing repo info')
+    return {
+      failed: true,
+      error: 'Missing repo info',
+    }
   }
 
   const gitCloneUrl = `https://x-access-token:${accessToken}@github.com/${repo.owner}/${repo.name}.git`
