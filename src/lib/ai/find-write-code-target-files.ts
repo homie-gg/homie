@@ -3,7 +3,7 @@ import { getOrganizationVectorDB } from '@/lib/ai/get-organization-vector-db'
 import { OpenAIEmbeddings } from '@langchain/openai'
 import { CohereClient } from 'cohere-ai'
 import OpenAI from 'openai'
-import { zodResponseFormat } from 'openai/helpers/zod.mjs'
+import { zodResponseFormat } from 'openai/helpers/zod'
 import { z } from 'zod'
 
 const findCodeFilesResponse = z.object({
