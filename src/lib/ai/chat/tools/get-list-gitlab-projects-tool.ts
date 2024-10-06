@@ -4,14 +4,14 @@ import { getOrganizationLogData } from '@/lib/organization/get-organization-log-
 import { DynamicTool } from '@langchain/core/tools'
 
 interface GetListGitlabProjectsTool {
-  answerId: string
+  answerID: string
   organization: {
     id: number
   }
 }
 
 export function getListGitlabProjectsTool(params: GetListGitlabProjectsTool) {
-  const { answerId, organization } = params
+  const { answerID: answerId, organization } = params
   return new DynamicTool({
     name: 'list_gitlab_projects',
     description: 'Returns all Gitlab Projects',

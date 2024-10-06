@@ -13,7 +13,7 @@ interface GetSearchPullRequestsToolParams {
     id: number
     ext_gh_install_id: number | null
   }
-  answerId: string
+  answerID: string
 }
 
 const numResults = 30
@@ -28,7 +28,7 @@ const searchRelevanceThreshold = 0.4
 export function getSearchPullRequestsTool(
   params: GetSearchPullRequestsToolParams,
 ) {
-  const { organization, answerId } = params
+  const { organization, answerID: answerId } = params
 
   return new DynamicStructuredTool({
     name: 'search_for_pull_requests',

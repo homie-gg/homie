@@ -10,13 +10,13 @@ interface GetFindWhatContributorIsWorkingOnTool {
   organization: {
     id: number
   }
-  answerId: string
+  answerID: string
 }
 
 export function getFindWhatContributorIsWorkingOnTool(
   params: GetFindWhatContributorIsWorkingOnTool,
 ) {
-  const { organization, answerId } = params
+  const { organization, answerID: answerId } = params
   return new DynamicStructuredTool({
     name: 'find_what_contributor_is_working_on',
     description: 'Find what a contributor is working on.',

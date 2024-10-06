@@ -9,11 +9,11 @@ interface getListPullRequestsToolParams {
   organization: {
     id: number
   }
-  answerId: string
+  answerID: string
 }
 
 export function getListPullRequestsTool(params: getListPullRequestsToolParams) {
-  const { organization, answerId } = params
+  const { organization, answerID: answerId } = params
   return new DynamicStructuredTool({
     name: 'list_pull_requests',
     description: 'List pull requests',

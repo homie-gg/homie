@@ -11,14 +11,14 @@ interface getListCommitsDeployedToBranchToolParams {
   organization: {
     id: number
   }
-  answerId: string
+  answerID: string
   onAnswer: (answer: string) => void
 }
 
 export function getListCommitsDeployedToBranchTool(
   params: getListCommitsDeployedToBranchToolParams,
 ) {
-  const { organization, answerId, onAnswer } = params
+  const { organization, answerID: answerId, onAnswer } = params
 
   const { id: orgId } = organization
   return new DynamicStructuredTool({

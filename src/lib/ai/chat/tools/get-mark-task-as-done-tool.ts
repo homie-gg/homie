@@ -16,11 +16,11 @@ interface GetMarkTaskAsDoneTool {
     ext_trello_done_task_list_id: string | null
     asana_access_token: string | null
   }
-  answerId: string
+  answerID: string
 }
 
 export function getMarkTaskAsDoneTool(params: GetMarkTaskAsDoneTool) {
-  const { organization, answerId } = params
+  const { organization, answerID: answerId } = params
 
   return new DynamicStructuredTool({
     name: 'mark_task_as_done',

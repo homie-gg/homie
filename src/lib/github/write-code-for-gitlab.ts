@@ -4,6 +4,8 @@ import { parseWriteCodeResult } from '@/lib/ai/parse-write-code-result'
 import { cloneRepository } from '@/lib/git/clone-repository'
 import { deleteRepository } from '@/lib/git/delete-repository'
 import { createGitlabClient } from '@/lib/gitlab/create-gitlab-client'
+import { logger } from '@/lib/log/logger'
+import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { execSync } from 'child_process'
 
 interface WriteCodeForGithubParams {
@@ -16,6 +18,7 @@ interface WriteCodeForGithubParams {
   }
   files: string[]
   context: string | null
+  answerID: string
 }
 
 type WriteCodeResult =
@@ -32,8 +35,15 @@ type WriteCodeResult =
 export async function writeCodeForGitlab(
   params: WriteCodeForGithubParams,
 ): Promise<WriteCodeResult> {
-  const { id, instructions, gitlabProjectId, organization, files, context } =
-    params
+  const {
+    id,
+    instructions,
+    gitlabProjectId,
+    organization,
+    files,
+    context,
+    answerID,
+  } = params
 
   const gitlab = createGitlabClient(organization.gitlab_access_token)
 
@@ -70,7 +80,20 @@ export async function writeCodeForGitlab(
 
     const result = await parseWriteCodeResult({ output })
 
+    logger.debug('Got write code result', {
+      event: 'write_code:result',
+      answer_id: answerID,
+      organization: getOrganizationLogData(organization),
+    })
+
     if (result.failed) {
+      logger.debug('Failed to write code', {
+        event: 'write_code:failed',
+        answer_id: answerID,
+        organization: getOrganizationLogData(organization),
+        error: result.error,
+      })
+
       return {
         failed: true,
         error: result.error,
@@ -128,13 +151,30 @@ export async function writeCodeForGitlab(
 
     deleteRepository({ path: directory })
 
+    logger.debug('Successfully wrote code & opened PR', {
+      event: 'write_code:success',
+      answer_id: answerID,
+      organization: getOrganizationLogData(organization),
+      pr_title: res.title,
+      pr_html_url: res.web_url,
+    })
+
     return {
       failed: false,
       title: res.title,
       html_url: res.web_url,
     }
   } catch (error) {
-    deleteRepository({ path: directory })
-    throw error
+    logger.debug('Failed to write code', {
+      event: 'write_code:failed',
+      answer_id: answerID,
+      organization: getOrganizationLogData(organization),
+      error: error instanceof Error ? error.message : 'Unknown error',
+    })
+
+    return {
+      failed: true,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
   }
 }

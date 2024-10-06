@@ -11,7 +11,7 @@ interface GetWriteCodeToolParams {
     gitlab_access_token: string | null
     slack_access_token: string
   }
-  answerId: string
+  answerID: string
   slackChannelID: string
   slackTargetMessageTS: string
 }
@@ -19,7 +19,7 @@ interface GetWriteCodeToolParams {
 const processingMessage = 'Starting to write code. Will open a PR in a minute.'
 
 export function getWriteCodeTool(params: GetWriteCodeToolParams) {
-  const { organization, answerId, slackTargetMessageTS, slackChannelID } =
+  const { organization, answerID, slackTargetMessageTS, slackChannelID } =
     params
   return new DynamicStructuredTool({
     name: 'write_code',
@@ -52,7 +52,7 @@ export function getWriteCodeTool(params: GetWriteCodeToolParams) {
           'GitHub Repo ID and Gitlab project ID were not specified.',
           {
             event: 'write_code:missing_repo_id',
-            answer_id: answerId,
+            answer_id: answerID,
             organization: getOrganizationLogData(organization),
           },
         )
@@ -65,7 +65,7 @@ export function getWriteCodeTool(params: GetWriteCodeToolParams) {
           'Both GitHub Repo ID and Gitlab project ID were specified.',
           {
             event: 'write_code:too_many_repo_id',
-            answer_id: answerId,
+            answer_id: answerID,
             organization: getOrganizationLogData(organization),
           },
         )
@@ -81,6 +81,7 @@ export function getWriteCodeTool(params: GetWriteCodeToolParams) {
             github_repo_id,
             slack_target_message_ts: slackTargetMessageTS,
             slack_channel_id: slackChannelID,
+            answer_id: answerID,
           },
           {
             attempts: 1,
@@ -97,6 +98,7 @@ export function getWriteCodeTool(params: GetWriteCodeToolParams) {
           gitlab_project_id,
           slack_target_message_ts: slackTargetMessageTS,
           slack_channel_id: slackChannelID,
+          answer_id: answerID,
         })
 
         return processingMessage
@@ -104,7 +106,7 @@ export function getWriteCodeTool(params: GetWriteCodeToolParams) {
 
       logger.debug('Missing params', {
         event: 'write_code:missing params',
-        answer_id: answerId,
+        answer_id: answerID,
         organization: getOrganizationLogData(organization),
       })
 

@@ -68,11 +68,11 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
     return 'No message was provided.'
   }
 
-  const answerId = uuid()
+  const answerID = uuid()
 
   logger.debug('Get Answer - Start', {
     event: 'get_answer:start',
-    answer_id: answerId,
+    answer_id: answerID,
     organization: getOrganizationLogData(organization),
   })
 
@@ -81,85 +81,85 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
   const tools = [
     getSearchGeneralContextTool({
       organization,
-      answerId,
+      answerID,
     }),
     getListPullRequestsTool({
       organization,
-      answerId,
+      answerID,
     }),
     getRememberConversationTool({
       targetMessageTS: currentMessage.ts,
       organization,
       messages,
       channelID: channelID,
-      answerId,
+      answerID,
     }),
-    getTodaysDateTool({ answerId, organization }),
+    getTodaysDateTool({ answerId: answerID, organization }),
     getFindCompletedTasksTool({
       organization,
-      answerId,
+      answerID,
     }),
     getFindWhatContributorIsWorkingOnTool({
       organization,
-      answerId,
+      answerID,
     }),
     getAssignTaskToContributorTool({
       organization,
-      answerId,
+      answerID,
     }),
     getMarkTaskAsDoneTool({
       organization,
-      answerId,
+      answerID,
     }),
     getFindTaskTool({
       organization,
-      answerId,
+      answerID,
     }),
     getFetchPullRequestDetailTool({
       organization,
-      answerId,
+      answerID,
     }),
     getListCommitsDeployedToBranchTool({
       organization,
-      answerId,
+      answerID,
       onAnswer: (result) => {
         toolAnswer = result
       },
     }),
     getSearchForTasksTool({
       organization,
-      answerId,
+      answerID,
     }),
     getCreateTaskTool({
       organization,
-      answerId,
+      answerId: answerID,
       targetMessageTS: currentMessage.ts,
       channelID,
     }),
     getListGithubReposTool({
       organization,
-      answerId,
+      answerID,
     }),
     getListGitlabProjectsTool({
       organization,
-      answerId,
+      answerID,
     }),
     getListAsanaProjectsTool({
       organization,
-      answerId,
+      answerID,
     }),
     getSearchPullRequestsTool({
       organization,
-      answerId,
+      answerID,
     }),
     getFindContributorTool({
       organization,
-      answerId,
+      answerID,
     }),
     getWriteCodeTool({
       slackTargetMessageTS: currentMessage.ts,
       organization,
-      answerId,
+      answerID: answerID,
       slackChannelID: channelID,
     }),
   ]
@@ -221,7 +221,7 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
 
   logger.debug('Get Answer - Result', {
     event: 'get_answer:result',
-    answer_id: answerId,
+    answer_id: answerID,
     organization: getOrganizationLogData(organization),
     input: currentMessage.text,
     is_tool_answer: Boolean(toolAnswer),
