@@ -1,5 +1,5 @@
 import crypto from 'node:crypto'
-import { App } from 'octokit'
+import { App, Octokit } from 'octokit'
 
 interface CreateGithubClientParams {
   installationId: number
@@ -21,9 +21,9 @@ export const getPrivateKey = () => {
   return privateKey
 }
 
-export type GithubClient = Awaited<ReturnType<typeof createGithubClient>>
+export type GithubClient = Octokit
 
-export async function createGithubClient(params: CreateGithubClientParams) {
+export async function createGithubClient(params: CreateGithubClientParams): Promise<GithubClient> {
   const { installationId } = params
 
   const app = new App({
