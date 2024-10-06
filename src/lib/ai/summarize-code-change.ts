@@ -17,7 +17,16 @@ interface SummarizeCodeChangeParams {
 }
 
 export async function summarizeCodeChange(params: SummarizeCodeChangeParams) {
-  const { body, issue, diff, title, length, logData, conversation, linkedTasks } = params
+  const {
+    body,
+    issue,
+    diff,
+    title,
+    length,
+    logData,
+    conversation,
+    linkedTasks,
+  } = params
 
   logger.debug('Summarize Code Change - Start', {
     ...logData,

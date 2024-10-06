@@ -33,20 +33,25 @@ export const updatePullRequestSummaryComment = defineJob(
       issue_number: pull_request.number,
     })
 
-    const summaryComment = comments.data.find(comment => 
-      comment.body?.startsWith('## Pull Request Summary')
+    const summaryComment = comments.data.find((comment) =>
+      comment.body?.startsWith('## Pull Request Summary'),
     )
 
     const linkedTasks = await dbClient
       .selectFrom('homie.task')
-      .innerJoin('homie.task_pull_request', 'task_pull_request.task_id', 'task.id')
+      .innerJoin(
+        'homie.task_pull_request',
+        'task_pull_request.task_id',
+        'task.id',
+      )
       .where('task_pull_request.pull_request_id', '=', pull_request.id)
       .select(['task.id', 'task.name', 'task.html_url'])
       .execute()
 
-    const linkedTasksSummary = linkedTasks.length > 0
-      ? `\n\n## Linked Tasks\n${linkedTasks.map(task => `- [${task.name}](${task.html_url})`).join('\n')}`
-      : ''
+    const linkedTasksSummary =
+      linkedTasks.length > 0
+        ? `\n\n## Linked Tasks\n${linkedTasks.map((task) => `- [${task.name}](${task.html_url})`).join('\n')}`
+        : ''
 
     const commentBody = `## Pull Request Summary\n\n${summary}${linkedTasksSummary}\n\n_This summary is automatically generated and updated._`
 
@@ -67,5 +72,5 @@ export const updatePullRequestSummaryComment = defineJob(
         body: commentBody,
       })
     }
-  }
+  },
 )
