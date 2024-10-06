@@ -92,12 +92,10 @@ export const getGithubWebhooks = () => {
   app.webhooks.on('pull_request.edited', async (params) => {
     const { pull_request, installation } = params.payload
 
-    if (pull_request.body?.includes(summaryKey)) {
-      await generateOpenPullRequestSummary.dispatch({
-        pull_request,
-        installation,
-      })
-    }
+    await updatePullRequestSummaryComment.dispatch({
+      pull_request,
+      installation,
+    })
   })
 
   app.webhooks.on('pull_request.opened', async (params) => {
@@ -108,12 +106,19 @@ export const getGithubWebhooks = () => {
       installation,
     })
 
-    if (pull_request.body?.includes(summaryKey)) {
-      await generateOpenPullRequestSummary.dispatch({
-        pull_request,
-        installation,
-      })
-    }
+    await updatePullRequestSummaryComment.dispatch({
+      pull_request,
+      installation,
+    })
+  })
+
+  app.webhooks.on('pull_request.synchronize', async (params) => {
+    const { pull_request, installation } = params.payload
+
+    await updatePullRequestSummaryComment.dispatch({
+      pull_request,
+      installation,
+    })
   })
 
   webhooks = app.webhooks
