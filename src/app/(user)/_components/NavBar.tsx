@@ -1,7 +1,6 @@
 import React, { PropsWithChildren } from 'react'
 import clsx from 'clsx'
 import styles from './NavBar.module.scss'
-import { cn } from '@/lib/utils'
 import Logo from '@/app/_components/Logo'
 import { UserNav } from '@/app/(user)/_components/UserNav'
 import { User } from '@clerk/nextjs/server'
@@ -15,7 +14,7 @@ export default function NavBar(props: NavBarProps) {
   const { user, children } = props
 
   return (
-    <nav className={cn(styles.nav, styles.blueNav)}>
+    <nav className={styles.nav}>
       <div className={clsx('container', styles.content)}>
         <div className={styles['content-start']}>
           <Logo />
