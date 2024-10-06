@@ -2,11 +2,14 @@ import { findWriteCodeTargetFiles } from '@/lib/ai/find-write-code-target-files'
 import { getWriteCodeContext } from '@/lib/ai/get-write-code-context'
 import { writeCodeForGithub } from '@/lib/github/write-code-for-github'
 import { writeCodeForGitlab } from '@/lib/github/write-code-for-gitlab'
+import { updatePullRequest } from '@/lib/github/update-pull-request'
 import { createSlackClient } from '@/lib/slack/create-slack-client'
 import { sendFailedToOpenPRMessage } from '@/lib/slack/send-failed-to-open-pr-message'
 import { sendPullRequestCreatedMessageToSlack } from '@/lib/slack/send-pull-request-created-message-to-slack'
+import { sendPullRequestUpdatedMessageToSlack } from '@/lib/slack/send-pull-request-updated-message-to-slack'
 import { createJob } from '@/queue/create-job'
 import crypto from 'node:crypto'
+import { dbClient } from '@/database/client'
 
 interface WriteCodeBasePayload {
   organization: {
@@ -19,6 +22,7 @@ interface WriteCodeBasePayload {
   slack_target_message_ts: string
   slack_channel_id: string
   answer_id: string
+  existing_pr_number?: number
 }
 
 export const writeCode = createJob({
@@ -41,6 +45,7 @@ export const writeCode = createJob({
       slack_channel_id,
       slack_target_message_ts,
       answer_id,
+      existing_pr_number,
     } = payload
 
     const slackClient = createSlackClient(organization.slack_access_token)
@@ -75,6 +80,46 @@ export const writeCode = createJob({
 
     // GitHub
     if (payload.github_repo_id && organization.ext_gh_install_id) {
+      if (existing_pr_number) {
+        const repo = await dbClient
+          .selectFrom('github.repo')
+          .where('id', '=', payload.github_repo_id)
+          .select(['owner', 'name'])
+          .executeTakeFirstOrThrow()
+
+        const result = await updatePullRequest({
+          organization: {
+            id: organization.id,
+            ext_gh_install_id: organization.ext_gh_install_id,
+          },
+          instructions,
+          pullRequestNumber: existing_pr_number,
+          repoOwner: repo.owner!,
+          repoName: repo.name,
+          answerID: answer_id,
+        })
+
+        if (result.failed) {
+          await sendFailedToOpenPRMessage({
+            slackClient,
+            channelID: slack_channel_id,
+            threadTS: slack_target_message_ts,
+          })
+
+          return
+        }
+
+        await sendPullRequestUpdatedMessageToSlack({
+          threadTS: slack_target_message_ts,
+          slackClient,
+          channelID: slack_channel_id,
+          title: result.title!,
+          url: result.html_url!,
+        })
+
+        return
+      }
+
       const result = await writeCodeForGithub({
         id,
         instructions,
