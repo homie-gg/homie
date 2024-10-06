@@ -13,6 +13,7 @@ import { updateHomieTaskFromGithubIssue } from '@/queue/jobs/update-homie-task-f
 import { reopenPullRequest } from '@/queue/jobs/reopen-pull-request'
 import { closePullRequest } from '@/queue/jobs/close-pull-requests'
 import { saveOpenedPullRequest } from '@/queue/jobs/save-opened-pull-request'
+import { updatePullRequestSummaryComment } from '@/queue/jobs/update-pull-request-summary-comment'
 
 let webhooks: ReturnType<typeof createGithubApp>['webhooks'] | null = null
 
