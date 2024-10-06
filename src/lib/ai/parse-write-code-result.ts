@@ -33,11 +33,12 @@ export async function parseWriteCodeResult(
 
   const client = new OpenAI()
 
-  const prompt = `The following text describes the code changes that occurred.
-  Summarize the code changes into a single sentence for the TITLE, and summarize it into bullet points as the DESCRIPTION.
-  Finally, determine whether the code changes were successful and return it as a boolean under 'was_successful'.
+  const prompt = `Resummarize the following CODE CHANGES. 
+- Generate a single sentence for the title, and use bullet points for the DESCRIPTION.
+- Determine whether the code changes were successful and return it as a boloean udner 'was_successful'
+- DO NOT include any information about aider
 
-  CODE CHANGES:
+CODE CHANGES:
 ${output}`
 
   const chatCompletion = await client.beta.chat.completions.parse({

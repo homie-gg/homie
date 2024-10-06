@@ -3,18 +3,16 @@ import { getWriteCodeCommand } from '@/lib/ai/get-write-code-command'
 import { parseWriteCodeResult } from '@/lib/ai/parse-write-code-result'
 import { cloneRepository } from '@/lib/git/clone-repository'
 import { deleteRepository } from '@/lib/git/delete-repository'
-import { createGithubClient } from '@/lib/github/create-github-client'
-import { getGithubDefaultBranch } from '@/lib/github/get-default-branch'
-import { getGithubAccessToken } from '@/lib/github/get-github-access-token'
+import { createGitlabClient } from '@/lib/gitlab/create-gitlab-client'
 import { execSync } from 'child_process'
 
 interface WriteCodeForGithubParams {
   id: string
   instructions: string
-  githubRepoId: number
+  gitlabProjectId: number
   organization: {
     id: number
-    ext_gh_install_id: number
+    gitlab_access_token: string
   }
   files: string[]
   context: string | null
@@ -31,32 +29,26 @@ type WriteCodeResult =
       html_url: string
     }
 
-export async function writeCodeForGithub(
+export async function writeCodeForGitlab(
   params: WriteCodeForGithubParams,
 ): Promise<WriteCodeResult> {
-  const { id, instructions, githubRepoId, organization, files, context } =
+  const { id, instructions, gitlabProjectId, organization, files, context } =
     params
 
-  const github = await createGithubClient({
-    installationId: organization.ext_gh_install_id,
-  })
+  const gitlab = createGitlabClient(organization.gitlab_access_token)
 
-  const accessToken = await getGithubAccessToken({
-    github,
-  })
-
-  const repo = await dbClient
-    .selectFrom('github.repo')
+  const project = await dbClient
+    .selectFrom('gitlab.project')
     .where('organization_id', '=', organization.id)
-    .where('id', '=', githubRepoId)
-    .select(['owner', 'github.repo.name', 'id'])
+    .where('id', '=', gitlabProjectId)
+    .select(['name', 'ext_gitlab_project_id'])
     .executeTakeFirst()
 
-  if (!repo || !repo.owner) {
+  if (!project) {
     throw new Error('Missing repo info')
   }
 
-  const gitCloneUrl = `https://x-access-token:${accessToken}@github.com/${repo.owner}/${repo.name}.git`
+  const gitCloneUrl = `https://oauth2:${organization.gitlab_access_token}@gitlab.com/${project.name.replaceAll(' ', '')}.git`
 
   const directory = cloneRepository({
     organization,
@@ -114,30 +106,32 @@ export async function writeCodeForGithub(
       cwd: directory,
     })
 
-    const defaultBranch = await getGithubDefaultBranch({
-      github,
-      repo: {
-        name: repo.name,
-        owner: repo.owner,
+    const projectInfo = await gitlab.Projects.show(
+      project.ext_gitlab_project_id,
+      {
+        showExpanded: true,
       },
-    })
+    )
+    const defaultBranch = projectInfo.data.default_branch
 
     // Open PR
-    const res = await github.rest.pulls.create({
-      owner: repo.owner,
-      repo: repo.name,
-      title: result.title,
-      body: result.description,
-      base: defaultBranch,
-      head: branch,
-    })
+
+    const res = await gitlab.MergeRequests.create(
+      project.ext_gitlab_project_id,
+      branch,
+      defaultBranch,
+      result.title,
+      {
+        description: result.description,
+      },
+    )
 
     deleteRepository({ path: directory })
 
     return {
       failed: false,
-      title: res.data.title,
-      html_url: res.data.html_url,
+      title: res.title,
+      html_url: res.web_url,
     }
   } catch (error) {
     console.error('ERROR: ', error)

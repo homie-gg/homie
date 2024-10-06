@@ -31,7 +31,8 @@ export function getCreateTaskTool(params: GetCreateTaskToolParams) {
 
   return new DynamicStructuredTool({
     name: 'create_task',
-    description: 'Creates a task to track an issue or feature but NOT actually implement the fix.',
+    description:
+      'Creates a task to track an issue or feature but NOT actually implement the fix.',
     schema: z.object({
       title: z
         .string()

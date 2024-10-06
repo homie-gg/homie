@@ -1,7 +1,9 @@
 import { findWriteCodeTargetFiles } from '@/lib/ai/find-write-code-target-files'
 import { getWriteCodeContext } from '@/lib/ai/get-write-code-context'
 import { writeCodeForGithub } from '@/lib/github/write-code-for-github'
+import { writeCodeForGitlab } from '@/lib/github/write-code-for-gitlab'
 import { createSlackClient } from '@/lib/slack/create-slack-client'
+import { sendFailedToOpenPRMessage } from '@/lib/slack/send-failed-to-open-pr-message'
 import { sendPullRequestCreatedMessageToSlack } from '@/lib/slack/send-pull-request-created-message-to-slack'
 import { createJob } from '@/queue/create-job'
 import crypto from 'node:crypto'
@@ -10,6 +12,7 @@ interface WriteCodeBasePayload {
   organization: {
     id: number
     ext_gh_install_id: number | null
+    gitlab_access_token: string | null
     slack_access_token: string
   }
   instructions: string
@@ -68,6 +71,7 @@ export const writeCode = createJob({
       .digest('hex')
       .substring(0, 7) // get first 7 chars, same as git commits
 
+    // GitHub
     if (payload.github_repo_id && organization.ext_gh_install_id) {
       const result = await writeCodeForGithub({
         id,
@@ -82,25 +86,10 @@ export const writeCode = createJob({
       })
 
       if (result.failed) {
-        await slackClient.post('chat.postMessage', {
-          channel: slack_channel_id,
-          thread_ts: slack_target_message_ts,
-          blocks: [
-            {
-              type: 'rich_text',
-              elements: [
-                {
-                  type: 'rich_text_quote',
-                  elements: [
-                    {
-                      type: 'text',
-                      text: "Sorry, something went wrong and we couldn't create PR for this.",
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+        await sendFailedToOpenPRMessage({
+          slackClient,
+          channelID: slack_channel_id,
+          threadTS: slack_target_message_ts,
         })
 
         return
@@ -113,6 +102,50 @@ export const writeCode = createJob({
         title: result.title,
         url: result.html_url,
       })
+
+      return
     }
+
+    // Gitlab
+    if (payload.gitlab_project_id && organization.gitlab_access_token) {
+      const result = await writeCodeForGitlab({
+        id,
+        instructions,
+        context,
+        files,
+        gitlabProjectId: payload.gitlab_project_id,
+        organization: {
+          id: organization.id,
+          gitlab_access_token: organization.gitlab_access_token,
+        },
+      })
+
+      if (result.failed) {
+        await sendFailedToOpenPRMessage({
+          slackClient,
+          channelID: slack_channel_id,
+          threadTS: slack_target_message_ts,
+        })
+
+        return
+      }
+
+      await sendPullRequestCreatedMessageToSlack({
+        threadTS: slack_target_message_ts,
+        slackClient,
+        channelID: slack_channel_id,
+        title: result.title,
+        url: result.html_url,
+      })
+
+      return
+    }
+
+    // Failed...
+    await sendFailedToOpenPRMessage({
+      slackClient,
+      channelID: slack_channel_id,
+      threadTS: slack_target_message_ts,
+    })
   },
 })
