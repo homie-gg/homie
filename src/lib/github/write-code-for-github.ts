@@ -34,7 +34,6 @@ type WriteCodeResult =
 // TODO
 // - add list gitlab projects tool
 // - handle gitlab code gen
-// - include helpful general context (already includes slack convos, pull requests, diffs)
 
 export async function writeCodeForGithub(
   params: WriteCodeForGithubParams,
