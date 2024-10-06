@@ -8,6 +8,7 @@ interface GetWriteCodeToolParams {
   organization: {
     id: number
     ext_gh_install_id: number | null
+    gitlab_access_token: string | null
     slack_access_token: string
   }
   answerId: string

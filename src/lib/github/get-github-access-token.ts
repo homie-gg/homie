@@ -1,5 +1,4 @@
 import {
-  createGithubClient,
   GithubClient,
 } from '@/lib/github/create-github-client'
 

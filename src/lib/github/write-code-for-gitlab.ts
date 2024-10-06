@@ -134,7 +134,6 @@ export async function writeCodeForGitlab(
       html_url: res.web_url,
     }
   } catch (error) {
-    console.error('ERROR: ', error)
     deleteRepository({ path: directory })
     throw error
   }

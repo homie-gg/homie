@@ -140,7 +140,6 @@ export async function writeCodeForGithub(
       html_url: res.data.html_url,
     }
   } catch (error) {
-    console.error('ERROR: ', error)
     deleteRepository({ path: directory })
     throw error
   }

@@ -1,8 +1,6 @@
 'use client'
 
-import { Avatar } from '@/lib/ui/Avatar'
 import { Button } from '@/lib/ui/Button'
-import { PersonIcon } from '@radix-ui/react-icons'
 import {
   DropdownMenu,
   DropdownMenuContent,

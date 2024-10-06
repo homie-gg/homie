@@ -11,12 +11,6 @@ export function getWriteCodeCommand(params: GetWriteCodeCommandParams) {
 
   let command = instructions
 
-  console.log('INSTRUCTIONS: ')
-  console.log(instructions)
-
-  console.log('CONTEXT: ')
-  console.log(context)
-
   if (context) {
     command += `\nUse the following context to help write the code by following code style, conventions, and references.`
   }
