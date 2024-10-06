@@ -9,7 +9,7 @@ interface SendPullRequestUpdatedMessageToSlackParams {
 }
 
 export async function sendPullRequestUpdatedMessageToSlack(
-  params: SendPullRequestUpdatedMessageToSlackParams
+  params: SendPullRequestUpdatedMessageToSlackParams,
 ) {
   const { threadTS, slackClient, channelID, title, url } = params
 

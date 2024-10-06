@@ -23,7 +23,7 @@ interface UpdatePullRequestParams {
 }
 
 export async function updatePullRequest(
-  params: UpdatePullRequestParams
+  params: UpdatePullRequestParams,
 ): Promise<{
   failed: boolean
   title?: string
@@ -58,7 +58,7 @@ export async function updatePullRequest(
         organization.id,
         instructions,
         pullRequestNumber,
-      ].join(' ')
+      ].join(' '),
     )
     .digest('hex')
     .substring(0, 7) // get first 7 chars, same as git commits
@@ -90,7 +90,7 @@ export async function updatePullRequest(
       }),
       {
         cwd: directory,
-      }
+      },
     ).toString('utf-8')
 
     const result = await parseWriteCodeResult({ output })
