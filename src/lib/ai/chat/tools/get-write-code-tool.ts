@@ -22,7 +22,8 @@ export function getWriteCodeTool(params: GetWriteCodeToolParams) {
     params
   return new DynamicStructuredTool({
     name: 'write_code',
-    description: 'Write code to implement a feature or bug fix.',
+    description:
+      'Fix an issue, implement a feature, open a Pull Request by writing the code.',
     schema: z.object({
       requirements: z
         .string()
