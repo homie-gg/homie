@@ -37,6 +37,7 @@ import { getSearchPullRequestsTool } from '@/lib/ai/chat/tools/get-search-pull-r
 import { getSearchGeneralContextTool } from '@/lib/ai/chat/tools/get-search-general-context-tool'
 import { getFindContributorTool } from '@/lib/ai/chat/tools/get-find-contributor-tool'
 import { getWriteCodeTool } from '@/lib/ai/chat/tools/get-write-code-tool'
+import { getListGitlabProjectsTool } from '@/lib/ai/chat/tools/get-list-gitlab-projects-tool'
 
 interface GetAnswerParams {
   organization: {
@@ -135,6 +136,10 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       channelID,
     }),
     getListGithubReposTool({
+      organization,
+      answerId,
+    }),
+    getListGitlabProjectsTool({
       organization,
       answerId,
     }),
