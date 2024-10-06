@@ -92,6 +92,7 @@ export async function writeCodeForGithub(
       event: 'write_code:result',
       answer_id: answerID,
       organization: getOrganizationLogData(organization),
+      result,
     })
 
     if (result.failed) {

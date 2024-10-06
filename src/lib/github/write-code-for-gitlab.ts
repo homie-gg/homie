@@ -84,6 +84,7 @@ export async function writeCodeForGitlab(
       event: 'write_code:result',
       answer_id: answerID,
       organization: getOrganizationLogData(organization),
+      result,
     })
 
     if (result.failed) {
