@@ -47,13 +47,13 @@ interface GetAnswerParams {
     persona_g_level: number
     persona_affection_level: number
     persona_emoji_level: number
-    slack_access_token: string
+    slack_access_token?: string
     ext_gh_install_id: number | null
-    gitlab_access_token: string | null
-    trello_access_token: string | null
-    asana_access_token: string | null
-    ext_trello_new_task_list_id: string | null
-    ext_trello_done_task_list_id: string | null
+    gitlab_access_token?: string | null
+    trello_access_token?: string | null
+    asana_access_token?: string | null
+    ext_trello_new_task_list_id?: string | null
+    ext_trello_done_task_list_id?: string | null
   }
   messages: Message[]
   channelID: string
@@ -78,6 +78,8 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
 
   let toolAnswer: string | null = null
 
+  const isGitHubContext = channelID.startsWith('github-')
+
   const tools = [
     getSearchGeneralContextTool({
       organization,
@@ -94,6 +96,11 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       channelID: channelID,
       answerID,
     }),
+    isGitHubContext ? getGitHubPullRequestContextTool({
+      organization,
+      answerID,
+      channelID,
+    }) : null,
     getTodaysDateTool({ answerId: answerID, organization }),
     getFindCompletedTasksTool({
       organization,
