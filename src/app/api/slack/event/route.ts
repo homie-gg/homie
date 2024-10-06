@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { verifySlackRequest } from '@/lib/slack/verify-slack-request'
 import { SlackEvent } from '@slack/bolt'
 import { logger } from '@/lib/log/logger'
-import { debouncedDispatch } from '@/queue/debounced-dispatch'
-import { generateUuid } from '@/lib/crypto/generate-uuid'
+import { replySlackMention } from '@/queue/jobs/reply-slack-mention'
 
 /**
  * How long to wait before sending a reply to a thread. This is to prevent
@@ -53,23 +52,21 @@ async function handleEvent(params: HandleEventParams) {
 
   switch (event.type) {
     case 'app_mention': {
-      await debouncedDispatch({
-        job: {
-          name: 'reply_slack_mention',
-          data: {
-            team_id,
-            channel_id: event.channel,
-            target_message_ts: event.ts,
-            thread_ts: event.thread_ts,
-            text: event.text,
+      await replySlackMention.dispatch(
+        {
+          team_id,
+          channel_id: event.channel,
+          target_message_ts: event.ts,
+          thread_ts: event.thread_ts,
+          text: event.text,
+        },
+        {
+          debounce: {
+            key: `reply_slack:${event.thread_ts ?? event.ts}`,
+            delaySecs: threadReplyDebounceSecs,
           },
         },
-        debounce: {
-          key: `reply_slack:${event.thread_ts ?? event.ts}`,
-          id: generateUuid(),
-          delaySecs: threadReplyDebounceSecs,
-        },
-      })
+      )
     }
     default:
       return
