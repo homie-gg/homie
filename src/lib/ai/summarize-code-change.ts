@@ -13,10 +13,11 @@ interface SummarizeCodeChangeParams {
   body: string | null
   length: 'short' | 'long'
   logData?: Record<string, any>
+  linkedTasks?: string
 }
 
 export async function summarizeCodeChange(params: SummarizeCodeChangeParams) {
-  const { body, issue, diff, title, length, logData, conversation } = params
+  const { body, issue, diff, title, length, logData, conversation, linkedTasks } = params
 
   logger.debug('Summarize Code Change - Start', {
     ...logData,
@@ -38,6 +39,7 @@ export async function summarizeCodeChange(params: SummarizeCodeChangeParams) {
     body,
     length,
     conversation,
+    linkedTasks,
   })
 
   const chatPrompt = ChatPromptTemplate.fromTemplate(template)
@@ -57,6 +59,7 @@ export async function summarizeCodeChange(params: SummarizeCodeChangeParams) {
     body: body ?? 'NONE',
     rules,
     conversation: conversation ?? 'NONE',
+    linkedTasks: linkedTasks ?? 'NONE',
   })
 
   logger.debug('Summarize Code Change - Result', {
