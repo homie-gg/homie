@@ -32,7 +32,6 @@ type WriteCodeResult =
     }
 
 // TODO
-// - add list gitlab projects tool
 // - handle gitlab code gen
 
 export async function writeCodeForGithub(
