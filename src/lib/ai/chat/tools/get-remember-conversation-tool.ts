@@ -17,13 +17,13 @@ interface getRememberConversationToolParams {
   }
   channelID: string
   messages: Message[]
-  messageId: string
+  answerId: string
 }
 
 export function getRememberConversationTool(
   params: getRememberConversationToolParams,
 ) {
-  const { targetMessageTS, organization, messages, channelID, messageId } =
+  const { targetMessageTS, organization, messages, channelID, answerId } =
     params
   return new DynamicStructuredTool({
     name: 'remember_conversation',
@@ -34,7 +34,7 @@ export function getRememberConversationTool(
     func: async ({ todaysDate }) => {
       logger.debug('Call - Remember Conversation', {
         event: 'get_answer:remember_conversation:call',
-        answer_id: messageId,
+        answer_id: answerId,
         organization: getOrganizationLogData(organization),
         todays_date: todaysDate,
       })
@@ -68,7 +68,7 @@ export function getRememberConversationTool(
 
         logger.debug('Finished remembering conversation', {
           event: 'get_answer:remember_conversation:done',
-          answer_id: messageId,
+          answer_id: answerId,
           organization: getOrganizationLogData(organization),
           todays_date: todaysDate,
           conversation,
@@ -79,7 +79,7 @@ export function getRememberConversationTool(
       } catch (error) {
         logger.debug('Failed to remember conversation', {
           event: 'get_answer:remember_conversation:failed',
-          answer_id: messageId,
+          answer_id: answerId,
           organization: getOrganizationLogData(organization),
           todays_date: todaysDate,
           error,
