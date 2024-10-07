@@ -51,14 +51,14 @@ export async function writeCodeForGitlab(
     .selectFrom('gitlab.project')
     .where('organization_id', '=', organization.id)
     .where('id', '=', gitlabProjectId)
-    .select(['name', 'ext_gitlab_project_id'])
+    .select(['name', 'ext_gitlab_project_id', 'web_url'])
     .executeTakeFirst()
 
   if (!project) {
     throw new Error('Missing repo info')
   }
 
-  const gitCloneUrl = `https://oauth2:${organization.gitlab_access_token}@gitlab.com/${project.name.replaceAll(' ', '')}.git`
+  const gitCloneUrl = `https://oauth2:${organization.gitlab_access_token}@${project.web_url.replace('https://', '')}.git`
 
   const directory = cloneRepository({
     organization,
