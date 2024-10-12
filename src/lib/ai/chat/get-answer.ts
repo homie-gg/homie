@@ -78,7 +78,6 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
 
   let toolAnswer: string | null = null
 
-  const isGitHubContext = channelID.startsWith('github-')
 
   const tools = [
     getSearchGeneralContextTool({
@@ -96,13 +95,6 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       channelID: channelID,
       answerID,
     }),
-    isGitHubContext
-      ? getGitHubPullRequestContextTool({
-          organization,
-          answerID,
-          channelID,
-        })
-      : null,
     getTodaysDateTool({ answerId: answerID, organization }),
     getFindCompletedTasksTool({
       organization,
