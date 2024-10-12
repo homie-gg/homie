@@ -13,6 +13,7 @@ import { updateHomieTaskFromGithubIssue } from '@/queue/jobs/update-homie-task-f
 import { reopenPullRequest } from '@/queue/jobs/reopen-pull-request'
 import { closePullRequest } from '@/queue/jobs/close-pull-requests'
 import { saveOpenedPullRequest } from '@/queue/jobs/save-opened-pull-request'
+import { implementPullRequestReviewChanges } from '@/queue/jobs/implement-pull-request-review-changes'
 
 let webhooks: ReturnType<typeof createGithubApp>['webhooks'] | null = null
 
@@ -114,6 +115,16 @@ export const getGithubWebhooks = () => {
         installation,
       })
     }
+  })
+
+  app.webhooks.on('pull_request_review.submitted', async (params) => {
+    const { installation, pull_request, review } = params.payload
+
+    await implementPullRequestReviewChanges.dispatch({
+      pull_request,
+      installation,
+      review,
+    })
   })
 
   webhooks = app.webhooks
