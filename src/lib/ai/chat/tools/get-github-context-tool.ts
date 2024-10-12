@@ -33,7 +33,11 @@ export function getGithubContextTool(params: GetGithubContextToolParams) {
         context,
       })
 
-      if (!context || context.type !== 'github' || !organization.ext_gh_install_id) {
+      if (
+        !context ||
+        context.type !== 'github' ||
+        !organization.ext_gh_install_id
+      ) {
         return 'No GitHub context available'
       }
 
@@ -64,7 +68,7 @@ export function getGithubContextTool(params: GetGithubContextToolParams) {
           title: issue.title,
           body: issue.body,
           state: issue.state,
-          comments: comments.map(comment => ({
+          comments: comments.map((comment) => ({
             body: comment.body,
             user: comment.user?.login,
             created_at: comment.created_at,

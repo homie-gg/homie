@@ -42,10 +42,7 @@ webhooks.on(
     const { comment, repository, installation } = event.payload
     const commentBody = comment.body.trim()
 
-    if (
-      !commentBody.toLowerCase().startsWith('/homie') ||
-      !installation?.id
-    ) {
+    if (!commentBody.toLowerCase().startsWith('/homie') || !installation?.id) {
       return
     }
 
@@ -83,7 +80,10 @@ webhooks.on(
       .executeTakeFirst()
 
     if (!orgData) {
-      console.error('Organization data not found:', organization.organization_id)
+      console.error(
+        'Organization data not found:',
+        organization.organization_id,
+      )
       return
     }
 
