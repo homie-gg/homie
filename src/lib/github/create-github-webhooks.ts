@@ -4,6 +4,10 @@ import { unassignContributorFromGithubIssue } from '@/lib/github/unassign-contri
 import { closeTaskFromGithubIssue } from '@/lib/github/close-task-from-github-issue'
 import { deleteTaskFromGithubIssue } from '@/lib/github/delete-task-from-github-issue'
 import { reopenTaskFromGithubIssue } from '@/lib/github/reopen-task-from-github-issue'
+import { getAnswer } from '@/lib/ai/chat/get-answer'
+import { createGithubClient } from '@/lib/github/create-github-client'
+import { dbClient } from '@/database/client'
+import { logger } from '@/lib/log/logger'
 import {
   generateOpenPullRequestSummary,
   summaryKey,
@@ -112,6 +116,65 @@ export const getGithubWebhooks = () => {
       await generateOpenPullRequestSummary.dispatch({
         pull_request,
         installation,
+      })
+    }
+  })
+
+  app.webhooks.on('pull_request_review_comment.created', async (params) => {
+    const { payload } = params
+    const { comment, repository, installation, pull_request } = payload
+
+    if (!comment.body.includes('@homie')) {
+      return
+    }
+
+    try {
+      const organization = await dbClient
+        .selectFrom('homie.organization')
+        .where('ext_gh_install_id', '=', installation.id)
+        .select([
+          'id',
+          'ext_gh_install_id',
+          'is_persona_enabled',
+          'persona_positivity_level',
+          'persona_g_level',
+          'persona_affection_level',
+          'persona_emoji_level',
+        ])
+        .executeTakeFirst()
+
+      if (!organization) {
+        logger.error('Organization not found for GitHub installation', {
+          installation_id: installation.id,
+        })
+        return
+      }
+
+      const message = comment.body.replace('@homie', '').trim()
+      const answer = await getAnswer({
+        organization,
+        messages: [
+          { type: 'human', text: message, ts: new Date().toISOString() },
+        ],
+        channelID: `github-${repository.id}`,
+      })
+
+      const github = await createGithubClient({
+        installationId: organization.ext_gh_install_id,
+      })
+
+      await github.rest.pulls.createReviewComment({
+        owner: repository.owner.login,
+        repo: repository.name,
+        pull_number: pull_request.number,
+        body: answer,
+        commit_id: comment.commit_id,
+        path: comment.path,
+        line: comment.line,
+      })
+    } catch (error) {
+      logger.error('Error processing GitHub review comment webhook', {
+        error: error instanceof Error ? error.message : 'Unknown error',
       })
     }
   })
