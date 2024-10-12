@@ -47,13 +47,13 @@ interface GetAnswerParams {
     persona_g_level: number
     persona_affection_level: number
     persona_emoji_level: number
-    slack_access_token?: string
-    ext_gh_install_id: number | null
-    gitlab_access_token?: string | null
-    trello_access_token?: string | null
-    asana_access_token?: string | null
-    ext_trello_new_task_list_id?: string | null
-    ext_trello_done_task_list_id?: string | null
+    slack_access_token: string
+    ext_gh_install_id: number
+    gitlab_access_token: string
+    trello_access_token: string
+    asana_access_token: string
+    ext_trello_new_task_list_id: string
+    ext_trello_done_task_list_id: string
   }
   messages: Message[]
   channelID: string
