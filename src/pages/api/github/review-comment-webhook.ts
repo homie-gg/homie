@@ -10,7 +10,7 @@ export default async function handler(
   }
 
   const webhooks = getGithubWebhooks()
-  
+
   try {
     await webhooks.verifyAndReceive({
       id: req.headers['x-github-delivery'] as string,
