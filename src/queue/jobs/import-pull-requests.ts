@@ -76,7 +76,7 @@ export const importPullRequests = createJob({
           state: 'closed',
           sort: 'updated',
           direction: 'desc',
-          per_page: 100,
+          per_page: 20,
           repo: repo.name,
           owner,
         })
