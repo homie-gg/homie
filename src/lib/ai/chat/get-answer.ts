@@ -57,10 +57,15 @@ interface GetAnswerParams {
   }
   messages: Message[]
   channelID: string
+  context?: {
+    type: 'github'
+    repository: string
+    issueNumber: number
+  }
 }
 
 export async function getAnswer(params: GetAnswerParams): Promise<string> {
-  const { organization, messages, channelID } = params
+  const { organization, messages, channelID, context } = params
 
   const currentMessage = messages.pop()
 
@@ -74,6 +79,7 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
     event: 'get_answer:start',
     answer_id: answerID,
     organization: getOrganizationLogData(organization),
+    context,
   })
 
   let toolAnswer: string | null = null
@@ -93,6 +99,11 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       messages,
       channelID: channelID,
       answerID,
+    }),
+    getGithubContextTool({
+      organization,
+      answerID,
+      context,
     }),
     getTodaysDateTool({ answerId: answerID, organization }),
     getFindCompletedTasksTool({
