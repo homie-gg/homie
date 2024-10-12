@@ -78,7 +78,6 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
 
   let toolAnswer: string | null = null
 
-
   const tools = [
     getSearchGeneralContextTool({
       organization,
