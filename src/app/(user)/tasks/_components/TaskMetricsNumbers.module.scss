@@ -1,0 +1,15 @@
+.data-list {
+  @apply flex flex-col;
+
+  .data-item {
+    @apply w-full flex items-center justify-between gap-x-3 px-6 py-4;
+
+    .data-label {
+      @apply font-semibold font-sans-inter text-sm text-primary;
+    }
+
+    .data-value {
+      @apply font-sans-inter text-sm text-primary;
+    }
+  }
+}
