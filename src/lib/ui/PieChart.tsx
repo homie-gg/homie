@@ -14,18 +14,20 @@ interface PieChartProps {
   data: {
     label: string
     count: number
+    fill?: string
   }[]
   className?: string
+  innerRadius?: number
 }
 
 export default function PieChart(props: PieChartProps) {
-  const { data, className } = props
+  const { data, className, innerRadius } = props
 
   const dataWithColor = data.map((entry, index) => ({
     index: `entry_${index}`,
     label: entry.label,
     count: entry.count,
-    fill: `var(--chart-${(index % 17) + 1})`, // 16 colors in globals.scss so %17 = 0..16
+    fill: entry.fill ?? `var(--chart-${(index % 17) + 1})`, // 16 colors in globals.scss so %17 = 0..16
   }))
 
   const config = data.reduce(
@@ -53,6 +55,7 @@ export default function PieChart(props: PieChartProps) {
             data={dataWithColor}
             dataKey="count"
             nameKey="index"
+            innerRadius={innerRadius}
           />
           <ChartLegend
             content={<ChartLegendContent nameKey="index" />}

@@ -1,5 +1,5 @@
 import TaskMetricsCard from '@/app/(user)/tasks/_components/TaskMetricsCard'
-import styles from './TaskTypesContribution.module.scss'
+import styles from './TaskTypesDistribution.module.scss'
 import ProgressBar from '@/lib/ui/ProgressBar'
 
 interface TaskTypesContributionProps {}
@@ -27,7 +27,7 @@ export const contributionMetrics = [
   },
 ]
 
-export default function TaskTypesContribution(
+export default function TaskTypesDistribution(
   props: TaskTypesContributionProps,
 ) {
   const {} = props
