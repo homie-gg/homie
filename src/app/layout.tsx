@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Onest } from 'next/font/google'
+import { Inter, Onest } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import localFont from 'next/font/local'
 import './globals.scss'
@@ -22,6 +22,11 @@ const excon = localFont({
     { path: '../assets/fonts/excon/Excon-Black.otf', weight: '900' },
   ],
   variable: '--font-excon',
+})
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-inter',
 })
 
 export const metadata: Metadata = {
@@ -57,7 +62,9 @@ export default function RootLayout({
               </Script>
             </head>
           )}
-          <body className={clsx(onest.variable, excon.variable)}>
+          <body
+            className={clsx(onest.variable, excon.variable, inter.variable)}
+          >
             <main className="h-screen">{children}</main>
             <Toaster />
           </body>

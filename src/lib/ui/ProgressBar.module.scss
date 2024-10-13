@@ -1,0 +1,15 @@
+.container {
+  @apply w-full flex items-center gap-x-3;
+
+  .bar {
+    @apply relative h-2 w-full bg-border rounded-full overflow-hidden;
+
+    span {
+      @apply block h-full bg-primary rounded-full;
+    }
+  }
+
+  .label {
+    @apply text-sm text-primary;
+  }
+}

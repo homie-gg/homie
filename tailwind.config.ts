@@ -167,6 +167,7 @@ const config = {
       fontFamily: {
         sans: ['var(--font-onest)'],
         'sans-alt': ['var(--font-excon)'],
+        'sans-inter': ['var(--font-inter)'],
       },
     },
   },
