@@ -4,6 +4,7 @@ import TaskFilters from '@/app/(user)/tasks/_components/TaskFilters'
 import styles from './_components/TasksPage.module.scss'
 import clsx from 'clsx'
 import TaskMetrics from '@/app/(user)/tasks/_components/TaskMetrics'
+import TasksTable from '@/app/(user)/tasks/_components/TasksTable'
 
 interface TasksPageProps {}
 
@@ -17,6 +18,7 @@ export default function TasksPage(props: TasksPageProps) {
         </PageHeader>
         <TaskFilters />
         <TaskMetrics />
+        <TasksTable />
       </div>
     </div>
   )

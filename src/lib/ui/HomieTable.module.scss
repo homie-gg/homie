@@ -1,26 +1,22 @@
 .main {
   @apply w-full flex flex-col bg-gray-foreground;
 
-  &::before {
-    @apply content-[''] block w-0 h-2 bg-gray-foreground;
-  }
-
   &::after {
     @apply content-[''] flex-1 block w-full min-h-[4.25rem] bg-background;
   }
 
-  thead .row {
+  thead tr {
     @apply h-11 bg-gray-foreground;
   }
 
-  .row {
+  thead tr td {
+      @apply font-medium text-xs leading-[18px] pt-2 pb-2 px-6;
+  }
+
+  tr {
     @apply h-[4.5rem] bg-background border-b-primary-light;
 
-    .head {
-      @apply font-medium text-xs leading-[18px] pt-0 pb-2 px-6;
-    }
-
-    & .cell {
+    & td {
       @apply text-sm leading-5 py-2 px-6 first-of-type:font-medium;
     }
   }

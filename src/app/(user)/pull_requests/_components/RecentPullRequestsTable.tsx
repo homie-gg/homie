@@ -1,6 +1,12 @@
 import ChartCard from '@/app/(user)/pull_requests/_components/ChartCard'
 import { PullRequest } from '@/app/(user)/pull_requests/_utils/get-pull-requests'
-import DataTable from '@/lib/ui/HomieDataTable'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from '@/lib/ui/HomieTable'
 
 interface RecentPullRequestsTableProps {
   pullRequests: PullRequest[]
@@ -13,18 +19,28 @@ export default function RecentPullRequestsTable(
 ) {
   const { pullRequests } = props
 
-  const rows = pullRequests
-    .filter((_pullRequest, index) => index < maxNumItems)
-    .map((pullRequest) => [pullRequest.title, pullRequest.user_username])
+  const recentPullRequests = pullRequests.filter(
+    (_pullRequest, index) => index < maxNumItems,
+  )
 
   return (
     <ChartCard title="Recent PRs" className="h-full">
-      <DataTable
-        data={{
-          headings: ['Task', 'Contributor'],
-          rows,
-        }}
-      />
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableCell>Task</TableCell>
+            <TableCell>Contributor</TableCell>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {recentPullRequests.map((pullRequest) => (
+            <TableRow key={pullRequest.id}>
+              <TableCell>{pullRequest.title}</TableCell>
+              <TableCell>{pullRequest.user_username}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </ChartCard>
   )
 }
