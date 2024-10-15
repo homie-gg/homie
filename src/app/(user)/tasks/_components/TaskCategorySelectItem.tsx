@@ -8,8 +8,9 @@ import { parseAsStringLiteral, useQueryState } from 'nuqs'
 
 const taskCategories = [
   'all',
-  'this_week',
   'new_tasks',
+  'due_this_week',
+  'late',
   'unassigned',
   'stale',
 ] as const

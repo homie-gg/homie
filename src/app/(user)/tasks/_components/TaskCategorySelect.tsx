@@ -6,12 +6,13 @@ export default function TaskCategorySelect() {
     <div className={styles.container}>
       <ul className={styles.content}>
         <TaskCategorySelectItem value="all">All Tasks</TaskCategorySelectItem>
-        <TaskCategorySelectItem value="this_week">
-          This Week
-        </TaskCategorySelectItem>
         <TaskCategorySelectItem value="new_tasks">
           New Tasks
         </TaskCategorySelectItem>
+        <TaskCategorySelectItem value="due_this_week">
+          Due This Week
+        </TaskCategorySelectItem>
+        <TaskCategorySelectItem value="late">Late Tasks</TaskCategorySelectItem>
         <TaskCategorySelectItem value="unassigned">
           Unassigned
         </TaskCategorySelectItem>
