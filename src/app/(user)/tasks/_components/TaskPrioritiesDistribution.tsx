@@ -10,22 +10,22 @@ export const priorityDistribution = [
   {
     label: 'critical',
     count: 40,
-    fill: 'var(--chart-6)',
+    fill: 'var(--chart-7)',
   },
   {
     label: 'high',
     count: 20,
-    fill: 'var(--chart-7)',
+    fill: 'var(--chart-8)',
   },
   {
     label: 'medium',
     count: 15,
-    fill: 'var(--chart-8)',
+    fill: 'var(--chart-9)',
   },
   {
     label: 'low',
     count: 25,
-    fill: 'var(--chart-9)',
+    fill: 'var(--chart-6)',
   },
 ]
 
