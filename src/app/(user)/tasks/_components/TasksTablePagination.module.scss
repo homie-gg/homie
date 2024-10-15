@@ -1,0 +1,23 @@
+.container {
+  @apply w-full flex justify-between items-center px-6 py-3;
+
+  .action {
+    @apply gap-x-2 font-semibold text-sm px-3 py-2 rounded-lg;
+
+    svg {
+      @apply w-5 h-5;
+    }
+  }
+
+  .tags-container {
+    @apply flex items-center gap-x-0.5;
+
+    .tag {
+      @apply h-10 w-10 font-medium text-sm text-primary rounded-lg p-2;
+
+      &--active {
+        @apply bg-primary text-white;
+      }
+    }
+  }
+}

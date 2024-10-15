@@ -12,6 +12,7 @@ import {
   TableRow,
 } from '@/lib/ui/HomieTable'
 import { cn } from '@/lib/utils'
+import TasksTablePagination from '@/app/(user)/tasks/_components/TasksTablePagination'
 
 interface TasksTableProps {}
 
@@ -60,6 +61,11 @@ export default function TasksTable(props: TasksTableProps) {
             </TableBody>
           </Table>
         </div>
+        <TasksTablePagination
+          totalPages={10}
+          currentPage={2}
+          setPage={() => {}}
+        />
       </div>
     </div>
   )
