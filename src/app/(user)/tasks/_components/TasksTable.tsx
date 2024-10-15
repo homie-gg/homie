@@ -1,7 +1,5 @@
 'use client'
 
-import clsx from 'clsx'
-import DataTable from '@/lib/ui/HomieDataTable'
 import styles from './TasksTable.module.scss'
 import { Button } from '@/lib/ui/HomieButton'
 import { useState } from 'react'
