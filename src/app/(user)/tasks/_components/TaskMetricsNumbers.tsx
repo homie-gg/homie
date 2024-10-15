@@ -1,13 +1,18 @@
 import TaskMetricsCard from '@/app/(user)/tasks/_components/TaskMetricsCard'
 import styles from './TaskMetricsNumbers.module.scss'
+import { Tasks } from '@/app/(user)/tasks/_components/get-tasks'
 
-export default function TaskMetricsNumbers() {
+interface TaskMetricsNumbersProps {
+  tasks: Tasks
+}
+export default function TaskMetricsNumbers(props: TaskMetricsNumbersProps) {
+  const { tasks } = props
   return (
     <TaskMetricsCard title="Metrics">
       <ul className={styles['data-list']}>
         <li className={styles['data-item']}>
           <span className={styles['data-label']}>Pending Tasks</span>
-          <span className={styles['data-value']}>125 tasks</span>
+          <span className={styles['data-value']}>{tasks.total} tasks</span>
         </li>
         <li className={styles['data-item']}>
           <span className={styles['data-label']}>Estimated number of days</span>

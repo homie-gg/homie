@@ -7,6 +7,8 @@ import TasksTable from '@/app/(user)/tasks/_components/TasksTable'
 import { getUserOrganization } from '@/lib/auth/get-user-organization'
 import TaskCategorySelect from '@/app/(user)/tasks/_components/TaskCategorySelect'
 import { TaskCategory } from '@/app/(user)/tasks/_components/TaskCategorySelectItem'
+import { dbClient } from '@/database/client'
+import { getTasks } from '@/app/(user)/tasks/_components/get-tasks'
 
 interface TasksPageProps {
   searchParams: {
@@ -24,6 +26,8 @@ export default async function TasksPage(props: TasksPageProps) {
 
   console.log(searchParams.category)
 
+  const tasks = await getTasks({ organization })
+
   return (
     <div className={styles.main}>
       <div className={clsx('container', styles.container)}>
@@ -31,7 +35,7 @@ export default async function TasksPage(props: TasksPageProps) {
           <PageTitle>Tasks</PageTitle>
         </PageHeader>
         <TaskCategorySelect />
-        <TaskMetrics />
+        <TaskMetrics tasks={tasks} />
         <TasksTable />
       </div>
     </div>

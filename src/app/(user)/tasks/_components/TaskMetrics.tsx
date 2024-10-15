@@ -2,16 +2,19 @@ import TaskTypesDistribution from '@/app/(user)/tasks/_components/TaskTypesDistr
 import styles from './TaskMetrics.module.scss'
 import TaskMetricsNumbers from '@/app/(user)/tasks/_components/TaskMetricsNumbers'
 import TaskPrioritiesDistribution from '@/app/(user)/tasks/_components/TaskPrioritiesDistribution'
+import { Tasks } from '@/app/(user)/tasks/_components/get-tasks'
 
-interface TaskMetricsProps {}
+interface TaskMetricsProps {
+  tasks: Tasks
+}
 
 export default function TaskMetrics(props: TaskMetricsProps) {
-  const {} = props
+  const { tasks } = props
   return (
     <div className={styles.main}>
       <div className={styles.content}>
         <TaskTypesDistribution />
-        <TaskMetricsNumbers />
+        <TaskMetricsNumbers tasks={tasks} />
         <TaskPrioritiesDistribution />
       </div>
     </div>
