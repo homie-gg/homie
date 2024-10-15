@@ -1,0 +1,62 @@
+.datepicker {
+  @apply grid gap-2;
+
+  .trigger {
+    @apply gap-x-2 justify-start text-base text-left font-medium rounded-lg shadow-sm px-3.5 py-2.5;
+  }
+}
+
+.popover-content {
+  @apply w-auto mt-1 flex items-stretch p-0;
+  box-shadow:
+    0px 20px 24px -4px rgba(16, 24, 40, 0.08),
+    0px 8px 8px -4px rgba(16, 24, 40, 0.03);
+
+  .calendar-options {
+    @apply border-r border-r-border p-4;
+
+    ul {
+      @apply flex flex-col gap-y-1;
+
+      .calendar-option {
+        @apply lg:min-w-[150px] w-full justify-start font-sans-inter font-medium text-sm text-primary text-left py-2 px-4;
+      }
+    }
+  }
+
+  .calendar-main {
+    @apply flex-1 flex flex-col;
+
+    .calendar {
+      @apply flex-1 flex items-center border-b border-b-border;
+    }
+
+    .calendar-footer {
+      @apply flex justify-between items-center gap-y-4 p-4;
+
+      .date-summary {
+        @apply flex items-center gap-x-2;
+
+        span {
+          @apply block border border-primary font-sans-inter text-base text-primary px-3 py-2 rounded-lg;
+        }
+      }
+
+      .calendar-actions {
+        @apply flex gap-x-2 items-center;
+
+        & button {
+          @apply h-11 px-4 py-2.5 font-semibold text-sm border-none rounded-lg;
+
+          &:nth-of-type(1) {
+            @apply text-primary-alt;
+            box-shadow:
+              0px 1px 2px rgba(16, 24, 40, 0.05),
+              inset 0px 0px 0px 1px rgba(16, 24, 40, 0.18),
+              inset 0px -2px 0px rgba(16, 24, 40, 0.05);
+          }
+        }
+      }
+    }
+  }
+}

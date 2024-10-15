@@ -3,10 +3,14 @@
 }
 
 .container {
-  @apply flex-1 grid grid-cols-4 items-center gap-x-3;
+  @apply flex-1 flex items-center gap-x-3;
+
+  .search {
+    @apply flex-1
+  }
 
   .item {
-    @apply flex flex-col gap-y-1.5;
+    @apply flex flex-col gap-y-1.5 min-w-[200px];
   }
 
   .label {

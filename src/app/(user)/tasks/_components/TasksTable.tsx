@@ -44,7 +44,7 @@ export default function TasksTable(props: TasksTableProps) {
               <TableRow>
                 <TableCell>Task</TableCell>
                 <TableCell>Priority</TableCell>
-                <TableCell>Created At</TableCell>
+                <TableCell>Added At</TableCell>
                 <TableCell>Est. Completion Date</TableCell>
               </TableRow>
             </TableHeader>

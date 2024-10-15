@@ -45,46 +45,65 @@
   --blue: 218 80% 46%;
   --blue-foreground: 206 100% 97%;
   --blue-alt: 206 100% 85%;
+  --blue-500: 211 95% 58%;
 
   --gray-foreground: 210 20% 98%;
 
   --destructive: 0 82% 54%;
   --destructive-foreground: 210 40% 98%;
 
+  --quinary-foreground: 218 15% 65%;
+
+  --error: 4 74% 49%;
+  --error-700: 4 77% 40%;
+  --error-200: 3 96% 89%;
+  --error-50: 5 86% 97%;
+
+  --warning-50: 45 100% 96%;
+  --warning-200: 44 98% 77%;
+  --warning-700: 22 92% 37%;
+
+  --success: 152 77% 39%;
+  --success-secondary: 152 77% 39%;
+  --success-50: 145 81% 96%;
+  --success-200: 144 68% 80%;
+  --success-700: 155 90% 24%;
+
+  --purple-50: 245 100% 98%;
+  --purple-200: 244 95% 92%;
+  --purple-700: 257 72% 50%;
+
+  --yellow-400: 46 96% 53%;
+
   --border: 218 17% 91%;
   --input: 0 0% 92%;
   --ring: 222.2 84% 4.9%;
 
+  --field-info: 238 23% 57%;
+
   --radius: 0.5rem;
 
-  // chart colors
-  --chart-1: hsla(247, 100%, 70%, 1);
-  --chart-2: hsla(51, 100%, 82%, 1);
-  --chart-3: hsla(327, 100%, 73%, 1);
-  --chart-4: hsla(137, 100%, 69%, 1);
-  --chart-5: hsla(200, 92%, 75%, 1);
+  // chart
+  --chart-1: hsl(247, 100%, 70%);
+  --chart-2: hsl(51, 100%, 82%);
+  --chart-3: hsl(327, 100%, 73%);
+  --chart-4: hsl(137, 100%, 69%);
+  --chart-5: hsl(200, 92%, 75%);
   --chart-6: hsl(218, 17%, 91%);
   --chart-7: hsl(4, 92%, 69%);
   --chart-8: hsl(51, 100%, 82%);
   --chart-9: hsl(200, 92%, 75%);
-  --chart-10: hsla(12, 92%, 76%, 1);
-  --chart-11: hsla(227, 85%, 72%, 1);
-  --chart-12: hsla(347, 90%, 68%, 1);
-  --chart-13: hsla(67, 90%, 74%, 1);
-  --chart-14: hsla(167, 85%, 70%, 1);
-  --chart-15: hsla(222, 100%, 68%, 1);
-  --chart-16: hsla(297, 92%, 78%, 1);
 }
 
 @layer base {
   body {
-    @apply text-primary font-sans;
+    @apply bg-primary-foreground text-primary font-sans;
   }
 }
 
 @layer components {
   .container {
-    @apply w-full lg:max-w-7xl py-14 px-4 lg:px-8;
+    @apply w-full max-w-full lg:max-w-7xl py-14 px-4 lg:px-8;
   }
 }
 

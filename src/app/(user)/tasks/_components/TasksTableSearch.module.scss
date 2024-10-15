@@ -1,0 +1,15 @@
+.container {
+  @apply relative;
+
+  .icon {
+    @apply absolute left-3.5 top-1/2 w-5 h-5 -translate-y-1/2;
+
+    svg {
+      @apply w-5 h-5;
+    }
+  }
+
+  .input {
+    @apply w-full border-primary pl-[calc(0.875rem+1.25rem+0.5rem)] shadow-[0px_1px_2px_rgba(16,24,40,0.05)] pr-3.5 focus-visible:ring-primary;
+  }
+}
