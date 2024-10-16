@@ -11,16 +11,20 @@ export default function TaskMetricsNumbers(props: TaskMetricsNumbersProps) {
     <TaskMetricsCard title="Metrics">
       <ul className={styles['data-list']}>
         <li className={styles['data-item']}>
-          <span className={styles['data-label']}>Pending Tasks</span>
+          <span className={styles['data-label']}>Open Tasks</span>
           <span className={styles['data-value']}>{tasks.total} tasks</span>
         </li>
         <li className={styles['data-item']}>
           <span className={styles['data-label']}>Estimated number of days</span>
-          <span className={styles['data-value']}>25 days</span>
+          <span className={styles['data-value']}>
+            {tasks.total_estimated_days_to_complete} days
+          </span>
         </li>
         <li className={styles['data-item']}>
           <span className={styles['data-label']}>Stale Tasks</span>
-          <span className={styles['data-value']}>12 tasks</span>
+          <span className={styles['data-value']}>
+            {tasks.num_stale_tasks} tasks
+          </span>
         </li>
       </ul>
     </TaskMetricsCard>

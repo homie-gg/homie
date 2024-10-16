@@ -32,6 +32,8 @@ interface TaskTypeCount {
 
 export type Tasks = PaginatedCollection<Task> & {
   task_types: Array<TaskTypeCount>
+  total_estimated_days_to_complete: number
+  num_stale_tasks: number
 }
 
 export async function getTasks(params: GetTasksParams): Promise<Tasks> {
@@ -46,10 +48,34 @@ export async function getTasks(params: GetTasksParams): Promise<Tasks> {
       'homie.task_type.id',
     )
 
-  // Get total count
-  const { total } = await query
-    .select(sql<number>`count(*)`.as('total'))
-    .executeTakeFirstOrThrow()
+  // Get  counts
+  const { total, total_estimated_days_to_complete, num_stale_tasks } =
+    await query
+      .select(sql<number>`count(*)`.as('total'))
+      .select(({ fn }) => [
+        fn
+          .sum<number>(sql`COALESCE(estimated_days_to_complete, 0)`)
+          .as('total_estimated_days_to_complete'),
+      ])
+      .select(({ fn }) => [
+        fn
+          .sum<number>(sql`COALESCE(estimated_days_to_complete, 0)`)
+          .as('total_estimated_days_to_complete'),
+      ])
+      .select((eb) =>
+        eb.fn
+          .sum<number>(
+            sql`
+          case
+            when is_stale = true then 1
+            else 0
+          end
+        `,
+          )
+          .as('num_stale_tasks'),
+      )
+
+      .executeTakeFirstOrThrow()
 
   const taskTypes: TaskTypeCount[] = (
     await query
@@ -93,5 +119,7 @@ export async function getTasks(params: GetTasksParams): Promise<Tasks> {
     to: Math.min(offset + perPage, total), // last item on page,
     total,
     task_types: taskTypes,
+    total_estimated_days_to_complete,
+    num_stale_tasks,
   }
 }
