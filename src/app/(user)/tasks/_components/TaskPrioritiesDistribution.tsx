@@ -13,7 +13,6 @@ export default function TaskPrioritiesDistribution(
   props: TaskTypesContributionProps,
 ) {
   const { tasks } = props
-  console.log(tasks.task_priorities)
   return (
     <TaskMetricsCard
       title="Priorities"
