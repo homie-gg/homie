@@ -1,9 +1,7 @@
 import { dbClient } from '@/database/client'
 import { sql } from 'kysely'
 
-export type Task = {
-  task_type: string
-}
+export type Task = {}
 
 interface GetTasksParams {
   organization: {
@@ -32,6 +30,7 @@ interface TaskTypeCount {
 
 export type Tasks = PaginatedCollection<Task> & {
   task_types: Array<TaskTypeCount>
+  task_priorities: Record<string, number>
   total_estimated_days_to_complete: number
   num_stale_tasks: number
 }
@@ -42,11 +41,6 @@ export async function getTasks(params: GetTasksParams): Promise<Tasks> {
   const query = dbClient
     .selectFrom('homie.task')
     .where('homie.task.organization_id', '=', organization.id)
-    .innerJoin(
-      'homie.task_type',
-      'homie.task.task_type_id',
-      'homie.task_type.id',
-    )
 
   // Get  counts
   const { total, total_estimated_days_to_complete, num_stale_tasks } =
@@ -79,6 +73,11 @@ export async function getTasks(params: GetTasksParams): Promise<Tasks> {
 
   const taskTypes: TaskTypeCount[] = (
     await query
+      .innerJoin(
+        'homie.task_type',
+        'homie.task.task_type_id',
+        'homie.task_type.id',
+      )
       .select(['homie.task_type.name as task_type'])
       .select((eb) => [eb.fn.count('homie.task.id').as('count')])
       .groupBy('task_type')
@@ -88,6 +87,18 @@ export async function getTasks(params: GetTasksParams): Promise<Tasks> {
     count: typeof type.count === 'number' ? type.count : Number(type.count),
   }))
 
+  const taskPriorities: Record<string, number> = (
+    await query
+      .select(['priority_level'])
+      .select((eb) => [eb.fn.count('homie.task.id').as('count')])
+      .groupBy('priority_level')
+      .execute()
+  ).reduce((acc, i) => {
+    acc[i.priority_level] =
+      typeof i.count === 'number' ? i.count : Number(i.count)
+    return acc
+  }, {} as any)
+
   const page = 1
   const perPage = 20
 
@@ -96,10 +107,10 @@ export async function getTasks(params: GetTasksParams): Promise<Tasks> {
   const paginated = await query
     .limit(perPage) // per page
     .offset(offset) // page
-    .select(['homie.task_type.name as task_type'])
+    .select([])
     .execute()
 
-  const baseUrl = 'http://localhost:3000/tasks'
+  const baseUrl = 'http://localhost:3000/is'
 
   const lastPage = Math.ceil(total / perPage)
 
@@ -121,5 +132,6 @@ export async function getTasks(params: GetTasksParams): Promise<Tasks> {
     task_types: taskTypes,
     total_estimated_days_to_complete,
     num_stale_tasks,
+    task_priorities: taskPriorities,
   }
 }

@@ -3,36 +3,17 @@
 import TaskMetricsCard from '@/app/(user)/tasks/_components/TaskMetricsCard'
 import styles from './TaskPrioritiesDistribution.module.scss'
 import PieChart from '@/lib/ui/PieChart'
+import { Tasks } from '@/app/(user)/tasks/_components/get-tasks'
 
-interface TaskTypesContributionProps {}
-
-export const priorityDistribution = [
-  {
-    label: 'critical',
-    count: 40,
-    fill: 'var(--chart-7)',
-  },
-  {
-    label: 'high',
-    count: 20,
-    fill: 'var(--chart-8)',
-  },
-  {
-    label: 'medium',
-    count: 15,
-    fill: 'var(--chart-9)',
-  },
-  {
-    label: 'low',
-    count: 25,
-    fill: 'var(--chart-6)',
-  },
-]
+interface TaskTypesContributionProps {
+  tasks: Tasks
+}
 
 export default function TaskPrioritiesDistribution(
   props: TaskTypesContributionProps,
 ) {
-  const {} = props
+  const { tasks } = props
+  console.log(tasks.task_priorities)
   return (
     <TaskMetricsCard
       title="Priorities"
@@ -42,7 +23,28 @@ export default function TaskPrioritiesDistribution(
       }}
     >
       <PieChart
-        data={priorityDistribution}
+        data={[
+          {
+            label: 'critical',
+            count: tasks.task_priorities['0'],
+            fill: 'var(--chart-7)',
+          },
+          {
+            label: 'high',
+            count: tasks.task_priorities['1'],
+            fill: 'var(--chart-8)',
+          },
+          {
+            label: 'medium',
+            count: tasks.task_priorities['2'],
+            fill: 'var(--chart-9)',
+          },
+          {
+            label: 'low',
+            count: tasks.task_priorities['3'],
+            fill: 'var(--chart-6)',
+          },
+        ]}
         innerRadius={25}
         className={styles.chart}
       />

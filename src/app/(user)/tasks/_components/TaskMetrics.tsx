@@ -15,7 +15,7 @@ export default function TaskMetrics(props: TaskMetricsProps) {
       <div className={styles.content}>
         <TaskTypesDistribution tasks={tasks} />
         <TaskMetricsNumbers tasks={tasks} />
-        <TaskPrioritiesDistribution />
+        <TaskPrioritiesDistribution tasks={tasks} />
       </div>
     </div>
   )
