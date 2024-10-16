@@ -25,7 +25,14 @@ export interface PaginatedCollection<T> {
   total: number
 }
 
-export type Tasks = PaginatedCollection<Task>
+interface TaskTypeCount {
+  type: string
+  count: number
+}
+
+export type Tasks = PaginatedCollection<Task> & {
+  task_types: Array<TaskTypeCount>
+}
 
 export async function getTasks(params: GetTasksParams): Promise<Tasks> {
   const { organization } = params
@@ -40,9 +47,20 @@ export async function getTasks(params: GetTasksParams): Promise<Tasks> {
     )
 
   // Get total count
-  const [{ total }] = await query
+  const { total } = await query
     .select(sql<number>`count(*)`.as('total'))
-    .execute()
+    .executeTakeFirstOrThrow()
+
+  const taskTypes: TaskTypeCount[] = (
+    await query
+      .select(['homie.task_type.name as task_type'])
+      .select((eb) => [eb.fn.count('homie.task.id').as('count')])
+      .groupBy('task_type')
+      .execute()
+  ).map((type) => ({
+    type: type.task_type,
+    count: typeof type.count === 'number' ? type.count : Number(type.count),
+  }))
 
   const page = 1
   const perPage = 20
@@ -74,5 +92,6 @@ export async function getTasks(params: GetTasksParams): Promise<Tasks> {
     from: offset + 1, // first item on page
     to: Math.min(offset + perPage, total), // last item on page,
     total,
+    task_types: taskTypes,
   }
 }

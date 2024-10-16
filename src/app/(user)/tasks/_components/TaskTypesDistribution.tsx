@@ -1,46 +1,45 @@
 import TaskMetricsCard from '@/app/(user)/tasks/_components/TaskMetricsCard'
 import styles from './TaskTypesDistribution.module.scss'
 import ProgressBar from '@/lib/ui/ProgressBar'
+import { Tasks } from '@/app/(user)/tasks/_components/get-tasks'
 
-interface TaskTypesContributionProps {}
-
-export const contributionMetrics = [
-  {
-    label: 'Data 1',
-    progress: 50,
-  },
-  {
-    label: 'Data 2',
-    progress: 30,
-  },
-  {
-    label: 'Data 3',
-    progress: 60,
-  },
-  {
-    label: 'Data 4',
-    progress: 10,
-  },
-  {
-    label: 'Data 5',
-    progress: 5,
-  },
-]
+interface TaskTypesContributionProps {
+  tasks: Tasks
+}
 
 export default function TaskTypesDistribution(
   props: TaskTypesContributionProps,
 ) {
-  const {} = props
+  const { tasks } = props
+
   return (
     <TaskMetricsCard title="Types">
       <ul className={styles['data-list']}>
-        {contributionMetrics.map(({ label, progress }, index) => (
+        {tasks.task_types.map(({ type, count }, index) => (
           <li key={index} className={styles['data-item']}>
-            <span className={styles['data-label']}>{label}</span>
-            <ProgressBar progress={progress} className={styles.progress} />
+            <span className={styles['data-label']}>{getTypeLabel(type)}</span>
+            <ProgressBar
+              progress={Math.round((100 * count) / tasks.total)}
+              className={styles.progress}
+            />
           </li>
         ))}
       </ul>
     </TaskMetricsCard>
   )
+}
+
+function getTypeLabel(type: string) {
+  switch (type) {
+    case 'feature':
+      return 'Feature'
+    case 'bug_fix':
+      return 'Bug Fix'
+    case 'maintenance':
+      return 'Maintenance'
+    case 'planning':
+      return 'Planning'
+    default:
+      return 'Unknown'
+  }
 }
