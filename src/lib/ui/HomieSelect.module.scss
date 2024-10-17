@@ -10,7 +10,7 @@
       & > div {
         @apply inline-flex items-center justify-between gap-x-1 rounded-md bg-background hover:bg-gray-foreground text-primary cursor-pointer;
 
-        &[aria-selected="true"] {
+        &[aria-selected='true'] {
           @apply bg-gray-foreground text-primary;
 
           &::after {

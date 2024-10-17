@@ -12,7 +12,7 @@ export type Task = {
   priority_level: number
   created_at: Date
   estimated_completion_date: Date | null
-  html_url:string
+  html_url: string
 }
 
 interface GetTasksParams {
