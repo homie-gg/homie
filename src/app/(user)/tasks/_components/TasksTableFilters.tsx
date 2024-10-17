@@ -2,9 +2,13 @@ import { DateRange } from 'react-day-picker'
 import styles from './TasksTableFilters.module.scss'
 import { useState } from 'react'
 import TasksTableSearch from '@/app/(user)/tasks/_components/TasksTableSearch'
-import TasksStatusFilter from '@/app/(user)/tasks/_components/TasksStatusFilter'
+import TaskPriorityFilter, {
+  TaskPriorityFilterValue,
+} from '@/app/(user)/tasks/_components/TaskPriorirtyFilter'
 import DatePicker from '@/lib/ui/DatePicker'
 import { cn } from '@/lib/utils'
+import { parseAsStringLiteral, ParserBuilder, useQueryState } from 'nuqs'
+import { taskPriority } from '@/lib/tasks/task-priority'
 
 interface TasksTableFiltersProps {
   searchTerm: string
@@ -13,10 +17,17 @@ interface TasksTableFiltersProps {
   setDate: (date?: DateRange) => void
 }
 
+const taskCategoryParser: ParserBuilder<TaskPriorityFilterValue> =
+  parseAsStringLiteral(['any', ...Object.keys(taskPriority)] as any)
+
 export default function TasksTableFilters(props: TasksTableFiltersProps) {
   const [searchTerm, setSearchTerm] = useState('')
 
   const [date, setDate] = useState<DateRange>()
+  const [priority, setPriority] = useQueryState(
+    'priority',
+    taskCategoryParser.withDefault('any'),
+  )
 
   const {} = props
   return (
@@ -29,8 +40,8 @@ export default function TasksTableFilters(props: TasksTableFiltersProps) {
         />
       </div>
       <div className={styles.item}>
-        <span className={styles.label}>Task Status</span>
-        <TasksStatusFilter />
+        <span className={styles.label}>Priority</span>
+        <TaskPriorityFilter value={priority} onChange={setPriority} />
       </div>
       <div className={styles.item}>
         <span className={styles.label}>Added At</span>
