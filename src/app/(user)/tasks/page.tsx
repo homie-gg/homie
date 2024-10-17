@@ -36,7 +36,7 @@ export default async function TasksPage(props: TasksPageProps) {
         </PageHeader>
         <TaskCategorySelect />
         <TaskMetrics tasks={tasks} />
-        <TasksTable />
+        <TasksTable tasks={tasks} />
       </div>
     </div>
   )

@@ -12,6 +12,7 @@ const onest = Onest({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
   variable: '--font-onest',
+  display: 'swap',
 })
 const excon = localFont({
   src: [
@@ -27,6 +28,7 @@ const inter = Inter({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
   variable: '--font-inter',
+  display: 'swap',
 })
 
 export const metadata: Metadata = {

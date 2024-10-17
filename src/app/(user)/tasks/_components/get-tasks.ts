@@ -1,7 +1,12 @@
 import { dbClient } from '@/database/client'
 import { sql } from 'kysely'
 
-export type Task = {}
+export type Task = {
+  id: number
+  name: string
+  priority_level: number
+  created_at: Date
+}
 
 interface GetTasksParams {
   organization: {
@@ -100,17 +105,24 @@ export async function getTasks(params: GetTasksParams): Promise<Tasks> {
   }, {} as any)
 
   const page = 1
-  const perPage = 20
+  const perPage = 8
 
   const offset = (page - 1) * perPage
 
   const paginated = await query
     .limit(perPage) // per page
     .offset(offset) // page
-    .select([])
+    .select([
+      'id',
+      'name',
+      'estimated_days_to_complete',
+      'due_date',
+      'priority_level',
+      'created_at',
+    ])
     .execute()
 
-  const baseUrl = 'http://localhost:3000/is'
+  const baseUrl = 'http://localhost:3000/tasks'
 
   const lastPage = Math.ceil(total / perPage)
 

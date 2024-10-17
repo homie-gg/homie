@@ -13,11 +13,15 @@ import {
 } from '@/lib/ui/HomieTable'
 import { cn } from '@/lib/utils'
 import TasksTablePagination from '@/app/(user)/tasks/_components/TasksTablePagination'
+import { Tasks } from '@/app/(user)/tasks/_components/get-tasks'
+import { addDays, differenceInDays, format, isSameDay } from 'date-fns'
 
-interface TasksTableProps {}
+interface TasksTableProps {
+  tasks: Tasks
+}
 
 export default function TasksTable(props: TasksTableProps) {
-  const {} = props
+  const { tasks } = props
   const [searchTerm, setSearchTerm] = useState('')
   return (
     <div className={styles.main}>
@@ -50,14 +54,25 @@ export default function TasksTable(props: TasksTableProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
-                <TableCell>
-                  Implement Search Functionality with Filters
-                </TableCell>
-                <TableCell>Low</TableCell>
-                <TableCell>Oct 15, 2024</TableCell>
-                <TableCell>Oct 15, 2024</TableCell>
-              </TableRow>
+              {tasks.data.map((task) => (
+                <TableRow key={task.id}>
+                  <TableCell>{task.name}</TableCell>
+                  <TableCell>
+                    <span
+                      className={cn(
+                        styles['priority-tag'],
+                        styles[`priority-${task.priority_level}`],
+                      )}
+                    >
+                      {getPriorityLabel(task.priority_level)}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    {format(task.created_at, 'MMM dd, yyyy')}
+                  </TableCell>
+                  <TableCell>Oct 15, 2024</TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </div>
@@ -69,4 +84,19 @@ export default function TasksTable(props: TasksTableProps) {
       </div>
     </div>
   )
+}
+
+function getPriorityLabel(priorityLevel: number) {
+  switch (priorityLevel) {
+    case 0:
+      return 'Critical'
+    case 1:
+      return 'High'
+    case 2:
+      return 'Medium'
+    case 3:
+      return 'Low'
+    default:
+      return 'Low'
+  }
 }

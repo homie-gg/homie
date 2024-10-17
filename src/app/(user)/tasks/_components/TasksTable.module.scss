@@ -19,6 +19,23 @@
     .body {
       @apply w-full;
 
+      .priority-tag {
+        @apply inline-flex font-medium capitalize text-sm leading-[18px] border rounded-full py-1 px-2;
+
+        &.priority-3 {
+          @apply bg-[#f8f9fc] border-[#d5d9eb] text-[#363f72];
+        }
+        &.priority-2 {
+          @apply bg-[#eff8ff] border-[#b2ddff] text-[#175cd3];
+        }
+        &.priority-1 {
+          @apply bg-[#fffaeb] border-[#fedf89] text-[#b54708];
+        }
+        &.priority-0 {
+          @apply bg-[#fef3f2] border-[#fecdca] text-[#b42318];
+        }
+      }
+
       .tasks-table-main {
         @apply w-full after:content-none;
 
@@ -103,22 +120,7 @@
           }
         }
 
-        .priority-tag {
-          @apply inline-flex font-medium capitalize text-sm leading-[18px] border rounded-full py-1 px-2;
-
-          &[data-priority="0"] {
-            @apply bg-[#f8f9fc] border-[#d5d9eb] text-[#363f72];
-          }
-          &[data-priority="1"] {
-            @apply bg-[#eff8ff] border-[#b2ddff] text-[#175cd3];
-          }
-          &[data-priority="2"] {
-            @apply bg-[#fffaeb] border-[#fedf89] text-[#b54708];
-          }
-          &[data-priority="3"] {
-            @apply bg-[#fef3f2] border-[#fecdca] text-[#b42318];
-          }
-        }
+        
 
         .date-short {
           @apply xl:hidden;
