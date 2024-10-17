@@ -4,6 +4,7 @@ import { taskStatus } from '@/lib/tasks'
 import { sql } from 'kysely'
 import { taskPriority } from '@/lib/tasks/task-priority'
 import { searchTasks } from '@/app/(user)/tasks/_components/search-tasks'
+import { endOfWeek, startOfWeek, subDays } from 'date-fns'
 
 export type Task = {
   id: number
@@ -53,8 +54,14 @@ export type Tasks = PaginatedCollection<Task> & {
 }
 
 export async function getTasks(params: GetTasksParams): Promise<Tasks> {
-  const { organization, category, added_from, added_to, search, priority } =
-    params
+  const {
+    organization,
+    category = 'all',
+    added_from,
+    added_to,
+    search,
+    priority,
+  } = params
 
   let query = dbClient
     .selectFrom('homie.task')
@@ -80,10 +87,41 @@ export async function getTasks(params: GetTasksParams): Promise<Tasks> {
   })
   if (searchMatchingIds) {
     if (searchMatchingIds.length === 0) {
-      query = query.where('homie.task.id', '=', 0)
+      query = query.where('homie.task.id', '=', 0) // force 0 results
     } else {
       query = query.where('homie.task.id', 'in', searchMatchingIds)
     }
+  }
+
+  if (category === 'new_tasks') {
+    query = query.where('homie.task.created_at', '>', subDays(new Date(), 3))
+  }
+
+  if (category === 'due_this_week') {
+    query = query.where('homie.task.due_date', '>', startOfWeek(new Date()))
+    query = query.where('homie.task.due_date', '<', endOfWeek(new Date()))
+  }
+
+  if (category === 'late') {
+    query = query.where('homie.task.due_date', '<', new Date())
+  }
+
+  if (category === 'unassigned') {
+    query = query.where(({ exists, selectFrom, not }) =>
+      not(
+        exists(
+          selectFrom('homie.contributor_task').whereRef(
+            'homie.contributor_task.task_id',
+            '=',
+            'homie.task.id',
+          ),
+        ),
+      ),
+    )
+  }
+
+  if (category === 'stale') {
+    query = query.where('homie.task.is_stale', '=', true)
   }
 
   // Get  counts
