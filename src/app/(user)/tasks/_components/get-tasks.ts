@@ -6,6 +6,7 @@ export type Task = {
   name: string
   priority_level: number
   created_at: Date
+  estimated_completion_date: Date | null
 }
 
 interface GetTasksParams {
@@ -109,6 +110,7 @@ export async function getTasks(params: GetTasksParams): Promise<Tasks> {
 
   const offset = (page - 1) * perPage
 
+  // Fetch tasks
   const paginated = await query
     .limit(perPage) // per page
     .offset(offset) // page
@@ -119,6 +121,7 @@ export async function getTasks(params: GetTasksParams): Promise<Tasks> {
       'due_date',
       'priority_level',
       'created_at',
+      'estimated_completion_date',
     ])
     .execute()
 

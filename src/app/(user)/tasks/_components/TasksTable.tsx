@@ -70,7 +70,11 @@ export default function TasksTable(props: TasksTableProps) {
                   <TableCell>
                     {format(task.created_at, 'MMM dd, yyyy')}
                   </TableCell>
-                  <TableCell>Oct 15, 2024</TableCell>
+                  <TableCell>
+                    {task.estimated_completion_date
+                      ? format(task.created_at, 'MMM dd, yyyy')
+                      : '-'}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

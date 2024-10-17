@@ -2653,6 +2653,12 @@ declare module 'zapatos/schema' {
         */
         due_date: Date | null;
         /**
+        * **homie.task.estimated_completion_date**
+        * - `timestamptz` in database
+        * - Nullable, no default
+        */
+        estimated_completion_date: Date | null;
+        /**
         * **homie.task.estimated_days_to_complete**
         * - `int4` in database
         * - Nullable, no default
@@ -2780,6 +2786,12 @@ declare module 'zapatos/schema' {
         * - Nullable, no default
         */
         due_date: db.TimestampTzString | null;
+        /**
+        * **homie.task.estimated_completion_date**
+        * - `timestamptz` in database
+        * - Nullable, no default
+        */
+        estimated_completion_date: db.TimestampTzString | null;
         /**
         * **homie.task.estimated_days_to_complete**
         * - `int4` in database
@@ -2909,6 +2921,12 @@ declare module 'zapatos/schema' {
         */
         due_date?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
         /**
+        * **homie.task.estimated_completion_date**
+        * - `timestamptz` in database
+        * - Nullable, no default
+        */
+        estimated_completion_date?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+        /**
         * **homie.task.estimated_days_to_complete**
         * - `int4` in database
         * - Nullable, no default
@@ -3037,6 +3055,12 @@ declare module 'zapatos/schema' {
         */
         due_date?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | null | db.DefaultType | db.SQLFragment;
         /**
+        * **homie.task.estimated_completion_date**
+        * - `timestamptz` in database
+        * - Nullable, no default
+        */
+        estimated_completion_date?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | null | db.DefaultType | db.SQLFragment;
+        /**
         * **homie.task.estimated_days_to_complete**
         * - `int4` in database
         * - Nullable, no default
@@ -3164,6 +3188,12 @@ declare module 'zapatos/schema' {
         * - Nullable, no default
         */
         due_date?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | null | db.DefaultType | db.SQLFragment>;
+        /**
+        * **homie.task.estimated_completion_date**
+        * - `timestamptz` in database
+        * - Nullable, no default
+        */
+        estimated_completion_date?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | null | db.DefaultType | db.SQLFragment>;
         /**
         * **homie.task.estimated_days_to_complete**
         * - `int4` in database
