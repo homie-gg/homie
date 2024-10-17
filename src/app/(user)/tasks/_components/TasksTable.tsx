@@ -125,7 +125,15 @@ export default function TasksTable(props: TasksTableProps) {
             <TableBody>
               {tasks.data.map((task) => (
                 <TableRow key={task.id}>
-                  <TableCell>{task.name}</TableCell>
+                  <TableCell>
+                    <a
+                      href={task.html_url}
+                      className={styles['name-link']}
+                      target="_blank"
+                    >
+                      {task.name}
+                    </a>
+                  </TableCell>
                   <TableCell>
                     <span
                       className={cn(

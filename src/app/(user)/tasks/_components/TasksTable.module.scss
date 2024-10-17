@@ -19,6 +19,10 @@
     .body {
       @apply w-full min-h-[180px];
 
+      .name-link {
+        @apply hover:underline;
+      }
+
       .priority-tag {
         @apply inline-flex font-medium capitalize text-sm leading-[18px] border rounded-full py-1 px-2;
 

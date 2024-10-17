@@ -12,6 +12,7 @@ export type Task = {
   priority_level: number
   created_at: Date
   estimated_completion_date: Date | null
+  html_url:string
 }
 
 interface GetTasksParams {
@@ -198,6 +199,7 @@ export async function getTasks(params: GetTasksParams): Promise<Tasks> {
       'priority_level',
       'created_at',
       'estimated_completion_date',
+      'html_url',
     ])
     .execute()
 
