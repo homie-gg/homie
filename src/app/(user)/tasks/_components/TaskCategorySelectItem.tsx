@@ -4,7 +4,7 @@ import { PropsWithChildren } from 'react'
 import styles from '@/app/(user)/tasks/_components/TaskCategorySelect.module.scss'
 import clsx from 'clsx'
 import { Button } from '@/lib/ui/HomieButton'
-import { parseAsStringLiteral, useQueryState } from 'nuqs'
+import { parseAsInteger, parseAsStringLiteral, useQueryState } from 'nuqs'
 
 const taskCategories = [
   'all',
@@ -31,6 +31,11 @@ export default function TaskCategorySelectItem(props: TaskFilterItemProps) {
     shallow: false,
   })
 
+  const [_page, setPage] = useQueryState('page', {
+    ...parseAsInteger,
+    shallow: false,
+  })
+
   return (
     <div key={value} className={styles.item}>
       <Button
@@ -39,6 +44,7 @@ export default function TaskCategorySelectItem(props: TaskFilterItemProps) {
           [styles['action--active']]: category === value,
         })}
         onClick={() => {
+          setPage(null)
           setCategory(value)
         }}
       >

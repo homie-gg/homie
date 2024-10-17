@@ -17,7 +17,7 @@
     }
 
     .body {
-      @apply w-full;
+      @apply w-full min-h-[180px];
 
       .priority-tag {
         @apply inline-flex font-medium capitalize text-sm leading-[18px] border rounded-full py-1 px-2;
