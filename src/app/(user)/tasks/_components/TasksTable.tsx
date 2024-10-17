@@ -48,7 +48,7 @@ export default function TasksTable(props: TasksTableProps) {
   const [addedToDate, setAddedToDate] = useQueryState('added_to', {
     shallow: false,
   })
-  const [debouncedSearch, setDebouncedSearch] = useQueryState('search', {
+  const [_debouncedSearch, setDebouncedSearch] = useQueryState('search', {
     shallow: false,
   })
   const [page, setPage] = useQueryState('page', {
@@ -82,7 +82,10 @@ export default function TasksTable(props: TasksTableProps) {
         <div className={cn(styles.header, 'border-b')}>
           <TasksTableFilters
             searchTerm={searchInput}
-            setSearchTerm={setSearchInput}
+            setSearchTerm={(term) => {
+              setPage(null)
+              setSearchInput(term)
+            }}
             date={{
               from: addedFromDate
                 ? parse(addedFromDate, 'yyyy-MM-dd', new Date())
@@ -91,9 +94,15 @@ export default function TasksTable(props: TasksTableProps) {
                 ? parse(addedToDate, 'yyyy-MM-dd', new Date())
                 : undefined,
             }}
-            setDate={handleSetDate}
+            setDate={(date) => {
+              setPage(null)
+              handleSetDate(date)
+            }}
             priority={priority}
-            setPriority={setPriority}
+            setPriority={(priority) => {
+              setPage(null)
+              setPriority(priority)
+            }}
           />
           <Button
             variant="outline"

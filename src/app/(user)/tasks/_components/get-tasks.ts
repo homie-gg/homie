@@ -1,6 +1,9 @@
+import { pa } from 'date-fns'
+import { TaskCategory } from '@/app/(user)/tasks/_components/TaskCategorySelectItem'
 import { dbClient } from '@/database/client'
 import { taskStatus } from '@/lib/tasks'
 import { sql } from 'kysely'
+import { taskPriority } from '@/lib/tasks/task-priority'
 
 export type Task = {
   id: number
@@ -14,6 +17,12 @@ interface GetTasksParams {
   organization: {
     id: number
   }
+  category?: TaskCategory
+  added_from?: string
+  added_to?: string
+  page?: string
+  search?: string
+  priority?: string
 }
 
 export interface PaginatedCollection<T> {
@@ -44,12 +53,26 @@ export type Tasks = PaginatedCollection<Task> & {
 }
 
 export async function getTasks(params: GetTasksParams): Promise<Tasks> {
-  const { organization } = params
+  const { organization, category, added_from, added_to, search, priority } =
+    params
 
-  const query = dbClient
+  let query = dbClient
     .selectFrom('homie.task')
     .where('homie.task.organization_id', '=', organization.id)
     .where('homie.task.task_status_id', '=', taskStatus.open)
+
+  if (added_from) {
+    query = query.where('homie.task.created_at', '>=', new Date(added_from))
+  }
+
+  if (added_to) {
+    query = query.where('homie.task.created_at', '<=', new Date(added_to))
+  }
+
+  const priorityLevel = taskPriority[priority as keyof typeof taskPriority]
+  if (priorityLevel !== undefined) {
+    query = query.where('homie.task.priority_level', '=', priorityLevel)
+  }
 
   // Get  counts
   const { total, total_estimated_days_to_complete, num_stale_tasks } =
@@ -108,7 +131,7 @@ export async function getTasks(params: GetTasksParams): Promise<Tasks> {
     return acc
   }, {} as any)
 
-  const page = 1
+  const page = parseInt(params.page ?? '1')
   const perPage = 8
 
   const offset = (page - 1) * perPage

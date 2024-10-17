@@ -7,26 +7,38 @@ import TasksTable from '@/app/(user)/tasks/_components/TasksTable'
 import { getUserOrganization } from '@/lib/auth/get-user-organization'
 import TaskCategorySelect from '@/app/(user)/tasks/_components/TaskCategorySelect'
 import { TaskCategory } from '@/app/(user)/tasks/_components/TaskCategorySelectItem'
-import { dbClient } from '@/database/client'
 import { getTasks } from '@/app/(user)/tasks/_components/get-tasks'
 
 interface TasksPageProps {
   searchParams: {
     category?: TaskCategory
+    added_from?: string
+    added_to?: string
+    page?: string
+    search?: string
+    priority?: string
   }
 }
 
 export default async function TasksPage(props: TasksPageProps) {
-  const { searchParams } = props
+  const {
+    searchParams: { category, added_from, added_to, page, search, priority },
+  } = props
 
   const organization = await getUserOrganization()
   if (!organization) {
     return
   }
 
-  console.log(searchParams)
-
-  const tasks = await getTasks({ organization })
+  const tasks = await getTasks({
+    organization,
+    category,
+    added_from,
+    added_to,
+    page,
+    search,
+    priority,
+  })
 
   return (
     <div className={styles.main}>
