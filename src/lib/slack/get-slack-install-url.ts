@@ -6,6 +6,8 @@ const appScopes = [
   'groups:history',
   'incoming-webhook',
   'users:read',
+  'im:history',
+  'mpim:history',
 ]
 
 const baseUrl = 'https://slack.com/oauth/v2/authorize'
