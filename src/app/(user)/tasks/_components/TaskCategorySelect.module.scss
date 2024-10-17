@@ -1,0 +1,24 @@
+.container {
+  @apply flex items-center gap-x-4;
+
+  .content {
+    @apply flex border border-primary rounded-full overflow-hidden;
+
+    & .item {
+      @apply inline-flex;
+
+      .action {
+        @apply font-semibold text-sm rounded-none px-4 py-2 focus-visible:ring-inset;
+
+        &--active,
+        &:hover {
+          @apply bg-primary text-background focus:ring-offset-transparent;
+        }
+      }
+
+      &:not(:last-of-type)::after {
+        @apply content-[''] block h-full border-r border-r-primary;
+      }
+    }
+  }
+}

@@ -15,11 +15,39 @@ const config = {
         center: true,
       },
       colors: {
+        'field-info': 'hsl(var(--field-info))',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        error: {
+          DEFAULT: 'hsl(var(--error))',
+          50: 'hsl(var(--error-50))',
+          200: 'hsl(var(--error-200))',
+          700: 'hsl(var(--error-700))',
+        },
+        warning: {
+          DEFAULT: 'hsl(var(--warning))',
+          50: 'hsl(var(--warning-50))',
+          200: 'hsl(var(--warning-200))',
+          700: 'hsl(var(--warning-700))',
+        },
+        success: {
+          DEFAULT: 'hsl(var(--success))',
+          secondary: 'hsl(var(--success-secondary))',
+          50: 'hsl(var(--success-50))',
+          200: 'hsl(var(--success-200))',
+          700: 'hsl(var(--success-700))',
+        },
+        purple: {
+          50: 'hsl(var(--purple-50))',
+          200: 'hsl(var(--purple-200))',
+          700: 'hsl(var(--purple-700))',
+        },
+        quinary: {
+          foreground: 'hsl(var(--quinary-foreground))',
+        },
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
@@ -61,6 +89,7 @@ const config = {
           DEFAULT: 'hsl(var(--blue))',
           foreground: 'hsl(var(--blue-foreground))',
           alt: 'hsl(var(--blue-alt))',
+          500: 'hsl(var(--blue-500))',
         },
         orchid: {
           DEFAULT: 'hsl(var(--orchid))',
@@ -69,6 +98,9 @@ const config = {
         },
         gray: {
           foreground: 'hsl(var(--gray-foreground))',
+        },
+        yellow: {
+          400: 'hsl(var(--yellow-400))',
         },
         popover: {
           DEFAULT: 'hsl(var(--popover))',
@@ -80,7 +112,9 @@ const config = {
         },
       },
       boxShadow: {
-        lg: '0px 1px 2px 0px #1018280D, 0px -2px 0px 0px #1018280D inset, 0px 0px 0px 1px #1018282E inset',
+        sm: '0px 1px 2px rgba(16, 24, 40, 0.05)',
+        md: '0px 12px 16px -4px rgba(16, 24, 40, 0.08), 0px 4px 6px -2px rgba(16, 24, 40, 0.03)',
+        lg: '0px 1px 2px rgba(16, 24, 40, 0.05), inset 0px 0px 0px 1px rgba(16, 24, 40, 0.18), inset 0px -2px 0px rgba(16, 24, 40, 0.05)',
       },
       keyframes: {
         ring: {
@@ -167,6 +201,10 @@ const config = {
       fontFamily: {
         sans: ['var(--font-onest)'],
         'sans-alt': ['var(--font-excon)'],
+        'sans-inter': ['var(--font-inter)'],
+      },
+      letterSpacing: {
+        tightest: '0.0125em',
       },
     },
   },

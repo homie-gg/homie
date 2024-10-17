@@ -1,0 +1,19 @@
+.option {
+  @apply flex items-center gap-x-2 before:content-[''] before:block before:w-2 before:h-2 before:rounded-full;
+
+  &.priority-any {
+    @apply before:bg-[--chart-1];
+  }
+  &.priority-critical {
+    @apply before:bg-[--chart-7];
+  }
+  &.priority-high {
+    @apply before:bg-[--chart-8];
+  }
+  &.priority-medium {
+    @apply before:bg-[--chart-9];
+  }
+  &.priority-low {
+    @apply before:bg-[--chart-6];
+  }
+}

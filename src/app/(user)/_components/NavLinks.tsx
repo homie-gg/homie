@@ -12,6 +12,10 @@ export const links = [
     href: '/pull_requests',
   },
   {
+    label: 'Tasks',
+    href: '/tasks',
+  },
+  {
     label: 'Settings',
     href: '/settings/contributors',
   },

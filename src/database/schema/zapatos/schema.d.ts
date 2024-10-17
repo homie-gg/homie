@@ -4434,6 +4434,12 @@ declare module 'zapatos/schema' {
          */
         due_date: Date | null
         /**
+         * **homie.task.estimated_completion_date**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        estimated_completion_date: Date | null
+        /**
          * **homie.task.estimated_days_to_complete**
          * - `int4` in database
          * - Nullable, no default
@@ -4487,6 +4493,12 @@ declare module 'zapatos/schema' {
          * - `NOT NULL`, default: `nextval('homie.task_id_seq'::regclass)`
          */
         id: number
+        /**
+         * **homie.task.is_stale**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        is_stale: boolean
         /**
          * **homie.task.name**
          * - `text` in database
@@ -4556,6 +4568,12 @@ declare module 'zapatos/schema' {
          */
         due_date: db.TimestampTzString | null
         /**
+         * **homie.task.estimated_completion_date**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        estimated_completion_date: db.TimestampTzString | null
+        /**
          * **homie.task.estimated_days_to_complete**
          * - `int4` in database
          * - Nullable, no default
@@ -4609,6 +4627,12 @@ declare module 'zapatos/schema' {
          * - `NOT NULL`, default: `nextval('homie.task_id_seq'::regclass)`
          */
         id: number
+        /**
+         * **homie.task.is_stale**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        is_stale: boolean
         /**
          * **homie.task.name**
          * - `text` in database
@@ -4715,6 +4739,23 @@ declare module 'zapatos/schema' {
          * - Nullable, no default
          */
         due_date?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | db.SQLFragment
+              | db.ParentColumn
+            >
+        /**
+         * **homie.task.estimated_completion_date**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        estimated_completion_date?:
           | (db.TimestampTzString | Date)
           | db.Parameter<db.TimestampTzString | Date>
           | db.SQLFragment
@@ -4851,6 +4892,20 @@ declare module 'zapatos/schema' {
           | db.SQLFragment<
               any,
               number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+            >
+        /**
+         * **homie.task.is_stale**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        is_stale?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.SQLFragment
+          | db.ParentColumn
+          | db.SQLFragment<
+              any,
+              boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn
             >
         /**
          * **homie.task.name**
@@ -4990,6 +5045,17 @@ declare module 'zapatos/schema' {
           | db.DefaultType
           | db.SQLFragment
         /**
+         * **homie.task.estimated_completion_date**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        estimated_completion_date?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+        /**
          * **homie.task.estimated_days_to_complete**
          * - `int4` in database
          * - Nullable, no default
@@ -5077,6 +5143,16 @@ declare module 'zapatos/schema' {
          * - `NOT NULL`, default: `nextval('homie.task_id_seq'::regclass)`
          */
         id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+        /**
+         * **homie.task.is_stale**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        is_stale?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.DefaultType
+          | db.SQLFragment
         /**
          * **homie.task.name**
          * - `text` in database
@@ -5185,6 +5261,25 @@ declare module 'zapatos/schema' {
          * - Nullable, no default
          */
         due_date?:
+          | (db.TimestampTzString | Date)
+          | db.Parameter<db.TimestampTzString | Date>
+          | null
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              | (db.TimestampTzString | Date)
+              | db.Parameter<db.TimestampTzString | Date>
+              | null
+              | db.DefaultType
+              | db.SQLFragment
+            >
+        /**
+         * **homie.task.estimated_completion_date**
+         * - `timestamptz` in database
+         * - Nullable, no default
+         */
+        estimated_completion_date?:
           | (db.TimestampTzString | Date)
           | db.Parameter<db.TimestampTzString | Date>
           | null
@@ -5349,6 +5444,20 @@ declare module 'zapatos/schema' {
           | db.SQLFragment<
               any,
               number | db.Parameter<number> | db.DefaultType | db.SQLFragment
+            >
+        /**
+         * **homie.task.is_stale**
+         * - `bool` in database
+         * - `NOT NULL`, default: `false`
+         */
+        is_stale?:
+          | boolean
+          | db.Parameter<boolean>
+          | db.DefaultType
+          | db.SQLFragment
+          | db.SQLFragment<
+              any,
+              boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment
             >
         /**
          * **homie.task.name**

@@ -1,0 +1,32 @@
+.select-control {
+  @apply shadow-sm;
+}
+
+.container {
+  @apply flex-1 flex items-center gap-x-3;
+
+  .search {
+    @apply flex-1;
+  }
+
+  .item {
+    @apply flex flex-col gap-y-1.5 min-w-[200px];
+  }
+
+  .label {
+    @apply font-medium text-sm text-primary;
+  }
+
+  .select {
+    & > .select-control {
+      @apply font-medium;
+      border-color: hsl(var(--primary)) !important;
+
+      &:focus,
+      &:hover {
+        border-color: hsl(var(--primary));
+        outline-color: transparent;
+      }
+    }
+  }
+}

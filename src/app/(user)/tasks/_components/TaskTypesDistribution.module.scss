@@ -1,0 +1,15 @@
+.data-list {
+  @apply w-full flex flex-col;
+
+  .data-item {
+    @apply w-full flex items-center gap-x-3 px-6 py-4;
+
+    .data-label {
+      @apply font-semibold font-sans-inter text-sm text-primary;
+    }
+
+    .progress {
+      @apply flex-1 font-sans-inter;
+    }
+  }
+}

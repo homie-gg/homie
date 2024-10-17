@@ -19,10 +19,10 @@ interface ClassifyTaskResult {
 const classifyTaskResponse = z.object({
   priority: z
     .union([
-      z.literal('critical_bug'),
-      z.literal('important'),
-      z.literal('normal'),
-      z.literal('nice_to_have'),
+      z.literal('critical'),
+      z.literal('high'),
+      z.literal('medium'),
+      z.literal('low'),
     ])
     .describe('Select one of the following that best describes the importance'),
   type: z
@@ -78,7 +78,7 @@ ${description}
     })
 
     return {
-      priority_level: taskPriority.normal,
+      priority_level: taskPriority.medium,
       task_type_id: taskType.feature,
     }
   }

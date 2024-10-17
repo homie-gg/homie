@@ -1,0 +1,9 @@
+.card {
+  .body {
+    @apply min-h-[260px];
+
+    .chart {
+      @apply flex-1 max-h-[260px];
+    }
+  }
+}

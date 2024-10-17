@@ -1,0 +1,27 @@
+.main {
+  @apply w-full;
+
+  .content {
+    @apply grid grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-8 items-stretch;
+
+    .card {
+      @apply min-h-[307px] flex flex-col gap-y-5 bg-background border border-primary-light shadow-sm rounded-xl;
+
+      .card-header {
+        @apply min-h-[72px] flex items-end pb-3 pt-5 px-6;
+
+        .card-heading {
+          @apply font-semibold text-lg text-primary;
+        }
+      }
+
+      .card-body {
+        @apply w-full flex-1 flex flex-col items-stretch border-t border-t-primary-light;
+
+        &::after {
+          @apply content-[''] block h-[47px];
+        }
+      }
+    }
+  }
+}
