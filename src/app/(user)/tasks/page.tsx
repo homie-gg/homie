@@ -24,7 +24,7 @@ export default async function TasksPage(props: TasksPageProps) {
     return
   }
 
-  console.log(searchParams.category)
+  console.log(searchParams)
 
   const tasks = await getTasks({ organization })
 

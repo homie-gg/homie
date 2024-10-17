@@ -17,15 +17,15 @@ import { Tasks } from '@/app/(user)/tasks/_components/get-tasks'
 import { format } from 'date-fns'
 import { DateRange } from 'react-day-picker'
 import {
-  parseAsIsoDateTime,
   parseAsStringLiteral,
+  parseAsInteger,
   ParserBuilder,
   useQueryState,
 } from 'nuqs'
 import { taskPriority } from '@/lib/tasks/task-priority'
 import { useDebounce } from 'react-use'
 import { TaskPriorityFilterValue } from '@/app/(user)/tasks/_components/TaskPriorirtyFilter'
-import { startOfDay, formatDate, parse } from 'date-fns'
+import { formatDate, parse } from 'date-fns'
 
 interface TasksTableProps {
   tasks: Tasks
@@ -49,6 +49,10 @@ export default function TasksTable(props: TasksTableProps) {
     shallow: false,
   })
   const [debouncedSearch, setDebouncedSearch] = useQueryState('search', {
+    shallow: false,
+  })
+  const [page, setPage] = useQueryState('page', {
+    ...parseAsInteger,
     shallow: false,
   })
 
@@ -137,9 +141,9 @@ export default function TasksTable(props: TasksTableProps) {
           </Table>
         </div>
         <TasksTablePagination
-          totalPages={10}
-          currentPage={2}
-          setPage={() => {}}
+          total={tasks.num_pages}
+          current={page ?? 1}
+          onChange={setPage}
         />
       </div>
     </div>

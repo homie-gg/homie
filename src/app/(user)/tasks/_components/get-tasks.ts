@@ -28,6 +28,7 @@ export interface PaginatedCollection<T> {
   prev_page_url: string | null
   to: number
   total: number
+  num_pages: number
 }
 
 interface TaskTypeCount {
@@ -150,5 +151,6 @@ export async function getTasks(params: GetTasksParams): Promise<Tasks> {
     total_estimated_days_to_complete,
     num_stale_tasks,
     task_priorities: taskPriorities,
+    num_pages: lastPage,
   }
 }
