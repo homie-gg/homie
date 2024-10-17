@@ -206,6 +206,7 @@ const DatePicker: React.FC<Props> = ({ date, setDate, className = '' }) => {
                   variant="outline"
                   onClick={() => {
                     revertSelection()
+                    close()
                   }}
                 >
                   Cancel

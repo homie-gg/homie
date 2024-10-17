@@ -17,7 +17,8 @@ interface TasksTableFiltersProps {
 }
 
 export default function TasksTableFilters(props: TasksTableFiltersProps) {
-  const { searchTerm, setSearchTerm, priority, setPriority, date, setDate } = props
+  const { searchTerm, setSearchTerm, priority, setPriority, date, setDate } =
+    props
 
   return (
     <div className={styles.container}>
@@ -33,7 +34,7 @@ export default function TasksTableFilters(props: TasksTableFiltersProps) {
         <TaskPriorityFilter value={priority} onChange={setPriority} />
       </div>
       <div className={styles.item}>
-        <span className={styles.label}>Added At</span>
+        <span className={styles.label}>Added</span>
         <DatePicker
           date={date}
           setDate={setDate}

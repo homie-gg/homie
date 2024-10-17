@@ -16,10 +16,16 @@ import TasksTablePagination from '@/app/(user)/tasks/_components/TasksTablePagin
 import { Tasks } from '@/app/(user)/tasks/_components/get-tasks'
 import { format } from 'date-fns'
 import { DateRange } from 'react-day-picker'
-import { parseAsStringLiteral, ParserBuilder, useQueryState } from 'nuqs'
+import {
+  parseAsIsoDateTime,
+  parseAsStringLiteral,
+  ParserBuilder,
+  useQueryState,
+} from 'nuqs'
 import { taskPriority } from '@/lib/tasks/task-priority'
 import { useDebounce } from 'react-use'
 import { TaskPriorityFilterValue } from '@/app/(user)/tasks/_components/TaskPriorirtyFilter'
+import { startOfDay, formatDate, parse } from 'date-fns'
 
 interface TasksTableProps {
   tasks: Tasks
@@ -32,26 +38,38 @@ export default function TasksTable(props: TasksTableProps) {
   const { tasks } = props
 
   const [searchInput, setSearchInput] = useState('')
-  const [date, setDate] = useState<DateRange>()
-  const [priority, setPriority] = useQueryState(
-    'priority',
-    taskCategoryParser.withDefault('any'),
-  )
-  const [debouncedSearch, setDebouncedSearch] = useQueryState('search')
+  const [priority, setPriority] = useQueryState('priority', {
+    ...taskCategoryParser.withDefault('any'),
+    shallow: false,
+  })
+  const [addedFromDate, setAddedFromDate] = useQueryState('added_from', {
+    shallow: false,
+  })
+  const [addedToDate, setAddedToDate] = useQueryState('added_to', {
+    shallow: false,
+  })
+  const [debouncedSearch, setDebouncedSearch] = useQueryState('search', {
+    shallow: false,
+  })
+
+  const handleSetDate = (date?: DateRange) => {
+    setAddedFromDate(date?.from ? formatDate(date?.from, 'yyyy-MM-dd') : null)
+    setAddedToDate(date?.to ? formatDate(date?.to, 'yyyy-MM-dd') : null)
+  }
 
   useDebounce(
     () => {
       setDebouncedSearch(searchInput)
     },
-    1500,
+    500,
     [searchInput],
   )
 
   const clearFilters = () => {
     setSearchInput('')
-    setDebouncedSearch('')
-    setDate(undefined)
-    setPriority('any')
+    setDebouncedSearch(null)
+    handleSetDate(undefined)
+    setPriority(null)
   }
 
   return (
@@ -61,10 +79,15 @@ export default function TasksTable(props: TasksTableProps) {
           <TasksTableFilters
             searchTerm={searchInput}
             setSearchTerm={setSearchInput}
-            date={undefined}
-            setDate={(range) => {
-              //
+            date={{
+              from: addedFromDate
+                ? parse(addedFromDate, 'yyyy-MM-dd', new Date())
+                : undefined,
+              to: addedToDate
+                ? parse(addedToDate, 'yyyy-MM-dd', new Date())
+                : undefined,
             }}
+            setDate={handleSetDate}
             priority={priority}
             setPriority={setPriority}
           />
@@ -82,7 +105,7 @@ export default function TasksTable(props: TasksTableProps) {
               <TableRow>
                 <TableCell>Task</TableCell>
                 <TableCell>Priority</TableCell>
-                <TableCell>Added At</TableCell>
+                <TableCell>Added</TableCell>
                 <TableCell>Est. Completion Date</TableCell>
               </TableRow>
             </TableHeader>

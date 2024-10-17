@@ -1,4 +1,5 @@
 import { dbClient } from '@/database/client'
+import { taskStatus } from '@/lib/tasks'
 import { sql } from 'kysely'
 
 export type Task = {
@@ -47,6 +48,7 @@ export async function getTasks(params: GetTasksParams): Promise<Tasks> {
   const query = dbClient
     .selectFrom('homie.task')
     .where('homie.task.organization_id', '=', organization.id)
+    .where('homie.task.task_status_id', '=', taskStatus.open)
 
   // Get  counts
   const { total, total_estimated_days_to_complete, num_stale_tasks } =
