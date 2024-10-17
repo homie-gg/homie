@@ -14,31 +14,64 @@ import {
 import { cn } from '@/lib/utils'
 import TasksTablePagination from '@/app/(user)/tasks/_components/TasksTablePagination'
 import { Tasks } from '@/app/(user)/tasks/_components/get-tasks'
-import { addDays, differenceInDays, format, isSameDay } from 'date-fns'
+import { format } from 'date-fns'
+import { DateRange } from 'react-day-picker'
+import { parseAsStringLiteral, ParserBuilder, useQueryState } from 'nuqs'
+import { taskPriority } from '@/lib/tasks/task-priority'
+import { useDebounce } from 'react-use'
+import { TaskPriorityFilterValue } from '@/app/(user)/tasks/_components/TaskPriorirtyFilter'
 
 interface TasksTableProps {
   tasks: Tasks
 }
 
+const taskCategoryParser: ParserBuilder<TaskPriorityFilterValue> =
+  parseAsStringLiteral(['any', ...Object.keys(taskPriority)] as any)
+
 export default function TasksTable(props: TasksTableProps) {
   const { tasks } = props
-  const [searchTerm, setSearchTerm] = useState('')
+
+  const [searchInput, setSearchInput] = useState('')
+  const [date, setDate] = useState<DateRange>()
+  const [priority, setPriority] = useQueryState(
+    'priority',
+    taskCategoryParser.withDefault('any'),
+  )
+  const [debouncedSearch, setDebouncedSearch] = useQueryState('search')
+
+  useDebounce(
+    () => {
+      setDebouncedSearch(searchInput)
+    },
+    1500,
+    [searchInput],
+  )
+
+  const clearFilters = () => {
+    setSearchInput('')
+    setDebouncedSearch('')
+    setDate(undefined)
+    setPriority('any')
+  }
+
   return (
     <div className={styles.main}>
       <div className={styles.container}>
         <div className={cn(styles.header, 'border-b')}>
           <TasksTableFilters
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
+            searchTerm={searchInput}
+            setSearchTerm={setSearchInput}
             date={undefined}
             setDate={(range) => {
               //
             }}
+            priority={priority}
+            setPriority={setPriority}
           />
           <Button
             variant="outline"
             className={styles['clear-button']}
-            onClick={() => {}}
+            onClick={clearFilters}
           >
             Clear all
           </Button>

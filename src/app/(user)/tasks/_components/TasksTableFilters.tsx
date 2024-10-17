@@ -1,35 +1,24 @@
 import { DateRange } from 'react-day-picker'
 import styles from './TasksTableFilters.module.scss'
-import { useState } from 'react'
 import TasksTableSearch from '@/app/(user)/tasks/_components/TasksTableSearch'
 import TaskPriorityFilter, {
   TaskPriorityFilterValue,
 } from '@/app/(user)/tasks/_components/TaskPriorirtyFilter'
 import DatePicker from '@/lib/ui/DatePicker'
 import { cn } from '@/lib/utils'
-import { parseAsStringLiteral, ParserBuilder, useQueryState } from 'nuqs'
-import { taskPriority } from '@/lib/tasks/task-priority'
 
 interface TasksTableFiltersProps {
   searchTerm: string
   setSearchTerm: (searchTerm: string) => void
   date?: DateRange
   setDate: (date?: DateRange) => void
+  priority: TaskPriorityFilterValue
+  setPriority: (priority: TaskPriorityFilterValue) => void
 }
 
-const taskCategoryParser: ParserBuilder<TaskPriorityFilterValue> =
-  parseAsStringLiteral(['any', ...Object.keys(taskPriority)] as any)
-
 export default function TasksTableFilters(props: TasksTableFiltersProps) {
-  const [searchTerm, setSearchTerm] = useState('')
+  const { searchTerm, setSearchTerm, priority, setPriority, date, setDate } = props
 
-  const [date, setDate] = useState<DateRange>()
-  const [priority, setPriority] = useQueryState(
-    'priority',
-    taskCategoryParser.withDefault('any'),
-  )
-
-  const {} = props
   return (
     <div className={styles.container}>
       <div className={cn(styles.item, styles.search)}>
