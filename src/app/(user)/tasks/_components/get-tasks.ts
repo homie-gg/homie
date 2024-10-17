@@ -1,9 +1,9 @@
-import { pa } from 'date-fns'
 import { TaskCategory } from '@/app/(user)/tasks/_components/TaskCategorySelectItem'
 import { dbClient } from '@/database/client'
 import { taskStatus } from '@/lib/tasks'
 import { sql } from 'kysely'
 import { taskPriority } from '@/lib/tasks/task-priority'
+import { searchTasks } from '@/app/(user)/tasks/_components/search-tasks'
 
 export type Task = {
   id: number
@@ -72,6 +72,18 @@ export async function getTasks(params: GetTasksParams): Promise<Tasks> {
   const priorityLevel = taskPriority[priority as keyof typeof taskPriority]
   if (priorityLevel !== undefined) {
     query = query.where('homie.task.priority_level', '=', priorityLevel)
+  }
+
+  const searchMatchingIds = await searchTasks({
+    organization,
+    searchTerm: search,
+  })
+  if (searchMatchingIds) {
+    if (searchMatchingIds.length === 0) {
+      query = query.where('homie.task.id', '=', 0)
+    } else {
+      query = query.where('homie.task.id', 'in', searchMatchingIds)
+    }
   }
 
   // Get  counts
