@@ -38,6 +38,7 @@ import { getSearchGeneralContextTool } from '@/lib/ai/chat/tools/get-search-gene
 import { getFindContributorTool } from '@/lib/ai/chat/tools/get-find-contributor-tool'
 import { getWriteCodeTool } from '@/lib/ai/chat/tools/get-write-code-tool'
 import { getListGitlabProjectsTool } from '@/lib/ai/chat/tools/get-list-gitlab-projects-tool'
+import { getFindWriteCodeRepoTool } from '@/lib/ai/chat/tools/get-find-write-code-repo-tool'
 
 interface GetAnswerParams {
   organization: {
@@ -156,10 +157,14 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       organization,
       answerID,
     }),
+    getFindWriteCodeRepoTool({
+      organization,
+      answerID,
+    }),
     getWriteCodeTool({
       slackTargetMessageTS: currentMessage.ts,
       organization,
-      answerID: answerID,
+      answerID,
       slackChannelID: channelID,
     }),
   ]
