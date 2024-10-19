@@ -96,7 +96,7 @@ export function getWriteCodeTool(params: GetWriteCodeToolParams) {
         )
 
         onAnswer(processingMessage)
-        return
+        return processingMessage
       }
 
       if (gitlab_project_id) {
@@ -110,7 +110,7 @@ export function getWriteCodeTool(params: GetWriteCodeToolParams) {
         })
 
         onAnswer(processingMessage)
-        return
+        return processingMessage
       }
 
       logger.debug('Missing params', {
