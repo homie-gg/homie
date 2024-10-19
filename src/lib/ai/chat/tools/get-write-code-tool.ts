@@ -14,13 +14,20 @@ interface GetWriteCodeToolParams {
   answerID: string
   slackChannelID: string
   slackTargetMessageTS: string
+  onAnswer: (answer: string) => void
 }
 
-const processingMessage = 'Starting to write code. Will open a PR in a minute.'
+const processingMessage =
+  'Started working on this. Will open a PR in a minute once this is ready.'
 
 export function getWriteCodeTool(params: GetWriteCodeToolParams) {
-  const { organization, answerID, slackTargetMessageTS, slackChannelID } =
-    params
+  const {
+    organization,
+    answerID,
+    slackTargetMessageTS,
+    slackChannelID,
+    onAnswer,
+  } = params
   return new DynamicStructuredTool({
     name: 'write_code',
     description:
@@ -88,6 +95,7 @@ export function getWriteCodeTool(params: GetWriteCodeToolParams) {
           },
         )
 
+        onAnswer(processingMessage)
         return processingMessage
       }
 
@@ -101,6 +109,7 @@ export function getWriteCodeTool(params: GetWriteCodeToolParams) {
           answer_id: answerID,
         })
 
+        onAnswer(processingMessage)
         return processingMessage
       }
 
