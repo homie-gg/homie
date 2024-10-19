@@ -16,8 +16,8 @@ interface WriteCodeBasePayload {
     slack_access_token: string
   }
   instructions: string
-  slack_target_message_ts: string
-  slack_channel_id: string
+  slack_target_message_ts?: string
+  slack_channel_id?: string
   answer_id: string
 }
 
@@ -43,7 +43,7 @@ export const writeCode = createJob({
       answer_id,
     } = payload
 
-    const slackClient = createSlackClient(organization.slack_access_token)
+    const slackClient = organization.slack_access_token ? createSlackClient(organization.slack_access_token) : null
 
     const files = await findWriteCodeTargetFiles({
       github_repo_id: payload.github_repo_id,
@@ -89,22 +89,26 @@ export const writeCode = createJob({
       })
 
       if (result.failed) {
-        await sendFailedToOpenPRMessage({
-          slackClient,
-          channelID: slack_channel_id,
-          threadTS: slack_target_message_ts,
-        })
+        if (slackClient && slack_channel_id && slack_target_message_ts) {
+          await sendFailedToOpenPRMessage({
+            slackClient,
+            channelID: slack_channel_id,
+            threadTS: slack_target_message_ts,
+          })
+        }
 
         return
       }
 
-      await sendPullRequestCreatedMessageToSlack({
-        threadTS: slack_target_message_ts,
-        slackClient,
-        channelID: slack_channel_id,
-        title: result.title,
-        url: result.html_url,
-      })
+      if (slackClient && slack_channel_id && slack_target_message_ts) {
+        await sendPullRequestCreatedMessageToSlack({
+          threadTS: slack_target_message_ts,
+          slackClient,
+          channelID: slack_channel_id,
+          title: result.title,
+          url: result.html_url,
+        })
+      }
 
       return
     }
