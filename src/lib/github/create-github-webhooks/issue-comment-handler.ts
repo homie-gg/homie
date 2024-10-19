@@ -9,8 +9,8 @@ export async function handleIssueComment(body: any) {
     throw new Error('Invalid webhook payload')
   }
 
-  const triggerPhrase = '/write-code'
-  if (!comment.body.startsWith(triggerPhrase)) {
+  const triggerPhrase = '/Homie write'
+  if (!comment.body.toLowerCase().startsWith(triggerPhrase.toLowerCase())) {
     return { message: 'No action required' }
   }
 
