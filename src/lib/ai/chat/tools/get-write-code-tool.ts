@@ -38,7 +38,7 @@ export function getWriteCodeTool(params: GetWriteCodeToolParams) {
       gitlab_project_id: z
         .number()
         .optional()
-        .describe('ID of the Gitalb project to push changes to.'),
+        .describe('ID of the Gitlab project to push changes to.'),
     }),
     func: async (params) => {
       const {
