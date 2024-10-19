@@ -11,7 +11,6 @@ import {
 } from '@langchain/core/messages'
 import { formatToOpenAIFunctionMessages } from 'langchain/agents/format_scratchpad'
 import { OpenAIFunctionsAgentOutputParser } from 'langchain/agents/openai/output_parser'
-
 import { createOpenAIChatClient } from '@/lib/open-ai/create-open-ai-chat-client'
 import { convertToOpenAIFunction } from '@langchain/core/utils/function_calling'
 import { rephraseWithPersona } from '@/lib/ai/rephrase-with-persona'
@@ -166,6 +165,9 @@ export async function getAnswer(params: GetAnswerParams): Promise<string> {
       organization,
       answerID,
       slackChannelID: channelID,
+      onAnswer: (result) => {
+        toolAnswer = result
+      },
     }),
   ]
 
