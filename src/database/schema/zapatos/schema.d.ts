@@ -2634,7 +2634,10 @@ declare module 'zapatos/schema' {
               | db.SQLFragment
             >
       }
-      export type UniqueIndex = 'plan_ext_stripe_price_id_key' | 'plan_pkey'
+      export type UniqueIndex =
+        | 'plan_ext_stripe_price_id_key'
+        | 'plan_name_billing_interval'
+        | 'plan_pkey'
       export type Column = keyof Selectable
       export type OnlyCols<T extends readonly Column[]> = Pick<
         Selectable,
