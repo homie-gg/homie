@@ -40,6 +40,19 @@ async function Content() {
     .where('stripe_status', '=', 'active')
     .executeTakeFirst()
 
+  const basicMonthly = await dbClient
+    .selectFrom('homie.plan')
+    .where('name', '=', 'basic')
+    .where('billing_interval', '=', 'monthly')
+    .selectAll()
+    .executeTakeFirstOrThrow()
+  const basicYearly = await dbClient
+    .selectFrom('homie.plan')
+    .where('name', '=', 'basic')
+    .where('billing_interval', '=', 'yearly')
+    .selectAll()
+    .executeTakeFirstOrThrow()
+
   const teamMonthly = await dbClient
     .selectFrom('homie.plan')
     .where('name', '=', 'team')
@@ -57,6 +70,8 @@ async function Content() {
   if (!subscription) {
     return (
       <SelectPlanGrid
+        basicMonthlyPlan={basicMonthly}
+        basicYearlyPlan={basicYearly}
         teamMonthlyPlan={teamMonthly}
         teamYearlyPlan={teamYearly}
       />
