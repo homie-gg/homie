@@ -13,12 +13,15 @@ interface WriteCodeBasePayload {
     id: number
     ext_gh_install_id: number | null
     gitlab_access_token: string | null
-    slack_access_token: string
+    slack_access_token?: string
   }
   instructions: string
-  slack_target_message_ts: string
-  slack_channel_id: string
+  slack_target_message_ts?: string
+  slack_channel_id?: string
   answer_id: string
+  issue_number?: number
+  issue_title?: string
+  issue_body?: string
 }
 
 export const writeCode = createJob({
@@ -41,9 +44,14 @@ export const writeCode = createJob({
       slack_channel_id,
       slack_target_message_ts,
       answer_id,
+      issue_number,
+      issue_title,
+      issue_body,
     } = payload
 
-    const slackClient = createSlackClient(organization.slack_access_token)
+    const slackClient = organization.slack_access_token
+      ? createSlackClient(organization.slack_access_token)
+      : null
 
     const files = await findWriteCodeTargetFiles({
       github_repo_id: payload.github_repo_id,
@@ -57,6 +65,8 @@ export const writeCode = createJob({
       gitlab_project_id: payload.gitlab_project_id,
       instructions,
       organization_id: organization.id,
+      issue_title,
+      issue_body,
     })
 
     // Generate unique code job id
@@ -86,25 +96,47 @@ export const writeCode = createJob({
           ext_gh_install_id: organization.ext_gh_install_id,
         },
         answerID: answer_id,
+        issueNumber: issue_number,
       })
 
       if (result.failed) {
-        await sendFailedToOpenPRMessage({
-          slackClient,
-          channelID: slack_channel_id,
-          threadTS: slack_target_message_ts,
-        })
-
+        if (slackClient && slack_channel_id && slack_target_message_ts) {
+          await sendFailedToOpenPRMessage({
+            slackClient,
+            channelID: slack_channel_id,
+            threadTS: slack_target_message_ts,
+          })
+        }
         return
       }
 
-      await sendPullRequestCreatedMessageToSlack({
-        threadTS: slack_target_message_ts,
-        slackClient,
-        channelID: slack_channel_id,
-        title: result.title,
-        url: result.html_url,
-      })
+      if (slackClient && slack_channel_id && slack_target_message_ts) {
+        await sendPullRequestCreatedMessageToSlack({
+          threadTS: slack_target_message_ts,
+          slackClient,
+          channelID: slack_channel_id,
+          title: result.title,
+          url: result.html_url,
+        })
+      }
+
+      if (issue_number) {
+        const github = await createGithubClient({
+          installationId: organization.ext_gh_install_id,
+        })
+        const repo = await dbClient
+          .selectFrom('github.repo')
+          .where('id', '=', payload.github_repo_id)
+          .select(['owner', 'name'])
+          .executeTakeFirstOrThrow()
+
+        await github.rest.issues.createComment({
+          owner: repo.owner!,
+          repo: repo.name,
+          issue_number: issue_number,
+          body: `I've opened a pull request to address this issue: [${result.title}](${result.html_url})`,
+        })
+      }
 
       return
     }
@@ -125,31 +157,36 @@ export const writeCode = createJob({
       })
 
       if (result.failed) {
-        await sendFailedToOpenPRMessage({
-          slackClient,
-          channelID: slack_channel_id,
-          threadTS: slack_target_message_ts,
-        })
-
+        if (slackClient && slack_channel_id && slack_target_message_ts) {
+          await sendFailedToOpenPRMessage({
+            slackClient,
+            channelID: slack_channel_id,
+            threadTS: slack_target_message_ts,
+          })
+        }
         return
       }
 
-      await sendPullRequestCreatedMessageToSlack({
-        threadTS: slack_target_message_ts,
-        slackClient,
-        channelID: slack_channel_id,
-        title: result.title,
-        url: result.html_url,
-      })
+      if (slackClient && slack_channel_id && slack_target_message_ts) {
+        await sendPullRequestCreatedMessageToSlack({
+          threadTS: slack_target_message_ts,
+          slackClient,
+          channelID: slack_channel_id,
+          title: result.title,
+          url: result.html_url,
+        })
+      }
 
       return
     }
 
     // Failed...
-    await sendFailedToOpenPRMessage({
-      slackClient,
-      channelID: slack_channel_id,
-      threadTS: slack_target_message_ts,
-    })
+    if (slackClient && slack_channel_id && slack_target_message_ts) {
+      await sendFailedToOpenPRMessage({
+        slackClient,
+        channelID: slack_channel_id,
+        threadTS: slack_target_message_ts,
+      })
+    }
   },
 })

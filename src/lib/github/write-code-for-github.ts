@@ -21,6 +21,7 @@ interface WriteCodeForGithubParams {
   files: string[]
   context: string | null
   answerID: string
+  issueNumber?: number
 }
 
 type WriteCodeResult =
@@ -154,6 +155,7 @@ export async function writeCodeForGithub(
       body: result.description,
       base: defaultBranch,
       head: branch,
+      issue: params.issueNumber,
     })
 
     deleteRepository({ path: directory })
