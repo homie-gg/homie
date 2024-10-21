@@ -27,11 +27,11 @@ export default async function handler(
   }
 
   const issueComment = payload.comment.body.trim()
-  if (!issueComment.startsWith('/write-code')) {
-    return res.status(200).json({ message: 'Ignored non-write-code comment' })
+  if (!issueComment.startsWith('/homie do this')) {
+    return res.status(200).json({ message: 'Ignored non-homie-do-this comment' })
   }
 
-  const instructions = issueComment.replace('/write-code', '').trim()
+  const instructions = issueComment.replace('/homie do this', '').trim()
   const { repository, issue } = payload
 
   try {
