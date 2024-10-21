@@ -121,7 +121,7 @@ export function SelectPlanGrid(props: SelectPlanGridProps) {
             <div>
               <span className="text-3xl font-bold">
                 {' '}
-                {billingInterval === 'yearly' ? '$24' : '$30'}
+                {billingInterval === 'yearly' ? '$150' : '$200'}
               </span>
               <span className="text-muted-foreground">
                 {' '}
