@@ -10,12 +10,15 @@ import { Plan } from '@/database/types'
 import { Switch } from '@/lib/ui/Switch'
 
 interface SelectPlanGridProps {
+  basicMonthlyPlan: Plan
+  basicYearlyPlan: Plan
   teamMonthlyPlan: Plan
   teamYearlyPlan: Plan
 }
 
 export function SelectPlanGrid(props: SelectPlanGridProps) {
-  const { teamMonthlyPlan, teamYearlyPlan } = props
+  const { basicMonthlyPlan, basicYearlyPlan, teamMonthlyPlan, teamYearlyPlan } =
+    props
 
   const [billingInterval, setBillintInterval] = useState<'yearly' | 'monthly'>(
     'yearly',
@@ -36,13 +39,15 @@ export function SelectPlanGrid(props: SelectPlanGridProps) {
         <p>Yearly</p>
       </div>
       <div className="grid md:grid-cols-3 gap-8">
-        <Card>
+        <Card className="flex flex-col">
           <CardHeader>
             <CardTitle className="flex item-center justify-between">
-              Free
+              Basic
             </CardTitle>
             <div>
-              <span className="text-3xl font-bold">$0</span>
+              <span className="text-3xl font-bold">
+                {billingInterval === 'yearly' ? '$20' : '$30'}
+              </span>
               <span className="text-muted-foreground">
                 {' '}
                 / contributor / month
@@ -50,10 +55,10 @@ export function SelectPlanGrid(props: SelectPlanGridProps) {
             </div>
           </CardHeader>
 
-          <CardContent>
+          <CardContent className="flex-1 flex flex-col justify-between">
             <div className="space-y-4 mb-4">
               {plans
-                .find((plan) => plan.title === 'Free')
+                .find((plan) => plan.title === 'Basic')
                 ?.benefitList.map((benefit: string) => (
                   <span key={benefit} className="flex">
                     <Check className="text-green-500" />{' '}
@@ -61,9 +66,14 @@ export function SelectPlanGrid(props: SelectPlanGridProps) {
                   </span>
                 ))}
             </div>
-            <Button disabled className="w-full" variant="outline">
-              Current Plan
-            </Button>
+            <SubscribeButton
+              plan={
+                billingInterval === 'yearly'
+                  ? basicYearlyPlan
+                  : basicMonthlyPlan
+              }
+              className="w-full"
+            />
           </CardContent>
         </Card>
 
@@ -74,7 +84,7 @@ export function SelectPlanGrid(props: SelectPlanGridProps) {
             </CardTitle>
             <div>
               <span className="text-3xl font-bold">
-                {billingInterval === 'yearly' ? '$12' : '$15'}
+                {billingInterval === 'yearly' ? '$80' : '$100'}
               </span>
               <span className="text-muted-foreground">
                 {' '}
@@ -106,7 +116,7 @@ export function SelectPlanGrid(props: SelectPlanGridProps) {
         <Card className="flex flex-col">
           <CardHeader>
             <CardTitle className="flex item-center justify-between">
-              Enterprise
+              Business
             </CardTitle>
             <div>
               <span className="text-3xl font-bold">
