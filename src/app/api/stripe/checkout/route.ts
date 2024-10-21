@@ -43,10 +43,10 @@ export const POST = createRoute(
       line_items: [
         {
           price: body.price_id,
-          quantity: 4,
+          quantity: 1,
           adjustable_quantity: {
             enabled: true,
-            minimum: 4, // free up to 3
+            minimum: 1,
             maximum: 1000,
           },
         },
