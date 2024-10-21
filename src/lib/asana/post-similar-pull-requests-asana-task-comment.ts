@@ -19,6 +19,6 @@ export async function postSimilarPullRequestsAsanaTaskComment(
   await postAsanaTaskComment({
     asanaAccessToken: organization.asana_access_token,
     extAsanaTaskId: targetTask.ext_asana_task_id,
-    html: `<body>Here are some pull requests that might be helpful reference for this task: <br/>${pullRequests.map((pullRequest) => `<a href="${pullRequest.html_url}">${pullRequest.title}</a>`).join('<br/>')}</body>`,
+    html: `<body>Here are some pull requests that might be helpful reference for this task: \n${pullRequests.map((pullRequest) => `<a href="${pullRequest.html_url}">${pullRequest.title}</a>`).join('\n')}</body>`,
   })
 }
