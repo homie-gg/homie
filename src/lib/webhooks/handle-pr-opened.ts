@@ -11,7 +11,7 @@ export async function handlePROpened(
     gitlab_access_token: string | null
   },
   prData: any,
-  source: 'github' | 'gitlab'
+  source: 'github' | 'gitlab',
 ) {
   try {
     const summary = await generatePRSummary(prData)
@@ -33,7 +33,7 @@ export async function handlePROpened(
       await gitlab.MergeRequestNotes.create(
         prData.project_id,
         prData.iid,
-        `## Homie Summary\n\n${summary}`
+        `## Homie Summary\n\n${summary}`,
       )
     }
 

@@ -18,5 +18,7 @@ Please provide a concise summary of the changes, their purpose, and any potentia
     model: 'gpt-4',
   })
 
-  return chatCompletion.choices[0].message.content || 'Unable to generate summary.'
+  return (
+    chatCompletion.choices[0].message.content || 'Unable to generate summary.'
+  )
 }
