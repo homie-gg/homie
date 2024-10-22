@@ -248,6 +248,29 @@ async function sendGithubIssueComment(params: {
     return
   }
 
+  const prNumber = parseInt(result.html_url.split('/').pop() || '', 10)
+  if (isNaN(prNumber)) {
+    throw new Error('Invalid PR URL')
+  }
+
+  const files = await github.rest.pulls.listFiles({
+    owner: githubRepo.owner,
+    repo: githubRepo.name,
+    pull_number: prNumber,
+  })
+
+  const summary = await generatePRSummary(
+    result.description,
+    files.data.map(file => file.filename)
+  )
+
+  await github.rest.issues.createComment({
+    issue_number: prNumber,
+    owner: githubRepo.owner,
+    repo: githubRepo.name,
+    body: summary,
+  })
+
   await github.rest.issues.createComment({
     issue_number: githubIssueNumber,
     owner: githubRepo.owner,
