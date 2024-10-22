@@ -145,7 +145,7 @@ export async function writeCodeForGitlab(
     await gitlab.MergeRequestNotes.create(
       project.ext_gitlab_project_id,
       res.iid,
-      `## Homie Summary\n\n${summary}`
+      `## Homie Summary\n\n${summary}`,
     )
 
     deleteRepository({ path: directory })

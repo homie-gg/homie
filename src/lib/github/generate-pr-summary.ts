@@ -6,7 +6,10 @@ const prSummarySchema = z.object({
   summary: z.string(),
 })
 
-export async function generatePRSummary(prDescription: string, files: string[]): Promise<string> {
+export async function generatePRSummary(
+  prDescription: string,
+  files: string[],
+): Promise<string> {
   const client = new OpenAI()
 
   const prompt = `Summarize the following pull request:

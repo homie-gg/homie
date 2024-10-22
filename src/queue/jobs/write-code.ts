@@ -303,7 +303,11 @@ export const generatePRMRSummary = createJob({
           body: `## Homie Summary\n\n${summary}`,
         })
       }
-    } else if (gitlab_project_id && organization.gitlab_access_token && mr_iid) {
+    } else if (
+      gitlab_project_id &&
+      organization.gitlab_access_token &&
+      mr_iid
+    ) {
       const gitlab = createGitlabClient(organization.gitlab_access_token)
 
       const project = await dbClient
@@ -317,7 +321,7 @@ export const generatePRMRSummary = createJob({
         await gitlab.MergeRequestNotes.create(
           project.ext_gitlab_project_id,
           mr_iid,
-          `## Homie Summary\n\n${summary}`
+          `## Homie Summary\n\n${summary}`,
         )
       }
     }
