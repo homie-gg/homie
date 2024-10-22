@@ -15,6 +15,7 @@ interface GetAssignTaskToContributorTool {
     trello_access_token: string | null
     ext_trello_done_task_list_id: string | null
     asana_access_token: string | null
+    asana_default_list_id: string | null
   }
   answerID: string
 }
