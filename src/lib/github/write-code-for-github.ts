@@ -9,6 +9,7 @@ import { getGithubAccessToken } from '@/lib/github/get-github-access-token'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { execSync } from 'child_process'
+import { generatePRSummary } from '@/lib/ai/generate-pr-summary'
 
 interface WriteCodeForGithubParams {
   id: string
@@ -156,9 +157,18 @@ export async function writeCodeForGithub(
       head: branch,
     })
 
+    // Generate and add summary comment
+    const summary = await generatePRSummary(result.description)
+    await github.rest.issues.createComment({
+      owner: repo.owner,
+      repo: repo.name,
+      issue_number: res.data.number,
+      body: `## Homie Summary\n\n${summary}`,
+    })
+
     deleteRepository({ path: directory })
 
-    logger.debug('Successfully wrote code & opened PR', {
+    logger.debug('Successfully wrote code, opened PR & added summary comment', {
       event: 'write_code:success',
       answer_id: answerID,
       organization: getOrganizationLogData(organization),
