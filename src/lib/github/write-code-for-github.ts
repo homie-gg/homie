@@ -1,6 +1,7 @@
 import { dbClient } from '@/database/client'
 import { getWriteCodeCommand } from '@/lib/ai/get-write-code-command'
 import { parseWriteCodeResult } from '@/lib/ai/parse-write-code-result'
+import { generatePRSummary } from '@/lib/ai/generate-pr-summary'
 import { cloneRepository } from '@/lib/git/clone-repository'
 import { deleteRepository } from '@/lib/git/delete-repository'
 import { createGithubClient } from '@/lib/github/create-github-client'
@@ -156,9 +157,28 @@ export async function writeCodeForGithub(
       head: branch,
     })
 
+    // Generate and add summary comment
+    const changedFiles = execSync('git diff --name-only HEAD~1', { cwd: directory })
+      .toString()
+      .split('\n')
+      .filter(Boolean)
+
+    const summary = await generatePRSummary({
+      title: result.title,
+      description: result.description,
+      changedFiles,
+    })
+
+    await github.rest.issues.createComment({
+      owner: repo.owner,
+      repo: repo.name,
+      issue_number: res.data.number,
+      body: `## Homie Summary\n\n${summary}`,
+    })
+
     deleteRepository({ path: directory })
 
-    logger.debug('Successfully wrote code & opened PR', {
+    logger.debug('Successfully wrote code, opened PR & added summary comment', {
       event: 'write_code:success',
       answer_id: answerID,
       organization: getOrganizationLogData(organization),

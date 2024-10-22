@@ -1,6 +1,7 @@
 import { dbClient } from '@/database/client'
 import { getWriteCodeCommand } from '@/lib/ai/get-write-code-command'
 import { parseWriteCodeResult } from '@/lib/ai/parse-write-code-result'
+import { generatePRSummary } from '@/lib/ai/generate-pr-summary'
 import { cloneRepository } from '@/lib/git/clone-repository'
 import { deleteRepository } from '@/lib/git/delete-repository'
 import { createGitlabClient } from '@/lib/gitlab/create-gitlab-client'
@@ -139,7 +140,6 @@ export async function writeCodeForGitlab(
     const defaultBranch = projectInfo.data.default_branch
 
     // Open PR
-
     const res = await gitlab.MergeRequests.create(
       project.ext_gitlab_project_id,
       branch,
@@ -150,9 +150,27 @@ export async function writeCodeForGitlab(
       },
     )
 
+    // Generate and add summary comment
+    const changedFiles = execSync('git diff --name-only HEAD~1', { cwd: directory })
+      .toString()
+      .split('\n')
+      .filter(Boolean)
+
+    const summary = await generatePRSummary({
+      title: result.title,
+      description: result.description,
+      changedFiles,
+    })
+
+    await gitlab.MergeRequestNotes.create(
+      project.ext_gitlab_project_id,
+      res.iid,
+      `## Homie Summary\n\n${summary}`
+    )
+
     deleteRepository({ path: directory })
 
-    logger.debug('Successfully wrote code & opened PR', {
+    logger.debug('Successfully wrote code, opened PR & added summary comment', {
       event: 'write_code:success',
       answer_id: answerID,
       organization: getOrganizationLogData(organization),
