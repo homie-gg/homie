@@ -94,6 +94,12 @@ export async function writeCodeForGitlab(
     const branch = `homie-${id}`
 
     try {
+      execSync(`git fetch && git pull`, { cwd: directory, stdio: 'ignore' })
+    } catch {
+      // ignore errors
+    }
+
+    try {
       execSync(`git branch -D ${branch}`, { cwd: directory, stdio: 'ignore' })
     } catch {
       // ignore errors

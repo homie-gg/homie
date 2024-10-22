@@ -134,7 +134,7 @@ export const implementPullRequestReviewChanges = createJob({
       dirName: id,
     })
 
-    execSync(`git fetch && git checkout ${pull_request.head.ref}`, {
+    execSync(`git fetch && git checkout ${pull_request.head.ref} && git pull`, {
       cwd: directory,
     })
 
