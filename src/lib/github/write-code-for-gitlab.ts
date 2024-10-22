@@ -4,7 +4,7 @@ import { parseWriteCodeResult } from '@/lib/ai/parse-write-code-result'
 import { generatePRSummary } from '@/lib/ai/generate-pr-summary'
 import { cloneRepository } from '@/lib/git/clone-repository'
 import { deleteRepository } from '@/lib/git/delete-repository'
-import { createGitlabClient } from '@/lib/gitlab/create-gitlab-client'
+import { createGithubClient } from '@/lib/github/create-github-client'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { execSync } from 'child_process'
@@ -12,10 +12,10 @@ import { execSync } from 'child_process'
 interface WriteCodeForGithubParams {
   id: string
   instructions: string
-  gitlabProjectId: number
+  githubRepoID: number
   organization: {
     id: number
-    gitlab_access_token: string
+    ext_gh_install_id: number
   }
   files: string[]
   context: string | null
@@ -33,37 +33,37 @@ type WriteCodeResult =
       html_url: string
     }
 
-export async function writeCodeForGitlab(
+export async function writeCodeForGithub(
   params: WriteCodeForGithubParams,
 ): Promise<WriteCodeResult> {
   const {
     id,
     instructions,
-    gitlabProjectId,
+    githubRepoID,
     organization,
     files,
     context,
     answerID,
   } = params
 
-  const gitlab = createGitlabClient(organization.gitlab_access_token)
+  const github = await createGithubClient({
+    installationId: organization.ext_gh_install_id,
+  })
 
-  const project = await dbClient
-    .selectFrom('gitlab.project')
+  const repo = await dbClient
+    .selectFrom('github.repository')
     .where('organization_id', '=', organization.id)
-    .where('id', '=', gitlabProjectId)
-    .select(['name', 'ext_gitlab_project_id', 'web_url'])
+    .where('id', '=', githubRepoID)
+    .select(['name', 'ext_gh_repo_id', 'full_name'])
     .executeTakeFirst()
 
-  if (!project) {
+  if (!repo) {
     throw new Error('Missing repo info')
   }
 
-  const gitCloneUrl = `https://oauth2:${organization.gitlab_access_token}@${project.web_url.replace('https://', '')}.git`
-
   const directory = cloneRepository({
     organization,
-    url: gitCloneUrl,
+    url: `https://x-access-token:${github.auth.token}@github.com/${repo.full_name}.git`,
     dirName: id,
   })
 
@@ -131,32 +131,24 @@ export async function writeCodeForGitlab(
       cwd: directory,
     })
 
-    const projectInfo = await gitlab.Projects.show(
-      project.ext_gitlab_project_id,
-      {
-        showExpanded: true,
-      },
-    )
-    const defaultBranch = projectInfo.data.default_branch
-
     // Open PR
-    const res = await gitlab.MergeRequests.create(
-      project.ext_gitlab_project_id,
-      branch,
-      defaultBranch,
-      result.title,
-      {
-        description: result.description,
-      },
-    )
+    const res = await github.rest.pulls.create({
+      owner: repo.full_name.split('/')[0],
+      repo: repo.name,
+      title: result.title,
+      head: branch,
+      base: 'main',
+      body: result.description,
+    })
 
     // Generate and add summary comment
-    const summary = await generatePRSummary(res)
-    await gitlab.MergeRequestNotes.create(
-      project.ext_gitlab_project_id,
-      res.iid,
-      `## Homie Summary\n\n${summary}`,
-    )
+    const summary = await generatePRSummary(res.data)
+    await github.rest.issues.createComment({
+      owner: repo.full_name.split('/')[0],
+      repo: repo.name,
+      issue_number: res.data.number,
+      body: `## Homie Summary\n\n${summary}`,
+    })
 
     deleteRepository({ path: directory })
 
@@ -164,14 +156,14 @@ export async function writeCodeForGitlab(
       event: 'write_code:success',
       answer_id: answerID,
       organization: getOrganizationLogData(organization),
-      pr_title: res.title,
-      pr_html_url: res.web_url,
+      pr_title: res.data.title,
+      pr_html_url: res.data.html_url,
     })
 
     return {
       failed: false,
-      title: res.title,
-      html_url: res.web_url,
+      title: res.data.title,
+      html_url: res.data.html_url,
     }
   } catch (error) {
     logger.debug('Failed to write code', {
