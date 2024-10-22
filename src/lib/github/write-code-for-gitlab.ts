@@ -7,6 +7,7 @@ import { createGitlabClient } from '@/lib/gitlab/create-gitlab-client'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { execSync } from 'child_process'
+import { generatePRSummary } from '@/lib/ai/generate-pr-summary'
 
 interface WriteCodeForGithubParams {
   id: string
@@ -112,7 +113,7 @@ export async function writeCodeForGitlab(
     try {
       execSync(`git checkout -b ${branch}`, { cwd: directory })
     } catch {
-      // ignore erorrs
+      // ignore errors
     }
 
     const currentBranch = execSync('git rev-parse --abbrev-ref HEAD', {
@@ -138,15 +139,18 @@ export async function writeCodeForGitlab(
     )
     const defaultBranch = projectInfo.data.default_branch
 
-    // Open PR
+    // Generate summary
+    const changes = execSync('git diff --stat', { cwd: directory }).toString('utf-8')
+    const summary = await generatePRSummary(result.title, result.description, changes)
 
+    // Open PR with summary in description
     const res = await gitlab.MergeRequests.create(
       project.ext_gitlab_project_id,
       branch,
       defaultBranch,
       result.title,
       {
-        description: result.description,
+        description: `${result.description}\n\n## Homie Summary\n\n${summary}`,
       },
     )
 
