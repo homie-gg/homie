@@ -30,10 +30,10 @@ export async function addGitHubSummaryComment(
   owner: string,
   repo: string,
   pullNumber: number,
-  prData: PullRequestData
+  prData: PullRequestData,
 ): Promise<void> {
   const summary = await generateSummary(prData)
-  
+
   await octokit.issues.createComment({
     owner,
     repo,
@@ -46,10 +46,10 @@ export async function addGitLabSummaryComment(
   gitlab: Gitlab,
   projectId: number,
   mergeRequestIid: number,
-  prData: PullRequestData
+  prData: PullRequestData,
 ): Promise<void> {
   const summary = await generateSummary(prData)
-  
+
   await gitlab.MergeRequestNotes.create(projectId, mergeRequestIid, {
     body: `## Homie Summary\n\n${summary}`,
   })
