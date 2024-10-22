@@ -158,8 +158,14 @@ export async function writeCodeForGithub(
     })
 
     // Generate and add summary comment
-    const changes = execSync('git diff --stat', { cwd: directory }).toString('utf-8')
-    const summary = await generatePRSummary(result.title, result.description, changes)
+    const changes = execSync('git diff --stat', { cwd: directory }).toString(
+      'utf-8',
+    )
+    const summary = await generatePRSummary(
+      result.title,
+      result.description,
+      changes,
+    )
     await github.rest.issues.createComment({
       owner: repo.owner,
       repo: repo.name,

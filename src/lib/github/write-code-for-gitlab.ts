@@ -140,8 +140,14 @@ export async function writeCodeForGitlab(
     const defaultBranch = projectInfo.data.default_branch
 
     // Generate summary
-    const changes = execSync('git diff --stat', { cwd: directory }).toString('utf-8')
-    const summary = await generatePRSummary(result.title, result.description, changes)
+    const changes = execSync('git diff --stat', { cwd: directory }).toString(
+      'utf-8',
+    )
+    const summary = await generatePRSummary(
+      result.title,
+      result.description,
+      changes,
+    )
 
     // Open PR with summary in description
     const res = await gitlab.MergeRequests.create(
