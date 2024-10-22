@@ -6,7 +6,9 @@ interface GeneratePRSummaryParams {
   changedFiles: string[]
 }
 
-export async function generatePRSummary(params: GeneratePRSummaryParams): Promise<string> {
+export async function generatePRSummary(
+  params: GeneratePRSummaryParams,
+): Promise<string> {
   const { title, description, changedFiles } = params
   const client = new OpenAI()
 
@@ -22,5 +24,7 @@ The summary should be brief, highlighting the main changes and their purpose.`
     model: 'gpt-3.5-turbo',
   })
 
-  return chatCompletion.choices[0].message.content || 'Unable to generate summary.'
+  return (
+    chatCompletion.choices[0].message.content || 'Unable to generate summary.'
+  )
 }

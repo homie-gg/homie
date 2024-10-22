@@ -158,7 +158,9 @@ export async function writeCodeForGithub(
     })
 
     // Generate and add summary comment
-    const changedFiles = execSync('git diff --name-only HEAD~1', { cwd: directory })
+    const changedFiles = execSync('git diff --name-only HEAD~1', {
+      cwd: directory,
+    })
       .toString()
       .split('\n')
       .filter(Boolean)

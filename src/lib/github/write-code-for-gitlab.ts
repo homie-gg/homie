@@ -151,7 +151,9 @@ export async function writeCodeForGitlab(
     )
 
     // Generate and add summary comment
-    const changedFiles = execSync('git diff --name-only HEAD~1', { cwd: directory })
+    const changedFiles = execSync('git diff --name-only HEAD~1', {
+      cwd: directory,
+    })
       .toString()
       .split('\n')
       .filter(Boolean)
@@ -165,7 +167,7 @@ export async function writeCodeForGitlab(
     await gitlab.MergeRequestNotes.create(
       project.ext_gitlab_project_id,
       res.iid,
-      `## Homie Summary\n\n${summary}`
+      `## Homie Summary\n\n${summary}`,
     )
 
     deleteRepository({ path: directory })
