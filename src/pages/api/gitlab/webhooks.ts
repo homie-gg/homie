@@ -1,11 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
 import { dispatch } from '@/queue/dispatch'
-import { generateSummary, createOrUpdateGitlabComment } from '@/lib/pullRequests/generateSummary'
+import {
+  generateSummary,
+  createOrUpdateGitlabComment,
+} from '@/lib/pullRequests/generateSummary'
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   if (req.method === 'POST') {
     const { object_kind, project, object_attributes } = req.body
@@ -36,7 +39,7 @@ export default async function handler(
           organization.gitlab_access_token,
           project.id,
           object_attributes.iid,
-          summary
+          summary,
         )
 
         await dispatch('gitlab:analyze-merge-request', {

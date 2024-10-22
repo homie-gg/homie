@@ -10,7 +10,12 @@ interface GenerateSummaryParams {
   organizationId: number
 }
 
-async function generateSummary({ title, body, diffUrl, organizationId }: GenerateSummaryParams): Promise<string> {
+async function generateSummary({
+  title,
+  body,
+  diffUrl,
+  organizationId,
+}: GenerateSummaryParams): Promise<string> {
   return await generatePullRequestSummary({
     title,
     body,
@@ -24,18 +29,18 @@ export async function createOrUpdateGithubComment(
   owner: string,
   repo: string,
   prNumber: number,
-  summary: string
+  summary: string,
 ): Promise<void> {
   const octokit = await createGithubClient({ installationId })
-  
+
   const { data: comments } = await octokit.issues.listComments({
     owner,
     repo,
     issue_number: prNumber,
   })
 
-  const existingComment = comments.find(comment => 
-    comment.body?.includes('<!--- Homie Summary Start -->')
+  const existingComment = comments.find((comment) =>
+    comment.body?.includes('<!--- Homie Summary Start -->'),
   )
 
   const commentBody = `<!--- Homie Summary Start -->\n${summary}\n<!--- Homie Summary End -->`
@@ -61,22 +66,34 @@ export async function createOrUpdateGitlabComment(
   accessToken: string,
   projectId: number,
   mergeRequestIid: number,
-  summary: string
+  summary: string,
 ): Promise<void> {
   const gitlab = new Gitlab({ token: accessToken })
 
-  const comments = await gitlab.MergeRequestNotes.all(projectId, mergeRequestIid)
+  const comments = await gitlab.MergeRequestNotes.all(
+    projectId,
+    mergeRequestIid,
+  )
 
-  const existingComment = comments.find(comment => 
-    comment.body?.includes('<!--- Homie Summary Start -->')
+  const existingComment = comments.find((comment) =>
+    comment.body?.includes('<!--- Homie Summary Start -->'),
   )
 
   const commentBody = `<!--- Homie Summary Start -->\n${summary}\n<!--- Homie Summary End -->`
 
   if (existingComment) {
-    await gitlab.MergeRequestNotes.edit(projectId, mergeRequestIid, existingComment.id, commentBody)
+    await gitlab.MergeRequestNotes.edit(
+      projectId,
+      mergeRequestIid,
+      existingComment.id,
+      commentBody,
+    )
   } else {
-    await gitlab.MergeRequestNotes.create(projectId, mergeRequestIid, commentBody)
+    await gitlab.MergeRequestNotes.create(
+      projectId,
+      mergeRequestIid,
+      commentBody,
+    )
   }
 }
 

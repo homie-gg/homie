@@ -4,7 +4,10 @@ import { Webhooks, createNodeMiddleware } from '@octokit/webhooks'
 import { createGithubClient } from '@/lib/github/create-github-client'
 import { prisma } from '@/lib/prisma'
 import { dispatch } from '@/queue/dispatch'
-import { generateSummary, createOrUpdateGithubComment } from '@/lib/pullRequests/generateSummary'
+import {
+  generateSummary,
+  createOrUpdateGithubComment,
+} from '@/lib/pullRequests/generateSummary'
 
 const webhooks = new Webhooks({
   secret: process.env.GITHUB_WEBHOOK_SECRET!,
@@ -46,7 +49,7 @@ webhooks.on('pull_request.opened', async ({ payload }) => {
     payload.repository.owner.login,
     payload.repository.name,
     pullRequest.number,
-    summary
+    summary,
   )
 
   await dispatch('github:analyze-pull-request', {
@@ -59,7 +62,10 @@ webhooks.on('pull_request.opened', async ({ payload }) => {
   })
 })
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   if (req.method === 'POST') {
     const buf = await buffer(req)
     const sig = req.headers['x-hub-signature-256'] as string
