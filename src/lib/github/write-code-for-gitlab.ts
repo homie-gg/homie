@@ -5,11 +5,12 @@ import { cloneRepository } from '@/lib/git/clone-repository'
 import { deleteRepository } from '@/lib/git/delete-repository'
 import { WriteCodeResult } from '@/lib/github/write-code-for-github'
 import { createGitlabClient } from '@/lib/gitlab/create-gitlab-client'
+import { generatePRSummary } from '@/lib/github/generate-pr-summary'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { execSync } from 'child_process'
 
-interface WriteCodeForGithubParams {
+interface WriteCodeForGitlabParams {
   id: string
   instructions: string
   gitlabProjectID: number
@@ -23,7 +24,7 @@ interface WriteCodeForGithubParams {
 }
 
 export async function writeCodeForGitlab(
-  params: WriteCodeForGithubParams,
+  params: WriteCodeForGitlabParams,
 ): Promise<WriteCodeResult> {
   const {
     id,
@@ -129,7 +130,6 @@ export async function writeCodeForGitlab(
     const defaultBranch = projectInfo.data.default_branch
 
     // Open PR
-
     const res = await gitlab.MergeRequests.create(
       project.ext_gitlab_project_id,
       branch,
@@ -138,6 +138,14 @@ export async function writeCodeForGitlab(
       {
         description: result.description,
       },
+    )
+
+    // Generate and add PR summary
+    const summary = await generatePRSummary(result.description, files)
+    await gitlab.MergeRequestNotes.create(
+      project.ext_gitlab_project_id,
+      res.iid,
+      `## Homie Summary\n\n${summary}`
     )
 
     deleteRepository({ path: directory })

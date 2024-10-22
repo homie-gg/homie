@@ -11,6 +11,7 @@ import { createSlackClient } from '@/lib/slack/create-slack-client'
 import { sendFailedToOpenPRMessageToSlack } from '@/lib/slack/send-failed-to-open-pr-message-to-slack'
 import { sendPullRequestCreatedMessageToSlack } from '@/lib/slack/send-pull-request-created-message-to-slack'
 import { createJob } from '@/queue/create-job'
+import { generatePRSummary } from '@/lib/github/generate-pr-summary'
 import crypto from 'node:crypto'
 
 interface WriteCodeBasePayload {
@@ -255,3 +256,70 @@ async function sendGithubIssueComment(params: {
     body: `Pull request for this: ${result.html_url}`,
   })
 }
+export const generatePRMRSummary = createJob({
+  id: 'generate_pr_mr_summary',
+  handle: async (payload: {
+    organization: {
+      id: number
+      ext_gh_install_id?: number
+      gitlab_access_token?: string
+    }
+    pr_description: string
+    files: string[]
+    github_repo_id?: number
+    gitlab_project_id?: number
+    pr_number?: number
+    mr_iid?: number
+  }) => {
+    const {
+      organization,
+      pr_description,
+      files,
+      github_repo_id,
+      gitlab_project_id,
+      pr_number,
+      mr_iid,
+    } = payload
+
+    const summary = await generatePRSummary(pr_description, files)
+
+    if (github_repo_id && organization.ext_gh_install_id && pr_number) {
+      const github = await createGithubClient({
+        installationId: organization.ext_gh_install_id,
+      })
+
+      const repo = await dbClient
+        .selectFrom('github.repo')
+        .where('organization_id', '=', organization.id)
+        .where('id', '=', github_repo_id)
+        .select(['owner', 'name'])
+        .executeTakeFirst()
+
+      if (repo && repo.owner) {
+        await github.rest.issues.createComment({
+          owner: repo.owner,
+          repo: repo.name,
+          issue_number: pr_number,
+          body: `## Homie Summary\n\n${summary}`,
+        })
+      }
+    } else if (gitlab_project_id && organization.gitlab_access_token && mr_iid) {
+      const gitlab = createGitlabClient(organization.gitlab_access_token)
+
+      const project = await dbClient
+        .selectFrom('gitlab.project')
+        .where('organization_id', '=', organization.id)
+        .where('id', '=', gitlab_project_id)
+        .select(['ext_gitlab_project_id'])
+        .executeTakeFirst()
+
+      if (project) {
+        await gitlab.MergeRequestNotes.create(
+          project.ext_gitlab_project_id,
+          mr_iid,
+          `## Homie Summary\n\n${summary}`
+        )
+      }
+    }
+  },
+})

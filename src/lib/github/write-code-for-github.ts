@@ -6,6 +6,7 @@ import { deleteRepository } from '@/lib/git/delete-repository'
 import { createGithubClient } from '@/lib/github/create-github-client'
 import { getGithubDefaultBranch } from '@/lib/github/get-default-branch'
 import { getGithubAccessToken } from '@/lib/github/get-github-access-token'
+import { generatePRSummary } from '@/lib/github/generate-pr-summary'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
 import { execSync } from 'child_process'
@@ -154,6 +155,15 @@ export async function writeCodeForGithub(
       body: result.description,
       base: defaultBranch,
       head: branch,
+    })
+
+    // Generate and add PR summary
+    const summary = await generatePRSummary(result.description, files)
+    await github.rest.issues.createComment({
+      owner: repo.owner,
+      repo: repo.name,
+      issue_number: res.data.number,
+      body: `## Homie Summary\n\n${summary}`,
     })
 
     deleteRepository({ path: directory })
