@@ -3,6 +3,7 @@ import { getWriteCodeCommand } from '@/lib/ai/get-write-code-command'
 import { parseWriteCodeResult } from '@/lib/ai/parse-write-code-result'
 import { cloneRepository } from '@/lib/git/clone-repository'
 import { deleteRepository } from '@/lib/git/delete-repository'
+import { WriteCodeResult } from '@/lib/github/write-code-for-github'
 import { createGitlabClient } from '@/lib/gitlab/create-gitlab-client'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
@@ -11,7 +12,7 @@ import { execSync } from 'child_process'
 interface WriteCodeForGithubParams {
   id: string
   instructions: string
-  gitlabProjectId: number
+  gitlabProjectID: number
   organization: {
     id: number
     gitlab_access_token: string
@@ -21,24 +22,13 @@ interface WriteCodeForGithubParams {
   answerID: string
 }
 
-type WriteCodeResult =
-  | {
-      failed: true
-      error: string
-    }
-  | {
-      failed: false
-      title: string
-      html_url: string
-    }
-
 export async function writeCodeForGitlab(
   params: WriteCodeForGithubParams,
 ): Promise<WriteCodeResult> {
   const {
     id,
     instructions,
-    gitlabProjectId,
+    gitlabProjectID,
     organization,
     files,
     context,
@@ -50,7 +40,7 @@ export async function writeCodeForGitlab(
   const project = await dbClient
     .selectFrom('gitlab.project')
     .where('organization_id', '=', organization.id)
-    .where('id', '=', gitlabProjectId)
+    .where('id', '=', gitlabProjectID)
     .select(['name', 'ext_gitlab_project_id', 'web_url'])
     .executeTakeFirst()
 

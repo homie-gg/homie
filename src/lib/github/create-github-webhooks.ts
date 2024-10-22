@@ -14,6 +14,7 @@ import { reopenPullRequest } from '@/queue/jobs/reopen-pull-request'
 import { closePullRequest } from '@/queue/jobs/close-pull-requests'
 import { saveOpenedPullRequest } from '@/queue/jobs/save-opened-pull-request'
 import { implementPullRequestReviewChanges } from '@/queue/jobs/implement-pull-request-review-changes'
+import { workOnGithubIssue } from '@/lib/github/work-on-github-issue'
 
 let webhooks: ReturnType<typeof createGithubApp>['webhooks'] | null = null
 
@@ -66,6 +67,10 @@ export const getGithubWebhooks = () => {
 
   app.webhooks.on('issues.reopened', async (params) => {
     await reopenTaskFromGithubIssue(params.payload)
+  })
+
+  app.webhooks.on('issue_comment.created', async (params) => {
+    await workOnGithubIssue(params.payload)
   })
 
   app.webhooks.on('pull_request.reopened', async (params) => {

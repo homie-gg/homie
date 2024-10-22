@@ -1,9 +1,14 @@
+import { dbClient } from '@/database/client'
 import { findWriteCodeTargetFiles } from '@/lib/ai/find-write-code-target-files'
 import { getWriteCodeContext } from '@/lib/ai/get-write-code-context'
-import { writeCodeForGithub } from '@/lib/github/write-code-for-github'
+import { createGithubClient } from '@/lib/github/create-github-client'
+import {
+  writeCodeForGithub,
+  WriteCodeResult,
+} from '@/lib/github/write-code-for-github'
 import { writeCodeForGitlab } from '@/lib/github/write-code-for-gitlab'
 import { createSlackClient } from '@/lib/slack/create-slack-client'
-import { sendFailedToOpenPRMessage } from '@/lib/slack/send-failed-to-open-pr-message'
+import { sendFailedToOpenPRMessageToSlack } from '@/lib/slack/send-failed-to-open-pr-message-to-slack'
 import { sendPullRequestCreatedMessageToSlack } from '@/lib/slack/send-pull-request-created-message-to-slack'
 import { createJob } from '@/queue/create-job'
 import crypto from 'node:crypto'
@@ -12,13 +17,14 @@ interface WriteCodeBasePayload {
   organization: {
     id: number
     ext_gh_install_id: number | null
-    gitlab_access_token: string | null
-    slack_access_token: string
+    gitlab_access_token?: string | null
+    slack_access_token?: string
   }
   instructions: string
-  slack_target_message_ts: string
-  slack_channel_id: string
+  slack_target_message_ts?: string
+  slack_channel_id?: string
   answer_id: string
+  github_issue_number?: number
 }
 
 export const writeCode = createJob({
@@ -41,20 +47,21 @@ export const writeCode = createJob({
       slack_channel_id,
       slack_target_message_ts,
       answer_id,
+      github_issue_number,
+      github_repo_id,
+      gitlab_project_id,
     } = payload
 
-    const slackClient = createSlackClient(organization.slack_access_token)
-
     const files = await findWriteCodeTargetFiles({
-      github_repo_id: payload.github_repo_id,
-      gitlab_project_id: payload.gitlab_project_id,
+      github_repo_id,
+      gitlab_project_id,
       instructions,
       organization_id: organization.id,
     })
 
     const context = await getWriteCodeContext({
-      github_repo_id: payload.github_repo_id,
-      gitlab_project_id: payload.gitlab_project_id,
+      github_repo_id,
+      gitlab_project_id,
       instructions,
       organization_id: organization.id,
     })
@@ -73,83 +80,178 @@ export const writeCode = createJob({
       .digest('hex')
       .substring(0, 7) // get first 7 chars, same as git commits
 
-    // GitHub
-    if (payload.github_repo_id && organization.ext_gh_install_id) {
-      const result = await writeCodeForGithub({
-        id,
-        instructions,
-        context,
-        files,
-        githubRepoID: payload.github_repo_id,
+    const result = await openPullRequest({
+      id,
+      organization,
+      instructions,
+      context,
+      files,
+      githubRepoID: github_repo_id,
+      gitlabProjectID: gitlab_project_id,
+      answerID: answer_id,
+    })
+
+    if (
+      organization.slack_access_token &&
+      slack_channel_id &&
+      slack_target_message_ts
+    ) {
+      await sendSlackMessage({
+        slackAccessToken: organization.slack_access_token,
+        slackChannelID: slack_channel_id,
+        slackTargetMessageTS: slack_target_message_ts,
+        result,
+      })
+    }
+
+    if (
+      organization.ext_gh_install_id &&
+      github_issue_number &&
+      github_repo_id
+    ) {
+      await sendGithubIssueComment({
+        githubIssueNumber: github_issue_number,
+        githubRepoID: github_repo_id,
         organization: {
           id: organization.id,
           ext_gh_install_id: organization.ext_gh_install_id,
         },
-        answerID: answer_id,
+        result,
       })
-
-      if (result.failed) {
-        await sendFailedToOpenPRMessage({
-          slackClient,
-          channelID: slack_channel_id,
-          threadTS: slack_target_message_ts,
-        })
-
-        return
-      }
-
-      await sendPullRequestCreatedMessageToSlack({
-        threadTS: slack_target_message_ts,
-        slackClient,
-        channelID: slack_channel_id,
-        title: result.title,
-        url: result.html_url,
-      })
-
-      return
     }
-
-    // Gitlab
-    if (payload.gitlab_project_id && organization.gitlab_access_token) {
-      const result = await writeCodeForGitlab({
-        id,
-        instructions,
-        context,
-        files,
-        gitlabProjectId: payload.gitlab_project_id,
-        organization: {
-          id: organization.id,
-          gitlab_access_token: organization.gitlab_access_token,
-        },
-        answerID: answer_id,
-      })
-
-      if (result.failed) {
-        await sendFailedToOpenPRMessage({
-          slackClient,
-          channelID: slack_channel_id,
-          threadTS: slack_target_message_ts,
-        })
-
-        return
-      }
-
-      await sendPullRequestCreatedMessageToSlack({
-        threadTS: slack_target_message_ts,
-        slackClient,
-        channelID: slack_channel_id,
-        title: result.title,
-        url: result.html_url,
-      })
-
-      return
-    }
-
-    // Failed...
-    await sendFailedToOpenPRMessage({
-      slackClient,
-      channelID: slack_channel_id,
-      threadTS: slack_target_message_ts,
-    })
   },
 })
+
+async function openPullRequest(params: {
+  id: string
+  organization: {
+    id: number
+    ext_gh_install_id: number | null
+    gitlab_access_token?: string | null
+    slack_access_token?: string
+  }
+  instructions: string
+  context: string | null
+  files: string[]
+  gitlabProjectID?: number
+  githubRepoID?: number
+  answerID: string
+}) {
+  const {
+    id,
+    githubRepoID,
+    answerID,
+    gitlabProjectID,
+    organization,
+    instructions,
+    context,
+    files,
+  } = params
+
+  // GitHub
+  if (githubRepoID && organization.ext_gh_install_id) {
+    return writeCodeForGithub({
+      id,
+      instructions,
+      context,
+      files,
+      githubRepoID,
+      organization: {
+        id: organization.id,
+        ext_gh_install_id: organization.ext_gh_install_id,
+      },
+      answerID,
+    })
+  }
+
+  // Gitlab
+  if (gitlabProjectID && organization.gitlab_access_token) {
+    return writeCodeForGitlab({
+      id,
+      instructions,
+      context,
+      files,
+      gitlabProjectID,
+      organization: {
+        id: organization.id,
+        gitlab_access_token: organization.gitlab_access_token,
+      },
+      answerID,
+    })
+  }
+
+  throw new Error('Missing repo info')
+}
+
+async function sendSlackMessage(params: {
+  slackAccessToken: string
+  slackChannelID: string
+  slackTargetMessageTS: string
+  result: WriteCodeResult
+}) {
+  const { slackAccessToken, slackChannelID, slackTargetMessageTS, result } =
+    params
+
+  const slackClient = createSlackClient(slackAccessToken)
+
+  if (result.failed) {
+    await sendFailedToOpenPRMessageToSlack({
+      slackClient,
+      channelID: slackChannelID,
+      threadTS: slackTargetMessageTS,
+    })
+    return
+  }
+
+  await sendPullRequestCreatedMessageToSlack({
+    threadTS: slackTargetMessageTS,
+    slackClient,
+    channelID: slackChannelID,
+    title: result.title,
+    url: result.html_url,
+  })
+}
+
+async function sendGithubIssueComment(params: {
+  githubIssueNumber: number
+  githubRepoID: number
+  organization: {
+    id: number
+    ext_gh_install_id: number
+  }
+  result: WriteCodeResult
+}) {
+  const { githubIssueNumber, githubRepoID, organization, result } = params
+
+  const github = await createGithubClient({
+    installationId: organization.ext_gh_install_id,
+  })
+
+  const githubRepo = await dbClient
+    .selectFrom('github.repo')
+    .where('organization_id', '=', organization.id)
+    .where('id', '=', githubRepoID)
+    .select(['owner', 'name'])
+    .executeTakeFirst()
+
+  if (!githubRepo?.name || !githubRepo.owner) {
+    return
+  }
+
+  if (result.failed) {
+    await github.rest.issues.createComment({
+      issue_number: githubIssueNumber,
+      owner: githubRepo.owner,
+      repo: githubRepo.name,
+      body: `Sorry, something went wrong and we couldn't create PR for this.`,
+    })
+    return
+  }
+
+  await github.rest.issues.createComment({
+    issue_number: githubIssueNumber,
+    owner: githubRepo.owner,
+    repo: githubRepo.name,
+    body: `Pull request for this: ${result.html_url}`,
+  })
+}

@@ -1,13 +1,13 @@
 import { SlackClient } from '@/lib/slack/create-slack-client'
 
-interface sendFailedToOpenPRMessageParams {
+interface sendFailedToOpenPRMessageParamsToSlack {
   slackClient: SlackClient
   channelID: string
   threadTS: string
 }
 
-export async function sendFailedToOpenPRMessage(
-  params: sendFailedToOpenPRMessageParams,
+export async function sendFailedToOpenPRMessageToSlack(
+  params: sendFailedToOpenPRMessageParamsToSlack,
 ) {
   const { slackClient, channelID, threadTS } = params
   return await slackClient.post('chat.postMessage', {

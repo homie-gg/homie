@@ -23,7 +23,7 @@ interface WriteCodeForGithubParams {
   answerID: string
 }
 
-type WriteCodeResult =
+export type WriteCodeResult =
   | {
       failed: true
       error: string
