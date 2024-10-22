@@ -261,7 +261,7 @@ async function sendGithubIssueComment(params: {
 
   const summary = await generatePRSummary(
     result.description,
-    files.data.map(file => file.filename)
+    files.data.map((file) => file.filename),
   )
 
   await github.rest.issues.createComment({
