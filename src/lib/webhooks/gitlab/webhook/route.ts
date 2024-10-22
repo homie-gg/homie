@@ -8,7 +8,7 @@ export async function handleGitlabPROpened(
     id: number
     gitlab_access_token: string
   },
-  prData: any
+  prData: any,
 ) {
   try {
     const summary = await generatePRSummary(prData)

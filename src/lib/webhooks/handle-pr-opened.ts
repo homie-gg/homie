@@ -11,14 +11,20 @@ export async function handlePROpened(
   source: 'github' | 'gitlab',
 ) {
   if (source === 'github' && organization.ext_gh_install_id) {
-    await handleGithubPROpened({
-      id: organization.id,
-      ext_gh_install_id: organization.ext_gh_install_id,
-    }, prData)
+    await handleGithubPROpened(
+      {
+        id: organization.id,
+        ext_gh_install_id: organization.ext_gh_install_id,
+      },
+      prData,
+    )
   } else if (source === 'gitlab' && organization.gitlab_access_token) {
-    await handleGitlabPROpened({
-      id: organization.id,
-      gitlab_access_token: organization.gitlab_access_token,
-    }, prData)
+    await handleGitlabPROpened(
+      {
+        id: organization.id,
+        gitlab_access_token: organization.gitlab_access_token,
+      },
+      prData,
+    )
   }
 }

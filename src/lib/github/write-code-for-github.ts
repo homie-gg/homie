@@ -152,7 +152,7 @@ export async function writeCodeForGitlab(
       result.title,
       {
         description: result.description,
-      }
+      },
     )
 
     // Generate and add summary comment
@@ -160,7 +160,7 @@ export async function writeCodeForGitlab(
     await gitlab.MergeRequestNotes.create(
       project.id,
       mr.iid,
-      `## Homie Summary\n\n${summary}`
+      `## Homie Summary\n\n${summary}`,
     )
 
     deleteRepository({ path: directory })

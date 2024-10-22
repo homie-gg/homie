@@ -8,7 +8,7 @@ export async function handleGithubPROpened(
     id: number
     ext_gh_install_id: number
   },
-  prData: any
+  prData: any,
 ) {
   try {
     const summary = await generatePRSummary(prData)
