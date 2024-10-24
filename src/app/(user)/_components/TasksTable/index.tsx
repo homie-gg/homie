@@ -3,7 +3,7 @@
 import styles from './TasksTable.module.scss'
 import { Button } from '@/lib/ui/HomieButton'
 import { useState } from 'react'
-import TasksTableFilters from '@/app/(user)/tasks/_components/TasksTableFilters'
+import TasksTableFilters from '@/app/(user)/_components/TasksTable/TasksTableFilters'
 import {
   Table,
   TableBody,
@@ -12,8 +12,8 @@ import {
   TableRow,
 } from '@/lib/ui/HomieTable'
 import { cn } from '@/lib/utils'
-import TasksTablePagination from '@/app/(user)/tasks/_components/TasksTablePagination'
-import { Tasks } from '@/app/(user)/tasks/_components/get-tasks'
+import TasksTablePagination from '@/app/(user)/_components/TasksTable/TasksTablePagination'
+import { Tasks } from '@/app/(user)/_components/TasksTable/get-tasks'
 import { format } from 'date-fns'
 import { DateRange } from 'react-day-picker'
 import {
@@ -24,7 +24,7 @@ import {
 } from 'nuqs'
 import { taskPriority } from '@/lib/tasks/task-priority'
 import { useDebounce } from 'react-use'
-import { TaskPriorityFilterValue } from '@/app/(user)/tasks/_components/TaskPriorirtyFilter'
+import { TaskPriorityFilterValue } from '@/app/(user)/_components/TasksTable/TaskPriorirtyFilter'
 import { formatDate, parse } from 'date-fns'
 
 interface TasksTableProps {

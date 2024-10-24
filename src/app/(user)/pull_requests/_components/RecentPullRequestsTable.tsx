@@ -1,4 +1,4 @@
-import ChartCard from '@/app/(user)/pull_requests/_components/ChartCard'
+import ChartCard from '@/app/(user)/_components/ChartCard'
 import { PullRequest } from '@/app/(user)/pull_requests/_utils/get-pull-requests'
 import {
   Table,

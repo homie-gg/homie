@@ -1,6 +1,6 @@
-import ContributorPeriodChart, {
+import PeriodChart, {
   PeriodChartData,
-} from './ContributorPeriodChart'
+} from '@/app/(user)/_components/PeriodChart'
 import styles from './ContributorActivityChart.module.scss'
 
 type ContributorActivityChartProps = {
@@ -11,7 +11,7 @@ const ContributorActivityChart = ({ data }: ContributorActivityChartProps) => {
   return (
     <div className={styles.container}>
       <p className={styles.label}>Activity Score</p>
-      <ContributorPeriodChart data={data} />
+      <PeriodChart data={data} />
     </div>
   )
 }

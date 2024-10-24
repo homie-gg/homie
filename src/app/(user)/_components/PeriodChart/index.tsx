@@ -8,7 +8,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/lib/ui/Chart'
-import styles from './ContributorPeriodChart.module.scss'
+import styles from './PeriodChart.module.scss'
 
 const chartConfig = {
   current: {
@@ -32,10 +32,7 @@ type Props = {
   xOrientation?: 'top' | 'bottom'
 }
 
-const ContributorPeriodChart: React.FC<Props> = ({
-  data,
-  xOrientation = 'bottom',
-}) => {
+const PeriodChart: React.FC<Props> = ({ data, xOrientation = 'bottom' }) => {
   return (
     <div className={styles.chart}>
       <ul className={styles.legend}>
@@ -75,4 +72,4 @@ const ContributorPeriodChart: React.FC<Props> = ({
   )
 }
 
-export default ContributorPeriodChart
+export default PeriodChart

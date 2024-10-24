@@ -1,6 +1,6 @@
 import React from 'react'
 import ContributorCategorySelect from './ContributorCategorySelect'
-import DateSelect from '@/app/(user)/_components/DateSelect'
+import DateSelect from '@/app/(user)/_components/DateSelect/DateSelect'
 import { Days } from '@/app/(user)/_utils/dates'
 import styles from './ContributorsFilters.module.scss'
 

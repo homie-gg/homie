@@ -3,7 +3,7 @@
 import TaskMetricsCard from '@/app/(user)/tasks/_components/TaskMetricsCard'
 import styles from './TaskPrioritiesDistribution.module.scss'
 import PieChart from '@/lib/ui/PieChart'
-import { Tasks } from '@/app/(user)/tasks/_components/get-tasks'
+import { Tasks } from '@/app/(user)/contributor/[user_id]/_components/get-tasks'
 
 interface TaskTypesContributionProps {
   tasks: Tasks

@@ -1,9 +1,9 @@
 import { DateRange } from 'react-day-picker'
 import styles from './TasksTableFilters.module.scss'
-import TasksTableSearch from '@/app/(user)/tasks/_components/TasksTableSearch'
+import TasksTableSearch from '@/app/(user)/_components/TasksTable/TasksTableSearch'
 import TaskPriorityFilter, {
   TaskPriorityFilterValue,
-} from '@/app/(user)/tasks/_components/TaskPriorirtyFilter'
+} from '@/app/(user)/_components/TasksTable/TaskPriorirtyFilter'
 import DatePicker from '@/lib/ui/DatePicker'
 import { cn } from '@/lib/utils'
 

@@ -3,7 +3,7 @@ import Image from 'next/image'
 import clsx from 'clsx'
 import styles from './ContributorDataCard.module.scss'
 import { ContributorCategory } from './ContributorCategorySelectItem'
-import { PeriodChartData } from './ContributorPeriodChart'
+import { PeriodChartData } from '@/app/(user)/_components/PeriodChart'
 import ContributorActivityChart from './ContributorActivityChart'
 
 type ContributorData = {
