@@ -1,0 +1,15 @@
+.root {
+  @apply w-full;
+
+  .container {
+    @apply w-full flex flex-col gap-y-8;
+
+    .heading {
+      @apply font-medium font-sans-alt text-3xl leading-[38px];
+    }
+
+    .content {
+      @apply w-full flex flex-col gap-y-6;
+    }
+  }
+}

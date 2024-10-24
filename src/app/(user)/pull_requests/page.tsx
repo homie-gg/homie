@@ -6,9 +6,9 @@ import styles from './_components/PullRequestsPage.module.scss'
 import clsx from 'clsx'
 import PageHeader from '@/app/(user)/_components/PageHeader'
 import PageTitle from '@/app/(user)/_components/PageTitle'
-import DateSelect from '@/app/(user)/pull_requests/_components/DateSelect'
+import DateSelect from '@/app/(user)/_components/DateSelect'
 import Metrics from '@/app/(user)/pull_requests/_components/Metrics'
-import { Days, daysFilter } from '@/app/(user)/pull_requests/_components/dates'
+import { Days, daysFilter } from '@/app/(user)/_utils/dates'
 import PullRequestsCountsChart from '@/app/(user)/pull_requests/_components/PullRequestsCountsChart'
 import PullRequestsDistributionsChart from '@/app/(user)/pull_requests/_components/PullRequestsDistributionChart'
 import RecentPullRequestsTable from '@/app/(user)/pull_requests/_components/RecentPullRequestsTable'
@@ -48,7 +48,7 @@ export default async function PullRequestsPage(props: PullRequestsPageProps) {
       <div className={clsx('container', styles.content)}>
         <PageHeader>
           <PageTitle>Pull Requests</PageTitle>
-          <DateSelect days={days} />
+          <DateSelect slug="pull_requests" days={days} />
         </PageHeader>
         <div className={styles.body}>
           <Metrics pullRequests={pullRequests} />
