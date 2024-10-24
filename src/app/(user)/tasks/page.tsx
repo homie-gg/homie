@@ -3,11 +3,11 @@ import PageTitle from '@/app/(user)/_components/PageTitle'
 import styles from './_components/TasksPage.module.scss'
 import clsx from 'clsx'
 import TaskMetrics from '@/app/(user)/tasks/_components/TaskMetrics'
-import TasksTable from '@/app/(user)/_components/TasksTable'
+import TasksTable from '@/app/(user)/tasks/_components/TasksTable'
 import { getUserOrganization } from '@/lib/auth/get-user-organization'
 import TaskCategorySelect from '@/app/(user)/tasks/_components/TaskCategorySelect'
 import { TaskCategory } from '@/app/(user)/tasks/_components/TaskCategorySelectItem'
-import { getTasks } from '@/app/(user)/_components/TasksTable/get-tasks'
+import { getTasks } from '@/app/(user)/tasks/_components/get-tasks'
 
 interface TasksPageProps {
   searchParams: {

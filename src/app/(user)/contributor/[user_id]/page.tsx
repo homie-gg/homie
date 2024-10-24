@@ -5,8 +5,8 @@ import ContributorPrPerRepo from './_components/ContributorPrPerRepo'
 import CompletedPullRequests from './_components/ContributorCompletedPullRequests'
 import ChartCard from '@/lib/ui/ChartCard'
 import PeriodChart from '@/lib/ui/PeriodChart'
-import TasksTable from '@/app/(user)/_components/TasksTable'
-import { Task, Tasks } from '@/app/(user)/_components/TasksTable/get-tasks'
+import TasksTable from '@/app/(user)/tasks/_components/TasksTable'
+import { Task } from '@/app/(user)/tasks/_components/get-tasks'
 import styles from './_components/ContributorDetailsPage.module.scss'
 
 const contributorPrPerRepoData = [
@@ -29,24 +29,6 @@ const contributorPrPerRepoData = [
   {
     repo: 'Repo 5',
     prCount: 1,
-  },
-]
-
-const contributorCompletedPrsData = [
-  {
-    title: 'Set up user authentication and login flow',
-    estimatedTime: '20 hours',
-    actualTimeTaken: '30 hours',
-  },
-  {
-    title: 'Implement dark mode toggle feature',
-    estimatedTime: '7 hours',
-    actualTimeTaken: '3 hours',
-  },
-  {
-    title: 'Develop a search bar with autocomplete',
-    estimatedTime: '12 hours',
-    actualTimeTaken: '30 minutes',
   },
 ]
 
@@ -124,7 +106,7 @@ export default function ContributorDetailsPage(
         <div className={styles.section}>
           <div className={styles['section-content']}>
             <ContributorPrPerRepo data={contributorPrPerRepoData} />
-            <CompletedPullRequests data={contributorCompletedPrsData} />
+            <CompletedPullRequests completedPullRequests={[]} />
           </div>
         </div>
         <div className={styles.section}>

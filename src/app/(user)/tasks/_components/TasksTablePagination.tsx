@@ -1,8 +1,8 @@
 import { Button } from '@/lib/ui/HomieButton'
 import styles from './TasksTablePagination.module.scss'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
-import TasksTablePaginationPageButton from '@/app/(user)/_components/TasksTable/TasksTablePaginationPageButton'
-import TasksTablePaginationEllipseButton from '@/app/(user)/_components/TasksTable/TasksTablePaginationEllipseButton'
+import TasksTablePaginationPageButton from '@/app/(user)/tasks/_components/TasksTablePaginationPageButton'
+import TasksTablePaginationEllipseButton from '@/app/(user)/tasks/_components/TasksTablePaginationEllipseButton'
 
 interface TasksTablePaginationProps {
   total: number

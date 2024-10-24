@@ -1,40 +1,24 @@
 'use client'
 
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table'
-import styles from './ContributorCompletedPullRequests.module.scss'
 import ChartCard from '@/lib/ui/ChartCard'
-import DataTable from '@/lib/ui/DataTable'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from '@/lib/ui/Table'
+import { PullRequest } from '@/app/(user)/pull_requests/_utils/get-pull-requests'
+import { getAverageDaysToMerge } from '@/app/(user)/pull_requests/_utils/get-average-days-to-merge'
+import styles from './ContributorCompletedPullRequests.module.scss'
 
-export type ContributorCompletedPullRequestsProps = {
-  data: {
-    title: string
-    estimatedTime: string
-    actualTimeTaken: string
-  }[]
+type CompletedPullRequestsProps = {
+  completedPullRequests: PullRequest[]
 }
 
 export default function CompletedPullRequests({
-  data,
-}: ContributorCompletedPullRequestsProps) {
-  const table = useReactTable({
-    columns: [
-      {
-        accessorKey: 'title',
-        header: 'Title',
-      },
-      {
-        accessorKey: 'estimatedTime',
-        header: 'Estimated Time',
-      },
-      {
-        accessorKey: 'actualTimeTaken',
-        header: 'Actual Time Taken',
-      },
-    ],
-    data: data,
-    getCoreRowModel: getCoreRowModel(),
-  })
-
+  completedPullRequests,
+}: CompletedPullRequestsProps) {
   return (
     <ChartCard
       title="Most recent PRs"
@@ -42,10 +26,28 @@ export default function CompletedPullRequests({
       action={{ label: 'View all', handler: () => {} }}
     >
       <div className={styles.table}>
-        <DataTable
-          columns={table.getHeaderGroups()}
-          data={table.getRowModel().rows}
-        />
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableCell>Title</TableCell>
+              <TableCell>Estimated Time</TableCell>
+              <TableCell>Actual Time Taken</TableCell>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {completedPullRequests.map((pullRequest) => {
+              const averageDaysToMerge = getAverageDaysToMerge([pullRequest])
+
+              return (
+                <TableRow key={pullRequest.id}>
+                  <TableCell>{pullRequest.title}</TableCell>
+                  <TableCell>12 hours</TableCell>
+                  <TableCell>{averageDaysToMerge}</TableCell>
+                </TableRow>
+              )
+            })}
+          </TableBody>
+        </Table>
       </div>
     </ChartCard>
   )
