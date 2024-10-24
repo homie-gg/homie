@@ -15,7 +15,7 @@ const contributorsData = [
     time: {
       current: '3:31 PM',
       timezone: 'PST',
-      //   country: 'https://flagsapi.com/CA/flat/64.png',
+      country: '',
     },
     hoursSinceLastPr: 2,
     tasksAssignedCount: 2,
@@ -28,7 +28,7 @@ const contributorsData = [
     time: {
       current: '4:56 PM',
       timezone: 'EST',
-      //   country: 'https://flagsapi.com/US/flat/64.png',
+      country: '',
     },
     hoursSinceLastPr: 3,
     tasksAssignedCount: 4,
@@ -68,7 +68,7 @@ const activityData = [
   },
 ]
 
-const ContributorsData = ({}: ContributorDataProps) => {
+export default function ContributorsData({}: ContributorDataProps) {
   return (
     <div className={styles.main}>
       <div className={styles.content}>
@@ -83,5 +83,3 @@ const ContributorsData = ({}: ContributorDataProps) => {
     </div>
   )
 }
-
-export default ContributorsData

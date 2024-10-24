@@ -1,10 +1,10 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import CalendarIcon from '@/app/(user)/pull_requests/_components/CalendarIcon'
 import Select from '@/lib/ui/HomieSelect'
+import { Days, daysLabels } from './dates'
 import styles from './DateSelect.module.scss'
-import { useRouter } from 'next/navigation'
-import { Days, daysLabels } from '@/app/(user)/_utils/dates'
 
 interface DateSelectProps {
   slug: string

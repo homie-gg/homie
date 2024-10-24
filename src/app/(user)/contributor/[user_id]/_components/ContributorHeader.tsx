@@ -8,11 +8,11 @@ import {
   BreadcrumbSeparator,
 } from '@/lib/ui/Breadcrumb'
 import HomeIcon from './HomeIcon'
-import DateSelect from '@/app/(user)/_components/DateSelect/DateSelect'
-import { Days } from '@/app/(user)/_utils/dates'
+import DateSelect from '@/lib/ui/DateSelect'
+import { Days } from '@/lib/ui/DateSelect/dates'
 import styles from './ContributorHeader.module.scss'
 
-type Props = {
+type ContributorHeaderProps = {
   days?: Days
   user: {
     name: string
@@ -21,10 +21,10 @@ type Props = {
   }
 }
 
-const ContributorHeader: React.FC<Props> = ({
+export default function ContributorHeader({
   days = '7',
   user: { name, username, image },
-}) => {
+}: ContributorHeaderProps) {
   return (
     <div className={styles.header}>
       <Breadcrumb>
@@ -61,5 +61,3 @@ const ContributorHeader: React.FC<Props> = ({
     </div>
   )
 }
-
-export default ContributorHeader

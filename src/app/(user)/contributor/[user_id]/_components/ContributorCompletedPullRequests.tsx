@@ -2,7 +2,7 @@
 
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import styles from './ContributorCompletedPullRequests.module.scss'
-import ChartCard from '@/app/(user)/_components/ChartCard'
+import ChartCard from '@/lib/ui/ChartCard'
 import DataTable from '@/lib/ui/DataTable'
 
 export type ContributorCompletedPullRequestsProps = {
@@ -13,9 +13,9 @@ export type ContributorCompletedPullRequestsProps = {
   }[]
 }
 
-const CompletedPullRequests = ({
+export default function CompletedPullRequests({
   data,
-}: ContributorCompletedPullRequestsProps) => {
+}: ContributorCompletedPullRequestsProps) {
   const table = useReactTable({
     columns: [
       {
@@ -50,5 +50,3 @@ const CompletedPullRequests = ({
     </ChartCard>
   )
 }
-
-export default CompletedPullRequests

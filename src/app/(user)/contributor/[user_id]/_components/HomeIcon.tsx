@@ -1,4 +1,4 @@
-const Home: React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
+export default function HomeIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       width="20"
@@ -18,5 +18,3 @@ const Home: React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
     </svg>
   )
 }
-
-export default Home

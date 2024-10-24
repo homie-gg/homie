@@ -5,7 +5,10 @@ type ContributorDataCardProps = {
   data: string | React.ReactNode
 }
 
-const ContributorDataCard = ({ label, data }: ContributorDataCardProps) => {
+export default function ContributorDataCard({
+  label,
+  data,
+}: ContributorDataCardProps) {
   return (
     <div className={styles.card}>
       <div className={styles.data}>
@@ -15,5 +18,3 @@ const ContributorDataCard = ({ label, data }: ContributorDataCardProps) => {
     </div>
   )
 }
-
-export default ContributorDataCard

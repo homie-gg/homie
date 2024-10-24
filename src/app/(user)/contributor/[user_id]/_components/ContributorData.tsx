@@ -16,12 +16,12 @@ type ContributorDataProps = {
   tasksCompleted: number
 }
 
-const ContributorData = ({
+export default function ContributorData({
   country: { name: countryName, image: countryImage },
   hoursSinceLastPr,
   tasksAssigned,
   tasksCompleted,
-}: ContributorDataProps) => {
+}: ContributorDataProps) {
   const [time, setTime] = useState<string>(getCurrentTime())
 
   useEffect(() => {
@@ -63,5 +63,3 @@ const ContributorData = ({
     </div>
   )
 }
-
-export default ContributorData

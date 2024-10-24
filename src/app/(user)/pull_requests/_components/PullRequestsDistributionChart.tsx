@@ -2,7 +2,7 @@
 
 import { PullRequest } from '@/app/(user)/pull_requests/_utils/get-pull-requests'
 import PieChart from '@/lib/ui/PieChart'
-import ChartCard from '@/app/(user)/_components/ChartCard'
+import ChartCard from '@/lib/ui/ChartCard'
 
 export const prPerRepoData = [
   {

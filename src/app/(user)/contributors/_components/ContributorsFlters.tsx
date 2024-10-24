@@ -1,14 +1,16 @@
 import React from 'react'
 import ContributorCategorySelect from './ContributorCategorySelect'
-import DateSelect from '@/app/(user)/_components/DateSelect/DateSelect'
-import { Days } from '@/app/(user)/_utils/dates'
+import DateSelect from '@/lib/ui/DateSelect'
+import { Days } from '@/lib/ui/DateSelect/dates'
 import styles from './ContributorsFilters.module.scss'
 
 type ContributorsFiltersProps = {
   days?: Days
 }
 
-const ContributorsFilters = ({ days = '7' }: ContributorsFiltersProps) => {
+export default function ContributorsFilters({
+  days = '7',
+}: ContributorsFiltersProps) {
   return (
     <div className={styles.container}>
       <ContributorCategorySelect />
@@ -16,5 +18,3 @@ const ContributorsFilters = ({ days = '7' }: ContributorsFiltersProps) => {
     </div>
   )
 }
-
-export default ContributorsFilters

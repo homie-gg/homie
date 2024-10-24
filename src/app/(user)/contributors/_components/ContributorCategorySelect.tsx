@@ -1,7 +1,7 @@
 import ContributorCategorySelectItem from './ContributorCategorySelectItem'
 import styles from './ContributorCategorySelect.module.scss'
 
-const ContributorCategorySelect = () => {
+export default function ContributorCategorySelect() {
   return (
     <div className={styles.container}>
       <p className={styles.label}>Quick Filters</p>
@@ -19,5 +19,3 @@ const ContributorCategorySelect = () => {
     </div>
   )
 }
-
-export default ContributorCategorySelect

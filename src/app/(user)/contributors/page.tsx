@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { getUserOrganization } from '@/lib/auth/get-user-organization'
-import { Days, daysFilter } from '@/app/(user)/_utils/dates'
+import { Days, daysFilter } from '@/lib/ui/DateSelect/dates'
 import ContributorsFilters from './_components/ContributorsFlters'
 import ContributorsData from './_components/ContributorsData'
 import styles from './_components/ContributorsPage.module.scss'

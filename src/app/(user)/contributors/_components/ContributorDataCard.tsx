@@ -3,7 +3,7 @@ import Image from 'next/image'
 import clsx from 'clsx'
 import styles from './ContributorDataCard.module.scss'
 import { ContributorCategory } from './ContributorCategorySelectItem'
-import { PeriodChartData } from '@/app/(user)/_components/PeriodChart'
+import { PeriodChartData } from '@/lib/ui/PeriodChart'
 import ContributorActivityChart from './ContributorActivityChart'
 
 type ContributorData = {
@@ -21,12 +21,12 @@ type ContributorData = {
   tasksAssignedCount: number
 }
 
-type Props = {
+type ContributorDataCardProps = {
   contributorData: ContributorData
   activityData: PeriodChartData
 }
 
-const ContributorDataCard: React.FC<Props> = ({
+export default function ContributorDataCard({
   contributorData: {
     name,
     username,
@@ -38,7 +38,7 @@ const ContributorDataCard: React.FC<Props> = ({
     tasksAssignedCount,
   },
   activityData,
-}) => {
+}: ContributorDataCardProps) {
   const badgeLabel =
     category === 'none'
       ? ''
@@ -95,5 +95,3 @@ const ContributorDataCard: React.FC<Props> = ({
     </div>
   )
 }
-
-export default ContributorDataCard

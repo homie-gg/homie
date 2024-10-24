@@ -3,8 +3,8 @@ import ContributorHeader from './_components/ContributorHeader'
 import ContributorData from './_components/ContributorData'
 import ContributorPrPerRepo from './_components/ContributorPrPerRepo'
 import CompletedPullRequests from './_components/ContributorCompletedPullRequests'
-import ChartCard from '@/app/(user)/_components/ChartCard'
-import PeriodChart from '@/app/(user)/_components/PeriodChart'
+import ChartCard from '@/lib/ui/ChartCard'
+import PeriodChart from '@/lib/ui/PeriodChart'
 import TasksTable from '@/app/(user)/_components/TasksTable'
 import { Task, Tasks } from '@/app/(user)/_components/TasksTable/get-tasks'
 import styles from './_components/ContributorDetailsPage.module.scss'
@@ -89,13 +89,13 @@ export default function ContributorDetailsPage(
           user={{
             name: 'Andre Flores',
             username: 'andreflores',
-            // image: '/assets/images/andre.jpeg',
+            image: '',
           }}
         />
         <ContributorData
           country={{
             name: 'Canda',
-            // image: 'https://flagsapi.com/CA/flat/64.png',
+            image: '',
           }}
           hoursSinceLastPr={25}
           tasksAssigned={5}

@@ -1,6 +1,6 @@
 'use client'
 
-import ChartCard from '@/app/(user)/_components/ChartCard'
+import ChartCard from '@/lib/ui/ChartCard'
 import PieChart from '@/lib/ui/PieChart'
 
 type ContributorPrPerRepoProps = {
@@ -10,7 +10,9 @@ type ContributorPrPerRepoProps = {
   }[]
 }
 
-const ContributorPrPerRepo = ({ data }: ContributorPrPerRepoProps) => {
+export default function ContributorPrPerRepo({
+  data,
+}: ContributorPrPerRepoProps) {
   return (
     <ChartCard title="PR Contribution per Repository">
       <PieChart
@@ -22,5 +24,3 @@ const ContributorPrPerRepo = ({ data }: ContributorPrPerRepoProps) => {
     </ChartCard>
   )
 }
-
-export default ContributorPrPerRepo

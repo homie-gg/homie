@@ -1,7 +1,6 @@
 'use client'
 
 import { AreaChart, XAxis, Area, CartesianGrid } from 'recharts'
-
 import {
   ChartConfig,
   ChartContainer,
@@ -27,12 +26,15 @@ export type PeriodChartData = {
   previous: number
 }[]
 
-type Props = {
+type PeriodChartProps = {
   data: PeriodChartData
   xOrientation?: 'top' | 'bottom'
 }
 
-const PeriodChart: React.FC<Props> = ({ data, xOrientation = 'bottom' }) => {
+export default function PeriodChart({
+  data,
+  xOrientation = 'bottom',
+}: PeriodChartProps) {
   return (
     <div className={styles.chart}>
       <ul className={styles.legend}>
@@ -71,5 +73,3 @@ const PeriodChart: React.FC<Props> = ({ data, xOrientation = 'bottom' }) => {
     </div>
   )
 }
-
-export default PeriodChart
