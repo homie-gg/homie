@@ -39,31 +39,39 @@ export function getClassifyQuestionTool(params: GetClassifyQuestionToolParams) {
 
       // Simple rule-based classification
       const lowerQuestion = question.toLowerCase()
-      
-      if (lowerQuestion.includes('task') || 
-          lowerQuestion.includes('todo') ||
-          lowerQuestion.includes('work item')) {
+
+      if (
+        lowerQuestion.includes('task') ||
+        lowerQuestion.includes('todo') ||
+        lowerQuestion.includes('work item')
+      ) {
         return QuestionType.TASK_SEARCH
       }
-      
-      if (lowerQuestion.includes('pr') || 
-          lowerQuestion.includes('pull request') ||
-          lowerQuestion.includes('merge request') ||
-          lowerQuestion.includes('merged') ||
-          lowerQuestion.includes('changes')) {
+
+      if (
+        lowerQuestion.includes('pr') ||
+        lowerQuestion.includes('pull request') ||
+        lowerQuestion.includes('merge request') ||
+        lowerQuestion.includes('merged') ||
+        lowerQuestion.includes('changes')
+      ) {
         return QuestionType.PR_SEARCH
       }
 
-      if (lowerQuestion.includes('code') ||
-          lowerQuestion.includes('implement') ||
-          lowerQuestion.includes('fix') ||
-          lowerQuestion.includes('bug')) {
+      if (
+        lowerQuestion.includes('code') ||
+        lowerQuestion.includes('implement') ||
+        lowerQuestion.includes('fix') ||
+        lowerQuestion.includes('bug')
+      ) {
         return QuestionType.CODE_HELP
       }
 
-      if (lowerQuestion.includes('who') ||
-          lowerQuestion.includes('contributor') ||
-          lowerQuestion.includes('working on')) {
+      if (
+        lowerQuestion.includes('who') ||
+        lowerQuestion.includes('contributor') ||
+        lowerQuestion.includes('working on')
+      ) {
         return QuestionType.CONTRIBUTOR_INFO
       }
 

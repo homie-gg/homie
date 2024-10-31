@@ -32,7 +32,8 @@ export function getSearchPullRequestsTool(
 
   return new DynamicStructuredTool({
     name: 'search_for_pull_requests',
-    description: 'Search for Pull Requests. Use this when the question is specifically about finding pull requests or code changes.',
+    description:
+      'Search for Pull Requests. Use this when the question is specifically about finding pull requests or code changes.',
     schema: z.object({
       searchTerm: z.string().describe('Term the pull request is related to'),
     }),

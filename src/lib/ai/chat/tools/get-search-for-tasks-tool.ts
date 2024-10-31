@@ -31,7 +31,8 @@ export function getSearchForTasksTool(params: GetSearchForTasksToolParams) {
 
   return new DynamicStructuredTool({
     name: 'search_for_tasks',
-    description: 'Search for tasks related to a given search term. Use this when the question is specifically about finding tasks.',
+    description:
+      'Search for tasks related to a given search term. Use this when the question is specifically about finding tasks.',
     schema: z.object({
       searchTerm: z.string().describe('Term the task is related to'),
       includeCompletedTasks: z
