@@ -184,7 +184,7 @@ it('should create and embed a pr', async () => {
 
   const pullRequest = await dbClient
     .selectFrom('homie.pull_request')
-    .where('ext_gh_pull_request_id', '=', 8282)
+    .where('ext_gh_pull_request_id', '=', '8282')
     .selectAll()
     .executeTakeFirstOrThrow()
   expect(pullRequest.title).toBe('My test closed PR')
