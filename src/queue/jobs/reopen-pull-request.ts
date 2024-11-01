@@ -76,7 +76,7 @@ export const reopenPullRequest = createJob({
 
     const pullRequest = await dbClient
       .selectFrom('homie.pull_request')
-      .where('ext_gh_pull_request_id', '=', pull_request.id)
+      .where('ext_gh_pull_request_id', '=', pull_request.id.toString())
       .select(['id'])
       .executeTakeFirst()
 
@@ -140,7 +140,7 @@ export const reopenPullRequest = createJob({
       .insertInto('homie.pull_request')
       .values({
         created_at: parseISO(pull_request.created_at),
-        ext_gh_pull_request_id: pull_request.id,
+        ext_gh_pull_request_id: String(pull_request.id),
         organization_id: organization.id,
         contributor_id: contributor.id,
         title: pull_request.title,

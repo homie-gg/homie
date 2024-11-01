@@ -119,8 +119,8 @@ export async function saveMergedMergeRequest(
     .insertInto('homie.pull_request')
     .values({
       created_at: parseISO(mergeRequest.created_at),
-      ext_gitlab_merge_request_id: mergeRequest.id,
-      ext_gitlab_merge_request_iid: mergeRequest.iid,
+      ext_gitlab_merge_request_id: String(mergeRequest.id),
+      ext_gitlab_merge_request_iid: String(mergeRequest.iid),
       organization_id: organization.id,
       contributor_id: contributor.id,
       title: mergeRequest.title,

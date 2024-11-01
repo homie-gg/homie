@@ -187,7 +187,7 @@ export async function saveMergedPullRequest(
     .insertInto('homie.pull_request')
     .values({
       created_at: parseISO(pullRequest.created_at),
-      ext_gh_pull_request_id: pullRequest.id,
+      ext_gh_pull_request_id: String(pullRequest.id),
       organization_id: organization.id,
       contributor_id: contributor.id,
       title: pullRequest.title,

@@ -112,8 +112,8 @@ export const saveOpenedMergeRequest = createJob({
     await dbClient
       .insertInto('homie.pull_request')
       .values({
-        ext_gitlab_merge_request_id: merge_request.id,
-        ext_gitlab_merge_request_iid: merge_request.iid,
+        ext_gitlab_merge_request_id: String(merge_request.id),
+        ext_gitlab_merge_request_iid: String(merge_request.iid),
         number: merge_request.iid,
         organization_id: organization.id,
         contributor_id: contributor.id,
