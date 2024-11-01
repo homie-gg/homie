@@ -1,39 +1,7 @@
 import React from 'react'
 
-import ContributorDataCard from './ContributorDataCard'
-import { ContributorCategory } from './ContributorCategorySelectItem'
+import ContributorDataCard, { ContributorData } from './ContributorDataCard'
 import styles from './ContributorsData.module.scss'
-
-type ContributorDataProps = {}
-
-const contributorsData = [
-  {
-    name: 'Andre Flores',
-    username: 'andreflores',
-    category: 'low_on_tasks' as ContributorCategory,
-    active: true,
-    time: {
-      current: '3:31 PM',
-      timezone: 'PST',
-      country: '',
-    },
-    hoursSinceLastPr: 2,
-    tasksAssignedCount: 2,
-  },
-  {
-    name: 'Olivia Rhye',
-    username: 'oliviarhye',
-    category: 'no_tasks' as ContributorCategory,
-    active: true,
-    time: {
-      current: '4:56 PM',
-      timezone: 'EST',
-      country: '',
-    },
-    hoursSinceLastPr: 3,
-    tasksAssignedCount: 4,
-  },
-]
 
 const activityData = [
   {
@@ -68,7 +36,13 @@ const activityData = [
   },
 ]
 
-export default function ContributorsData({}: ContributorDataProps) {
+type ContributorsDataProps = {
+  contributorsData: ContributorData[]
+}
+
+export default function ContributorsData({
+  contributorsData,
+}: ContributorsDataProps) {
   return (
     <div className={styles.main}>
       <div className={styles.content}>

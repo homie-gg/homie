@@ -1,20 +1,22 @@
-import React from 'react'
+'use client'
+
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import clsx from 'clsx'
 import styles from './ContributorDataCard.module.scss'
 import { ContributorCategory } from './ContributorCategorySelectItem'
 import { PeriodChartData } from '@/lib/ui/PeriodChart'
 import ContributorActivityChart from './ContributorActivityChart'
+import { getCurrentTime } from '../_utils/get-current-time'
 
-type ContributorData = {
+export type ContributorData = {
   name: string
   username: string
   image?: string
   category: ContributorCategory
   active: boolean
-  time: {
-    current: string
-    timezone: string
+  locale: {
+    tz?: string
     country?: string
   }
   hoursSinceLastPr: number
@@ -33,18 +35,27 @@ export default function ContributorDataCard({
     image,
     category,
     active,
-    time: { current, timezone, country },
+    locale: { tz, country },
     hoursSinceLastPr,
     tasksAssignedCount,
   },
   activityData,
 }: ContributorDataCardProps) {
+  const [time, setTime] = useState(getCurrentTime(tz ?? 'PST'))
+
+  const timezone = tz ?? 'PST'
   const badgeLabel =
     category === 'none'
       ? ''
       : category === 'low_on_tasks'
         ? 'Low on tasks'
         : 'No task assigned'
+
+  useEffect(() => {
+    setInterval(() => {
+      setTime(getCurrentTime(timezone))
+    }, 120000)
+  }, [])
 
   return (
     <div className={styles.card}>
@@ -75,7 +86,7 @@ export default function ContributorDataCard({
           <li className={styles['data-item']}>
             <p>Current time</p>
             <p>
-              <span>{current}</span> <span>{timezone}</span>{' '}
+              <span>{time}</span> <span>{timezone}</span>{' '}
               {country && (
                 <Image src={country} alt={timezone} width={24} height={24} />
               )}
