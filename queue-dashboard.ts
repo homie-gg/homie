@@ -1,6 +1,6 @@
 import express from 'express'
 import { createBullBoard } from '@bull-board/api'
-import { BullAdapter } from '@bull-board/api/bullAdapter'
+import { BullMQAdapter } from '@bull-board/api/bullMQAdapter'
 import { ExpressAdapter } from '@bull-board/express'
 import { getQueue } from '@/queue/get-queue'
 import { config } from '@/config'
@@ -10,7 +10,7 @@ serverAdapter.setBasePath('/jobs')
 
 createBullBoard({
   queues: Object.keys(config.queue.queues).map(
-    (queue) => new BullAdapter(getQueue(queue)),
+    (queue) => new BullMQAdapter(getQueue(queue)),
   ),
   serverAdapter: serverAdapter,
 })
