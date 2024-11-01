@@ -3,30 +3,32 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import ContributorDataCard from './ContributorDataCard'
-import { getCurrentTime } from '@/app/(user)/contributor/_utils/get-current-time'
+import { getCurrentTime } from '@/lib/utils'
 import styles from './ContributorData.module.scss'
 
 type ContributorDataProps = {
-  country: {
-    name: string
-    image?: string
+  locale: {
+    tz?: string
+    country?: string
   }
-  hoursSinceLastPr: number
+  hoursSinceLastPr: number | null
   tasksAssigned: number
   tasksCompleted: number
 }
 
-export default function ContributorData({
-  country: { name: countryName, image: countryImage },
-  hoursSinceLastPr,
-  tasksAssigned,
-  tasksCompleted,
-}: ContributorDataProps) {
-  const [time, setTime] = useState<string>(getCurrentTime())
+export default function ContributorData(props: ContributorDataProps) {
+  const {
+    locale: { country: countryImage, tz = 'PST' },
+    hoursSinceLastPr,
+    tasksAssigned,
+    tasksCompleted,
+  } = props
+
+  const [time, setTime] = useState<string>(getCurrentTime(tz))
 
   useEffect(() => {
     setInterval(() => {
-      setTime(getCurrentTime())
+      setTime(getCurrentTime(tz))
     }, 30000)
   }, [])
 
@@ -41,12 +43,7 @@ export default function ContributorData({
                 <span>{time}</span>
                 {countryImage && (
                   <span className={styles['country-img']}>
-                    <Image
-                      src={countryImage}
-                      alt={countryName}
-                      width={24}
-                      height={24}
-                    />
+                    <Image src={countryImage} alt={tz} width={24} height={24} />
                   </span>
                 )}
               </>

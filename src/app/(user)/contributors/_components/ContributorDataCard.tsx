@@ -3,11 +3,11 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import clsx from 'clsx'
-import styles from './ContributorDataCard.module.scss'
 import { ContributorCategory } from './ContributorCategorySelectItem'
-import { PeriodChartData } from '@/lib/ui/PeriodChart'
 import ContributorActivityChart from './ContributorActivityChart'
-import { getCurrentTime } from '../_utils/get-current-time'
+import { PeriodChartData } from '@/lib/ui/PeriodChart'
+import { getCurrentTime } from '@/lib/utils'
+import styles from './ContributorDataCard.module.scss'
 
 export type ContributorData = {
   name: string
@@ -28,19 +28,21 @@ type ContributorDataCardProps = {
   activityData: PeriodChartData
 }
 
-export default function ContributorDataCard({
-  contributorData: {
-    name,
-    username,
-    image,
-    category,
-    active,
-    locale: { tz, country },
-    hoursSinceLastPr,
-    tasksAssignedCount,
-  },
-  activityData,
-}: ContributorDataCardProps) {
+export default function ContributorDataCard(props: ContributorDataCardProps) {
+  const {
+    contributorData: {
+      name,
+      username,
+      image,
+      category,
+      active,
+      locale: { tz, country },
+      hoursSinceLastPr,
+      tasksAssignedCount,
+    },
+    activityData,
+  } = props
+
   const [time, setTime] = useState(getCurrentTime(tz ?? 'PST'))
 
   const timezone = tz ?? 'PST'

@@ -32,7 +32,7 @@ export default async function UserLayout(props: UserLayoutProps) {
 
   if (
     !organization.owner_name ||
-    !organization.ext_slack_team_id ||
+    /*!organization.ext_slack_team_id ||*/
     (!organization.ext_gh_install_id && !organization.gitlab_access_token)
   ) {
     return (

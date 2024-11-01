@@ -34,24 +34,8 @@ export default async function ContributorsPage(props: ContributorsPageProps) {
       'slack.workspace.organization_id',
       'homie.organization.id',
     )
-    .leftJoin(
-      'trello.workspace',
-      'trello.workspace.organization_id',
-      'homie.organization.id',
-    )
-    .leftJoin(
-      'asana.app_user',
-      'asana.app_user.organization_id',
-      'homie.organization.id',
-    )
     .where('ext_clerk_user_id', '=', userId)
-    .select([
-      'slack_access_token',
-      'homie.organization.id',
-      'trello_access_token',
-      'ext_trello_board_id',
-      'asana_access_token',
-    ])
+    .select(['slack_access_token', 'homie.organization.id'])
     .executeTakeFirst()
 
   if (!organization) {
