@@ -25,8 +25,8 @@ createBullBoard({
 
 const app = express()
 
-// Apply auth middleware to all routes
-app.use(auth)
+// Apply auth middleware to /jobs routes only
+app.use('/jobs', auth)
 
 app.use('/jobs', serverAdapter.getRouter())
 app.get('/', (_req, res) => res.send('ok'))
