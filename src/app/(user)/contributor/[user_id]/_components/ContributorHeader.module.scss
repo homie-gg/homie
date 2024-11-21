@@ -1,0 +1,45 @@
+.header {
+  @apply flex flex-col gap-y-6;
+
+  .main {
+    @apply flex flex-wrap gap-4 justify-between items-center py-1;
+
+    .profile {
+      @apply flex items-center gap-x-3;
+
+      .profile-img {
+        @apply box-content relative w-12 h-12 border border-border rounded-full;
+
+        img {
+          @apply w-full h-full object-cover rounded-full;
+        }
+
+        .profile-tag {
+          @apply box-content absolute bottom-0 right-0 block w-3 h-3 border-2 border-background rounded-full;
+
+          &[data-active='true'] {
+            @apply bg-success-secondary;
+          }
+          &[data-active='false'] {
+            @apply bg-[#98a2b3];
+          }
+        }
+      }
+
+      .profile-details {
+        @apply flex flex-col;
+
+        & p {
+          @apply whitespace-nowrap overflow-hidden text-ellipsis font-sans-inter text-primary;
+
+          &:nth-child(1) {
+            @apply font-semibold text-4xl;
+          }
+          &:nth-child(2) {
+            @apply text-base;
+          }
+        }
+      }
+    }
+  }
+}

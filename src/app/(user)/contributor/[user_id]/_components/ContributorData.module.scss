@@ -1,0 +1,15 @@
+.root {
+  @apply w-full;
+
+  .content {
+    @apply w-full flex flex-col gap-y-4;
+
+    .data-list {
+      @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8;
+
+      .country-img {
+        @apply box-content block min-w-6 w-6 h-6 rounded-full overflow-hidden;
+      }
+    }
+  }
+}

@@ -5,6 +5,7 @@ import { sql } from 'kysely'
 import { taskPriority } from '@/lib/tasks/task-priority'
 import { searchTasks } from '@/app/(user)/tasks/_components/search-tasks'
 import { endOfWeek, startOfWeek, subDays } from 'date-fns'
+import db from 'node-pg-migrate/dist/db'
 
 export type Task = {
   id: number
@@ -19,6 +20,7 @@ interface GetTasksParams {
   organization: {
     id: number
   }
+  contributor_id?: number
   category?: TaskCategory
   added_from?: string
   added_to?: string
@@ -50,6 +52,7 @@ interface TaskTypeCount {
 export type Tasks = PaginatedCollection<Task> & {
   task_types: Array<TaskTypeCount>
   task_priorities: Record<string, number>
+  total_completed_tasks: number
   total_estimated_days_to_complete: number
   num_stale_tasks: number
 }
@@ -57,6 +60,7 @@ export type Tasks = PaginatedCollection<Task> & {
 export async function getTasks(params: GetTasksParams): Promise<Tasks> {
   const {
     organization,
+    contributor_id,
     category = 'all',
     added_from,
     added_to,
@@ -64,8 +68,19 @@ export async function getTasks(params: GetTasksParams): Promise<Tasks> {
     priority,
   } = params
 
-  let query = dbClient
-    .selectFrom('homie.task')
+  let query = (
+    contributor_id
+      ? dbClient
+          .selectFrom('homie.task')
+          .innerJoin(
+            'homie.contributor_task',
+            'homie.contributor_task.task_id',
+            'homie.task.id',
+          )
+          .where('homie.contributor_task.contributor_id', '=', contributor_id)
+      : dbClient.selectFrom('homie.task')
+  )
+
     .where('homie.task.organization_id', '=', organization.id)
     .where('homie.task.task_status_id', '=', taskStatus.open)
 
@@ -126,33 +141,48 @@ export async function getTasks(params: GetTasksParams): Promise<Tasks> {
   }
 
   // Get  counts
-  const { total, total_estimated_days_to_complete, num_stale_tasks } =
-    await query
-      .select(sql<number>`count(*)`.as('total'))
-      .select(({ fn }) => [
-        fn
-          .sum<number>(sql`COALESCE(estimated_days_to_complete, 0)`)
-          .as('total_estimated_days_to_complete'),
-      ])
-      .select(({ fn }) => [
-        fn
-          .sum<number>(sql`COALESCE(estimated_days_to_complete, 0)`)
-          .as('total_estimated_days_to_complete'),
-      ])
-      .select((eb) =>
-        eb.fn
-          .sum<number>(
-            sql`
+  const {
+    total,
+    total_estimated_days_to_complete,
+    num_stale_tasks,
+    total_completed_tasks,
+  } = await query
+    .select(sql<number>`count(*)`.as('total'))
+    .select(({ fn }) => [
+      fn
+        .sum<number>(sql`COALESCE(estimated_days_to_complete, 0)`)
+        .as('total_estimated_days_to_complete'),
+    ])
+    .select(({ fn }) => [
+      fn
+        .sum<number>(sql`COALESCE(estimated_days_to_complete, 0)`)
+        .as('total_estimated_days_to_complete'),
+    ])
+    .select((eb) =>
+      eb.fn
+        .sum<number>(
+          sql`
           case
             when is_stale = true then 1
             else 0
           end
         `,
-          )
-          .as('num_stale_tasks'),
-      )
-
-      .executeTakeFirstOrThrow()
+        )
+        .as('num_stale_tasks'),
+    )
+    .select((eb) =>
+      eb.fn
+        .sum<number>(
+          sql`
+            case
+              when completed_at IS NOT NULL then 1
+              else 0
+            end
+          `,
+        )
+        .as('total_completed_tasks'),
+    )
+    .executeTakeFirstOrThrow()
 
   const taskTypes: TaskTypeCount[] = (
     await query
@@ -223,6 +253,7 @@ export async function getTasks(params: GetTasksParams): Promise<Tasks> {
     to: Math.min(offset + perPage, total), // last item on page,
     total,
     task_types: taskTypes,
+    total_completed_tasks: total_completed_tasks,
     total_estimated_days_to_complete,
     num_stale_tasks,
     task_priorities: taskPriorities,
