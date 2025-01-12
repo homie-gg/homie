@@ -141,13 +141,13 @@ export function getFetchPullRequestDetailTool(
           const commits = await listMergeRequestCommits({
             gitlabAccessToken: organization.gitlab_access_token,
             projectId: project.ext_gitlab_project_id,
-            mergeRequestIid: pullRequest.ext_gitlab_merge_request_iid,
+            mergeRequestIid: parseInt(pullRequest.ext_gitlab_merge_request_iid),
           })
 
           const diff = await getMergeRequestDiff({
             gitlabAccessToken: organization.gitlab_access_token,
             projectId: project.ext_gitlab_project_id,
-            mergeRequestIid: pullRequest.ext_gitlab_merge_request_iid,
+            mergeRequestIid: parseInt(pullRequest.ext_gitlab_merge_request_iid),
           })
 
           return JSON.stringify({

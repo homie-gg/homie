@@ -2705,22 +2705,22 @@ declare module 'zapatos/schema' {
         embed_value: string | null
         /**
          * **homie.pull_request.ext_gh_pull_request_id**
-         * - `int4` in database
+         * - `text` in database
          * - Nullable, no default
          */
-        ext_gh_pull_request_id: number | null
+        ext_gh_pull_request_id: string | null
         /**
          * **homie.pull_request.ext_gitlab_merge_request_id**
-         * - `int4` in database
+         * - `text` in database
          * - Nullable, no default
          */
-        ext_gitlab_merge_request_id: number | null
+        ext_gitlab_merge_request_id: string | null
         /**
          * **homie.pull_request.ext_gitlab_merge_request_iid**
-         * - `int4` in database
+         * - `text` in database
          * - Nullable, no default
          */
-        ext_gitlab_merge_request_iid: number | null
+        ext_gitlab_merge_request_iid: string | null
         /**
          * **homie.pull_request.github_repo_id**
          * - `int4` in database
@@ -2839,22 +2839,22 @@ declare module 'zapatos/schema' {
         embed_value: string | null
         /**
          * **homie.pull_request.ext_gh_pull_request_id**
-         * - `int4` in database
+         * - `text` in database
          * - Nullable, no default
          */
-        ext_gh_pull_request_id: number | null
+        ext_gh_pull_request_id: string | null
         /**
          * **homie.pull_request.ext_gitlab_merge_request_id**
-         * - `int4` in database
+         * - `text` in database
          * - Nullable, no default
          */
-        ext_gitlab_merge_request_id: number | null
+        ext_gitlab_merge_request_id: string | null
         /**
          * **homie.pull_request.ext_gitlab_merge_request_iid**
-         * - `int4` in database
+         * - `text` in database
          * - Nullable, no default
          */
-        ext_gitlab_merge_request_iid: number | null
+        ext_gitlab_merge_request_iid: string | null
         /**
          * **homie.pull_request.github_repo_id**
          * - `int4` in database
@@ -3038,45 +3038,45 @@ declare module 'zapatos/schema' {
             >
         /**
          * **homie.pull_request.ext_gh_pull_request_id**
-         * - `int4` in database
+         * - `text` in database
          * - Nullable, no default
          */
         ext_gh_pull_request_id?:
-          | number
-          | db.Parameter<number>
+          | string
+          | db.Parameter<string>
           | db.SQLFragment
           | db.ParentColumn
           | db.SQLFragment<
               any,
-              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
             >
         /**
          * **homie.pull_request.ext_gitlab_merge_request_id**
-         * - `int4` in database
+         * - `text` in database
          * - Nullable, no default
          */
         ext_gitlab_merge_request_id?:
-          | number
-          | db.Parameter<number>
+          | string
+          | db.Parameter<string>
           | db.SQLFragment
           | db.ParentColumn
           | db.SQLFragment<
               any,
-              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
             >
         /**
          * **homie.pull_request.ext_gitlab_merge_request_iid**
-         * - `int4` in database
+         * - `text` in database
          * - Nullable, no default
          */
         ext_gitlab_merge_request_iid?:
-          | number
-          | db.Parameter<number>
+          | string
+          | db.Parameter<string>
           | db.SQLFragment
           | db.ParentColumn
           | db.SQLFragment<
               any,
-              number | db.Parameter<number> | db.SQLFragment | db.ParentColumn
+              string | db.Parameter<string> | db.SQLFragment | db.ParentColumn
             >
         /**
          * **homie.pull_request.github_repo_id**
@@ -3321,34 +3321,34 @@ declare module 'zapatos/schema' {
           | db.SQLFragment
         /**
          * **homie.pull_request.ext_gh_pull_request_id**
-         * - `int4` in database
+         * - `text` in database
          * - Nullable, no default
          */
         ext_gh_pull_request_id?:
-          | number
-          | db.Parameter<number>
+          | string
+          | db.Parameter<string>
           | null
           | db.DefaultType
           | db.SQLFragment
         /**
          * **homie.pull_request.ext_gitlab_merge_request_id**
-         * - `int4` in database
+         * - `text` in database
          * - Nullable, no default
          */
         ext_gitlab_merge_request_id?:
-          | number
-          | db.Parameter<number>
+          | string
+          | db.Parameter<string>
           | null
           | db.DefaultType
           | db.SQLFragment
         /**
          * **homie.pull_request.ext_gitlab_merge_request_iid**
-         * - `int4` in database
+         * - `text` in database
          * - Nullable, no default
          */
         ext_gitlab_merge_request_iid?:
-          | number
-          | db.Parameter<number>
+          | string
+          | db.Parameter<string>
           | null
           | db.DefaultType
           | db.SQLFragment
@@ -3569,57 +3569,57 @@ declare module 'zapatos/schema' {
             >
         /**
          * **homie.pull_request.ext_gh_pull_request_id**
-         * - `int4` in database
+         * - `text` in database
          * - Nullable, no default
          */
         ext_gh_pull_request_id?:
-          | number
-          | db.Parameter<number>
+          | string
+          | db.Parameter<string>
           | null
           | db.DefaultType
           | db.SQLFragment
           | db.SQLFragment<
               any,
-              | number
-              | db.Parameter<number>
+              | string
+              | db.Parameter<string>
               | null
               | db.DefaultType
               | db.SQLFragment
             >
         /**
          * **homie.pull_request.ext_gitlab_merge_request_id**
-         * - `int4` in database
+         * - `text` in database
          * - Nullable, no default
          */
         ext_gitlab_merge_request_id?:
-          | number
-          | db.Parameter<number>
+          | string
+          | db.Parameter<string>
           | null
           | db.DefaultType
           | db.SQLFragment
           | db.SQLFragment<
               any,
-              | number
-              | db.Parameter<number>
+              | string
+              | db.Parameter<string>
               | null
               | db.DefaultType
               | db.SQLFragment
             >
         /**
          * **homie.pull_request.ext_gitlab_merge_request_iid**
-         * - `int4` in database
+         * - `text` in database
          * - Nullable, no default
          */
         ext_gitlab_merge_request_iid?:
-          | number
-          | db.Parameter<number>
+          | string
+          | db.Parameter<string>
           | null
           | db.DefaultType
           | db.SQLFragment
           | db.SQLFragment<
               any,
-              | number
-              | db.Parameter<number>
+              | string
+              | db.Parameter<string>
               | null
               | db.DefaultType
               | db.SQLFragment
