@@ -36,6 +36,8 @@ export default function axiomRequestMiddleware(
 
     await axiom.flush()
 
+    console.log('LOGGED')
+
     const response = await middleware(request, event)
 
     axiom.ingest(process.env.NEXT_PUBLIC_AXIOM_DATASET!, [
