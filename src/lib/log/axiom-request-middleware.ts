@@ -13,6 +13,8 @@ export default function axiomRequestMiddleware(
   return async (request, event) => {
     const id = uuid()
 
+    console.log('GOT REQUEST')
+
     const reqBody = await getBody(request)
 
     axiom.ingest(process.env.NEXT_PUBLIC_AXIOM_DATASET!, [
