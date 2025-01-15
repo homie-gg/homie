@@ -9,9 +9,16 @@ const axiom = new Axiom({
 
 export default function axiomRequestMiddleware(
   middleware: NextMiddleware,
+  options: {
+    ignoredRoutes?: string[]
+  } = {},
 ): NextMiddleware {
   return async (request, event) => {
     const id = uuid()
+
+    if (options.ignoredRoutes?.includes(request.nextUrl.pathname)) {
+      return middleware(request, event)
+    }
 
     const reqBody = await getBody(request)
 
