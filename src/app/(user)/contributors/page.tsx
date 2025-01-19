@@ -43,7 +43,7 @@ export default async function ContributorsPage(props: ContributorsPageProps) {
   }
   const slackClient = createSlackClient(organization.slack_access_token)
 
-  const { members: slackMembers = [], ok } = await getSlackUsers({
+  const { members: slackMembers = [] } = await getSlackUsers({
     slackClient,
   })
 
