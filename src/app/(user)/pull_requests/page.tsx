@@ -12,6 +12,7 @@ import Metrics from '@/app/(user)/pull_requests/_components/Metrics'
 import PullRequestsCountsChart from '@/app/(user)/pull_requests/_components/PullRequestsCountsChart'
 import PullRequestsDistributionsChart from '@/app/(user)/pull_requests/_components/PullRequestsDistributionChart'
 import RecentPullRequestsTable from '@/app/(user)/pull_requests/_components/RecentPullRequestsTable'
+import { useRouter } from 'next/navigation'
 
 interface PullRequestsPageProps {
   searchParams: {
@@ -22,6 +23,8 @@ interface PullRequestsPageProps {
 
 export default async function PullRequestsPage(props: PullRequestsPageProps) {
   const { searchParams } = props
+
+  const router = useRouter()
 
   const days =
     searchParams.days && daysFilter.includes(searchParams.days)
@@ -48,7 +51,10 @@ export default async function PullRequestsPage(props: PullRequestsPageProps) {
       <div className={clsx('container', styles.content)}>
         <PageHeader>
           <PageTitle>Pull Requests</PageTitle>
-          <DateSelect slug="pull_requests" days={days} />
+          <DateSelect
+            onChange={(days) => router.push(`/pull_requests?days=${days}`)}
+            days={days}
+          />
         </PageHeader>
         <div className={styles.body}>
           <Metrics pullRequests={pullRequests} />

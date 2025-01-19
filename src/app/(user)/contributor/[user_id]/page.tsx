@@ -1,5 +1,4 @@
 import { notFound } from 'next/navigation'
-import { auth } from '@clerk/nextjs'
 import clsx from 'clsx'
 import ContributorHeader from './_components/ContributorHeader'
 import ContributorData from './_components/ContributorData'
@@ -66,6 +65,7 @@ const periodData = [
 ]
 
 interface ContributorDetailsPageProps {
+  params: { user_id: string }
   searchParams: {
     days?: Days
     category?: TaskCategory
@@ -90,6 +90,7 @@ export default async function ContributorDetailsPage(
       search,
       priority,
     },
+    params: { user_id: userId },
   } = props
 
   const days =
@@ -99,8 +100,6 @@ export default async function ContributorDetailsPage(
 
   const startDate = subDays(new Date(), parseInt(days))
   const endDate = endOfDay(new Date())
-
-  const { userId } = auth()
 
   const organization = await dbClient
     .selectFrom('homie.organization')
@@ -123,7 +122,7 @@ export default async function ContributorDetailsPage(
 
   const slackClient = createSlackClient(organization.slack_access_token)
 
-  const { members: slackMembers = [], ok } = await getSlackUsers({
+  const { members: slackMembers = [] } = await getSlackUsers({
     slackClient,
   })
 
@@ -183,6 +182,7 @@ export default async function ContributorDetailsPage(
       <div className={clsx('container', styles.container)}>
         <ContributorHeader
           user={{
+            id: contributor.id,
             name:
               slackMember?.profile?.real_name ??
               slackMember?.profile?.display_name ??

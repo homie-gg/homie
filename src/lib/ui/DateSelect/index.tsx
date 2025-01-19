@@ -1,19 +1,17 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import CalendarIcon from '@/app/(user)/pull_requests/_components/CalendarIcon'
 import Select from '@/lib/ui/HomieSelect'
 import { Days, daysLabels } from './dates'
 import styles from './DateSelect.module.scss'
 
 interface DateSelectProps {
-  slug: string
   days: Days
+  onChange: (days: string) => void
 }
 
 export default function DateSelect(props: DateSelectProps) {
-  const { slug, days } = props
-  const router = useRouter()
+  const { days, onChange } = props
 
   return (
     <Select
@@ -30,9 +28,7 @@ export default function DateSelect(props: DateSelectProps) {
       showIndicator={false}
       className={styles.root}
       controlClassName={styles['select-control']}
-      onChange={({ value }: any) => {
-        router.push(`/${slug}?days=${value}`)
-      }}
+      onChange={({ value }: any) => onChange(value)}
     />
   )
 }

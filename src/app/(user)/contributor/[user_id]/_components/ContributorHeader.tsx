@@ -11,20 +11,23 @@ import HomeIcon from './HomeIcon'
 import DateSelect from '@/lib/ui/DateSelect'
 import { Days } from '@/lib/ui/DateSelect/dates'
 import styles from './ContributorHeader.module.scss'
+import { useRouter } from 'next/navigation'
 
 type ContributorHeaderProps = {
   days?: Days
   user: {
+    id: number
     name: string
     username: string
     image?: string
   }
 }
 
-export default function ContributorHeader({
-  days = '7',
-  user: { name, username, image },
-}: ContributorHeaderProps) {
+export default function ContributorHeader(props: ContributorHeaderProps) {
+  const { user, days = '7' } = props
+  const { name, username, image } = user
+  const router = useRouter()
+
   return (
     <div className={styles.header}>
       <Breadcrumb>
@@ -56,7 +59,12 @@ export default function ContributorHeader({
           </div>
         </div>
 
-        <DateSelect slug="contributor" days={days} />
+        <DateSelect
+          onChange={(days) =>
+            router.push(`/contributor/${user.id}?days=${days}`)
+          }
+          days={days}
+        />
       </div>
     </div>
   )
