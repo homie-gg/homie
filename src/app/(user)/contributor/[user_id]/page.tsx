@@ -13,10 +13,10 @@ import ChartCard from '@/lib/ui/ChartCard'
 import PeriodChart from '@/lib/ui/PeriodChart'
 import { createSlackClient } from '@/lib/slack/create-slack-client'
 import { getSlackUsers } from '@/lib/slack/get-slack-users'
-import { getTasks } from '../../tasks/_components/get-tasks'
 import { endOfDay, startOfDay, subDays } from 'date-fns'
 import { getContributorLatestPullRequest } from './_utils/get-contributor-pull-requests'
 import { getHoursDiff } from './_utils/get-hours-diff'
+import { getContributorTasks } from '@/app/(user)/contributor/[user_id]/_utils/get-contributor-tasks'
 
 const contributorPrPerRepoData = [
   {
@@ -150,7 +150,7 @@ export default async function ContributorDetailsPage(
 
   if (!isAvailable) return null
 
-  const contributorTasks = await getTasks({
+  const contributorTasks = await getContributorTasks({
     organization,
     contributor_id: contributor.id,
     category,
@@ -161,7 +161,7 @@ export default async function ContributorDetailsPage(
     priority,
   })
 
-  const dateFilteredContributorTasks = await getTasks({
+  const dateFilteredContributorTasks = await getContributorTasks({
     organization,
     contributor_id: contributor.id,
     added_from: startOfDay(startDate).toString(),
