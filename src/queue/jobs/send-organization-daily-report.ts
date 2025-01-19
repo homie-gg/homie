@@ -7,7 +7,6 @@ import { getAssignedTasks } from '@/lib/daily-report/get-assigned-tasks'
 import { getDailyReportSummaryBlocks } from '@/lib/daily-report/get-daily-report-summary-blocks'
 import { getDailyReportPullRequestBlocks } from '@/lib/daily-report/get-daily-report-pull-request-blocks'
 import { getDailyReportTaskBlocks } from '@/lib/daily-report/get-daily-report-task-blocks'
-import { getDailyReportHomieHintsBlocks } from '@/lib/daily-report/get-daily-report-homie-hints-blocks'
 import { subHours } from 'date-fns'
 import { logger } from '@/lib/log/logger'
 import { getOrganizationLogData } from '@/lib/organization/get-organization-log-data'
@@ -263,20 +262,6 @@ export const sendOrganizationDailyReport = createJob({
           num_assigned_tasks: Object.values(assignedTasks).length,
         })
       }
-
-      // Homie hints
-      await slackClient.post<{
-        ts: string
-      }>('chat.postMessage', {
-        channel: organization.ext_slack_webhook_channel_id,
-        thread_ts: res.ts,
-        blocks: await getDailyReportHomieHintsBlocks({
-          pendingTasks,
-          pullRequests,
-          contributors: Object.values(contributors),
-          extSlackBotUserId: organization.ext_slack_bot_user_id,
-        }),
-      })
     }
   },
 })
