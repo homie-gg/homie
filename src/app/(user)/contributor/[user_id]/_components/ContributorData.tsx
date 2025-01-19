@@ -27,10 +27,12 @@ export default function ContributorData(props: ContributorDataProps) {
   const [time, setTime] = useState<string>(getCurrentTime(tz))
 
   useEffect(() => {
-    setInterval(() => {
+    const interval = setInterval(() => {
       setTime(getCurrentTime(tz))
     }, 30000)
-  }, [])
+
+    return () => clearInterval(interval)
+  }, [tz])
 
   return (
     <div className={styles.root}>
