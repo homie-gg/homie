@@ -23,7 +23,10 @@ const middleware = authMiddleware({
 
 const withLogging =
   process.env.NODE_ENV === 'production'
-    ? loggingMiddleware(middleware)
+    ? loggingMiddleware(middleware, {
+        // Do not log these routes
+        ignoredRoutes: ['/health'],
+      })
     : middleware
 
 export default withLogging
