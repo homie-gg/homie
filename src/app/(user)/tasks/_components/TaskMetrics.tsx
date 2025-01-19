@@ -2,7 +2,7 @@ import TaskTypesDistribution from '@/app/(user)/tasks/_components/TaskTypesDistr
 import styles from './TaskMetrics.module.scss'
 import TaskMetricsNumbers from '@/app/(user)/tasks/_components/TaskMetricsNumbers'
 import TaskPrioritiesDistribution from '@/app/(user)/tasks/_components/TaskPrioritiesDistribution'
-import { Tasks } from './get-tasks'
+import { Tasks } from '@/app/(user)/tasks/_components/get-tasks'
 
 interface TaskMetricsProps {
   tasks: Tasks

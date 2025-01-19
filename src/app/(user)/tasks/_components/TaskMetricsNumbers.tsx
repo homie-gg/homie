@@ -1,6 +1,6 @@
 import TaskMetricsCard from '@/app/(user)/tasks/_components/TaskMetricsCard'
 import styles from './TaskMetricsNumbers.module.scss'
-import { Tasks } from './get-tasks'
+import { Tasks } from '@/app/(user)/tasks/_components/get-tasks'
 
 interface TaskMetricsNumbersProps {
   tasks: Tasks
