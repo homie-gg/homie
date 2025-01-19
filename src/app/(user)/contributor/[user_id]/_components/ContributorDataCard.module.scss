@@ -1,0 +1,15 @@
+.card {
+  @apply flex items-center bg-background border border-primary-light rounded-xl p-6;
+
+  .data {
+    @apply w-full flex flex-col gap-y-2;
+
+    .label {
+      @apply font-bold text-sm leading-5;
+    }
+
+    .text {
+      @apply inline-flex items-center gap-x-4 font-semibold text-3xl leading-[44px];
+    }
+  }
+}

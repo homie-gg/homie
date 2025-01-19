@@ -1,0 +1,84 @@
+.card {
+  @apply flex flex-col bg-background border border-border pb-6 shadow-sm rounded-xl;
+
+  .header {
+    @apply w-full flex items-center justify-between border-b border-b-border p-6;
+
+    .profile {
+      @apply flex items-center gap-x-3;
+
+      .profile-img {
+        @apply box-content relative w-12 h-12 border border-border rounded-full;
+
+        img {
+          @apply w-full h-full object-cover rounded-full;
+        }
+
+        .profile-tag {
+          @apply box-content absolute bottom-0 right-0 block w-3 h-3 border-2 border-background rounded-full;
+
+          &[data-active='true'] {
+            @apply bg-success-secondary;
+          }
+          &[data-active='false'] {
+            @apply bg-[#98a2b3];
+          }
+        }
+      }
+
+      .profile-details {
+        @apply flex flex-col;
+
+        & p {
+          @apply whitespace-nowrap overflow-hidden text-ellipsis font-sans-inter text-primary;
+
+          &:nth-child(1) {
+            @apply font-semibold text-lg;
+          }
+          &:nth-child(2) {
+            @apply text-base;
+          }
+        }
+      }
+    }
+
+    .badge {
+      @apply min-w-fit min-h-[28px] font-sans-inter font-medium text-sm px-3 py-1 border rounded-full;
+
+      &--error {
+        @apply bg-error-50 text-error-700 border-error-200;
+      }
+
+      &--warning {
+        @apply bg-warning-50 text-warning-700 border-warning-200;
+      }
+    }
+  }
+
+  .body {
+    @apply flex flex-col lg:flex-row items-stretch;
+
+    .data-list {
+      @apply lg:w-[35%] flex flex-row lg:flex-col flex-wrap lg:gap-y-3 gap-2;
+
+      .data-item {
+        @apply lg:w-full flex flex-col gap-y-3 py-4 px-6;
+
+        & p {
+          @apply inline-flex items-center gap-1.5 font-sans-inter text-primary;
+
+          &:nth-child(1) {
+            @apply font-semibold text-sm;
+          }
+          &:nth-child(2) {
+            @apply text-sm;
+
+            img {
+              @apply rounded-full;
+            }
+          }
+        }
+      }
+    }
+  }
+}

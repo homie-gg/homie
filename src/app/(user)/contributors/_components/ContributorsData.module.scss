@@ -1,0 +1,7 @@
+.main {
+  @apply w-full;
+
+  .content {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-x-5 lg:gap-x-8 gap-y-5 lg:gap-y-6;
+  }
+}

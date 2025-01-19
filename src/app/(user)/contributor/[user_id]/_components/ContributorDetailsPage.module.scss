@@ -1,0 +1,19 @@
+.root {
+  @apply w-full;
+
+  .container {
+    @apply w-full flex flex-col gap-y-4;
+
+    .section {
+      @apply w-full;
+
+      .section-content {
+        @apply w-full grid lg:grid-cols-2 grid-cols-1 gap-6 lg:gap-8 py-3;
+      }
+    }
+
+    .chart-container {
+      @apply w-full p-6;
+    }
+  }
+}

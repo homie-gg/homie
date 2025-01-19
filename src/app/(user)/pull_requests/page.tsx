@@ -6,12 +6,13 @@ import styles from './_components/PullRequestsPage.module.scss'
 import clsx from 'clsx'
 import PageHeader from '@/app/(user)/_components/PageHeader'
 import PageTitle from '@/app/(user)/_components/PageTitle'
-import DateSelect from '@/app/(user)/pull_requests/_components/DateSelect'
+import DateSelect from '@/lib/ui/DateSelect'
+import { Days, daysFilter } from '@/lib/ui/DateSelect/dates'
 import Metrics from '@/app/(user)/pull_requests/_components/Metrics'
-import { Days, daysFilter } from '@/app/(user)/pull_requests/_components/dates'
 import PullRequestsCountsChart from '@/app/(user)/pull_requests/_components/PullRequestsCountsChart'
 import PullRequestsDistributionsChart from '@/app/(user)/pull_requests/_components/PullRequestsDistributionChart'
 import RecentPullRequestsTable from '@/app/(user)/pull_requests/_components/RecentPullRequestsTable'
+import { useRouter } from 'next/navigation'
 
 interface PullRequestsPageProps {
   searchParams: {
@@ -22,6 +23,8 @@ interface PullRequestsPageProps {
 
 export default async function PullRequestsPage(props: PullRequestsPageProps) {
   const { searchParams } = props
+
+  const router = useRouter()
 
   const days =
     searchParams.days && daysFilter.includes(searchParams.days)
@@ -48,7 +51,10 @@ export default async function PullRequestsPage(props: PullRequestsPageProps) {
       <div className={clsx('container', styles.content)}>
         <PageHeader>
           <PageTitle>Pull Requests</PageTitle>
-          <DateSelect days={days} />
+          <DateSelect
+            onChange={(days) => router.push(`/pull_requests?days=${days}`)}
+            days={days}
+          />
         </PageHeader>
         <div className={styles.body}>
           <Metrics pullRequests={pullRequests} />
