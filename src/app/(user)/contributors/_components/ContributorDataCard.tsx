@@ -54,10 +54,12 @@ export default function ContributorDataCard(props: ContributorDataCardProps) {
         : 'No task assigned'
 
   useEffect(() => {
-    setInterval(() => {
+    const interval = setInterval(() => {
       setTime(getCurrentTime(timezone))
     }, 120000)
-  }, [])
+
+    return () => clearInterval(interval)
+  }, [timezone])
 
   return (
     <div className={styles.card}>
