@@ -1,5 +1,5 @@
 import React from 'react'
-import ContributorCategorySelect from './ContributorCategorySelect'
+import ContributorsStatusSelect from '@/app/(user)/contributors/_components/ContributorsStatusSelect'
 import DateSelect from '@/lib/ui/DateSelect'
 import { Days } from '@/lib/ui/DateSelect/dates'
 import styles from './ContributorsFilters.module.scss'
@@ -16,7 +16,7 @@ export default function ContributorsFilters({
 
   return (
     <div className={styles.container}>
-      <ContributorCategorySelect />
+      <ContributorsStatusSelect />
       <DateSelect
         onChange={(days) => router.push(`/contributors?days=${days}`)}
         days={days}

@@ -12,12 +12,12 @@ export const contributorCategories = [
   'no_tasks',
 ] as const
 
-export type ContributorCategory = (typeof contributorCategories)[number]
+export type ContributorStatus = (typeof contributorCategories)[number]
 
 const contributorCategoryParser = parseAsStringLiteral(contributorCategories)
 
 interface ContributorFilterItemProps extends PropsWithChildren {
-  value: ContributorCategory
+  value: ContributorStatus
 }
 
 export default function ContributorCategorySelectItem(
