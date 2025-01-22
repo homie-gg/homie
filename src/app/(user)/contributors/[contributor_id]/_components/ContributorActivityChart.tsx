@@ -1,27 +1,28 @@
 import PeriodChart, { PeriodChartData } from '@/lib/ui/PeriodChart'
-import styles from './ContributorActivityChart.module.scss'
-import { GetContributorsData } from '@/app/(user)/contributors/_utils/get-contributors'
-import { addDays, subDays } from 'date-fns'
+import { addDays, differenceInDays, subDays } from 'date-fns'
 import { dbClient } from '@/database/client'
 
 type ContributorActivityChartProps = {
-  contributor: GetContributorsData[number]
+  contributor: {
+    id: number
+  }
+  startDate: Date
+  endDate: Date
 }
 
 export default async function ContributorActivityChart(
   props: ContributorActivityChartProps,
 ) {
-  const { contributor } = props
+  const { contributor, startDate, endDate } = props
 
-  const days = [
-    subDays(new Date(), 6),
-    subDays(new Date(), 5),
-    subDays(new Date(), 4),
-    subDays(new Date(), 3),
-    subDays(new Date(), 2),
-    subDays(new Date(), 1),
-    new Date(),
-  ]
+  const numDays = differenceInDays(endDate, startDate)
+
+  const days = Array.from(
+    {
+      length: numDays,
+    },
+    (_, index) => addDays(startDate, index),
+  )
 
   const data: PeriodChartData = await Promise.all(
     days.map(async (day, index) => {
@@ -38,7 +39,7 @@ export default async function ContributorActivityChart(
         previous: (
           await dbClient
             .selectFrom('homie.pull_request')
-            .where('created_at', '>=', subDays(day, 7))
+            .where('created_at', '>=', subDays(day, days.length))
             .where('created_at', '<=', day)
             .where('contributor_id', '=', contributor.id)
             .execute()
@@ -47,10 +48,5 @@ export default async function ContributorActivityChart(
     }),
   )
 
-  return (
-    <div className={styles.container}>
-      <p className={styles.label}>Activity Score</p>
-      <PeriodChart data={data} />
-    </div>
-  )
+  return <PeriodChart data={data} />
 }

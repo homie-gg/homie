@@ -1,20 +1,18 @@
 'use client'
 
-import { GetContributorsData } from '@/app/(user)/contributors/_utils/get-contributors'
 import { getCurrentTime } from '@/lib/utils'
 import { formatInTimeZone } from 'date-fns-tz'
 import { useEffect, useState } from 'react'
 
-interface ContributorTimeProps {
-  contributor: GetContributorsData[number]
+interface CurrentTimeProps {
+  timezone?: string
 }
 
-export default function ContributorTime(props: ContributorTimeProps) {
-  const { contributor } = props
-  const { timezone } = contributor
+export default function CurrentTime(props: CurrentTimeProps) {
+  const { timezone } = props
 
   const [currentTime, setCurrentTime] = useState(
-    contributor.timezone ? getCurrentTime(contributor.timezone) : null,
+    timezone ? getCurrentTime(timezone) : null,
   )
 
   useEffect(() => {
@@ -30,7 +28,7 @@ export default function ContributorTime(props: ContributorTimeProps) {
   }, [timezone])
 
   if (!currentTime) {
-    return <p>-</p>
+    return <span>-</span>
   }
 
   const utcOffset = timezone
@@ -40,8 +38,8 @@ export default function ContributorTime(props: ContributorTimeProps) {
   const utcLabel = timezone === 'UTC' ? 'UTC' : `UTC${utcOffset}`
 
   return (
-    <p>
+    <>
       <span>{currentTime}</span> <span>{utcLabel}</span>{' '}
-    </p>
+    </>
   )
 }

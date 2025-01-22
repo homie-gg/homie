@@ -21,7 +21,7 @@ export type GetContributorsData = Array<{
   isActive: boolean
   timezone?: string
   hoursSinceLastPr: number
-  extSlackMemberId: string
+  extSlackMemberId?: string
   image?: string
 }>
 
@@ -61,42 +61,14 @@ export async function getContributors(
     .selectFrom('homie.contributor')
     .where('organization_id', '=', organization.id)
     .select(['id', 'ext_slack_member_id', 'username'])
-    .where('ext_slack_member_id', 'in', slackMemberIds)
     .execute()
-
-  const slackContributors: Array<{
-    id: number
-    username: string
-    ext_slack_member_id: string
-  }> = []
-
-  for (const contributor of contributors) {
-    if (contributor.ext_slack_member_id) {
-      slackContributors.push({
-        id: contributor.id,
-        username: contributor.username,
-        ext_slack_member_id: contributor.ext_slack_member_id,
-      })
-    }
-  }
 
   return (
     await Promise.all(
-      slackContributors.map(async (contributor) => {
+      contributors.map(async (contributor) => {
         const slackMember = availableSlackMembers.find(
           (slackMember) => slackMember.id === contributor.ext_slack_member_id,
         )
-
-        if (!slackMember) {
-          throw new Error(
-            'Slack member not found. This should not happen as contributors should have been scoped to those with matching slack member ids.',
-          )
-        }
-
-        const slackProfile = await getSlackUserProfile({
-          slackClient,
-          extSlackMemberId: contributor.ext_slack_member_id,
-        })
 
         const openTasks =
           (await dbClient
@@ -117,6 +89,27 @@ export async function getContributors(
           .select(['created_at'])
           .limit(1)
           .executeTakeFirst()
+
+        if (!contributor.ext_slack_member_id || !slackMember) {
+          return {
+            id: contributor.id,
+            openTaskCount: openTasks.length,
+            userName: contributor.username,
+            isActive: true,
+            hoursSinceLastPr: lastPullRequest
+              ? differenceInHours(
+                  new Date(),
+                  new Date(lastPullRequest.created_at),
+                )
+              : 0,
+            extSlackMemberId: contributor.ext_slack_member_id ?? undefined,
+          }
+        }
+
+        const slackProfile = await getSlackUserProfile({
+          slackClient,
+          extSlackMemberId: contributor.ext_slack_member_id,
+        })
 
         return {
           id: contributor.id,

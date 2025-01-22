@@ -3,8 +3,8 @@ import Image from 'next/image'
 import clsx from 'clsx'
 import styles from './ContributorDataCard.module.scss'
 import { GetContributorsData } from '@/app/(user)/contributors/_utils/get-contributors'
-import ContributorTime from '@/app/(user)/contributors/_components/ContributorTime'
-import ContributorActivityChart from '@/app/(user)/contributors/_components/ContributorActivityChart'
+import CurrentTime from '@/lib/ui/CurrentTime'
+import ContributorActivityChart from '@/app/(user)/contributors/_components/ContributorActivity'
 
 type ContributorCardProps = {
   contributor: GetContributorsData[number]
@@ -60,7 +60,9 @@ export default async function ContributorCard(props: ContributorCardProps) {
         <ul className={styles['data-list']}>
           <li className={styles['data-item']}>
             <p>Current time</p>
-            <ContributorTime contributor={contributor} />
+            <p>
+              <CurrentTime timezone={contributor.timezone} />
+            </p>
           </li>
           <li className={styles['data-item']}>
             <p>Hours since last PR</p>

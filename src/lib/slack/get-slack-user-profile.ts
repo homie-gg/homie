@@ -13,6 +13,7 @@ interface GetSlackUserProfileResponse {
   image_72?: string
   image_192?: string
   image_512?: string
+  tz?: string
 }
 
 export async function getSlackUserProfile(
