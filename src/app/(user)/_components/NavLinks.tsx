@@ -19,6 +19,10 @@ export const links = [
     label: 'Settings',
     href: '/settings/contributors',
   },
+  {
+    label: 'Contributors',
+    href: '/contributors',
+  },
 ]
 
 export default function NavLinks() {

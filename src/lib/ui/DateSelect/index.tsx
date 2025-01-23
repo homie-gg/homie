@@ -2,17 +2,16 @@
 
 import CalendarIcon from '@/app/(user)/pull_requests/_components/CalendarIcon'
 import Select from '@/lib/ui/HomieSelect'
+import { Days, daysLabels } from './dates'
 import styles from './DateSelect.module.scss'
-import { useRouter } from 'next/navigation'
-import { Days, daysLabels } from '@/app/(user)/pull_requests/_components/dates'
 
 interface DateSelectProps {
   days: Days
+  onChange: (days: string) => void
 }
 
 export default function DateSelect(props: DateSelectProps) {
-  const { days } = props
-  const router = useRouter()
+  const { days, onChange } = props
 
   return (
     <Select
@@ -29,9 +28,7 @@ export default function DateSelect(props: DateSelectProps) {
       showIndicator={false}
       className={styles.root}
       controlClassName={styles['select-control']}
-      onChange={({ value }: any) => {
-        router.push(`/pull_requests?days=${value}`)
-      }}
+      onChange={({ value }: any) => onChange(value)}
     />
   )
 }

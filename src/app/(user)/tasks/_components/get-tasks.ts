@@ -203,7 +203,7 @@ export async function getTasks(params: GetTasksParams): Promise<Tasks> {
     ])
     .execute()
 
-  const baseUrl = 'http://localhost:3000/tasks'
+  const baseUrl = '/tasks'
 
   const lastPage = Math.ceil(total / perPage)
 

@@ -10,7 +10,7 @@ import {
 } from '@/lib/ui/Chart'
 import styles from './PieChart.module.scss'
 
-interface PieChartProps {
+export interface PieChartProps {
   data: {
     label: string
     count: number

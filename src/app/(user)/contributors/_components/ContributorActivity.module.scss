@@ -1,0 +1,34 @@
+.container {
+  @apply lg:w-[65%] flex flex-col gap-y-2.5 p-6;
+
+  .label {
+    @apply font-sans-inter font-semibold text-sm text-primary;
+  }
+
+  .chart {
+    @apply flex flex-col gap-y-1;
+
+    .legend {
+      @apply w-full flex items-center justify-end gap-3;
+
+      & li {
+        @apply inline-flex gap-2 items-center font-sans-inter text-sm text-primary;
+
+        &::before {
+          @apply content-[''] block w-2 h-2 rounded-full;
+        }
+
+        &[data-period='current'] {
+          &::before {
+            @apply bg-success-secondary;
+          }
+        }
+        &[data-period='previous'] {
+          &::before {
+            @apply bg-quinary-foreground;
+          }
+        }
+      }
+    }
+  }
+}
