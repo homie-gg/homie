@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import ContributorsStatusSelect from '@/app/(user)/contributors/_components/ContributorsStatusSelect'
 import DateSelect from '@/lib/ui/DateSelect'

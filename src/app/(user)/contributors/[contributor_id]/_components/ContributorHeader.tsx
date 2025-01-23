@@ -7,15 +7,14 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/lib/ui/Breadcrumb'
-import HomeIcon from './HomeIcon'
-import DateSelect from '@/lib/ui/DateSelect'
 import { Days } from '@/lib/ui/DateSelect/dates'
 import styles from './ContributorHeader.module.scss'
-import { useRouter } from 'next/navigation'
+import ContributorDateSelect from '@/app/(user)/contributors/[contributor_id]/_components/ContributorDateSelect'
+import HomeIcon from '@/app/(user)/contributors/[contributor_id]/_components/HomeIcon'
 
 type ContributorHeaderProps = {
   days?: Days
-  user: {
+  contributor: {
     id: number
     name: string
     username: string
@@ -24,9 +23,8 @@ type ContributorHeaderProps = {
 }
 
 export default function ContributorHeader(props: ContributorHeaderProps) {
-  const { user, days = '7' } = props
-  const { name, username, image } = user
-  const router = useRouter()
+  const { contributor, days = '7' } = props
+  const { name, username, image } = contributor
 
   return (
     <div className={styles.header}>
@@ -59,12 +57,7 @@ export default function ContributorHeader(props: ContributorHeaderProps) {
           </div>
         </div>
 
-        <DateSelect
-          onChange={(days) =>
-            router.push(`/contributor/${user.id}?days=${days}`)
-          }
-          days={days}
-        />
+        <ContributorDateSelect days={days} contributor={contributor} />
       </div>
     </div>
   )

@@ -1,5 +1,3 @@
-'use client'
-
 import { PropsWithChildren } from 'react'
 import { parseAsInteger, parseAsStringLiteral, useQueryState } from 'nuqs'
 import clsx from 'clsx'

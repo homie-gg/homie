@@ -111,7 +111,7 @@ export default async function ContributorDetailsPage(
     <div className={styles.root}>
       <div className={clsx('container', styles.container)}>
         <ContributorHeader
-          user={{
+          contributor={{
             id: details.contributor.id,
             name:
               details.slackMember?.real_name ?? details.contributor.username,
