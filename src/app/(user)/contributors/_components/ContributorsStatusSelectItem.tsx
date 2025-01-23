@@ -4,7 +4,7 @@ import { PropsWithChildren } from 'react'
 import { parseAsInteger, parseAsStringLiteral, useQueryState } from 'nuqs'
 import clsx from 'clsx'
 import { Button } from '@/lib/ui/HomieButton'
-import styles from '@/app/(user)/contributors/_components/ContributorCategorySelect.module.scss'
+import styles from '@/app/(user)/contributors/_components/ContributorsStatusSelect.module.scss'
 
 export const contributorCategories = [
   'none',

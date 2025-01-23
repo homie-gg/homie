@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import clsx from 'clsx'
-import styles from './ContributorDataCard.module.scss'
+import styles from './ContributorCard.module.scss'
 import { GetContributorsData } from '@/app/(user)/contributors/_utils/get-contributors'
 import CurrentTime from '@/lib/ui/CurrentTime'
 import ContributorActivityChart from '@/app/(user)/contributors/_components/ContributorActivity'
